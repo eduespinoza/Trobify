@@ -36,4 +36,6 @@ class MainActivity : AppCompatActivity() {
             else -> super.onOptionsItemSelected(item)
         }
     }
+    ////pruebaaaaloco
+    val variableDePrueb = "prueba2";
 }
