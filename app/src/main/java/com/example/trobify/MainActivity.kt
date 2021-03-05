@@ -9,7 +9,6 @@ import android.view.MenuItem
 
 class MainActivity : AppCompatActivity() {
 
-    // HOLA ESTO LO VES O NO
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -37,5 +36,5 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    ///prueba numero 2112312381723dwe
+
 }
