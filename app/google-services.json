@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "593476086434",
+    "project_id": "trobify-ebd36",
+    "storage_bucket": "trobify-ebd36.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:593476086434:android:d62cf8d84dff09231045fb",
+        "android_client_info": {
+          "package_name": "com.example.trobify"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "593476086434-irvfhr2eqlcn7jbvm6b9inerjo90psra.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAHyVrk1Q6YIygWuGEA1om7dUbKb6BzHTg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "593476086434-irvfhr2eqlcn7jbvm6b9inerjo90psra.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
