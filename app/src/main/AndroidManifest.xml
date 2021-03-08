@@ -9,7 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Trobify">
-        <activity android:name=".Login"></activity>
+        <activity android:name=".Register"></activity>
+        <activity android:name=".Login" />
         <activity android:name=".Register_Login_Activity" />
         <activity
             android:name=".MainActivity"
