@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Trobify</string>
     <string name="action_settings">Settings</string>
     <!-- Strings used for fragments for navigation -->
@@ -13,7 +13,7 @@
     <string name="correo_electr_nico">Correo electrónico:</string>
     <string name="contrase_a">Contraseña:</string>
     <string name="a_n_no_tienes_cuenta">¿Aún no tienes cuenta?</string>
-    <string name="hint">hint</string>
+    <string name="hint" tools:ignore="DuplicateDefinition">hint</string>
     <string name="registrar">Registrar</string>
     <string name="nombre">Nombre:</string>
     <string name="apellidos">Apellidos:</string>
