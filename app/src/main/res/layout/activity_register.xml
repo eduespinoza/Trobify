@@ -82,7 +82,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageButton
-        android:id="@+id/buttonBack"
+        android:id="@+id/buttonGoBack"
         android:layout_width="73dp"
         android:layout_height="38dp"
         android:layout_marginStart="16dp"
@@ -129,7 +129,6 @@
         android:layout_height="46dp"
         android:layout_marginTop="90dp"
         android:layout_marginBottom="595dp"
-        android:hint="@string/hint"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -153,7 +152,6 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="202dp"
         android:layout_marginBottom="484dp"
-        android:hint="@string/hint"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -201,7 +199,6 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="541dp"
         android:layout_marginBottom="145dp"
-        android:hint="@string/hint"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -213,7 +210,6 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="315dp"
         android:layout_marginBottom="371dp"
-        android:hint="@string/hint"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -225,7 +221,6 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="428dp"
         android:layout_marginBottom="258dp"
-        android:hint="@string/hint"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
