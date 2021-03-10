@@ -6,37 +6,76 @@
     android:layout_height="match_parent"
     tools:context=".Flitros_Busqueda">
 
-    <CheckBox
-        android:id="@+id/checkBox"
+    <TextView
+        android:id="@+id/textView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="A reformar"
-        tools:layout_editor_absoluteX="40dp"
-        tools:layout_editor_absoluteY="638dp" />
+        android:layout_marginStart="40dp"
+        android:layout_marginEnd="154dp"
+        android:text="Número de habitaciones"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:textColor="#000000"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="277dp" />
 
-    <CheckBox
-        android:id="@+id/checkBox2"
+    <TextView
+        android:id="@+id/textView5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Muy bien"
-        tools:layout_editor_absoluteX="211dp"
-        tools:layout_editor_absoluteY="542dp" />
+        android:layout_marginStart="40dp"
+        android:layout_marginEnd="208dp"
+        android:text="Número de baños"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:textColor="#000000"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="362dp" />
 
-    <CheckBox
-        android:id="@+id/checkBox3"
+    <TextView
+        android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Obra nueva"
-        tools:layout_editor_absoluteX="40dp"
-        tools:layout_editor_absoluteY="542dp" />
+        android:layout_marginStart="40dp"
+        android:layout_marginEnd="222dp"
+        android:text="Rango de precio"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:textColor="#000000"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="197dp" />
 
-    <CheckBox
-        android:id="@+id/checkBox4"
+    <TextView
+        android:id="@+id/textView6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Casi nuevo"
-        tools:layout_editor_absoluteX="211dp"
-        tools:layout_editor_absoluteY="590dp" />
+        android:layout_marginStart="40dp"
+        android:layout_marginEnd="272dp"
+        android:text="Superficie"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:textColor="#000000"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="452dp" />
+
+    <TextView
+        android:id="@+id/textView8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginEnd="184dp"
+        android:layout_marginBottom="8dp"
+        android:text="Estado de la vivienda"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:textColor="#000000"
+        app:layout_constraintBottom_toTopOf="@+id/checkBox3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <CheckBox
         android:id="@+id/checkBox6"
@@ -44,7 +83,40 @@
         android:layout_height="wrap_content"
         android:text="Bien"
         tools:layout_editor_absoluteX="211dp"
-        tools:layout_editor_absoluteY="638dp" />
+        tools:layout_editor_absoluteY="688dp" />
+
+    <CheckBox
+        android:id="@+id/checkBox4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Casi nuevo"
+        tools:layout_editor_absoluteX="211dp"
+        tools:layout_editor_absoluteY="640dp" />
+
+    <CheckBox
+        android:id="@+id/checkBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="A reformar"
+        tools:layout_editor_absoluteX="40dp"
+        tools:layout_editor_absoluteY="688dp" />
+
+    <CheckBox
+        android:id="@+id/checkBox3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:text="Obra nueva"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="592dp" />
+
+    <CheckBox
+        android:id="@+id/checkBox2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Muy bien"
+        tools:layout_editor_absoluteX="211dp"
+        tools:layout_editor_absoluteY="592dp" />
 
     <CheckBox
         android:id="@+id/checkBox5"
@@ -52,76 +124,35 @@
         android:layout_height="wrap_content"
         android:text="Reformado"
         tools:layout_editor_absoluteX="40dp"
-        tools:layout_editor_absoluteY="590dp" />
-
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Número de habitaciones"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        android:textColor="#000000"
-        tools:layout_editor_absoluteX="40dp"
-        tools:layout_editor_absoluteY="289dp" />
-
-    <TextView
-        android:id="@+id/textView5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Número de baños"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        android:textColor="#000000"
-        tools:layout_editor_absoluteX="40dp"
-        tools:layout_editor_absoluteY="366dp" />
-
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Rango de precio"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        android:textColor="#000000"
-        tools:layout_editor_absoluteX="40dp"
-        tools:layout_editor_absoluteY="215dp" />
-
-    <TextView
-        android:id="@+id/textView6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Superficie"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        android:textColor="#000000"
-        tools:layout_editor_absoluteX="40dp"
-        tools:layout_editor_absoluteY="437dp" />
-
-    <TextView
-        android:id="@+id/textView8"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Estado de la vivienda"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        android:textColor="#000000"
-        tools:layout_editor_absoluteX="40dp"
-        tools:layout_editor_absoluteY="518dp" />
+        tools:layout_editor_absoluteY="640dp" />
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="213dp"
         android:text="Tipo de inmueble"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:textColor="#000000"
-        tools:layout_editor_absoluteX="40dp"
-        tools:layout_editor_absoluteY="54dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginEnd="222dp"
         android:text="Tipo de vivienda"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:textColor="#000000"
-        tools:layout_editor_absoluteX="40dp"
-        tools:layout_editor_absoluteY="136dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="116dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
