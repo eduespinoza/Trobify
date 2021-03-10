@@ -18,6 +18,7 @@ class Login : AppCompatActivity() {
         val buttonAcceder = findViewById<Button>(R.id.buttonAcces)
         buttonAcceder.setOnClickListener{
 
+
         }
     }
 }
