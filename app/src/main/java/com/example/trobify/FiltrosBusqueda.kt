@@ -31,6 +31,9 @@ class FiltrosBusqueda : AppCompatActivity(),AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 if (spinnerInmueble.selectedItem.equals("Edificio")){
                     addOptionsViviendaEdificio()
+                    spinnerVivienda.setEnabled(true)
+                    spinnerHabtiaciones.setEnabled(true)
+                    spinnerBaños.setEnabled(true)
                 }
                 else if (spinnerInmueble.selectedItem.equals("Terreno") || spinnerInmueble.selectedItem.equals("Nave")){
                     // Deshabilitar las opciones de : Tipo de vivienda, Num Habitaciones, Num baños, Esatdo de la vivienda y Extras

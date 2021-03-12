@@ -9,21 +9,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Trobify">
-<<<<<<< HEAD
-        <service
-            android:name=".User1"
-            android:enabled="true"
-            android:exported="true"></service>
 
         <activity android:name=".Register" />
-        <activity android:name=".Flitros_Busqueda" />
-=======
-         android:HEAD
-        <activity android:name=".Register"></activity>
-=======
-        <activity android:name=".FiltrosBusqueda"></activity>
->>>>>>> 3cbbf685c9a2300ad370bec7eefe2d805d65c9d9
->>>>>>> 43e9cb2b2b5edf53241fdfde296aa613a5c5f0fc
+        <activity android:name=".FiltrosBusqueda" />
         <activity android:name=".Login" />
         <activity
             android:name=".MainActivity"
