@@ -20,4 +20,27 @@
     <string name="confirmar_contrase_a">Confirmar contraseña:</string>
     <string name="siguiente">Siguiente</string>
     <string name="volver">Volver</string>
+    <string name="n_mero_de_habitaciones">Número de habitaciones</string>
+    <string name="n_mero_de_ba_os">Número de baños</string>
+    <string name="obra_nueva">Obra nueva</string>
+    <string name="tipo_de_vivienda">Tipo de vivienda</string>
+    <string name="superficie">Superficie</string>
+    <string name="precio">Rango de precio</string>
+    <string name="tipo_de_inmueble">Tipo de inmueble</string>
+    <string name="casi_nuevo">Casi nuevo</string>
+    <string name="muy_bien">Muy bien</string>
+    <string name="estado_de_la_vivienda">Estado de la vivienda</string>
+    <string name="bien">Bien</string>
+    <string name="reformado">Reformado</string>
+    <string name="a_reformar">A reformar</string>
+
+    <string-array name="options_inmueble">
+        <item>Vivienda</item>
+        <item>Edificio</item>
+        <item>Oficina</item>
+        <item>Garaje</item>
+        <item>Local</item>
+        <item>Terreno</item>
+        <item>Nave</item>
+    </string-array>
 </resources>

@@ -12,10 +12,9 @@
          android:HEAD
         <activity android:name=".Register"></activity>
 =======
-        <activity android:name=".FlitrosBusqueda"></activity>
+        <activity android:name=".FiltrosBusqueda"></activity>
 >>>>>>> 3cbbf685c9a2300ad370bec7eefe2d805d65c9d9
         <activity android:name=".Login" />
-        <activity android:name=".Register_Login_Activity" />
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
