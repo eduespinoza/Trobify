@@ -1,95 +1,110 @@
 package com.example.trobify
 
+import android.content.ContentValues.TAG
 import android.os.Bundle
 import android.util.Log
 import android.util.Patterns
 import android.widget.Button
+import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 
 
+
 class Register : AppCompatActivity() {
-    var name:String = ""
-    var surname:String = ""
-    var email:String = ""
-    var password:String = ""
+    var name:String? = null
+    var surname:String? = null
+    var email:String? = null
+    var password:String? = null
+    var comPassword:String? = null
+    private lateinit var auth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
 
+        auth = Firebase.auth
+
         val bBack = findViewById<ImageButton>(R.id.buttonGoBack)
         bBack.setOnClickListener { finish() }
 
         val bRegister = findViewById<Button>(R.id.buttonNext)
-        bRegister.setOnClickListener {
-            checkName()
-            checkSurname()
-            checkEmail()
-            checkPassWord()
-            crearUsuario()
-        }
+        bRegister.setOnClickListener { check() }
     }
 
-
-    private fun checkName(){
-        name  = findViewById<TextInputEditText>(R.id.textInputNombre).toString()
-        if(name.isEmpty()){ emptyMessage()}
-        if(name.filter { it in 'A' .. 'Z' || it in 'a' .. 'z' }.length == name.length){  incorrectNameMessage()}
+    private fun check() {
+        if(checkName()){ if(checkSurname()){ if(checkEmail()){ if (checkPassWord()){
+                        createNewUser(email.toString(), password.toString())
+        } } } }
     }
 
-    private fun checkSurname(){
-        surname  = findViewById<TextInputEditText>(R.id.textInputApellidos).toString()
-        if(surname.isEmpty()){ emptyMessage()}
-        if(surname.filter { it in 'A' .. 'Z' || it in 'a' .. 'z' }.length == surname.length){ incorrectSurnameMessage()}
-    }
-
-    private fun checkEmail(){
-        email  = findViewById<TextInputEditText>(R.id.textInputEmail).toString()
-        if(email.isEmpty()){ emptyMessage()}
-        val emailPattern = Patterns.EMAIL_ADDRESS
-        if(!emailPattern.matcher(email).matches()){ incorrectEmailMessage()}
-    }
-
-    private fun checkPassWord(){
-        password  = findViewById<TextInputEditText>(R.id.textInputPassword).toString()
-        if(password.isEmpty()){ emptyMessage()}
-        if(password.length < 7){ shortPasswordMessage()}
-    }
-
-    private fun crearUsuario() : Boolean{
-        var bool = true
-        lateinit var auth: FirebaseAuth
-        auth = Firebase.auth
-
-        auth.createUserWithEmailAndPassword(email, password)
-            .addOnCompleteListener(this) { task ->
-                if (task.isSuccessful) {
-                    val user = auth.currentUser
-                } else {
-                    Toast.makeText(baseContext, "Authentication failed.", Toast.LENGTH_SHORT).show()
-                    bool = false
+    private  fun createNewUser(uEmail :String, uPassword :String){
+        val id :Int = -1
+        auth.createUserWithEmailAndPassword(uEmail, uPassword).addOnCompleteListener(this) { task ->
+                    if (task.isSuccessful) {
+                        Log.d(TAG, "createUserWithEmail:success")
+                        val user = auth.currentUser
+                        updateUI(user)
+                    } else {
+                        Log.w(TAG, "createUserWithEmail:failure", task.exception)
+                        Toast.makeText(baseContext, "Authentication failed.",
+                                Toast.LENGTH_SHORT).show()
+                        updateUI(null)
+                    }
                 }
-
-            }
-        return  bool
     }
 
+    private fun updateUI(user: FirebaseUser?) {
 
+    }
 
+    //Checks
+    private fun checkName() : Boolean{
+        println(2)
+        name  = findViewById<EditText>(R.id.editTextName).text.toString()
+        if(name!!.isEmpty()){println(3);  emptyMessage(); return false}
+        val regex = "^[A-Za-z]*$".toRegex()
+        if(!name!!.matches(regex)){incorrectNameMessage(); return false}
+        return true
+    }
+
+    private fun checkSurname() : Boolean{
+        surname  = findViewById<EditText>(R.id.editTextSurname).text.toString()
+        if(surname!!.isEmpty()){ emptyMessage(); return false}
+        val regex = "^[A-Za-z]*$".toRegex()
+        if(!surname!!.matches(regex)){ incorrectSurnameMessage(); return false}
+        return true;
+    }
+
+    private fun checkEmail() : Boolean{
+        email  = findViewById<EditText>(R.id.editTextEmail).text.toString()
+        if(email!!.isEmpty()){ emptyMessage(); return false}
+        val emailPattern = Patterns.EMAIL_ADDRESS
+        if(!emailPattern.matcher(email).matches()){ incorrectEmailMessage(); return false}
+        return true
+    }
+
+    private fun checkPassWord() : Boolean{
+        password  = findViewById<EditText>(R.id.editTextPassword).text.toString()
+        comPassword = findViewById<EditText>(R.id.editTextPassword2).text.toString()
+        if(password!!.isEmpty() || comPassword!!.isEmpty()){ emptyMessage(); return false}
+        if(password!!.length < 7){ shortPasswordMessage(); return false}
+        if(!password.equals(comPassword)){ PasswordNotEqualMessage(); return false;}
+        return true
+    }
     //errors
     private fun emptyMessage() {
         val builder = AlertDialog.Builder(this)
         builder.setTitle("Error: Rellene todos los campos")
         builder.setMessage(" Debe rellenar todos los campos. ")
         builder.setIcon(android.R.drawable.ic_dialog_alert)
-        builder.setNeutralButton("  Continue  "){dialogInterface , which -> }
+        builder.setNeutralButton("  Continue  "){ _, _ -> }
         val alertDialog: AlertDialog = builder.create()
         alertDialog.setCancelable(false)
         alertDialog.show()
@@ -134,6 +149,17 @@ class Register : AppCompatActivity() {
         builder.setMessage(" Por razones de seguridad, prueba a escribir una contraseña más larga. ")
         builder.setIcon(android.R.drawable.ic_dialog_alert)
         builder.setNeutralButton("  Continue  "){dialogInterface , which -> }
+        val alertDialog: AlertDialog = builder.create()
+        alertDialog.setCancelable(false)
+        alertDialog.show()
+    }
+
+    private fun PasswordNotEqualMessage() {
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Error:Contraseñas no coinciden")
+        builder.setMessage(" Revise las contraseñas, deben coincidir ")
+        builder.setIcon(android.R.drawable.ic_dialog_alert)
+        builder.setNeutralButton("  Continue  "){ _, _ -> }
         val alertDialog: AlertDialog = builder.create()
         alertDialog.setCancelable(false)
         alertDialog.show()
