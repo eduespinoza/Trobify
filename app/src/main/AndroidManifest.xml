@@ -9,11 +9,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Trobify">
-         android:HEAD
-        <activity android:name=".Register"></activity>
-=======
-        <activity android:name=".Flitros_Busqueda"></activity>
->>>>>>> 3cbbf685c9a2300ad370bec7eefe2d805d65c9d9
+        <service
+            android:name=".User1"
+            android:enabled="true"
+            android:exported="true"></service>
+
+        <activity android:name=".Register" />
+        <activity android:name=".Flitros_Busqueda" />
         <activity android:name=".Login" />
         <activity android:name=".Register_Login_Activity" />
         <activity

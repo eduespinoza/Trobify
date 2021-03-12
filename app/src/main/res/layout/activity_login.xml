@@ -41,16 +41,18 @@
         android:id="@+id/textViewPass"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="126dp"
+        android:layout_marginStart="140dp"
         android:layout_marginTop="332dp"
-        android:layout_marginEnd="157dp"
+        android:layout_marginEnd="140dp"
         android:layout_marginBottom="367dp"
         android:text="@string/contrase_a"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/textViewAunNo"
@@ -62,32 +64,6 @@
         android:layout_marginBottom="145dp"
         android:text="@string/a_n_no_tienes_cuenta"
         android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/textInputEmail"
-        android:layout_width="322dp"
-        android:layout_height="54dp"
-        android:layout_marginStart="44dp"
-        android:layout_marginTop="6dp"
-        android:layout_marginEnd="45dp"
-        android:layout_marginBottom="35dp"
-        app:layout_constraintBottom_toTopOf="@+id/textViewPass"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewEmail" />
-
-    <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/textInputPass"
-        android:layout_width="322dp"
-        android:layout_height="54dp"
-        android:layout_marginStart="45dp"
-        android:layout_marginTop="376dp"
-        android:layout_marginEnd="45dp"
-        android:layout_marginBottom="301dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -116,6 +92,36 @@
         android:layout_marginEnd="168dp"
         android:layout_marginBottom="245dp"
         android:text="Acceder"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/editTextLoginEmail"
+        android:layout_width="316dp"
+        android:layout_height="39dp"
+        android:layout_marginStart="47dp"
+        android:layout_marginTop="247dp"
+        android:layout_marginEnd="48dp"
+        android:layout_marginBottom="445dp"
+        android:ems="10"
+        android:inputType="textEmailAddress"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/editTextLoginPassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="100dp"
+        android:layout_marginTop="377dp"
+        android:layout_marginEnd="101dp"
+        android:layout_marginBottom="309dp"
+        android:ems="10"
+        android:inputType="textPassword"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
