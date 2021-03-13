@@ -33,6 +33,15 @@
     <string name="bien">Bien</string>
     <string name="reformado">Reformado</string>
     <string name="a_reformar">A reformar</string>
+    <string name="extras">Extras</string>
+    <string name="parking">Parking</string>
+    <string name="ascensor">Ascensor</string>
+    <string name="amueblado">Amueblado</string>
+    <string name="calefacci_n">Calefacción</string>
+    <string name="jard_n">Jardín</string>
+    <string name="piscina">Piscina</string>
+    <string name="terraza">Terraza</string>
+    <string name="trastero">Trastero</string>
 
     <string-array name="options_inmueble">
         <item>Vivienda</item>
@@ -42,5 +51,27 @@
         <item>Local</item>
         <item>Terreno</item>
         <item>Nave</item>
+    </string-array>
+
+    <string-array name="options_vivienda_por_defecto">
+        <item>Apartamento</item>
+        <item>Ático</item>
+        <item>Dúplex</item>
+        <item>Loft</item>
+        <item>Planta baja</item>
+        <item>Estudio</item>
+        <item>Casa</item>
+        <item>Cahlet</item>
+        <item>Adosado</item>
+        <item>Finca rústica</item>
+    </string-array>
+
+    <string-array name="options_vivienda_edificio">
+        <item>Apartamento</item>
+        <item>Ático</item>
+        <item>Dúplex</item>
+        <item>Loft</item>
+        <item>Planta baja</item>
+        <item>Estudio</item>
     </string-array>
 </resources>

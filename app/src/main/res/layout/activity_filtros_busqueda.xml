@@ -10,162 +10,267 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:paddingStart="20dp"
-        android:paddingTop="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0">
-
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="163dp"
-            android:layout_height="wrap_content"
-            android:text="@string/tipo_de_inmueble"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:textSize="18sp" />
-
-        <Spinner
-            android:id="@+id/desplegableTipoInmueble"
-            android:layout_width="210dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp" />
-
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="131dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:text="@string/tipo_de_vivienda"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:textSize="18sp" />
-
-        <Spinner
-            android:id="@+id/desplegableTipoVivienda"
-            android:layout_width="210dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp" />
-
-        <TextView
-            android:id="@+id/textView3"
-            android:layout_width="163dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:text="@string/precio"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:textSize="18sp" />
-
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
         <LinearLayout
-            android:layout_width="300dp"
-            android:layout_height="39dp"
-            android:orientation="horizontal">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="20dp"
+            android:paddingTop="15dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="163dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="@string/tipo_de_inmueble"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:textSize="18sp" />
 
             <Spinner
-                android:id="@+id/desplegableMinPrecio"
-                android:layout_width="132dp"
+                android:id="@+id/desplegableTipoInmueble"
+                android:layout_width="210dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp" />
+                android:layout_marginTop="8dp" />
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="131dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:text="@string/tipo_de_vivienda"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:textSize="18sp" />
+
+            <Button
+                android:id="@+id/buttonTipoVivienda"
+                android:text="Elegir tipo"
+                android:layout_width="210dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="#F6F6F6"
+                app:backgroundTint="#DDDDDD"></Button>
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="163dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:text="@string/precio"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:textSize="18sp" />
+
+            <LinearLayout
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Spinner
+                    android:id="@+id/desplegableMinPrecio"
+                    android:layout_width="132dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp" />
+
+                <Spinner
+                    android:id="@+id/desplegableMaxPrecio"
+                    android:layout_width="135dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="8dp" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="208dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:text="@string/n_mero_de_habitaciones"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:textSize="18sp" />
 
             <Spinner
-                android:id="@+id/desplegableMaxPrecio"
-                android:layout_width="135dp"
+                android:id="@+id/desplegableNumHabitaciones"
+                android:layout_width="210dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="5dp" />
+                android:layout_marginTop="8dp" />
+
+            <TextView
+                android:id="@+id/textView5"
+                android:layout_width="208dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:text="@string/n_mero_de_ba_os"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:textSize="18sp" />
+
+            <Spinner
+                android:id="@+id/desplegableNumBaños"
+                android:layout_width="210dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp" />
+
+            <TextView
+                android:id="@+id/textView6"
+                android:layout_width="131dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15sp"
+                android:text="@string/superficie"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:textSize="18sp" />
+
+            <LinearLayout
+                android:layout_width="300dp"
+                android:layout_height="39dp"
+                android:orientation="horizontal">
+
+                <Spinner
+                    android:id="@+id/desplegableMinSuperficie"
+                    android:layout_width="132dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp" />
+
+                <Spinner
+                    android:id="@+id/desplegableMaxSuperficie"
+                    android:layout_width="135dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="8sp" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/textView7"
+                android:layout_width="206dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:text="@string/estado_de_la_vivienda"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:textSize="18sp" />
+
+            <LinearLayout
+                android:id="@+id/contenedorEstadoVivienda"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:orientation="vertical">
+
+                <CheckBox
+                    android:id="@+id/checkBoxEstadoObraNueva"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/obra_nueva" />
+
+                <CheckBox
+                    android:id="@+id/checkBoxEstadoCasiNuevo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/casi_nuevo" />
+
+                <CheckBox
+                    android:id="@+id/checkBoxEstadoMuyBien"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/muy_bien" />
+
+                <CheckBox
+                    android:id="@+id/checkBoxEstadoBien"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/bien" />
+
+                <CheckBox
+                    android:id="@+id/checkBoxEstadoReformado"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/reformado" />
+
+                <CheckBox
+                    android:id="@+id/checkBoxEstadoAReformar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/a_reformar" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/textView8"
+                android:layout_width="131dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="@string/extras"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:textSize="18sp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:orientation="vertical">
+            <CheckBox
+                android:id="@+id/checkBoxExtrasParking"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/parking" />
+
+            <CheckBox
+                android:id="@+id/checkBoxExtrasAscensor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/ascensor" />
+
+            <CheckBox
+                android:id="@+id/checkBoxExtrasAmueblado"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/amueblado" />
+
+            <CheckBox
+                android:id="@+id/checkBoxExtrasCalefaccion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/calefacci_n" />
+
+            <CheckBox
+                android:id="@+id/checkBoxExtrasJardin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/jard_n" />
+
+            <CheckBox
+                android:id="@+id/checkBoxExtrasPiscina"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/piscina" />
+
+            <CheckBox
+                android:id="@+id/checkBoxExtrasTerraza"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/terraza" />
+
+            <CheckBox
+                android:id="@+id/checkBoxExtrasTrastero"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/trastero" />
+
+            <Button
+                android:id="@+id/buttonAplicar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="30dp"
+                android:text="Aplicar" />
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/textView4"
-            android:layout_width="208dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:text="@string/n_mero_de_habitaciones"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:textSize="18sp" />
-
-        <Spinner
-            android:id="@+id/desplegableNumHabitaciones"
-            android:layout_width="210dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp" />
-
-        <TextView
-            android:id="@+id/textView5"
-            android:layout_width="208dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:text="@string/n_mero_de_ba_os"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:textSize="16sp" />
-
-        <Spinner
-            android:id="@+id/desplegableNumBaños"
-            android:layout_width="210dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp" />
-
-        <TextView
-            android:id="@+id/textView6"
-            android:layout_width="131dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15sp"
-            android:text="@string/superficie"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:textSize="18sp" />
-
-        <LinearLayout
-            android:layout_width="300dp"
-            android:layout_height="39dp"
-            android:orientation="horizontal">
-
-            <Spinner
-                android:id="@+id/desplegableMinSuperficie"
-                android:layout_width="132dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp" />
-
-            <Spinner
-                android:id="@+id/desplegableMaxSuperficie"
-                android:layout_width="135dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="5dp" />
         </LinearLayout>
-
-        <TextView
-            android:id="@+id/textView7"
-            android:layout_width="206dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:text="@string/estado_de_la_vivienda"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:textSize="18sp" />
-
-        <CheckBox
-            android:id="@+id/checkBox4"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="CheckBox" />
-
-        <CheckBox
-            android:id="@+id/checkBox5"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="CheckBox" />
-
-        <CheckBox
-            android:id="@+id/checkBox6"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="CheckBox" />
-
-        <CheckBox
-            android:id="@+id/checkBox7"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="CheckBox" />
+    </ScrollView>
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
