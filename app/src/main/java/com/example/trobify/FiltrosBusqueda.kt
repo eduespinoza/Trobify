@@ -6,7 +6,7 @@ import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 
-class FiltrosBusqueda : AppCompatActivity(),AdapterView.OnItemSelectedListener {
+class FiltrosBusqueda : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,7 +28,6 @@ class FiltrosBusqueda : AppCompatActivity(),AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {}
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 if (spinnerInmueble.selectedItem.equals("Terreno") || spinnerInmueble.selectedItem.equals("Nave")){
-                    // Deshabilitar las opciones de : Tipo de vivienda, Num Habitaciones, Num baños, Estado de la vivienda y Extras
                     buttonVivienda.setEnabled(false)
                     spinnerHabtiaciones.setEnabled(false)
                     spinnerBaños.setEnabled(false)
@@ -46,15 +45,32 @@ class FiltrosBusqueda : AppCompatActivity(),AdapterView.OnItemSelectedListener {
                     reformado.setEnabled(false)
                     aReformar.setEnabled(false)
 
-                        /*val contenedorEstadoVivienda = findViewById<LinearLayout>(R.id.contenedorEstadoVivienda)
-                        contenedorEstadoVivienda.setVisibility(View.INVISIBLE)*/
+                    /*val contenedorEstadoVivienda = findViewById<LinearLayout>(R.id.contenedorEstadoVivienda)
+                    contenedorEstadoVivienda.setVisibility(View.INVISIBLE)*/
 
                 }
                 else if (spinnerInmueble.selectedItem.equals("Garaje")){
-                    // Deshabilitar las opciones de Extras, Num habitaciones, tipo de vivienda y numero de baños
                     buttonVivienda.setEnabled(false)
                     spinnerHabtiaciones.setEnabled(false)
                     spinnerBaños.setEnabled(false)
+
+                    val parking = findViewById<CheckBox>(R.id.checkBoxExtrasParking)
+                    val ascensor = findViewById<CheckBox>(R.id.checkBoxExtrasAscensor)
+                    val amueblado = findViewById<CheckBox>(R.id.checkBoxExtrasAmueblado)
+                    val calefaccion = findViewById<CheckBox>(R.id.checkBoxExtrasCalefaccion)
+                    val jardin = findViewById<CheckBox>(R.id.checkBoxExtrasJardin)
+                    val piscina = findViewById<CheckBox>(R.id.checkBoxExtrasPiscina)
+                    val terraza = findViewById<CheckBox>(R.id.checkBoxExtrasTerraza)
+                    val trastero = findViewById<CheckBox>(R.id.checkBoxExtrasTrastero)
+
+                    parking.setEnabled(false)
+                    ascensor.setEnabled(false)
+                    amueblado.setEnabled(false)
+                    calefaccion.setEnabled(false)
+                    jardin.setEnabled(false)
+                    piscina.setEnabled(false)
+                    terraza.setEnabled(false)
+                    trastero.setEnabled(false)
                 }
                 else{
                     buttonVivienda.setEnabled(true)
@@ -96,14 +112,6 @@ class FiltrosBusqueda : AppCompatActivity(),AdapterView.OnItemSelectedListener {
         }
     }
 
-    override fun onNothingSelected(parent: AdapterView<*>?) {
-        TODO("Not yet implemented")
-    }
-
-    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-        TODO("Not yet implemented")
-    }
-
     private fun addOptionsInmueble(){
         val spinnerInmueble = findViewById<Spinner>(R.id.desplegableTipoInmueble)
         // El array se encuentra en res -> values -> strings.xml
@@ -120,13 +128,16 @@ class FiltrosBusqueda : AppCompatActivity(),AdapterView.OnItemSelectedListener {
         val spinnerPrecioMin = findViewById<Spinner>(R.id.desplegableMinPrecio)
         val spinnerPrecioMax = findViewById<Spinner>(R.id.desplegableMaxPrecio)
 
-        val options_price = listOf<Int>(50000, 75000, 100000, 125000, 150000, 200000, 300000, 400000, 500000)
+        val options_price = listOf<Int>(0, 50000, 75000, 100000, 125000, 150000, 200000, 300000, 400000, 500000)
+        val options_price_max = listOf<Int>(50000, 75000, 100000, 125000, 150000, 200000, 300000, 400000, 500000)
 
         /* AÑADIR LAS OPCIONES A LOS DESPLEGABLES */
-        val adapter = ArrayAdapter<Int>(this, android.R.layout.simple_spinner_item, options_price)
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        spinnerPrecioMin.adapter = adapter
-        spinnerPrecioMax.adapter = adapter
+        val adapter0 = ArrayAdapter<Int>(this, android.R.layout.simple_spinner_item, options_price)
+        val adapter1 = ArrayAdapter<Int>(this, android.R.layout.simple_spinner_item, options_price_max)
+        adapter0.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spinnerPrecioMin.adapter = adapter0
+        spinnerPrecioMax.adapter = adapter1
     }
 
     private fun addOptionsHabitaciones(){
