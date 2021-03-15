@@ -1,5 +1,6 @@
 package com.example.trobify
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.View
 import android.widget.*
@@ -17,11 +18,32 @@ class FiltrosBusqueda : AppCompatActivity() {
         val spinnerHabtiaciones = findViewById<Spinner>(R.id.desplegableNumHabitaciones)
         val spinnerBaños = findViewById<Spinner>(R.id.desplegableNumBaños)
 
+        val obraNueva = findViewById<CheckBox>(R.id.checkBoxEstadoObraNueva)
+        val casiNuevo = findViewById<CheckBox>(R.id.checkBoxEstadoCasiNuevo)
+        val muyBien = findViewById<CheckBox>(R.id.checkBoxEstadoMuyBien)
+        val bien = findViewById<CheckBox>(R.id.checkBoxEstadoBien)
+        val reformado = findViewById<CheckBox>(R.id.checkBoxEstadoReformado)
+        val aReformar = findViewById<CheckBox>(R.id.checkBoxEstadoAReformar)
+
+        val parking = findViewById<CheckBox>(R.id.checkBoxExtrasParking)
+        val ascensor = findViewById<CheckBox>(R.id.checkBoxExtrasAscensor)
+        val amueblado = findViewById<CheckBox>(R.id.checkBoxExtrasAmueblado)
+        val calefaccion = findViewById<CheckBox>(R.id.checkBoxExtrasCalefaccion)
+        val jardin = findViewById<CheckBox>(R.id.checkBoxExtrasJardin)
+        val piscina = findViewById<CheckBox>(R.id.checkBoxExtrasPiscina)
+        val terraza = findViewById<CheckBox>(R.id.checkBoxExtrasTerraza)
+        val trastero = findViewById<CheckBox>(R.id.checkBoxExtrasTrastero)
+
         addOptionsInmueble()
         addOptionsPrice()
         addOptionsHabitaciones()
         addOptionsBaños()
         addOptionsSuperficie()
+
+        val builder = AlertDialog.Builder(this@FiltrosBusqueda)
+        builder.setTitle("Selecciona el tipo de vivienda")
+        val elementosSeleccionadosTipoEdif = booleanArrayOf(false, false, false, false, false, false, false)
+        val elementosSeleccionadosTipoPorDefecto = booleanArrayOf(false, false, false, false, false, false, false, false, false, false)
 
         spinnerInmueble.onItemSelectedListener = object:
             AdapterView.OnItemSelectedListener{
@@ -32,12 +54,6 @@ class FiltrosBusqueda : AppCompatActivity() {
                     spinnerHabtiaciones.setEnabled(false)
                     spinnerBaños.setEnabled(false)
 
-                    val obraNueva = findViewById<CheckBox>(R.id.checkBoxEstadoObraNueva)
-                    val casiNuevo = findViewById<CheckBox>(R.id.checkBoxEstadoCasiNuevo)
-                    val muyBien = findViewById<CheckBox>(R.id.checkBoxEstadoMuyBien)
-                    val bien = findViewById<CheckBox>(R.id.checkBoxEstadoBien)
-                    val reformado = findViewById<CheckBox>(R.id.checkBoxEstadoReformado)
-                    val aReformar = findViewById<CheckBox>(R.id.checkBoxEstadoAReformar)
                     obraNueva.setEnabled(false)
                     casiNuevo.setEnabled(false)
                     muyBien.setEnabled(false)
@@ -54,15 +70,6 @@ class FiltrosBusqueda : AppCompatActivity() {
                     spinnerHabtiaciones.setEnabled(false)
                     spinnerBaños.setEnabled(false)
 
-                    val parking = findViewById<CheckBox>(R.id.checkBoxExtrasParking)
-                    val ascensor = findViewById<CheckBox>(R.id.checkBoxExtrasAscensor)
-                    val amueblado = findViewById<CheckBox>(R.id.checkBoxExtrasAmueblado)
-                    val calefaccion = findViewById<CheckBox>(R.id.checkBoxExtrasCalefaccion)
-                    val jardin = findViewById<CheckBox>(R.id.checkBoxExtrasJardin)
-                    val piscina = findViewById<CheckBox>(R.id.checkBoxExtrasPiscina)
-                    val terraza = findViewById<CheckBox>(R.id.checkBoxExtrasTerraza)
-                    val trastero = findViewById<CheckBox>(R.id.checkBoxExtrasTrastero)
-
                     parking.setEnabled(false)
                     ascensor.setEnabled(false)
                     amueblado.setEnabled(false)
@@ -72,21 +79,52 @@ class FiltrosBusqueda : AppCompatActivity() {
                     terraza.setEnabled(false)
                     trastero.setEnabled(false)
                 }
-                else{
+                else if (spinnerInmueble.selectedItem.equals("Local")){
+                    buttonVivienda.setEnabled(false)
+
+                    obraNueva.setEnabled(true)
+                    casiNuevo.setEnabled(true)
+                    muyBien.setEnabled(true)
+                    bien.setEnabled(true)
+                    reformado.setEnabled(true)
+                    aReformar.setEnabled(true)
+
+                    parking.setEnabled(true)
+                    ascensor.setEnabled(true)
+                    amueblado.setEnabled(true)
+                    calefaccion.setEnabled(true)
+                    terraza.setEnabled(true)
+                    trastero.setEnabled(false)
+                    piscina.setEnabled(false)
+                    jardin.setEnabled(false)
+                }
+                else {
                     buttonVivienda.setEnabled(true)
                     spinnerHabtiaciones.setEnabled(true)
                     spinnerBaños.setEnabled(true)
+                    spinnerBaños.setEnabled(true)
+
+                    obraNueva.setEnabled(true)
+                    casiNuevo.setEnabled(true)
+                    muyBien.setEnabled(true)
+                    bien.setEnabled(true)
+                    reformado.setEnabled(true)
+                    aReformar.setEnabled(true)
+
+                    parking.setEnabled(true)
+                    ascensor.setEnabled(true)
+                    amueblado.setEnabled(true)
+                    calefaccion.setEnabled(true)
+                    jardin.setEnabled(true)
+                    piscina.setEnabled(true)
+                    terraza.setEnabled(true)
+                    trastero.setEnabled(true)
                 }
             }
         }
 
-        val builder = AlertDialog.Builder(this@FiltrosBusqueda)
-        builder.setTitle("Selecciona el tipo de vivienda")
-        val elementosSeleccionadosTipoEdif = booleanArrayOf(false, false, false, false, false, false, false)
-        val elementosSeleccionadosTipoPorDefecto = booleanArrayOf(false, false, false, false, false, false, false, false, false, false)
-
         buttonVivienda.setOnClickListener{
-            if(spinnerInmueble.selectedItem.equals("Edificio")){
+            if(spinnerInmueble.selectedItem.equals("Edificio") || spinnerInmueble.selectedItem.equals("Oficina")){
                 val optionsViviendaEdificio = resources.getStringArray(R.array.options_vivienda_edificio)
 
                 builder.setMultiChoiceItems(optionsViviendaEdificio, elementosSeleccionadosTipoEdif){dialog, which, isChecked ->
@@ -109,6 +147,8 @@ class FiltrosBusqueda : AppCompatActivity() {
         val buttonAplicar = findViewById<Button>(R.id.buttonAplicar)
         buttonAplicar.setOnClickListener{
             // ACABAR
+            checkPrice()
+            checkSurface()
         }
     }
 
@@ -173,5 +213,29 @@ class FiltrosBusqueda : AppCompatActivity() {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinnerSuperficieMin.adapter = adapter
         spinnerSuperficieMax.adapter = adapter
+    }
+
+    private fun checkPrice(){
+        val spinnerPrecioMin = findViewById<Spinner>(R.id.desplegableMinPrecio)
+        val spinnerPrecioMax = findViewById<Spinner>(R.id.desplegableMaxPrecio)
+        if(compareValues(spinnerPrecioMin.selectedItem.toString().toInt(), spinnerPrecioMax.selectedItem.toString().toInt()) >= 0){
+            AlertDialog.Builder(this@FiltrosBusqueda).apply {
+                setTitle("Error")
+                setMessage("El rango de valores de precio es incorrecto.")
+                setPositiveButton("Ok", null)
+            }.show()
+        }
+    }
+
+    private fun checkSurface(){
+        val spinnerSuperficieMin = findViewById<Spinner>(R.id.desplegableMinSuperficie)
+        val spinnerSuperficieMax = findViewById<Spinner>(R.id.desplegableMaxSuperficie)
+        if(compareValues(spinnerSuperficieMin.selectedItem.toString().toInt(), spinnerSuperficieMax.selectedItem.toString().toInt()) >= 0){
+            AlertDialog.Builder(this@FiltrosBusqueda).apply {
+                setTitle("Error")
+                setMessage("El rango de valores de superficie es incorrecto.")
+                setPositiveButton("Ok", null)
+            }.show()
+        }
     }
 }
