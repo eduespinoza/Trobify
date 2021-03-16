@@ -1,9 +1,11 @@
 package com.example.trobify
 
 import android.content.ContentValues.TAG
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.util.Patterns
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
@@ -49,6 +51,7 @@ class Register : AppCompatActivity() {
         auth.createUserWithEmailAndPassword(uEmail, uPassword).addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
                         Log.d(TAG, "createUserWithEmail:success")
+                        helloMessage()
                         val user = auth.currentUser
                         updateUI(user)
                     } else {
@@ -61,7 +64,10 @@ class Register : AppCompatActivity() {
     }
 
     private fun updateUI(user: FirebaseUser?) {
-
+        val returnMain = Intent(this, Pruebas::class.java)
+        returnMain.putExtra("usuario",user)
+        startActivity(returnMain)
+        finish()
     }
 
     //Checks
@@ -98,7 +104,7 @@ class Register : AppCompatActivity() {
         if(!password.equals(comPassword)){ PasswordNotEqualMessage(); return false;}
         return true
     }
-    //errors
+    //messages
     private fun emptyMessage() {
         val builder = AlertDialog.Builder(this)
         builder.setTitle("Error: Rellene todos los campos")
@@ -159,6 +165,17 @@ class Register : AppCompatActivity() {
         builder.setTitle("Error:Contraseñas no coinciden")
         builder.setMessage(" Revise las contraseñas, deben coincidir ")
         builder.setIcon(android.R.drawable.ic_dialog_alert)
+        builder.setNeutralButton("  Continue  "){ _, _ -> }
+        val alertDialog: AlertDialog = builder.create()
+        alertDialog.setCancelable(false)
+        alertDialog.show()
+    }
+
+    private fun helloMessage() {
+        val builder =  AlertDialog.Builder(this)
+        builder.setTitle("Bienvenido: " + name)
+        builder.setMessage(" Su usuario se ha registrado correctamente. ")
+        builder.setIcon(android.R.drawable.ic_dialog_email)
         builder.setNeutralButton("  Continue  "){ _, _ -> }
         val alertDialog: AlertDialog = builder.create()
         alertDialog.setCancelable(false)

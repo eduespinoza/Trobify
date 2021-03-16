@@ -9,7 +9,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Trobify">
-
+        <activity
+            android:name=".Pruebas"
+            android:label="@string/title_activity_pruebas"
+            android:theme="@style/Theme.Trobify.NoActionBar"></activity>
         <activity android:name=".Register" />
         <activity android:name=".FiltrosBusqueda" />
         <activity android:name=".Login" />

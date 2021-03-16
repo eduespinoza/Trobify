@@ -53,7 +53,10 @@ class Login : AppCompatActivity() {
     }
 
     private fun updateUI(user: FirebaseUser?) {
-        println("Bienvenido: " )
+        val returnMain = Intent(this, Pruebas::class.java)
+        returnMain.putExtra("usuario",user)
+        startActivity(returnMain)
+        finish()
 
     }
 }

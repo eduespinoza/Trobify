@@ -83,4 +83,5 @@
         <item>Planta baja</item>
         <item>Estudio</item>
     </string-array>
+    <string name="title_activity_pruebas">Pruebas</string>
 </resources>
