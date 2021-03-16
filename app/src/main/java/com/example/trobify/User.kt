@@ -14,17 +14,26 @@ import io.grpc.Context
 
 class User {
 
-    private var name : String = ""
-    private var surname : String = ""
-    private var email : String = ""
-    private var id : String = ""
-    private var pass : String = ""
-    private var telefono : Int = -1
-    private var listaFavoritos : MutableList<String> = mutableListOf()
+    private var name : String? = null
+    private var surname : String? = null
+    private var email : String? = null
+    private var id : String? = null
+    private var pass : String? = null
+    private var phone : Int? = null
+    private var favourite : MutableList<String> = mutableListOf()
 
 
-    class User(var nombre : String, var apellidos : String, var correo : String, var id : String,
-    var pass : String, var telefono : Int,var listaFavoritos : MutableList<String>){}
+    constructor(name : String?, surname : String?, email : String?, id : String?,
+                pass : String?){
+        this.name = name
+        this.surname = surname
+        this.email = email
+        this.pass = pass
+        this.id = id
+
+        //añadir a base de datos
+    }
+
 
 
 

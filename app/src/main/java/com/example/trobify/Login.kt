@@ -12,6 +12,7 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import android.content.ContentValues.TAG
+import androidx.appcompat.app.AlertDialog
 
 class Login : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
@@ -46,17 +47,40 @@ class Login : AppCompatActivity() {
                         Log.w(TAG, "signInWithEmail:failure", task.exception)
                         Toast.makeText(baseContext, "Authentication failed.",
                             Toast.LENGTH_SHORT).show()
-                        updateUI(null)
+                        errorMessage()
                     }
                 }
         }
     }
 
     private fun updateUI(user: FirebaseUser?) {
+        helloMessage()
         val returnMain = Intent(this, Pruebas::class.java)
-        returnMain.putExtra("usuario",user)
+        returnMain.putExtra("Email",email)
         startActivity(returnMain)
         finish()
 
+    }
+
+    private fun helloMessage() {
+        val builder =  AlertDialog.Builder(this)
+        builder.setTitle("Bienvenido: " + name)
+        builder.setMessage(" Su usuario se ha registrado correctamente. ")
+        builder.setIcon(android.R.drawable.ic_dialog_email)
+        builder.setNeutralButton("  Continue  "){ _, _ -> }
+        val alertDialog: AlertDialog = builder.create()
+        alertDialog.setCancelable(false)
+        alertDialog.show()
+    }
+
+    private fun errorMessage() {
+        val builder =  AlertDialog.Builder(this)
+        builder.setTitle("Error de credenciales " )
+        builder.setMessage(" Compruebe los datos introducidos. ")
+        builder.setIcon(android.R.drawable.stat_notify_error)
+        builder.setNeutralButton("  Continue  "){ _, _ -> }
+        val alertDialog: AlertDialog = builder.create()
+        alertDialog.setCancelable(false)
+        alertDialog.show()
     }
 }

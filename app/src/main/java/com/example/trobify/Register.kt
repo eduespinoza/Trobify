@@ -26,6 +26,7 @@ class Register : AppCompatActivity() {
     var password:String? = null
     var comPassword:String? = null
     private lateinit var auth: FirebaseAuth
+    private lateinit var database: User
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,22 +54,23 @@ class Register : AppCompatActivity() {
                         Log.d(TAG, "createUserWithEmail:success")
                         helloMessage()
                         val user = auth.currentUser
+                        val newUser :User = User(name,surname,email,user.uid,password)
                         updateUI(user)
                     } else {
                         Log.w(TAG, "createUserWithEmail:failure", task.exception)
                         Toast.makeText(baseContext, "Authentication failed.",
                                 Toast.LENGTH_SHORT).show()
-                        updateUI(null)
                     }
                 }
     }
 
     private fun updateUI(user: FirebaseUser?) {
         val returnMain = Intent(this, Pruebas::class.java)
-        returnMain.putExtra("usuario",user)
+        returnMain.putExtra("Email",email)
         startActivity(returnMain)
         finish()
     }
+
 
     //Checks
     private fun checkName() : Boolean{
