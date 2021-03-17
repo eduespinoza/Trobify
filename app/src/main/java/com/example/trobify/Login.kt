@@ -34,23 +34,29 @@ class Login : AppCompatActivity() {
 
         val buttonAcceder = findViewById<Button>(R.id.buttonAcces)
         buttonAcceder.setOnClickListener{
-            email  = findViewById<EditText>(R.id.editTextLoginEmail).text.toString()
-            password  = findViewById<EditText>(R.id.editTextLoginPassword).text.toString()
-            
-            auth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this) { task ->
-                    if (task.isSuccessful) {
-                        Log.d(TAG, "signInWithEmail:success")
-                        val user = auth.currentUser
-                        updateUI(user)
-                    } else {
-                        Log.w(TAG, "signInWithEmail:failure", task.exception)
-                        Toast.makeText(baseContext, "Authentication failed.",
-                            Toast.LENGTH_SHORT).show()
-                        errorMessage()
-                    }
-                }
+            if(findViewById<EditText>(R.id.editTextLoginEmail).text.isNullOrEmpty() || findViewById<EditText>(R.id.editTextLoginPassword).text.isNullOrEmpty()){
+                errorMessage()
+            }else{ login() }
         }
+    }
+
+    private fun login(){
+        email  = findViewById<EditText>(R.id.editTextLoginEmail).text.toString()
+        password  = findViewById<EditText>(R.id.editTextLoginPassword).text.toString()
+        auth.signInWithEmailAndPassword(email, password)
+            .addOnCompleteListener(this) { task ->
+                if (task.isSuccessful) {
+                    Log.d(TAG, "signInWithEmail:success")
+                    val user = auth.currentUser
+                    updateUI(user)
+                } else {
+                    Log.w(TAG, "signInWithEmail:failure", task.exception)
+                    Toast.makeText(baseContext, "Authentication failed.",
+                        Toast.LENGTH_SHORT).show()
+                    errorMessage()
+                }
+            }
+
     }
 
     private fun updateUI(user: FirebaseUser?) {
@@ -82,5 +88,7 @@ class Login : AppCompatActivity() {
         val alertDialog: AlertDialog = builder.create()
         alertDialog.setCancelable(false)
         alertDialog.show()
+        email = null
+        password = null
     }
 }

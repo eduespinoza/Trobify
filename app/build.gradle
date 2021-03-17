@@ -66,6 +66,8 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    implementation 'com.android.support:design:23.4.0'
+    implementation 'com.firebaseui:firebase-ui:0.6.0'
 }
 
 //Bom de Firebase
@@ -78,3 +80,4 @@ dependencies {
     // When using the BoM, you don't specify versions in Firebase library dependencies
     implementation 'com.google.firebase:firebase-auth-ktx'
 }
+
