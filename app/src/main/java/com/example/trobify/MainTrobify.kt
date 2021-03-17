@@ -13,14 +13,14 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 
 class MainTrobify : AppCompatActivity() {
-    //var test = InmuebleTest("Piso en la playa", 700, 69, arrayOf(R.drawable.piso4, R.drawable.piso5))
-    //var test4 = InmuebleTest("Piso en la playa", 700, 69, arrayOf(R.drawable.piso4, R.drawable.piso5))
-    //var test5 = InmuebleTest("Piso en la playa", 700, 69, arrayOf(R.drawable.piso4, R.drawable.piso5))
-    //var test2 = InmuebleTest("Piso en el campo", 700, 69, arrayOf(R.drawable.piso5, R.drawable.piso5))
-    //var test3 = InmuebleTest("Piso en la montaña", 700, 69, arrayOf(R.drawable.piso4, R.drawable.piso5))
-    //private val adaptadorInmueble by lazy {
-       // AdaptadorInmuebleBusqueda(arrayListOf(test,test2, test3,test4,test5))
-    //}
+    var test = InmuebleTest("Piso en la playa", 700, 69, arrayOf(R.drawable.piso4, R.drawable.piso5))
+    var test4 = InmuebleTest("Piso en la playa", 700, 69, arrayOf(R.drawable.piso4, R.drawable.piso5))
+    var test5 = InmuebleTest("Piso en la playa", 700, 69, arrayOf(R.drawable.piso4, R.drawable.piso5))
+    var test2 = InmuebleTest("Piso en el campo", 700, 69, arrayOf(R.drawable.piso5, R.drawable.piso5))
+    var test3 = InmuebleTest("Piso en la montaña", 700, 69, arrayOf(R.drawable.piso4, R.drawable.piso5))
+    private val adaptadorInmueble by lazy {
+        AdaptadorInmuebleBusqueda(arrayListOf(test,test2, test3,test4,test5))
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.trobify_main)
@@ -31,6 +31,6 @@ class MainTrobify : AppCompatActivity() {
         recycler.setHasFixedSize(true)
         val layoutmanager = LinearLayoutManager(baseContext)
         recycler.layoutManager = layoutmanager
-        //recycler.adapter = adaptadorInmueble
+        recycler.adapter = adaptadorInmueble
     }
 }
