@@ -9,11 +9,12 @@ class MainActivity : AppCompatActivity() {
 
     private val db = FirebaseFirestore.getInstance()
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val goLogin = Intent(this, FiltrosBusqueda::class.java)
+        val goLogin = Intent(this, Chat::class.java)
         startActivity(goLogin)
 
         // para probar maintrobify
@@ -24,6 +25,7 @@ class MainActivity : AppCompatActivity() {
         //val goFiltros = Intent(this, FiltrosBusqueda::class.java)
         //startActivity(goFiltros)
         }
+    }
 }
 
 
