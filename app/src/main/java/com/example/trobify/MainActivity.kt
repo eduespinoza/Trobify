@@ -24,7 +24,6 @@ class MainActivity : AppCompatActivity() {
         // para probar Filtros
         //val goFiltros = Intent(this, FiltrosBusqueda::class.java)
         //startActivity(goFiltros)
-        }
     }
 }
 
