@@ -19,6 +19,10 @@ class MainActivity : AppCompatActivity() {
         // para probar maintrobify
         //val goSearch = Intent(this, MainTrobify::class.java)
         //startActivity(goSearch)
+
+        // para probar Filtros
+        //val goFiltros = Intent(this, FiltrosBusqueda::class.java)
+        //startActivity(goFiltros)
         }
 }
 
