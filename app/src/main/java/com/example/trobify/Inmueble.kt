@@ -12,38 +12,61 @@ import com.google.firebase.ktx.Firebase
 import io.grpc.Context
 
 
-class Inmueble(
-    private var id : String,
-    private var propietario : User,
-    private var numHabitaciones : Int,
-    private var numBanos : Int,  //en m2
-    private var superficie : Double,
-    private var direccion : String,  // piso, aprtamento, atico, duplex, estudio...
+class Inmueble{
+    var id : String? = null
+    var propietario : User? = null
+    var numHabitaciones : Int? = null
+    var numBanos : Int? = null
+    var superficie : Double? = null
+    var direccion : String? = null
 
-    private var tipoInmueble : String,
-    private var intencion : String,
-    private var precio : Int,
+    var tipoInmueble : String? = null
+    var intencion : String? = null //vender o alquilar
+    var precio : Int? = null
 
-    private var fotos : MutableList<String>,   //cambiar tipo a img
-    private var certificadoEnergetico : String,   //Desde la A hasta la G
-    private var estado : String,
+    //var photos : MutableList<Int>  //cambiar tipo a img
+    var certificadoEnergetico : String? = null  //Desde la A hasta la G, hay que hacer que solo deje poner las letras posibles
+    var descripcion : String? = null
+    var titulo : String? = null //se puede quitar
 
-    private var descripcion : String,
+    var estado : String? = null  //hay que ver esto aun para que solo deje poner los estados posibles
 
-    //EXTRAS 0 si 1 no
-    private var amueblado : Int,
-    private var parking : Int,
-    private var ascensor : Int,
-    private var calefaccion : Int,
-    private var jardin : Int,
-    private var pisicina : Int,
-    private var terraza : Int
-) {
+    //EXTRAS 0 si 1 no se pueden añadir mas o quitar los que sobran
+    var caractertisicasList = mutableListOf(true, false)
+    var caracteristicas : String? = null
 
+    constructor( id : String?, propietario : User?,  numHabitaciones : Int?, superficie : Double?,
+                 direccion: String?, tipoInmueble: String?, intencion: String?, precio : Int?,
+                 certificadoEnergetico : String?, descripcion : String?, titulo : String? , estado: String?  ) {
+        this.id = id
+        this.propietario = propietario
+        this.numHabitaciones = numHabitaciones
+        this.superficie = superficie
+        this.direccion = direccion
+        this.tipoInmueble = tipoInmueble
+        this.intencion = intencion
+        this.precio = precio
+        this.certificadoEnergetico = certificadoEnergetico
+        this.descripcion = descripcion
+        this.titulo = "Inmueble en " + direccion
 
-    private fun updateUI(user: FirebaseUser?) {
+        this.caracteristicas = caracteristicasToString(caractertisicasList)
+        this.estado = estado
 
     }
 
+    fun caracteristicasToString( list : MutableList<Boolean> ) : String?{
+        var res = ""
+
+        return "hola"
+    }
+
+
+
+
 
 }
+//db.collection("inmuebles").document("tipo de inmueble")
+//.set(docData)
+//.addOnSuccessListener { Log.d(TAG, "Inmueble guardado correctamente!") }
+//.addOnFailureListener { e -> Log.w(TAG, "Error al guardar inmueble", e) }

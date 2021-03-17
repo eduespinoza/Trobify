@@ -7,7 +7,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
-class AdaptadorInmuebleBusqueda (private val fichainmueble : ArrayList<InmuebleTest>)
+
+class AdaptadorInmuebleBusqueda (private val fichainmueble : ArrayList<Inmueble>)
     : RecyclerView.Adapter<AdaptadorInmuebleBusqueda.ViewHolder>() {
 
     class ViewHolder(var view: View) : RecyclerView.ViewHolder(view){
@@ -30,12 +31,13 @@ class AdaptadorInmuebleBusqueda (private val fichainmueble : ArrayList<InmuebleT
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.ftitulo.text = fichainmueble[position].title
-        holder.fimage.setImageResource(fichainmueble[position].photos.first())
+        holder.ftitulo.text = fichainmueble[position].titulo
+        //holder.fimage.setImageResource(fichainmueble[position].photos.first())
+        holder.fimage.setImageResource(R.drawable.piso4)
         holder.fdescripcion.text = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
-        holder.fprecio.text = fichainmueble[position].price.toString() + "€"
+        holder.fprecio.text = fichainmueble[position].precio.toString() + "€"
         holder.fhabitaciones.text = "5"
-        holder.fsuperficie.text = fichainmueble[position].surface.toString()
+        holder.fsuperficie.text = fichainmueble[position].superficie.toString()
         holder.itemView.setOnClickListener { v:View ->
             Toast.makeText(v.context, "Hola hermano", Toast.LENGTH_SHORT).show()
         }

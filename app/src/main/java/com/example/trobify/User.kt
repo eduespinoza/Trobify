@@ -20,7 +20,7 @@ class User {
     private var id : String? = null
     private var pass : String? = null
     private var phone : Int? = null
-    private var favourite : MutableList<String> = mutableListOf()
+    private var favourite : MutableList<String> = mutableListOf()  //cambiar a inmueble luego
 
 
     constructor(name : String?, surname : String?, email : String?, id : String?,
@@ -32,6 +32,19 @@ class User {
         this.id = id
 
         //añadir a base de datos
+    }
+
+    fun getName() : String? {
+        return  this.name
+    }
+
+    fun getPhone() : Int?{
+        return this.phone
+    }
+
+    fun addInmuebleToFav(){
+        favourite.add("Inmueble") //cambiar a inmueble luego
+
     }
 
 

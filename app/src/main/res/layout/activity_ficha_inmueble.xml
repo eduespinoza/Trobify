@@ -29,7 +29,7 @@
                     android:orientation="horizontal">
 
                     <Button
-                        android:id="@+id/button5"
+                        android:id="@+id/buttonAtrasFicha"
                         android:layout_width="130dp"
                         android:layout_height="wrap_content"
                         android:text="@string/atras" />
@@ -41,6 +41,7 @@
                     android:layout_height="249dp">
 
                     <LinearLayout
+                        android:id="@+id/contenedorImagenes"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:orientation="horizontal">
@@ -50,8 +51,8 @@
                             android:layout_width="420dp"
                             android:layout_height="287dp"
                             android:layout_weight="1"
-                            tools:srcCompat="@tools:sample/backgrounds/scenic"
-                            android:contentDescription="@string/todo" />
+                            android:contentDescription="@string/todo"
+                            tools:srcCompat="@tools:sample/backgrounds/scenic" />
 
                         <ImageView
                             android:id="@+id/imageView5"
@@ -74,14 +75,14 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            android:id="@+id/textView10"
+                            android:id="@+id/textViewCalle"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="calle" />
 
                         <TextView
-                            android:id="@+id/textView11"
+                            android:id="@+id/textViewPrecio"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
@@ -94,21 +95,21 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            android:id="@+id/textView12"
+                            android:id="@+id/textViewNumHabitaciones"
                             android:layout_width="23dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="numHabitaciones" />
 
                         <TextView
-                            android:id="@+id/textView13"
+                            android:id="@+id/textViewNumBanos"
                             android:layout_width="24dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="numBaños" />
 
                         <TextView
-                            android:id="@+id/textView23"
+                            android:id="@+id/textViewSuperficie"
                             android:layout_width="24dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
@@ -130,7 +131,7 @@
                         android:text="@string/descripcion" />
 
                     <TextView
-                        android:id="@+id/textView20"
+                        android:id="@+id/textViewDescripcion"
                         android:layout_width="match_parent"
                         android:layout_height="72dp"
                         android:text="describcionBox" />
@@ -148,7 +149,7 @@
                         android:text="@string/caracteristicas" />
 
                     <TextView
-                        android:id="@+id/textView21"
+                        android:id="@+id/textViewCaracteristicas"
                         android:layout_width="match_parent"
                         android:layout_height="72dp"
                         android:text="caracteristicas box" />
@@ -156,7 +157,7 @@
                 </LinearLayout>
 
                 <Button
-                    android:id="@+id/button6"
+                    android:id="@+id/buttonFav"
                     android:layout_width="115dp"
                     android:layout_height="wrap_content"
                     android:text="@string/fav" />
@@ -173,7 +174,7 @@
                         android:text="@string/anunciante" />
 
                     <TextView
-                        android:id="@+id/textView19"
+                        android:id="@+id/textViewNomPropietario"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="nomPropietario" />
@@ -188,14 +189,14 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/button7"
+                android:id="@+id/buttonLlamar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text=" llamar" />
 
             <Button
-                android:id="@+id/button8"
+                android:id="@+id/buttonContactar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
