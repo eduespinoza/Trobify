@@ -7,6 +7,7 @@
     android:layout_height="match_parent">
 
     <LinearLayout
+        android:id="@+id/linearLayout3"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:gravity="center|top"
@@ -23,25 +24,47 @@
             android:layout_width="match_parent"
             android:layout_height="65dp"
             android:gravity="center|left"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:padding="5dp">
 
-            <TextView
-                android:id="@+id/textView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Trobify"
-                android:textSize="24sp"
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="5dp"
+                android:background="#FFFFFF"
+                android:gravity="center|start"
+                android:orientation="horizontal"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.329"
                 app:layout_constraintStart_toEndOf="@+id/button"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:id="@+id/buscarTrobify"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_weight="1"
+                    android:text="Busca en TROBIFY"
+                    android:textSize="20sp" />
+
+                <SearchView
+                    android:id="@+id/buscarView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:clickable="true"
+                    android:fadingEdge="none"
+                    android:queryHint="Ciudad, calle, CP..." />
+
+            </LinearLayout>
 
             <Button
                 android:id="@+id/button"
                 android:layout_width="57dp"
                 android:layout_height="48dp"
-                android:layout_marginStart="24dp"
+                android:layout_marginStart="8dp"
                 app:backgroundTint="#2196F3"
                 app:icon="@drawable/menu"
                 app:iconSize="25dp"
@@ -50,57 +73,91 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.47" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/linearlayout2"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_gravity="top"
-            android:orientation="vertical">
+            android:layout_marginTop="0dp"
+            android:dividerPadding="10dp"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/linearlayout">
 
             <LinearLayout
-                android:id="@+id/linearLayout"
-                android:layout_width="350dp"
+                android:id="@+id/opciones"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:background="#FFFFFF"
-                android:gravity="center"
                 android:orientation="horizontal"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="@id/linearLayout"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
-                <EditText
-                    android:id="@+id/editTextTextPersonName"
-                    android:layout_width="293dp"
+                <TextView
+                    android:id="@+id/verMapa"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:hapticFeedbackEnabled="false"
-                    android:inputType="none|text"
-                    android:text="¿Dónde quieres buscar?" />
-
-                <Button
-                    android:id="@+id/button4"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
+                    android:layout_gravity="center|fill"
                     android:layout_weight="1"
-                    app:backgroundTint="#FFFFFF"
-                    app:icon="@android:drawable/ic_menu_search"
-                    app:iconTint="#000000" />
+                    android:clickable="false"
+                    android:drawableLeft="@drawable/ic_vermapa"
+                    android:text="Mapa"
+                    android:textSize="24sp" />
+
+                <TextView
+                    android:id="@+id/ordenarPor"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:drawableLeft="@drawable/ic_ordenarpor"
+                    android:text="Ordenar"
+                    android:textSize="24sp" />
+
+                <TextView
+                    android:id="@+id/filtrar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:drawableLeft="@drawable/ic_filtrar"
+                    android:text="Filtrar"
+                    android:textSize="24sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toTopOf="@+id/recycler"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/opciones">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Inmuebles añadidos recientemente"
+                    android:textSize="25sp"
+                    android:textStyle="bold" />
+
             </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_marginTop="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="8dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

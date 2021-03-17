@@ -19,7 +19,6 @@ class Inmueble{
     var numBanos : Int? = null
     var superficie : Double? = null
     var direccion : String? = null
-
     var tipoInmueble : String? = null
     var intencion : String? = null //vender o alquilar
     var precio : Int? = null
@@ -34,7 +33,8 @@ class Inmueble{
     //EXTRAS 0 si 1 no se pueden añadir mas o quitar los que sobran
     var caractertisicasList = mutableListOf(true, false)
     var caracteristicas : String? = null
-
+    constructor( title: String,   price: Int,  surface: Double,  photos: Array<Int>){
+    }
     constructor( id : String?, propietario : User?,  numHabitaciones : Int?, superficie : Double?,
                  direccion: String?, tipoInmueble: String?, intencion: String?, precio : Int?,
                  certificadoEnergetico : String?, descripcion : String?, titulo : String? , estado: String?  ) {
