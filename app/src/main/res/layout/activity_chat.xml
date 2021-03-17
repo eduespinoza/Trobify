@@ -38,7 +38,11 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
         <ImageButton
+<<<<<<< HEAD
             android:id="@+id/btnEnviarFoto"
+=======
+            android:id="@+id/sendPicture"
+>>>>>>> parent of af3f9d6 (Revert "Chat v2")
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@android:drawable/ic_menu_gallery"
@@ -60,6 +64,10 @@
     </LinearLayout>
 </LinearLayout>
 
+<<<<<<< HEAD
 >>>>>>> parent of 3f6d8d4 (Chat V2)
+=======
+>>>>>>> parent of 85181af (Revert "Chat V2")
+>>>>>>> parent of af3f9d6 (Revert "Chat v2")
 
 </androidx.constraintlayout.widget.ConstraintLayout>
