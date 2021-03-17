@@ -9,11 +9,12 @@ class MainActivity : AppCompatActivity() {
 
     private val db = FirebaseFirestore.getInstance()
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val goLogin = Intent(this, Login::class.java)
+        val goLogin = Intent(this, Chat::class.java)
         startActivity(goLogin)
 
         // para probar maintrobify
