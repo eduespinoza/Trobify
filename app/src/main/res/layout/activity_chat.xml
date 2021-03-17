@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-<<<<<<< HEAD
-    tools:context=".Chat">
-=======
     tools:context="com.example.trobify.Chat"
     android:padding="5sp"
     android:orientation="vertical">
@@ -38,11 +36,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
         <ImageButton
-<<<<<<< HEAD
-            android:id="@+id/btnEnviarFoto"
-=======
             android:id="@+id/sendPicture"
->>>>>>> parent of af3f9d6 (Revert "Chat v2")
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@android:drawable/ic_menu_gallery"
@@ -63,11 +57,3 @@
             app:backgroundTint="#009688" />
     </LinearLayout>
 </LinearLayout>
-
-<<<<<<< HEAD
->>>>>>> parent of 3f6d8d4 (Chat V2)
-=======
->>>>>>> parent of 85181af (Revert "Chat V2")
->>>>>>> parent of af3f9d6 (Revert "Chat v2")
-
-</androidx.constraintlayout.widget.ConstraintLayout>

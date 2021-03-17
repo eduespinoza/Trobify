@@ -1,6 +1,7 @@
 package com.example.trobify
 
 import android.R.id
+import android.R.layout
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -21,7 +22,7 @@ class MessagesAdapter(private val c : Context) :
 
     override fun onCreateViewHolder(parent : ViewGroup, viewType : Int) : MessageHolder {
         val v : View =
-            LayoutInflater.from(c).inflate(R.layout.messages_card_view, parent, false)
+            LayoutInflater.from(c).inflate(R.layout.message_card, parent, false)
         return MessageHolder(v)
     }
 
@@ -30,18 +31,18 @@ class MessagesAdapter(private val c : Context) :
         holder.message.setText(listMessage[position].message)
 
         if (listMessage[position].type_message.equals("2")) {
-            holder.profilePicture.setVisibility(View.VISIBLE)
+            //holder.profilePicture.setVisibility(View.VISIBLE)
             holder.message.setVisibility(View.VISIBLE)
-            Glide.with(c).load(listMessage[position].urlPicture).into(holder.getMessagePicture())
+            //Glide.with(c).load(listMessage[position].getprofilePictureMessage()).into(holder.getMessagePicture())
         } else if (listMessage[position].type_message.equals("1")) {
-            holder.getMessagePicture()?.setVisibility(View.GONE)
+            //holder.getMessagePicture()?.setVisibility(View.GONE)
             holder.message.setVisibility(View.VISIBLE)
         }
-        if (listMessage[position].profilePicture?.isEmpty()!!) {
-            holder.profilePicture.setImageResource(R.mipmap.ic_launcher)
+        if (listMessage[position].getprofilePictureMessage()?.isEmpty()!!) {
+            //holder.profilePicture.setImageResource(R.mipmap.ic_launcher)
         } else {
-            Glide.with(c).load(listMessage[position].profilePicture)
-                .into(holder.profilePicture)
+            Glide.with(c).load(listMessage[position].getprofilePictureMessage())
+                //.into(holder.profilePicture)
         }
         val codigoHora : Long = listMessage[position].time!!
         val d = Date(codigoHora)

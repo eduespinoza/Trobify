@@ -15,6 +15,6 @@ class MessageReception : Message {
         profilePicture : String?,
         type_message : String?,
         time : Long?
-    ) : super(message, urlPicture , name , profilePicture, type_message ) { this.time = time }
+    ) : super(message!!, urlPicture!! , name!! , profilePicture!!, type_message!! ) { this.time = time }
 
 }
