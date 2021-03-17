@@ -1,56 +1,36 @@
 package com.example.trobify
 
-import android.R.id
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import java.text.SimpleDateFormat
-import java.util.*
 
+class MessagesAdapter : RecyclerView.Adapter<HolderMessage> {
 
-class MessagesAdapter(private val c : Context) :
-    RecyclerView.Adapter<MessageHolder>() {
-    private val listMessage : MutableList<MessageReception> = ArrayList()
-    fun addMessage(m : MessageReception) {
-        listMessage.add(m)
-        notifyItemInserted(listMessage.size)
+    private var listMessage : MutableList<Message> = arrayListOf(Message())
+    private lateinit var context : Context
+
+    constructor(context : Context){ this.context = context }
+
+    private fun addMessage(message : Message){
+        listMessage.add(message)
+
     }
 
-    override fun onCreateViewHolder(parent : ViewGroup, viewType : Int) : MessageHolder {
-        val v : View =
-            LayoutInflater.from(c).inflate(R.layout.messages_card_view, parent, false)
-        return MessageHolder(v)
-    }
-
-    override fun onBindViewHolder(holder :  MessageHolder, position : Int) {
-        holder.name.setText(listMessage[position].name)
-        holder.message.setText(listMessage[position].message)
-
-        if (listMessage[position].type_message.equals("2")) {
-            holder.profilePicture.setVisibility(View.VISIBLE)
-            holder.message.setVisibility(View.VISIBLE)
-            Glide.with(c).load(listMessage[position].urlPicture).into(holder.getMessagePicture())
-        } else if (listMessage[position].type_message.equals("1")) {
-            holder.getMessagePicture()?.setVisibility(View.GONE)
-            holder.message.setVisibility(View.VISIBLE)
-        }
-        if (listMessage[position].profilePicture?.isEmpty()!!) {
-            holder.profilePicture.setImageResource(R.mipmap.ic_launcher)
-        } else {
-            Glide.with(c).load(listMessage[position].profilePicture)
-                .into(holder.profilePicture)
-        }
-        val codigoHora : Long = listMessage[position].time!!
-        val d = Date(codigoHora)
-        val sdf = SimpleDateFormat("hh:mm:ss a") //a pm o am
-        holder.time.setText(sdf.format(d))
+    override fun onCreateViewHolder(parent : ViewGroup, viewType : Int) : HolderMessage {
+        val v : View = LayoutInflater.from(context).inflate(R.layout.messages_card_view,parent,false )
+        return HolderMessage(v)
     }
 
     override fun getItemCount() : Int {
         return listMessage.size
+    }
+
+    override fun onBindViewHolder(holder : HolderMessage, position : Int) {
+        holder.getName()?.setText(listMessage.get(position).getName())
+        holder.getMessage()?.setText(listMessage.get(position).getMessage())
+        holder.getTime()?.setText(listMessage.get(position).getTime())
     }
 
 }
