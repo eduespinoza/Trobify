@@ -16,7 +16,7 @@ class MessageHolder : RecyclerView.ViewHolder{
     constructor(itemView : View) : super(itemView){
         name = itemView.findViewById<View>(R.id.profileName) as TextView
         message = itemView.findViewById<View>(R.id.txtMessage) as TextView
-        time = itemView.findViewById<View>(R.id.timeInMessage as TextView
+        time = itemView.findViewById<View>(R.id.timeInMessage) as TextView
         //profilePicture = itemView.findViewById<View>(R.id.fotoPerfilMensaje) as CircleImageView
         //messagePicture = itemView.findViewById<View>(R.id.mensajeFoto) as ImageView
     }
