@@ -56,7 +56,7 @@ class Chat : AppCompatActivity() {
         profilePicture2 = ""
 
         database = FirebaseDatabase.getInstance()
-        databaseReference = database!!.getReference("chat")
+        databaseReference = database!!.getReference("Sala Chat")
         storage = FirebaseStorage.getInstance()
 
         val layoutManager = LinearLayoutManager(this)
@@ -66,7 +66,7 @@ class Chat : AppCompatActivity() {
             databaseReference!!.push().setValue(
                 MessageSend(
                     txtMessage!!.text.toString(),
-                    name!!.text.toString(),
+                    name?.text.toString(),
                     profilePicture2,
                     "1",
                     ServerValue.TIMESTAMP
