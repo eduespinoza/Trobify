@@ -36,7 +36,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
         <ImageButton
-            android:id="@+id/sendPicture"
+            android:id="@+id/btnSendPicture"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@android:drawable/ic_menu_gallery"
@@ -50,7 +50,7 @@
             android:layout_weight="1"/>
 
         <Button
-            android:id="@+id/sendButton"
+            android:id="@+id/buttonSendMessage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:hint="Enviar"

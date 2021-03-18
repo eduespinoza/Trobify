@@ -40,8 +40,8 @@ class Chat : AppCompatActivity() {
         name = findViewById<View>(R.id.name) as? TextView
         rvMessages = findViewById<View>(R.id.rvMessages) as? RecyclerView
         txtMessage = findViewById<View>(R.id.txtMessage) as? EditText
-        btnSend = findViewById<View>(R.id.sendButton) as? Button
-        btnSendPicture = findViewById<View>(R.id.sendPicture) as? ImageButton
+        btnSend = findViewById<View>(R.id.buttonSendMessage) as? Button
+        btnSendPicture = findViewById<View>(R.id.btnSendPicture) as? ImageButton
         profilePicture2 = ""
         database = FirebaseDatabase.getInstance()
         databaseReference = database!!.getReference("chat")
