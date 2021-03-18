@@ -1,28 +1,26 @@
 package com.example.trobify
 
 class MessageSend : Message {
-    var hora : Map<*, *>? = null
+    var time : Map<*, *>? = null
 
     constructor() {}
-    constructor(hora : Map<*, *>?) {
-        this.hora = hora
-    }
+    constructor(hora : Map<*, *>?) { this.time = time }
 
     constructor(
-        mensaje : String?,
-        nombre : String?,
-        fotoPerfil : String?,
-        type_mensaje : String?,
-        hora : Map<*, *>?
-    ) : super(mensaje, nombre, fotoPerfil, type_mensaje) { this.hora = hora }
+        textMessage : String?,
+        name : String?,
+        profilePicture : String?,
+        type_message : String?,
+        time : Map<*, *>?
+    ) : super(textMessage, name, profilePicture, type_message) { this.time = time }
 
     constructor(
-        mensaje : String?,
-        urlFoto : String?,
-        nombre : String?,
-        fotoPerfil : String?,
-        type_mensaje : String?,
-        hora : Map<*, *>?
-    ) : super(mensaje, urlFoto, nombre, fotoPerfil, type_mensaje) { this.hora = hora }
+        textMessage : String?,
+        urlPicture : String?,
+        name : String?,
+        profilePicture : String?,
+        type_message : String?,
+        time : Map<*, *>?
+    ) : super(textMessage, urlPicture, name, profilePicture, type_message) { this.time = time }
 
 }

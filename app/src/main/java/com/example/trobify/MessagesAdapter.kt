@@ -28,26 +28,26 @@ class MessagesAdapter(private val c : Context) :
 
     override fun onBindViewHolder(holder :  MessageHolder, position : Int) {
         holder.name.setText(listMessage[position].name)
-        holder.message.setText(listMessage[position].message)
+        holder.textMessage.setText(listMessage[position].textMessage)
 
         if (listMessage[position].type_message.equals("2")) {
-            //holder.profilePicture.setVisibility(View.VISIBLE)
-            holder.message.setVisibility(View.VISIBLE)
-            //Glide.with(c).load(listMessage[position].getprofilePictureMessage()).into(holder.getMessagePicture())
+            holder.profilePictureInMessage.setVisibility(View.VISIBLE)
+            holder.textMessage.setVisibility(View.VISIBLE)
+            Glide.with(c).load(listMessage[position].urlPicture).into(holder.getPictureInMessage())
         } else if (listMessage[position].type_message.equals("1")) {
-            //holder.getMessagePicture()?.setVisibility(View.GONE)
-            holder.message.setVisibility(View.VISIBLE)
+            holder.getPictureInMessage()?.setVisibility(View.GONE)
+            holder.textMessage.setVisibility(View.VISIBLE)
         }
-        if (listMessage[position].getprofilePictureMessage()?.isEmpty()!!) {
-            //holder.profilePicture.setImageResource(R.mipmap.ic_launcher)
+        if (listMessage[position].profilePicture?.isEmpty()!!) {
+            holder.profilePictureInMessage.setImageResource(R.mipmap.ic_launcher)
         } else {
-            Glide.with(c).load(listMessage[position].getprofilePictureMessage())
-                //.into(holder.profilePicture)
+            Glide.with(c).load(listMessage[position].profilePicture)
+                .into(holder.profilePictureInMessage)
         }
-        val codigoHora : Long = listMessage[position].time!!
-        val d = Date(codigoHora)
-        val sdf = SimpleDateFormat("hh:mm:ss a") //a pm o am
-        holder.time.setText(sdf.format(d))
+        val timeCode : Long = listMessage[position].time!!
+        val d = Date(timeCode)
+        val dateF = SimpleDateFormat("hh:mm:ss a")
+        holder.time.setText(dateF.format(d))
     }
 
     override fun getItemCount() : Int {
