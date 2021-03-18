@@ -1,31 +1,35 @@
 package com.example.trobify
 
+import android.R.id
 import android.view.View
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import de.hdodenhof.circleimageview.CircleImageView
 
 
-class MessageHolder : RecyclerView.ViewHolder{
+class MessageHolder(itemView : View) : RecyclerView.ViewHolder(itemView) {
     var name : TextView
-    var message : TextView
+    var textMessage : TextView
     var time : TextView
-    //var profilePicture : CircleImageView
-    //private var messagePicture : ImageView
+    var profilePictureInMessage : CircleImageView
+    private var pictureInMessage : ImageView
 
-
-    constructor(itemView : View) : super(itemView){
-        name = itemView.findViewById<View>(R.id.profileName) as TextView
-        message = itemView.findViewById<View>(R.id.txtMessage) as TextView
-        time = itemView.findViewById<View>(R.id.timeInMessage as TextView
-        //profilePicture = itemView.findViewById<View>(R.id.fotoPerfilMensaje) as CircleImageView
-        //messagePicture = itemView.findViewById<View>(R.id.mensajeFoto) as ImageView
+    fun getPictureInMessage() : ImageView {
+        return pictureInMessage
     }
 
+    fun setPictureInMessage(pictureInMessage : ImageView) {
+        this.pictureInMessage = pictureInMessage
+    }
 
-    //fun getMessagePicture() : ImageView? {
-        //return messagePicture
-    //}
-
+    init {
+        name = itemView.findViewById<View>(R.id.nameInMessage) as TextView
+        textMessage = itemView.findViewById<View>(R.id.messageInMessage) as TextView
+        time = itemView.findViewById<View>(R.id.timeInMessage) as TextView
+        profilePictureInMessage = itemView.findViewById<View>(R.id.profilePictureInMessage) as CircleImageView
+        pictureInMessage = itemView.findViewById<View>(R.id.pictureInMessage) as ImageView
+    }
 }
 
 
