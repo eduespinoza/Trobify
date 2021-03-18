@@ -21,32 +21,44 @@ import de.hdodenhof.circleimageview.CircleImageView
 
 
 class Chat : AppCompatActivity() {
-    private var profilePicture : CircleImageView? = null
     private var name : TextView? = null
-    private var rvMessages : RecyclerView? = null
     private var txtMessage : EditText? = null
-    private var btnSend : Button? = null
-    private var adapter : MessagesAdapter? = null
+    private var profilePicture : CircleImageView? = null
     private var btnSendPicture : ImageButton? = null
+    private var btnSend : Button? = null
+
+    private var adapter : MessagesAdapter? = null
+    private var rvMessages : RecyclerView? = null
+    private var profilePicture2 : String? = null
+
     private var database : FirebaseDatabase? = null
     private var databaseReference : DatabaseReference? = null
     private var storage : FirebaseStorage? = null
     private var storageReference : StorageReference? = null
-    private var profilePicture2 : String? = null
+
+    companion object {
+        private const val PICTURE = 1
+        private const val PROFILE = 2
+    }
+
     override fun onCreate(savedInstanceState : Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat)
-        profilePicture = findViewById<View>(R.id.profilePicture) as? CircleImageView
+
         name = findViewById<View>(R.id.name) as? TextView
-        rvMessages = findViewById<View>(R.id.rvMessages) as? RecyclerView
         txtMessage = findViewById<View>(R.id.txtMessage) as? EditText
-        btnSend = findViewById<View>(R.id.buttonSendMessage) as? Button
+        profilePicture = findViewById<View>(R.id.profilePicture) as? CircleImageView
         btnSendPicture = findViewById<View>(R.id.btnSendPicture) as? ImageButton
+        btnSend = findViewById<View>(R.id.buttonSendMessage) as? Button
+
+        adapter = MessagesAdapter(this)
+        rvMessages = findViewById<View>(R.id.rvMessages) as? RecyclerView
         profilePicture2 = ""
+
         database = FirebaseDatabase.getInstance()
         databaseReference = database!!.getReference("chat")
         storage = FirebaseStorage.getInstance()
-        adapter = MessagesAdapter(this)
+
         val layoutManager = LinearLayoutManager(this)
         rvMessages!!.layoutManager = layoutManager
         rvMessages!!.adapter = adapter
@@ -68,7 +80,7 @@ class Chat : AppCompatActivity() {
             i.putExtra(Intent.EXTRA_LOCAL_ONLY, true)
             startActivityForResult(
                 Intent.createChooser(i, "Selecciona una foto"),
-                Chat.Companion.PHOTO_SEND
+                Chat.Companion.PICTURE
             )
         }
         profilePicture!!.setOnClickListener {
@@ -77,7 +89,7 @@ class Chat : AppCompatActivity() {
             i.putExtra(Intent.EXTRA_LOCAL_ONLY, true)
             startActivityForResult(
                 Intent.createChooser(i, "Selecciona una foto"),
-                Chat.Companion.PHOTO_PERFIL
+                Chat.Companion.PROFILE
             )
         }
         adapter!!.registerAdapterDataObserver(object : AdapterDataObserver() {
@@ -127,16 +139,16 @@ class Chat : AppCompatActivity() {
         data : Intent?
     ) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == Chat.Companion.PHOTO_SEND && resultCode == Activity.RESULT_OK) {
+        if (requestCode == Chat.Companion.PICTURE && resultCode == Activity.RESULT_OK) {
             val u = data!!.data
             storageReference = storage!!.getReference("imagenes_chat") //imagenes_chat
-            val fotoReferencia = storageReference!!.child(u!!.lastPathSegment!!)
-            fotoReferencia.putFile(u).addOnSuccessListener(
+            val referencePicture = storageReference!!.child(u!!.lastPathSegment!!)
+            referencePicture.putFile(u).addOnSuccessListener(
                 this
             ) { taskSnapshot ->
                 val u : Uri = taskSnapshot.metadata?.reference?.downloadUrl!!.result  //getDownloadUrl()
                 val m = MessageSend(
-                    "Kevin te ha enviado una foto",
+                    "Paco te ha enviado una foto",
                     u.toString(),
                     name!!.text.toString(),
                     profilePicture2,
@@ -145,17 +157,17 @@ class Chat : AppCompatActivity() {
                 )
                 databaseReference!!.push().setValue(m)
             }
-        } else if (requestCode == Chat.Companion.PHOTO_PERFIL && resultCode == Activity.RESULT_OK) {
+        } else if (requestCode == Chat.Companion.PICTURE && resultCode == Activity.RESULT_OK) {
             val u = data!!.data
             storageReference = storage!!.getReference("foto_perfil") //imagenes_chat
-            val fotoReferencia = storageReference!!.child(u!!.lastPathSegment!!)
-            fotoReferencia.putFile(u).addOnSuccessListener(
+            val referencePicture = storageReference!!.child(u!!.lastPathSegment!!)
+            referencePicture.putFile(u).addOnSuccessListener(
                 this
             ) { taskSnapshot ->
                 val u : Uri = taskSnapshot.metadata?.reference?.downloadUrl!!.result
                 profilePicture2 = u.toString()
                 val m = MessageSend(
-                    "Kevin ha actualizado su foto de perfil",
+                    "Paco ha actualizado su foto de perfil",
                     u.toString(),
                     name!!.text.toString(),
                     profilePicture2,
@@ -166,10 +178,5 @@ class Chat : AppCompatActivity() {
                 Glide.with(this@Chat).load(u.toString()).into(profilePicture)
             }
         }
-    }
-
-    companion object {
-        private const val PHOTO_SEND = 1
-        private const val PHOTO_PERFIL = 2
     }
 }
