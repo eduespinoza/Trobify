@@ -16,18 +16,19 @@ class MessageOfertaContraoferta  : AppCompatActivity(){
         setContentView(R.layout.activity_message_oferta_contraoferta)
 
         val buttonSendOffer = findViewById<Button>(R.id.buttonSendOffer)
+        val buttonCancelOffer = findViewById<Button>(R.id.buttonCancelOffer)
 
         val textNameInmueble = findViewById<TextView>(R.id.textNameInmueble)
-        textNameInmueble.setText(Inmueble)
+        //textNameInmueble.setText()
 
         val textFeaturesInmueble = findViewById<TextView>(R.id.textFeaturesInmueble)
-        textFeaturesInmueble.setText()
+        //textFeaturesInmueble.setText()
 
         val textLocationInmueble = findViewById<TextView>(R.id.textLocationInmueble)
-        textLocationInmueble.setText()
+        //textLocationInmueble.setText()
 
         val textPriceInmueble = findViewById<TextView>(R.id.textPriceInmueble)
-        textPriceInmueble.setText()
+        //textPriceInmueble.setText()
 
         buttonSendOffer.setOnClickListener {
             checkOffer()
@@ -35,6 +36,10 @@ class MessageOfertaContraoferta  : AppCompatActivity(){
                 createMessage()
                 sendMessage()
             }
+        }
+
+        buttonCancelOffer.setOnClickListener {
+            finish()
         }
     }
 
@@ -52,12 +57,12 @@ class MessageOfertaContraoferta  : AppCompatActivity(){
 
     private fun createMessage(){
         val textOfferQuantity = findViewById<EditText>(R.id.textOfferQuantity)
-        Message().textMessage = "OFERTA: " +
-                                "Nombre del inmueble" +
-                                "Cantidad ofrecida: " + textOfferQuantity.toString()
+        val message:String = "OFERTA: " +
+                            "Nombre del inmueble" +
+                            "Cantidad ofrecida: " + textOfferQuantity.toString()
     }
 
     private fun sendMessage(){
-        MessageSend()
+
     }
 }

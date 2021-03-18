@@ -14,7 +14,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_margin="20dp"
             android:orientation="vertical"
             tools:layout_editor_absoluteX="103dp"
@@ -24,7 +24,7 @@
                 android:id="@+id/textView25"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Nombre del inmueble"
+                android:text="@string/nombre_del_inmueble"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body2"
                 android:textSize="18sp" />
 
@@ -32,15 +32,14 @@
                 android:id="@+id/textNameInmueble"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:text="TextView" />
+                android:layout_marginTop="10dp" />
 
             <TextView
                 android:id="@+id/textView28"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
-                android:text="Loacalización"
+                android:text="@string/loacalizaci_n"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body2"
                 android:textSize="18sp" />
 
@@ -48,15 +47,14 @@
                 android:id="@+id/textLocationInmueble"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:text="TextView" />
+                android:layout_marginTop="10dp" />
 
             <TextView
                 android:id="@+id/textView17"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:text="Características"
+                android:text="@string/caracter_sticas"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body2"
                 android:textSize="18sp" />
 
@@ -64,15 +62,14 @@
                 android:id="@+id/textFeaturesInmueble"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:text="TextView" />
+                android:layout_marginTop="10dp" />
 
             <TextView
                 android:id="@+id/textView26"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:text="Precio del inmueble"
+                android:text="@string/precio_del_inmueble"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body2"
                 android:textSize="18sp" />
 
@@ -80,15 +77,14 @@
                 android:id="@+id/textPriceInmueble"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:text="TextView" />
+                android:layout_marginTop="10dp" />
 
             <TextView
                 android:id="@+id/textView9"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
-                android:text="Introduce la cantidad ofrecida"
+                android:text="@string/introduce_la_cantidad_ofrecida"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body2"
                 android:textSize="18sp" />
 
@@ -106,7 +102,16 @@
                 android:layout_marginLeft="30dp"
                 android:layout_marginTop="30dp"
                 android:layout_marginRight="30dp"
-                android:text="Enviar oferta" />
+                android:text="@string/enviar_oferta" />
+
+            <Button
+                android:id="@+id/buttonCancelOffer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="30dp"
+                android:layout_marginRight="30dp"
+                android:text="Cancelar oferta" />
 
         </LinearLayout>
     </ScrollView>

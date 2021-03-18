@@ -153,6 +153,11 @@ class FiltrosBusqueda : AppCompatActivity() {
             val goSearch = Intent(this, MainTrobify::class.java)
             startActivity(goSearch)
         }
+
+        val buttonBack = findViewById<ImageButton>(R.id.buttonBack)
+        buttonBack.setOnClickListener{
+            finish()
+        }
     }
 
     private fun addOptionsInmueble(){

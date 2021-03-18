@@ -84,4 +84,13 @@
         <item>Estudio</item>
     </string-array>
     <string name="title_activity_pruebas">Pruebas</string>
+    <string name="nombre_del_inmueble">Nombre del inmueble</string>
+    <string name="textview">TextView</string>
+    <string name="loacalizaci_n">Loacalización</string>
+    <string name="textview">TextView</string>
+    <string name="caracter_sticas">Características</string>
+    <string name="textview">TextView</string>
+    <string name="precio_del_inmueble">Precio del inmueble</string>
+    <string name="introduce_la_cantidad_ofrecida">Introduce la cantidad ofrecida</string>
+    <string name="enviar_oferta">Enviar oferta</string>
 </resources>
