@@ -1,22 +1,19 @@
 package com.example.trobify
 
 class MessageReception : Message {
-    var hora : Long? = null
+    var time : Long? = null
 
     constructor() {}
-    constructor(hora : Long?) {
-        this.hora = hora
-    }
-
+    constructor(hora : Long?) { this.time = time }
     constructor(
-        mensaje : String?,
-        urlFoto : String?,
-        nombre : String?,
-        fotoPerfil : String?,
-        type_mensaje : String?,
-        hora : Long?
-    ) : super(mensaje, urlFoto, nombre, fotoPerfil, type_mensaje) {
-        this.hora = hora
+        textMessage : String?,
+        urlPicture : String?,
+        name : String?,
+        profilePicture : String?,
+        type_message : String?,
+        time : Long?
+    ) : super(textMessage, urlPicture, name, profilePicture, type_message) {
+        this.time = time
     }
 
 }

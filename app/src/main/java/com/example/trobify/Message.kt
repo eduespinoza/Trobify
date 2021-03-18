@@ -1,7 +1,7 @@
 package com.example.trobify
 
 
-class Message {
+open class Message {
     var textMessage : String? = null
     var urlPicture : String? = null
     var name : String? = null
