@@ -13,12 +13,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="10sp">
+
             <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/fotoPerfilMensaje"
+                android:id="@+id/profilePictureInMessage"
                 android:layout_width="24sp"
                 android:layout_height="24sp"
-                android:src="@mipmap/ic_launcher"
-                />
+                android:src="@drawable/com_facebook_profile_picture_blank_portrait" />
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
@@ -27,26 +27,28 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
+
                 <TextView
-                    android:id="@+id/nombreMensaje"
+                    android:id="@+id/nameInMessage"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Kevin"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1"
+                    android:text="Paco" />
                 <TextView
-                    android:id="@+id/horaMensaje"
+                    android:id="@+id/timeInMessage"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="00:00"/>
             </LinearLayout>
+
             <TextView
-                android:visibility="gone"
-                android:id="@+id/mensajeMensaje"
+                android:id="@+id/messageInMessage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Hola bienvenido"/>
+                android:text="Buenas"
+                android:visibility="gone" />
             <ImageView
-                android:id="@+id/mensajeFoto"
+                android:id="@+id/pictureInMessage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:visibility="gone"/>
