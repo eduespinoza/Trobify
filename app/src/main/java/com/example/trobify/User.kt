@@ -46,6 +46,9 @@ class User {
         favourite.add("Inmueble") //cambiar a inmueble luego
 
     }
+    fun getId() : String?{
+        return this.id
+    }
 
 
 

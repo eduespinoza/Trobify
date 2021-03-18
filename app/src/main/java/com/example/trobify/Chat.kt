@@ -14,7 +14,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.AdapterDataObserver
 import com.bumptech.glide.Glide
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.*
+import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import de.hdodenhof.circleimageview.CircleImageView
@@ -56,25 +58,26 @@ class Chat : AppCompatActivity() {
         profilePicture2 = ""
 
         database = FirebaseDatabase.getInstance()
-        databaseReference = database!!.getReference("Sala Chat")
+        databaseReference = database?.reference?.child("Chat")
+
         storage = FirebaseStorage.getInstance()
 
         val layoutManager = LinearLayoutManager(this)
-        rvMessages!!.layoutManager = layoutManager
-        rvMessages!!.adapter = adapter
-        btnSend!!.setOnClickListener {
-            databaseReference!!.push().setValue(
+        rvMessages?.layoutManager = layoutManager
+        rvMessages?.adapter = adapter
+        btnSend?.setOnClickListener {
+            databaseReference?.push()?.setValue(
                 MessageSend(
-                    txtMessage!!.text.toString(),
+                    txtMessage?.text.toString(),
                     name?.text.toString(),
                     profilePicture2,
                     "1",
                     ServerValue.TIMESTAMP
                 )
             )
-            txtMessage!!.setText("")
+            txtMessage?.setText("")
         }
-        btnSendPicture!!.setOnClickListener {
+        btnSendPicture?.setOnClickListener {
             val i = Intent(Intent.ACTION_GET_CONTENT)
             i.type = "image/jpeg"
             i.putExtra(Intent.EXTRA_LOCAL_ONLY, true)
@@ -83,7 +86,7 @@ class Chat : AppCompatActivity() {
                 Chat.Companion.PICTURE
             )
         }
-        profilePicture!!.setOnClickListener {
+        profilePicture?.setOnClickListener {
             val i = Intent(Intent.ACTION_GET_CONTENT)
             i.type = "image/jpeg"
             i.putExtra(Intent.EXTRA_LOCAL_ONLY, true)
@@ -92,7 +95,7 @@ class Chat : AppCompatActivity() {
                 Chat.Companion.PROFILE
             )
         }
-        adapter!!.registerAdapterDataObserver(object : AdapterDataObserver() {
+        adapter?.registerAdapterDataObserver(object : AdapterDataObserver() {
             override fun onItemRangeInserted(
                 positionStart : Int,
                 itemCount : Int
@@ -101,7 +104,7 @@ class Chat : AppCompatActivity() {
                 setScrollbar()
             }
         })
-        databaseReference!!.addChildEventListener(object : ChildEventListener {
+        databaseReference?.addChildEventListener(object : ChildEventListener {
             override fun onChildAdded(
                 dataSnapshot : DataSnapshot,
                 s : String?
@@ -140,42 +143,44 @@ class Chat : AppCompatActivity() {
     ) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == Chat.Companion.PICTURE && resultCode == Activity.RESULT_OK) {
-            val u = data!!.data
-            storageReference = storage!!.getReference("imagenes_chat") //imagenes_chat
-            val referencePicture = storageReference!!.child(u!!.lastPathSegment!!)
-            referencePicture.putFile(u).addOnSuccessListener(
+            val u : Uri? = data?.data
+            storageReference = storage?.getReference("imagenes_chat") //imagenes_chat
+            val referencePicture  = u?.lastPathSegment?.let { storageReference?.child(it) }
+            referencePicture?.putFile(u)?.addOnSuccessListener(
                 this
             ) { taskSnapshot ->
-                val u : Uri = taskSnapshot.metadata?.reference?.downloadUrl!!.result  //getDownloadUrl()
+                val u : String = taskSnapshot.getMetadata()?.reference?.downloadUrl.toString()  //taskSnapshot.metadata?.reference?.downloadUrl?.result  //getDownloadUrl()
                 val m = MessageSend(
                     "Paco te ha enviado una foto",
                     u.toString(),
-                    name!!.text.toString(),
+                    name?.text.toString(),
                     profilePicture2,
                     "2",
                     ServerValue.TIMESTAMP
                 )
-                databaseReference!!.push().setValue(m)
+                databaseReference?.push()?.setValue(m)
             }
         } else if (requestCode == Chat.Companion.PICTURE && resultCode == Activity.RESULT_OK) {
-            val u = data!!.data
-            storageReference = storage!!.getReference("foto_perfil") //imagenes_chat
-            val referencePicture = storageReference!!.child(u!!.lastPathSegment!!)
-            referencePicture.putFile(u).addOnSuccessListener(
-                this
-            ) { taskSnapshot ->
-                val u : Uri = taskSnapshot.metadata?.reference?.downloadUrl!!.result
-                profilePicture2 = u.toString()
-                val m = MessageSend(
-                    "Paco ha actualizado su foto de perfil",
-                    u.toString(),
-                    name!!.text.toString(),
-                    profilePicture2,
-                    "2",
-                    ServerValue.TIMESTAMP
-                )
-                databaseReference!!.push().setValue(m)
-                Glide.with(this@Chat).load(u.toString()).into(profilePicture)
+            val u = data?.data
+            storageReference = storage?.getReference("foto_perfil") //imagenes_chat
+            val referencePicture = u?.lastPathSegment?.let { storageReference?.child(it) }
+            if (referencePicture != null) {
+                referencePicture.putFile(u).addOnSuccessListener(
+                    this
+                ) { taskSnapshot ->
+                    val u : String = taskSnapshot.getMetadata()?.reference?.downloadUrl.toString() //Uri = taskSnapshot.metadata?.reference?.downloadUrl?.result
+                    profilePicture2 = u.toString()
+                    val m = MessageSend(
+                        "Paco ha actualizado su foto de perfil",
+                        u.toString(),
+                        name?.text.toString(),
+                        profilePicture2,
+                        "2",
+                        ServerValue.TIMESTAMP
+                    )
+                    databaseReference?.push()?.setValue(m)
+                    Glide.with(this@Chat).load(u.toString()).into(profilePicture)
+                }
             }
         }
     }

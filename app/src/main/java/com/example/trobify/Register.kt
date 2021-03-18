@@ -1,6 +1,8 @@
 package com.example.trobify
 
+import android.app.Dialog
 import android.content.ContentValues.TAG
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -15,8 +17,14 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ServerValue
 import com.google.firebase.ktx.Firebase
-
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
+import com.firebase.ui.database.BuildConfig
+import com.google.firebase.firestore.ktx.firestore
 
 
 class Register : AppCompatActivity() {
@@ -25,8 +33,9 @@ class Register : AppCompatActivity() {
     var email:String? = null
     var password:String? = null
     var comPassword:String? = null
+
+    var db = Firebase.firestore
     private lateinit var auth: FirebaseAuth
-    private lateinit var database: User
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,13 +58,13 @@ class Register : AppCompatActivity() {
 
     private  fun createNewUser(uEmail :String, uPassword :String){
         val id :Int = -1
+
         auth.createUserWithEmailAndPassword(uEmail, uPassword).addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
                         Log.d(TAG, "createUserWithEmail:success")
-                        helloMessage()
-                        val user = auth.currentUser
-                        val newUser :User = User(name,surname,email,user.uid,password)
-                        updateUI(user)
+                        auth.signInWithEmailAndPassword(email,password)
+                        finishCreation()
+
                     } else {
                         Log.w(TAG, "createUserWithEmail:failure", task.exception)
                         Toast.makeText(baseContext, "Authentication failed.",
@@ -64,13 +73,24 @@ class Register : AppCompatActivity() {
                 }
     }
 
-    private fun updateUI(user: FirebaseUser?) {
-        val returnMain = Intent(this, Pruebas::class.java)
-        returnMain.putExtra("Email",email)
-        startActivity(returnMain)
-        finish()
-    }
+    private fun finishCreation(){
+        val user = User(name,surname,email,auth.uid,password)
+        val userDb = hashMapOf(
+            "name" to name,
+            "surname" to surname,
+            "email" to email,
+            "password" to password,
+            "profilePic" to "default"
+        )
+        user.getId()?.let {
+            db.collection("users").document(it)
+                .set(userDb)
+                .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully written!") }
+                .addOnFailureListener { Log.w(TAG, "Error writing document" ) }
+        }
 
+        finishMessage()
+   }
 
     //Checks
     private fun checkName() : Boolean{
@@ -95,6 +115,7 @@ class Register : AppCompatActivity() {
         if(email!!.isEmpty()){ emptyMessage(); return false}
         val emailPattern = Patterns.EMAIL_ADDRESS
         if(!emailPattern.matcher(email).matches()){ incorrectEmailMessage(); return false}
+        //if(auth.fetchSignInMethodsForEmail(email) )
         return true
     }
 
@@ -106,7 +127,8 @@ class Register : AppCompatActivity() {
         if(!password.equals(comPassword)){ PasswordNotEqualMessage(); return false;}
         return true
     }
-    //messages
+
+    //Messages
     private fun emptyMessage() {
         val builder = AlertDialog.Builder(this)
         builder.setTitle("Error: Rellene todos los campos")
@@ -173,12 +195,12 @@ class Register : AppCompatActivity() {
         alertDialog.show()
     }
 
-    private fun helloMessage() {
+    private fun finishMessage(){
         val builder =  AlertDialog.Builder(this)
         builder.setTitle("Bienvenido: " + name)
         builder.setMessage(" Su usuario se ha registrado correctamente. ")
         builder.setIcon(android.R.drawable.ic_dialog_email)
-        builder.setNeutralButton("  Continue  "){ _, _ -> }
+        builder.setPositiveButton("  Continue  ", DialogInterface.OnClickListener{ Dialog , id -> finish() })
         val alertDialog: AlertDialog = builder.create()
         alertDialog.setCancelable(false)
         alertDialog.show()
