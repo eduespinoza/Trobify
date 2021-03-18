@@ -6,19 +6,19 @@ open class Message {
     var urlPicture : String? = null
     var name : String? = null
     var profilePicture : String? = null
-    var type_mensage : String? = null
+    var type_message : String? = null
 
     constructor() {}
     constructor(
         textMessage : String?,
         name : String?,
         profilePicture : String?,
-        type_mensage : String?
+        type_message : String?
     ) {
         this.textMessage = textMessage
         this.name = name
         this.profilePicture = profilePicture
-        this.type_mensage = type_mensage
+        this.type_message = type_message
     }
 
     constructor(
@@ -26,13 +26,13 @@ open class Message {
         urlPicture : String?,
         name : String?,
         profilePicture : String?,
-        type_mensage : String?
+        type_message : String?
     ) {
         this.textMessage = textMessage
         this.urlPicture = urlPicture
         this.name = name
         this.profilePicture = profilePicture
-        this.type_mensage = type_mensage
+        this.type_message = type_message
     }
 
 }
