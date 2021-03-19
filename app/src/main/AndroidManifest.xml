@@ -16,8 +16,11 @@
             android:label="@string/title_activity_pruebas"
             android:theme="@style/Theme.Trobify.NoActionBar" />
         <activity android:name=".Register" />
-        <activity android:name=".MainTrobify" />
-        <activity android:name=".ListaFavoritos" />
+        <activity
+            android:name=".MainTrobify"
+            android:theme="@style/Theme.Trobify.NoActionBar"
+            />
+
         <activity android:name=".FiltrosBusqueda" />
         <activity android:name=".Login" />
         <activity
