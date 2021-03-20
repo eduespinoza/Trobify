@@ -17,7 +17,7 @@ class Inmueble{
     var propietario : User? = null
     var numHabitaciones : Int? = null
     var numBanos : Int? = null
-    var superficie : Double? = null
+    var superficie : Int? = null
     var direccion : String? = null
     var tipoInmueble : String? = null
     var intencion : String? = null //vender o alquilar
@@ -33,9 +33,12 @@ class Inmueble{
     //EXTRAS 0 si 1 no se pueden añadir mas o quitar los que sobran
     var caractertisicasList = mutableListOf(true, false)
     var caracteristicas : String? = null
-    constructor( title: String,   price: Int,  surface: Double,  photos: Array<Int>){
+    constructor( title: String,   price: Int,  surface: Int,  photos: Array<Int>){
+        this.titulo = "Inmueble en " + title
+        this.precio = price
+        this.superficie = surface
     }
-    constructor( id : String?, propietario : User?,  numHabitaciones : Int?, superficie : Double?,
+    constructor( id : String?, propietario : User?,  numHabitaciones : Int?, superficie : Int?,
                  direccion: String?, tipoInmueble: String?, intencion: String?, precio : Int?,
                  certificadoEnergetico : String?, descripcion : String?, titulo : String? , estado: String?  ) {
         this.id = id
