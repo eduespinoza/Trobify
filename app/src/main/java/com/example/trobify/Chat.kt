@@ -1,9 +1,12 @@
 package com.example.trobify
 
 import android.app.Activity
+import android.content.ContentValues
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
@@ -14,12 +17,19 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.AdapterDataObserver
 import com.bumptech.glide.Glide
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.*
+import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.DocumentChange
+import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import com.google.type.DateTime
 import de.hdodenhof.circleimageview.CircleImageView
+import java.util.*
 
 
 class Chat : AppCompatActivity() {
@@ -33,10 +43,15 @@ class Chat : AppCompatActivity() {
     private var rvMessages : RecyclerView? = null
     private var profilePicture2 : String? = null
 
-    private var database : FirebaseDatabase? = null
-    private var databaseReference : DatabaseReference? = null
+    private var db = Firebase.firestore
+    private lateinit var auth : FirebaseAuth
+    private var dbreference : CollectionReference = db.collection("Chat")
+
+    private lateinit var database : FirebaseDatabase
+    private lateinit var databaseReference : DatabaseReference
     private var storage : FirebaseStorage? = null
     private var storageReference : StorageReference? = null
+    private var m : MessageReception? = null
 
     companion object {
         private const val PICTURE = 1
@@ -58,24 +73,30 @@ class Chat : AppCompatActivity() {
         profilePicture2 = ""
 
         database = FirebaseDatabase.getInstance()
-        databaseReference = database?.reference?.child("Chat")
+        databaseReference = database.getReference("Chat")
 
-        storage = FirebaseStorage.getInstance()
 
         val layoutManager = LinearLayoutManager(this)
+        storage = FirebaseStorage.getInstance()
         rvMessages?.layoutManager = layoutManager
         rvMessages?.adapter = adapter
+
         btnSend?.setOnClickListener {
-            databaseReference?.push()?.setValue(
-                MessageSend(
-                    txtMessage?.text.toString(),
-                    name?.text.toString(),
-                    profilePicture2,
-                    "1",
-                    ServerValue.TIMESTAMP
-                )
+            val chatMap = hashMapOf(
+                "message" to txtMessage?.text.toString(),
+                "user" to name?.text.toString(),
+                "profile_picture" to profilePicture2,
+                "type_message" to "1",
+                "time" to ServerValue.TIMESTAMP
             )
-            txtMessage?.setText("")
+            db.collection("Chat")
+                .add(chatMap)
+                .addOnSuccessListener { documentReference ->
+                    var chatId = documentReference
+                }
+                .addOnFailureListener { e ->
+                    Log.w("Error adding document", e)
+                }
         }
         btnSendPicture?.setOnClickListener {
             val i = Intent(Intent.ACTION_GET_CONTENT)
@@ -104,7 +125,9 @@ class Chat : AppCompatActivity() {
                 setScrollbar()
             }
         })
-        databaseReference?.addChildEventListener(object : ChildEventListener {
+
+
+        databaseReference.addChildEventListener(object : ChildEventListener {
             override fun onChildAdded(
                 dataSnapshot : DataSnapshot,
                 s : String?
@@ -130,6 +153,31 @@ class Chat : AppCompatActivity() {
 
             override fun onCancelled(databaseError : DatabaseError) {}
         })
+        dbreference.addSnapshotListener { snapshots , e ->
+            if (e != null) {  Log.w("Listen failed.", e); return@addSnapshotListener }
+            if (snapshots != null) {
+                for (dc in snapshots!!.documentChanges) {
+                    when (dc.type) {
+                        DocumentChange.Type.ADDED -> {
+                            val messageM = dc.document.get("message")
+                            val userM = dc.document.get("message")
+                            val profile_pictureM = dc.document.get("message")
+                            val type_messageM = dc.document.get("message")
+                            val timeM  = dc.document.get("message")
+
+                            //m = MessageReception(messageM.toString(), null , userM.toString() ,profile_pictureM.toString(), type_messageM.toString() , timeM.toString())
+                        }
+                    }
+                }
+
+                if (m != null) {
+                    adapter!!.addMessage(m!!)
+
+                } else {
+                    Log.w("", "Current data: null")
+                }
+            }
+        }
     }
 
     private fun setScrollbar() {
@@ -143,13 +191,13 @@ class Chat : AppCompatActivity() {
     ) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == Chat.Companion.PICTURE && resultCode == Activity.RESULT_OK) {
-            val u : Uri? = data?.data
+            val u : Uri = data!!.data!!
             storageReference = storage?.getReference("imagenes_chat") //imagenes_chat
             val referencePicture  = u?.lastPathSegment?.let { storageReference?.child(it) }
             referencePicture?.putFile(u)?.addOnSuccessListener(
                 this
             ) { taskSnapshot ->
-                val u : String = taskSnapshot.getMetadata()?.reference?.downloadUrl.toString()  //taskSnapshot.metadata?.reference?.downloadUrl?.result  //getDownloadUrl()
+                val u : String = taskSnapshot.metadata?.reference?.downloadUrl.toString()  //taskSnapshot.metadata?.reference?.downloadUrl?.result  //getDownloadUrl()
                 val m = MessageSend(
                     "Paco te ha enviado una foto",
                     u.toString(),

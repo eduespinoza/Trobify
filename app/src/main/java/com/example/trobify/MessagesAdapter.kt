@@ -31,12 +31,12 @@ class MessagesAdapter(private val c : Context) :
         holder.textMessage.setText(listMessage[position].textMessage)
 
         if (listMessage[position].type_message.equals("2")) {
-            holder.profilePictureInMessage.setVisibility(View.VISIBLE)
-            holder.textMessage.setVisibility(View.VISIBLE)
+            holder.getPictureInMessage().visibility = View.VISIBLE
+            holder.textMessage.visibility = View.VISIBLE
             Glide.with(c).load(listMessage[position].urlPicture).into(holder.getPictureInMessage())
         } else if (listMessage[position].type_message.equals("1")) {
-            holder.getPictureInMessage()?.setVisibility(View.GONE)
-            holder.textMessage.setVisibility(View.VISIBLE)
+            holder.getPictureInMessage().visibility = View.GONE
+            holder.textMessage.visibility = View.VISIBLE
         }
         if (listMessage[position].profilePicture?.isEmpty()!!) {
             holder.profilePictureInMessage.setImageResource(R.mipmap.ic_launcher)

@@ -52,7 +52,7 @@ class Register : AppCompatActivity() {
 
     private fun check() {
         if(checkName()){ if(checkSurname()){ if(checkEmail()){ if (checkPassWord()){
-                        createNewUser(email.toString(), password.toString())
+            createNewUser(email.toString(), password.toString())
         } } } }
     }
 
@@ -60,17 +60,17 @@ class Register : AppCompatActivity() {
         val id :Int = -1
 
         auth.createUserWithEmailAndPassword(uEmail, uPassword).addOnCompleteListener(this) { task ->
-                    if (task.isSuccessful) {
-                        Log.d(TAG, "createUserWithEmail:success")
-                        auth.signInWithEmailAndPassword(email,password)
-                        finishCreation()
+            if (task.isSuccessful) {
+                Log.d(TAG, "createUserWithEmail:success")
+                auth.signInWithEmailAndPassword(email,password)
+                finishCreation()
 
-                    } else {
-                        Log.w(TAG, "createUserWithEmail:failure", task.exception)
-                        Toast.makeText(baseContext, "Authentication failed.",
-                                Toast.LENGTH_SHORT).show()
-                    }
-                }
+            } else {
+                Log.w(TAG, "createUserWithEmail:failure", task.exception)
+                Toast.makeText(baseContext, "Authentication failed.",
+                    Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     private fun finishCreation(){
@@ -90,7 +90,7 @@ class Register : AppCompatActivity() {
         }
 
         finishMessage()
-   }
+    }
 
     //Checks
     private fun checkName() : Boolean{
@@ -115,7 +115,11 @@ class Register : AppCompatActivity() {
         if(email!!.isEmpty()){ emptyMessage(); return false}
         val emailPattern = Patterns.EMAIL_ADDRESS
         if(!emailPattern.matcher(email).matches()){ incorrectEmailMessage(); return false}
-        //if(auth.fetchSignInMethodsForEmail(email) )
+        if( emailExist(email) ){ emailAlreadyInUseMessage(); return false}
+
+
+
+
         return true
     }
 
@@ -126,6 +130,33 @@ class Register : AppCompatActivity() {
         if(password!!.length < 7){ shortPasswordMessage(); return false}
         if(!password.equals(comPassword)){ PasswordNotEqualMessage(); return false;}
         return true
+    }
+    //SOLUCIONAR
+    private fun getAllEmails() : MutableList<String>{
+        val db = Firebase.firestore
+        val emailList : MutableList<String> = mutableListOf()
+        val findEmails = db.collection("users").whereEqualTo("email",true)
+        findEmails.get()
+            .addOnSuccessListener { document ->
+                if (document != null) {
+                    emailList.add(document.toString())
+                    Log.d(TAG, "DocumentSnapshot data: $document")
+                } else {
+                    Log.d(TAG, "No such document")
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.d(TAG, "get failed with ", exception)
+            }
+
+        return emailList
+
+    }
+
+    private fun emailExist(email : String?) : Boolean{
+        val emailList = getAllEmails()
+        return emailList.contains(email)
+
     }
 
     //Messages
@@ -200,6 +231,17 @@ class Register : AppCompatActivity() {
         builder.setTitle("Bienvenido: " + name)
         builder.setMessage(" Su usuario se ha registrado correctamente. ")
         builder.setIcon(android.R.drawable.ic_dialog_email)
+        builder.setPositiveButton("  Continue  ", DialogInterface.OnClickListener{ Dialog , id -> finish() })
+        val alertDialog: AlertDialog = builder.create()
+        alertDialog.setCancelable(false)
+        alertDialog.show()
+    }
+
+    private fun emailAlreadyInUseMessage(){
+        val builder =  AlertDialog.Builder(this)
+        builder.setTitle("Error: Correo ya registrado")
+        builder.setMessage(" El correo ya esta asignado a otra cuenta ")
+        builder.setIcon(android.R.drawable.ic_dialog_alert)
         builder.setPositiveButton("  Continue  ", DialogInterface.OnClickListener{ Dialog , id -> finish() })
         val alertDialog: AlertDialog = builder.create()
         alertDialog.setCancelable(false)

@@ -8,6 +8,8 @@ import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.Query
+import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import io.grpc.Context
 
@@ -33,6 +35,7 @@ class User {
 
         //añadir a base de datos
     }
+    constructor(){}
 
     fun getName() : String? {
         return  this.name
@@ -50,12 +53,5 @@ class User {
         return this.id
     }
 
-
-
-
-    private fun updateUI(user: FirebaseUser?) {
-
-    }
-
-
+    private fun updateUI(user: FirebaseUser?) {}
 }
