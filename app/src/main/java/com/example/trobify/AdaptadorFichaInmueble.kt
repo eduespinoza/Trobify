@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.util.TypedValue
 import android.widget.Button
+import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -39,9 +40,21 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
         }
 
         val buttonContactar = findViewById<Button>(R.id.buttonContactarFicha)
-            buttonContactar.setOnClickListener {
-            val goContactar = Intent(this, Chat::class.java)
-            startActivity(goContactar)
+        val builder = AlertDialog.Builder(this@AdaptadorFichaInmueble)
+        buttonContactar.setOnClickListener {
+            builder.setItems(R.array.contactOptions) { dialog, which ->
+                if(which.equals(0)) {
+                    val goContactar = Intent(this, Chat::class.java)
+                    startActivity(goContactar)
+                }
+                else {
+                    introduceQuantityOferta(inmueble)
+                }
+            }
+
+            builder.setNegativeButton("Cancelar") { dialog, which -> dialog.dismiss() }
+            val dialog = builder.create()
+            dialog.show()
         }
 
         val buttonFav = findViewById<Button>(R.id.buttonFav)
@@ -141,5 +154,25 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
         alertDialog.setCancelable(false)
         alertDialog.show()
     }
+
+    private val builderIntroduceQuantityOferta = AlertDialog.Builder(this@AdaptadorFichaInmueble)
+    private val inflater = layoutInflater
+    private val dialogLayout = inflater.inflate(R.layout.edit_text_oferta, null)
+
+    private fun introduceQuantityOferta(inmueble : Inmueble){
+
+        with(builderIntroduceQuantityOferta){
+            setPositiveButton("Enviar mensaje"){dialog, which ->
+                messagePredefOferta(inmueble)
+            }
+            builderIntroduceQuantityOferta.setNegativeButton("Cancelar") { dialog, which -> dialog.dismiss() }
+            setView(dialogLayout)
+            show()
+        }
+    }
+
+    private fun messagePredefOferta(inmueble : Inmueble){
+        val priceIntroduced = dialogLayout.findViewById<EditText>(R.id.editText_oferta)
+        val message = "Oferta : " + inmueble.titulo + " Cantidad ofrecida : " + priceIntroduced
 
 }
