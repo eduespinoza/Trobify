@@ -12,9 +12,10 @@ import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import io.grpc.Context
+import java.io.Serializable
 
 
-class User {
+class User : Serializable{
 
     private var name : String? = null
     private var surname : String? = null

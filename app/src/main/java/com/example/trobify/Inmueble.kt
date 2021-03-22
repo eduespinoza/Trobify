@@ -140,7 +140,3 @@ class Inmueble : Serializable{
 
 
 }
-//db.collection("inmuebles").document("tipo de inmueble")
-//.set(docData)
-//.addOnSuccessListener { Log.d(TAG, "Inmueble guardado correctamente!") }
-//.addOnFailureListener { e -> Log.w(TAG, "Error al guardar inmueble", e) }

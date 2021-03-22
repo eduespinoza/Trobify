@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.util.TypedValue
 import android.widget.Button
+import android.content.DialogInterface
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
@@ -21,9 +22,10 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_ficha_inmueble)
-        actionBar?.hide()
 
+        var user = User("Pepe", "Viyuela", "correo@correo.com", "pepe123", "123456789")
         //var user = intent.extras?.get("usuario") as User
+
         var inmueble = intent.extras?.get("inmueble") as Inmueble
         var fotos = inmueble.getfotos()
         var fotosOrd = inmueble.getfotosord()
@@ -42,13 +44,16 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
         val buttonContactar = findViewById<Button>(R.id.buttonContactarFicha)
         val builder = AlertDialog.Builder(this@AdaptadorFichaInmueble)
         buttonContactar.setOnClickListener {
+            //val goContactar = Intent(this, Chat::class.java)
+            //startActivity(goContactar)
+
             builder.setItems(R.array.contactOptions) { dialog, which ->
                 if(which.equals(0)) {
                     val goContactar = Intent(this, Chat::class.java)
                     startActivity(goContactar)
                 }
                 else {
-                    introduceQuantityOferta(inmueble)
+                    //introduceQuantityOferta(inmueble)
                 }
             }
 
@@ -59,7 +64,7 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
 
         val buttonFav = findViewById<Button>(R.id.buttonFav)
         buttonFav.setOnClickListener {
-            //addToFav(user, inmueble)
+            addToFav(user, inmueble)
         }
 
 
@@ -68,9 +73,8 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
 
         val carouselView = findViewById<CarouselView>(R.id.carouselView)
         carouselView.setImageListener{ position, imageView ->
-            if (fotos != null) {
                 imageView.setImageResource(fotos.get(position))
-            }
+
         }
 
 
@@ -126,9 +130,6 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
         name.setTextColor(Color.BLACK)
         name.setTextSize(TypedValue.COMPLEX_UNIT_PX, 40F)
 
-
-
-
     }
 
     private fun llamadaMessage(inmueble : Inmueble) {
@@ -155,7 +156,7 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
         alertDialog.show()
     }
 
-    private val builderIntroduceQuantityOferta = AlertDialog.Builder(this@AdaptadorFichaInmueble)
+    /*private val builderIntroduceQuantityOferta = AlertDialog.Builder(this@AdaptadorFichaInmueble)
     private val inflater = layoutInflater
     private val dialogLayout = inflater.inflate(R.layout.edit_text_oferta, null)
 
@@ -175,5 +176,5 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
         val priceIntroduced = dialogLayout.findViewById<EditText>(R.id.editText_oferta)
         val message = "Oferta : " + inmueble.titulo + " Cantidad ofrecida : " + priceIntroduced
 
-    }
+    }*/
 }
