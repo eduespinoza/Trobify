@@ -14,8 +14,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val goLogin = Intent(this, Login::class.java)
-        startActivity(goLogin)
+        //val goLogin = Intent(this, Login::class.java)
+        //startActivity(goLogin)
 
         // para probar maintrobify
         //val goSearch = Intent(this, MainTrobify::class.java)
@@ -26,12 +26,21 @@ class MainActivity : AppCompatActivity() {
         //startActivity(goFiltros)
 
         // pa probar Ficha
-        //val goFicha = Intent(this, AdaptadorFichaInmueble::class.java)
-        //startActivity(goFicha)
+        var usuario = User("Pepe", "Viyuela", "correo@correo.com", "pepe123", "123456789")
+
+        var pisito = Inmueble("125", usuario, 3,1, 75, "piso", "vender", 500,
+            intArrayOf(R.drawable.piso1, R.drawable.piso2, R.drawable.piso3,R.drawable.piso4,R.drawable.piso5),
+            arrayOf("imagen1","imagen2", "imagen3", "imagen4", "imagen5"), "B", "Piso ideal para estudiantes....bla bla ",
+            "obre nueva", false, true, true, false, false,false, false,false)
+
+
+        val goFicha = Intent(this, AdaptadorFichaInmueble::class.java)
+        goFicha.putExtra("inmueble", pisito )
+        startActivity(goFicha)
 
         // pa los Favoritos
-        val goFav = Intent(this, ListaFavoritos::class.java)
-        startActivity(goFav)
+        //val goFav = Intent(this, ListaFavoritos::class.java)
+        //startActivity(goFav)
     }
 }
 

@@ -11,9 +11,10 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import io.grpc.Context
+import java.io.Serializable
 
 
-class Inmueble{
+class Inmueble : Serializable{
     var titulo : String? = null
     var id : String? = null
     var propietario : User? = null
@@ -26,7 +27,8 @@ class Inmueble{
     var intencion : String? = null //vender o alquilar
     var precio : Int? = null
 
-    //var photos : ArryList<>  //cambiar tipo a img
+    var fotos : IntArray = intArrayOf()
+    var fotosOrd : Array<String> = arrayOf()
     var certificadoEnergetico : String? = null  //Desde la A hasta la G, hay que hacer que solo deje poner las letras posibles
     var descripcion : String? = null
 
@@ -57,11 +59,13 @@ class Inmueble{
         numBanos : Int?,
         superficie : Int?,
 
-        direccion : Direccion?,
+        //direccion : Direccion?,
         tipoInmueble : String?,
         intencion : String?,
         precio : Int?,
 
+        fotos : IntArray,
+        fotosOrd : Array<String>,
         certificadoEnergetico : String?,
         descripcion : String?,
 
@@ -82,10 +86,12 @@ class Inmueble{
         this.numHabitaciones = numHabitaciones
         this.numBanos = numBanos
         this.superficie = superficie
-        this.direccion = direccion
+        //this.direccion = direccion
         this.tipoInmueble = tipoInmueble
         this.intencion = intencion
         this.precio = precio
+        this.fotos = fotos
+        this.fotosOrd = fotosOrd
         this.certificadoEnergetico = certificadoEnergetico
         this.descripcion = descripcion
         this.estado = estado
@@ -99,24 +105,34 @@ class Inmueble{
         this.trastero = trastero
         this.caracteristicas = caracteristicasToString()
 
-        if (direccion != null) {
-            this.titulo = "Inmueble en " + direccion.direccionToString()
-        }
+        //if (direccion != null) {
+          //  this.titulo = "Inmueble en " + direccion.direccionToString()
+        //}
     }
 
     fun caracteristicasToString( ) : String {
-        var res = "El piso dispone de "
+        var res = "El piso dispone de las siguientes caracteristicas: \n"
 
-        if(parking == true){ res += "-parking " }
-        if(ascensor == true){ res += "-ascensor " }
-        if(amueblado == true){ res += "-amueblado " }
-        if(calefaccion == true){ res += "-calefaccion " }
-        if(jardin == true){ res += "-jardin " }
-        if(piscina == true){ res += "-piscina " }
-        if(terraza == true){ res += "-terraza " }
-        if(trastero == true){ res += "-trastero " }
+        if(parking == true){ res += "-Parking\n" }
+        if(ascensor == true){ res += "-Ascensor\n" }
+        if(amueblado == true){ res += "-Amueblado\n" }
+        if(calefaccion == true){ res += "-Calefaccion\n" }
+        if(jardin == true){ res += "-Jardin\n" }
+        if(piscina == true){ res += "-Piscina\n" }
+        if(terraza == true){ res += "-Terraza\n" }
+        if(trastero == true){ res += "-Trastero\n" }
 
         return res
+    }
+
+
+    fun getfotos() : IntArray{
+        return fotos
+    }
+
+    fun getfotosord() : Array<String>{
+        return fotosOrd
+
     }
 
 
