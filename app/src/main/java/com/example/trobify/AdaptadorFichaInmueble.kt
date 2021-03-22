@@ -16,7 +16,8 @@ import com.synnapps.carouselview.CarouselView
 class AdaptadorFichaInmueble() : AppCompatActivity() {
 
     //Si se quiere pasar un inmueble hay que pasarlo con el putextra al intent de la siguiente forma
-    //goFicha.putExtra("inmueble", elinmueble)
+    //val goFicha = Intent(this, AdaptadorFichaInmueble::class.java)
+    //goFicha.putExtra("inmueble", el inmueble que queremos pasar)
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,8 +45,6 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
         val buttonContactar = findViewById<Button>(R.id.buttonContactarFicha)
         val builder = AlertDialog.Builder(this@AdaptadorFichaInmueble)
         buttonContactar.setOnClickListener {
-            //val goContactar = Intent(this, Chat::class.java)
-            //startActivity(goContactar)
 
             builder.setItems(R.array.contactOptions) { dialog, which ->
                 if(which.equals(0)) {
@@ -79,7 +78,7 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
 
 
         carouselView.setImageClickListener{ position ->
-            Toast.makeText(applicationContext, fotosOrd?.get(position), Toast.LENGTH_SHORT).show()
+            Toast.makeText(applicationContext, fotosOrd.get(position), Toast.LENGTH_SHORT).show()
         }
         carouselView.pageCount = fotosOrd.size
 
@@ -91,42 +90,42 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
     private fun rellenar(inmueble : Inmueble) {
 
         val direccion =  findViewById<TextView>(R.id.textViewCalleFicha)
-        direccion.text = inmueble?.titulo
+        direccion.text = inmueble.titulo
         direccion.setTextColor(Color.BLACK)
         direccion.setTextSize(TypedValue.COMPLEX_UNIT_PX, 40F)
 
         val precio = findViewById<TextView>(R.id.textViewPrecioFicha)
-        precio.text = inmueble?.precio.toString()+ " €"
+        precio.text = inmueble.precio.toString()+ " €"
         precio.setTextColor(Color.BLACK)
         precio.setTextSize(TypedValue.COMPLEX_UNIT_PX, 40F)
 
         val numHabitaciones =  findViewById<TextView>(R.id.textViewHabitacionesFicha)
-        numHabitaciones.text = inmueble?.numHabitaciones.toString() + " habitaciones"
+        numHabitaciones.text = inmueble.numHabitaciones.toString() + " habitaciones"
         numHabitaciones.setTextColor(Color.BLACK)
         numHabitaciones.setTextSize(TypedValue.COMPLEX_UNIT_PX, 40F)
 
         val numBanos = findViewById<TextView>(R.id.textViewBanosFicha)
-        numBanos.text = inmueble?.numBanos.toString() + " baños"
+        numBanos.text = inmueble.numBanos.toString() + " baños"
         numBanos.setTextColor(Color.BLACK)
         numBanos.setTextSize(TypedValue.COMPLEX_UNIT_PX, 40F)
 
         val superficie = findViewById<TextView>(R.id.textViewSuperficieFicha)
-        superficie.text = inmueble?.superficie.toString() + "m2"
+        superficie.text = inmueble.superficie.toString() + "m2"
         superficie.setTextColor(Color.BLACK)
         superficie.setTextSize(TypedValue.COMPLEX_UNIT_PX, 40F)
 
         val descripcion = findViewById<TextView>(R.id.textViewDescripcionFicha)
-        descripcion.text = inmueble?.descripcion.toString()
+        descripcion.text = inmueble.descripcion.toString()
         descripcion.setTextColor(Color.BLACK)
         descripcion.setTextSize(TypedValue.COMPLEX_UNIT_PX, 40F)
 
         val caracteristicas = findViewById<TextView>(R.id.textViewCaracteristicasFicha)
-        caracteristicas.text = inmueble?.caracteristicas
+        caracteristicas.text = inmueble.caracteristicas
         caracteristicas.setTextColor(Color.BLACK)
         caracteristicas.setTextSize(TypedValue.COMPLEX_UNIT_PX, 40F)
 
         val name = findViewById<TextView>(R.id.textViewPropietarioFicha)
-        name .text = inmueble?.propietario?.getName().toString()
+        name .text = inmueble.propietario?.getName().toString()
         name.setTextColor(Color.BLACK)
         name.setTextSize(TypedValue.COMPLEX_UNIT_PX, 40F)
 
@@ -134,7 +133,7 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
 
     private fun llamadaMessage(inmueble : Inmueble) {
         val builder =  AlertDialog.Builder(this)
-        val numero = inmueble?.propietario?.getPhone()
+        val numero = inmueble.propietario?.getPhone()
         builder.setTitle("Contacto")
         builder.setMessage("El numero del propietarios es:  " + numero)
         builder.setIcon(android.R.drawable.ic_menu_call)
@@ -156,7 +155,7 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
         alertDialog.show()
     }
 
-    private val inflater = layoutInflater
+    /*private val inflater = layoutInflater
     private val dialogLayout = inflater.inflate(R.layout.edit_text_oferta, null)
 
     private fun introduceQuantityOferta(inmueble : Inmueble){
@@ -175,5 +174,5 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
         val priceIntroduced = dialogLayout.findViewById<EditText>(R.id.editText_oferta)
         val message = "Oferta : " + inmueble.titulo + " Cantidad ofrecida : " + priceIntroduced
 
-    }
+    }*/
 }

@@ -8,7 +8,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 class ListaFavoritos () : AppCompatActivity() {
-    lateinit var user : User
+
+
+    var user = User("Pepe", "Viyuela", "correo@correo.com", "pepe123", "123456789")
 
     private val adaptadorInmueble by lazy {
         //AdaptadorInmuebleBusqueda(user.getFav())

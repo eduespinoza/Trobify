@@ -12,6 +12,8 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import io.grpc.Context
 import java.io.Serializable
+import java.time.LocalDateTime
+import java.util.*
 
 
 class Inmueble : Serializable{
@@ -32,7 +34,7 @@ class Inmueble : Serializable{
     var certificadoEnergetico : String? = null  //Desde la A hasta la G, hay que hacer que solo deje poner las letras posibles
     var descripcion : String? = null
 
-
+    var fechaSubida : LocalDateTime? = null
     var estado : String? = null
 
     var parking : Boolean? = null
@@ -59,7 +61,7 @@ class Inmueble : Serializable{
         numBanos : Int?,
         superficie : Int?,
 
-        //direccion : Direccion?,
+        //direccion : Direccion?, descomentar cuando se termine lo de direccion, abajo tmb
         tipoInmueble : String?,
         intencion : String?,
         precio : Int?,
@@ -78,7 +80,9 @@ class Inmueble : Serializable{
         jardin : Boolean?,
         piscina : Boolean?,
         terraza : Boolean?,
-        trastero : Boolean?
+        trastero : Boolean?,
+
+        fechaSubida : LocalDateTime?
     ) {
 
         this.id = id
@@ -86,7 +90,6 @@ class Inmueble : Serializable{
         this.numHabitaciones = numHabitaciones
         this.numBanos = numBanos
         this.superficie = superficie
-        //this.direccion = direccion
         this.tipoInmueble = tipoInmueble
         this.intencion = intencion
         this.precio = precio
@@ -105,9 +108,13 @@ class Inmueble : Serializable{
         this.trastero = trastero
         this.caracteristicas = caracteristicasToString()
 
+        //this.direccion = direccion
+
         //if (direccion != null) {
-          //  this.titulo = "Inmueble en " + direccion.direccionToString()
+        //    this.titulo = "Inmueble en " + direccion.direccionToString()
         //}
+
+        this.fechaSubida = fechaSubida
     }
 
     fun caracteristicasToString( ) : String {
