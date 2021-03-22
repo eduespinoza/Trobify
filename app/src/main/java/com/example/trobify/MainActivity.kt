@@ -14,8 +14,13 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+<<<<<<< Updated upstream
         val goLogin = Intent(this, Login::class.java)
         startActivity(goLogin)
+=======
+        //val goLogin = Intent(this, Login::class.java)
+        //startActivity(goLogin)
+>>>>>>> Stashed changes
 
         // para probar maintrobify
         //val goSearch = Intent(this, MainTrobify::class.java)

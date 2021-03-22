@@ -41,11 +41,6 @@ class FiltrosBusqueda : AppCompatActivity() {
         addOptionsBaños()
         addOptionsSuperficie()
 
-        val builder = AlertDialog.Builder(this@FiltrosBusqueda)
-        builder.setTitle("Selecciona el tipo de vivienda")
-        val elementosSeleccionadosTipoEdif = booleanArrayOf(false, false, false, false, false, false, false)
-        val elementosSeleccionadosTipoPorDefecto = booleanArrayOf(false, false, false, false, false, false, false, false, false, false)
-
         spinnerInmueble.onItemSelectedListener = object:
             AdapterView.OnItemSelectedListener{
             override fun onNothingSelected(parent: AdapterView<*>?) {}
@@ -123,6 +118,11 @@ class FiltrosBusqueda : AppCompatActivity() {
                 }
             }
         }
+
+        val builder = AlertDialog.Builder(this@FiltrosBusqueda)
+        builder.setTitle("Selecciona el tipo de vivienda")
+        val elementosSeleccionadosTipoEdif = booleanArrayOf(false, false, false, false, false, false, false)
+        val elementosSeleccionadosTipoPorDefecto = booleanArrayOf(false, false, false, false, false, false, false, false, false, false)
 
         buttonVivienda.setOnClickListener{
             if(spinnerInmueble.selectedItem.equals("Edificio") || spinnerInmueble.selectedItem.equals("Oficina")){
