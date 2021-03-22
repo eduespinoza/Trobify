@@ -18,7 +18,7 @@ class ListaFavoritos () : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.lista_favoritos)
         actionBar?.hide()
-        //user = MainTrobify.getUser()
+        user = MainTrobify.getUser()
         crearInmueble()
 
         val buttonAtras= findViewById<Button>(R.id.buttonAtrasFavoritos)

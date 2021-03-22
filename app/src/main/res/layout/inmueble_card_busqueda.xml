@@ -4,129 +4,90 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/card_busqueda"
     android:layout_width="match_parent"
-    android:layout_height="200dp"
+    android:layout_height="150dp"
     android:layout_margin="6dp"
-    card_view:cardCornerRadius="3dp"
+    card_view:cardCornerRadius="10dp"
     card_view:cardElevation="4dp"
     card_view:cardUseCompatPadding="true">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
         <ImageView
             android:id="@+id/imageinmueble"
             android:layout_width="150dp"
             android:layout_height="100dp"
+            android:layout_margin="10dp"
+            android:layout_weight="0"
             card_view:layout_constraintBottom_toBottomOf="parent"
             card_view:layout_constraintStart_toStartOf="parent"
             card_view:layout_constraintTop_toTopOf="parent"
             tools:srcCompat="@drawable/piso5" />
 
-        <TextView
-            android:id="@+id/titulo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:text="Pisito en la playa"
-            android:textSize="15sp"
-            android:textStyle="bold"
-            card_view:layout_constraintEnd_toEndOf="parent"
-            card_view:layout_constraintHorizontal_bias="0.224"
-            card_view:layout_constraintStart_toEndOf="@+id/imageinmueble"
-            card_view:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/precio"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="28dp"
-            android:text="700€"
-            android:textSize="20sp"
-            card_view:layout_constraintBottom_toBottomOf="parent"
-            card_view:layout_constraintStart_toEndOf="@+id/imageinmueble"
-            card_view:layout_constraintTop_toBottomOf="@+id/titulo"
-            card_view:layout_constraintVertical_bias="0.174" />
-
         <LinearLayout
-            android:id="@+id/sup"
-            android:layout_width="wrap_content"
-            android:layout_height="26dp"
-            android:layout_marginStart="28dp"
-            android:gravity="center"
-            android:orientation="horizontal"
-            card_view:layout_constraintBottom_toBottomOf="parent"
-            card_view:layout_constraintStart_toEndOf="@+id/precio"
-            card_view:layout_constraintTop_toBottomOf="@+id/titulo"
-            card_view:layout_constraintVertical_bias="0.178">
-
-            <TextView
-                android:id="@+id/superficie"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="60"
-                android:textSize="20sp" />
-
-            <ImageView
-                android:layout_width="20dp"
-                android:layout_height="19dp"
-                android:layout_weight="1"
-                card_view:srcCompat="@drawable/metroscuadrados" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="40dp"
-            android:layout_height="26dp"
-            android:layout_marginStart="28dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="5dp"
             android:layout_weight="1"
-            android:orientation="horizontal"
-            card_view:layout_constraintBottom_toBottomOf="parent"
-            card_view:layout_constraintStart_toEndOf="@id/sup"
-            card_view:layout_constraintTop_toBottomOf="@+id/titulo"
-            card_view:layout_constraintVertical_bias="0.17000002">
+            android:orientation="vertical">
 
             <TextView
-                android:id="@+id/habitaciones"
-                android:layout_width="wrap_content"
+                android:id="@+id/titulo"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="5"
-                android:textSize="20sp" />
+                android:layout_marginTop="20dp"
+                android:maxLines="2"
+                android:text="Pisito en la playa"
+                android:textSize="15sp"
+                android:textStyle="bold" />
 
-            <ImageView
-                android:layout_width="20dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                card_view:srcCompat="@drawable/bed" />
+            <LinearLayout
+                android:layout_width="165dp"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/precio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="14dp"
+                    android:layout_weight="1"
+                    android:text="700€"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/superficie"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="14dp"
+                    android:layout_weight="1"
+                    android:drawableEnd="@drawable/ic_metrocuadrado"
+                    android:text="60"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/habitaciones"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:drawableRight="@drawable/ic_habitaciones"
+                    android:text="5"
+                    android:textSize="20sp" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/descripcion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:lines="2"
+                android:maxLines="2"
+                android:text="Lorem impsum " />
         </LinearLayout>
+    </LinearLayout>
 
-        <TextView
-            android:id="@+id/descripcion"
-            android:layout_width="0dp"
-            android:layout_height="30dp"
-            android:layout_marginStart="28dp"
-            android:text="Lorem impsum "
-            card_view:layout_constraintBottom_toBottomOf="parent"
-            card_view:layout_constraintEnd_toEndOf="parent"
-            card_view:layout_constraintHorizontal_bias="0.05"
-            card_view:layout_constraintStart_toEndOf="@+id/imageinmueble"
-            card_view:layout_constraintTop_toBottomOf="@+id/sup"
-            card_view:layout_constraintVertical_bias="0.271" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            card_view:layout_constraintGuide_begin="72dp" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            card_view:layout_constraintGuide_begin="100dp" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

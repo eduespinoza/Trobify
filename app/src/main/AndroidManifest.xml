@@ -2,6 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.trobify">
 
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -9,8 +14,19 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Trobify">
-        android:usesCleartextTraffic="true"
-        <activity android:name=".Chat"></activity>
+        <activity
+            android:name=".Buscador"
+            android:label="@string/title_activity_buscador"
+            android:theme="@style/Theme.Trobify.NoActionBar"></activity>
+
+        <meta-data
+            android:name="com.here.sdk.access_key_id"
+            android:value="i0xgZIXUkBg2Hg0g5WyjOw" />
+        <meta-data
+            android:name="com.here.sdk.access_key_secret"
+            android:value="KWuRO85k2HN54edM9rQzV2yNr1BAISz5DQtbxHFVN-7WQyiwbHFN0--JbDc_KZTPlCKUSoGAIEJowimD9Yhhyw" />
+
+        <activity android:name=".Chat" />
         <activity
             android:name=".Pruebas"
             android:label="@string/title_activity_pruebas"
@@ -18,9 +34,7 @@
         <activity android:name=".Register" />
         <activity
             android:name=".MainTrobify"
-            android:theme="@style/Theme.Trobify.NoActionBar"
-            />
-
+            android:theme="@style/Theme.Trobify.NoActionBar" />
         <activity android:name=".FiltrosBusqueda" />
         <activity android:name=".AdaptadorFichaInmueble" />
         <activity android:name=".ListaFavoritos" />

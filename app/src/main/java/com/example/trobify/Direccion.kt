@@ -30,7 +30,6 @@ class Direccion {
 
     fun direccionToString() : String{
         return calle + ", numero " + numeroPortal + ", planta " + planta + ", puerta" + numeroPuerta
-
     }
 
 }
