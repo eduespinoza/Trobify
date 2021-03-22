@@ -175,4 +175,5 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
         val priceIntroduced = dialogLayout.findViewById<EditText>(R.id.editText_oferta)
         val message = "Oferta : " + inmueble.titulo + " Cantidad ofrecida : " + priceIntroduced
 
+    }
 }
