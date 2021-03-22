@@ -22,7 +22,7 @@ class User {
     private var id : String? = null
     private var pass : String? = null
     private var phone : Int? = null
-    private var favourite : MutableList<String> = mutableListOf()  //cambiar a inmueble luego
+    private var favourite : ArrayList<Inmueble> = arrayListOf()
 
 
     constructor(name : String?, surname : String?, email : String?, id : String?,
@@ -45,12 +45,16 @@ class User {
         return this.phone
     }
 
-    fun addInmuebleToFav(){
-        favourite.add("Inmueble") //cambiar a inmueble luego
+    fun addInmuebleToFav(inm : Inmueble){
+        favourite.add(inm)
 
     }
     fun getId() : String?{
         return this.id
+    }
+
+    fun getFav() : ArrayList<Inmueble>{
+        return this.favourite
     }
 
     private fun updateUI(user: FirebaseUser?) {}

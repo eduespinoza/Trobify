@@ -22,6 +22,7 @@
             />
 
         <activity android:name=".FiltrosBusqueda" />
+        <activity android:name=".ListaFavoritos" />
         <activity android:name=".Login" />
         <activity
             android:name=".MainActivity"

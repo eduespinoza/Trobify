@@ -42,7 +42,7 @@ class AdaptadorFichaInmueble(private val inmueble : Inmueble) : AppCompatActivit
 
 
     private fun rellenar(){
-        val direccion = inmueble.direccion
+        val direccion = inmueble.titulo
         findViewById<TextView>(R.id.textViewCalleFicha).text = direccion
 
         val precio = inmueble.precio.toString()

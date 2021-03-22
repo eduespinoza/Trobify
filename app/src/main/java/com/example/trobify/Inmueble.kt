@@ -21,7 +21,7 @@ class Inmueble{
     var numBanos : Int? = null
     var superficie : Int? = null
 
-    var direccion : String? = null
+    var direccion : Direccion? = null
     var tipoInmueble : String? = null
     var intencion : String? = null //vender o alquilar
     var precio : Int? = null
@@ -51,14 +51,13 @@ class Inmueble{
     }
 
     constructor(
-        titulo : String?,
         id : String?,
         propietario : User?,
         numHabitaciones : Int?,
         numBanos : Int?,
         superficie : Int?,
 
-        direccion : String?,
+        direccion : Direccion?,
         tipoInmueble : String?,
         intencion : String?,
         precio : Int?,
@@ -77,7 +76,7 @@ class Inmueble{
         terraza : Boolean?,
         trastero : Boolean?
     ) {
-        this.titulo = "Inmueble en " + titulo
+
         this.id = id
         this.propietario = propietario
         this.numHabitaciones = numHabitaciones
@@ -99,6 +98,10 @@ class Inmueble{
         this.terraza = terraza
         this.trastero = trastero
         this.caracteristicas = caracteristicasToString()
+
+        if (direccion != null) {
+            this.titulo = "Inmueble en " + direccion.direccionToString()
+        }
     }
 
     fun caracteristicasToString( ) : String {
