@@ -156,12 +156,11 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
         alertDialog.show()
     }
 
-    /*private val builderIntroduceQuantityOferta = AlertDialog.Builder(this@AdaptadorFichaInmueble)
     private val inflater = layoutInflater
     private val dialogLayout = inflater.inflate(R.layout.edit_text_oferta, null)
 
     private fun introduceQuantityOferta(inmueble : Inmueble){
-
+        val builderIntroduceQuantityOferta = AlertDialog.Builder(this@AdaptadorFichaInmueble)
         with(builderIntroduceQuantityOferta){
             setPositiveButton("Enviar mensaje"){dialog, which ->
                 messagePredefOferta(inmueble)
@@ -176,5 +175,5 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
         val priceIntroduced = dialogLayout.findViewById<EditText>(R.id.editText_oferta)
         val message = "Oferta : " + inmueble.titulo + " Cantidad ofrecida : " + priceIntroduced
 
-    }*/
+    }
 }
