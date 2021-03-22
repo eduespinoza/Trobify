@@ -82,6 +82,12 @@
         <item>Planta baja</item>
         <item>Estudio</item>
     </string-array>
+
+    <string-array name="contactOptions">
+        <item>Chat</item>
+        <item>Enviar mensaje Oferta/Contraoferta</item>
+    </string-array>
+
     <string name="title_activity_pruebas">Pruebas</string>
     <string name="nombre_del_inmueble">Nombre del inmueble</string>
     <!--<string name="textview">TextView</string>-->
