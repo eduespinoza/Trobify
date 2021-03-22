@@ -1,13 +1,11 @@
 package com.example.trobify
 
-import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 
@@ -62,40 +60,32 @@ class AdaptadorFichaInmueble(private val inmueble : Inmueble) : AppCompatActivit
 
         rellenar()
     }
-<<<<<<< Updated upstream
-
-
 
     private fun rellenar(){
-        val direccion = inmueble.titulo
-=======
-    
-    private fun rellenar() {
-        //val direccion = inmueble.direccion
->>>>>>> Stashed changes
-        findViewById<TextView>(R.id.textViewCalleFicha).text = direccion
 
-        //val precio = inmueble.precio.toString()
+        val direccion = inmueble.direccion
+        findViewById<TextView>(R.id.textViewCalleFicha).text = direccion.toString()
+
+        val precio = inmueble.precio.toString()
         findViewById<TextView>(R.id.textViewPrecioFicha).text = precio
 
-        //val numHabitaciones = inmueble.numHabitaciones.toString()
+        val numHabitaciones = inmueble.numHabitaciones.toString()
         findViewById<TextView>(R.id.textViewHabitacionesFicha).text = numHabitaciones
 
-        //val numBanos = inmueble.numBanos.toString()
+        val numBanos = inmueble.numBanos.toString()
         findViewById<TextView>(R.id.textViewBanosFicha).text = numBanos
 
-        //val superficie = inmueble.superficie.toString()
+        val superficie = inmueble.superficie.toString()
         findViewById<TextView>(R.id.textViewSuperficieFicha).text = superficie
 
-        //val descripcion = inmueble.descripcion.toString()
+        val descripcion = inmueble.descripcion.toString()
         findViewById<TextView>(R.id.textViewDescripcionFicha).text = descripcion
 
-        //val caracteristicas = inmueble.caracteristicas.toString()
+        val caracteristicas = inmueble.caracteristicas.toString()
         findViewById<TextView>(R.id.textViewCaracteristicasFicha).text = caracteristicas
 
-        //val name = inmueble.propietario?.getName().toString()
+        val name = inmueble.propietario?.getName().toString()
         findViewById<TextView>(R.id.textViewPropietarioFicha).text = name
-
 
     }
 

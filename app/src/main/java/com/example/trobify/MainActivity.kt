@@ -14,13 +14,10 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-<<<<<<< Updated upstream
-        val goLogin = Intent(this, Login::class.java)
-        startActivity(goLogin)
-=======
         //val goLogin = Intent(this, Login::class.java)
         //startActivity(goLogin)
->>>>>>> Stashed changes
+        //val goLogin = Intent(this, Login::class.java)
+        //startActivity(goLogin)
 
         // para probar maintrobify
         //val goSearch = Intent(this, MainTrobify::class.java)
@@ -31,12 +28,12 @@ class MainActivity : AppCompatActivity() {
         //startActivity(goFiltros)
 
         // pa probar Ficha
-        //val goFicha = Intent(this, AdaptadorFichaInmueble::class.java)
-        //startActivity(goFicha)
+        val goFicha = Intent(this, AdaptadorFichaInmueble::class.java)
+        startActivity(goFicha)
 
         // pa los Favoritos
-        val goFav = Intent(this, ListaFavoritos::class.java)
-        startActivity(goFav)
+        //val goFav = Intent(this, ListaFavoritos::class.java)
+        //startActivity(goFav)
     }
 }
 
