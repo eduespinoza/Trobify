@@ -11,14 +11,14 @@ class ListaFavoritos () : AppCompatActivity() {
     lateinit var user : User
 
     private val adaptadorInmueble by lazy {
-        AdaptadorInmuebleBusqueda(user.getFav())
+        //AdaptadorInmuebleBusqueda(user.getFav())
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.lista_favoritos)
         actionBar?.hide()
-        user = MainTrobify.getUser()
+        //user = MainTrobify.getUser()
         crearInmueble()
 
         val buttonAtras= findViewById<Button>(R.id.buttonAtrasFavoritos)
@@ -33,7 +33,7 @@ class ListaFavoritos () : AppCompatActivity() {
         recycler.setHasFixedSize(true)
         val layoutmanager = LinearLayoutManager(baseContext)
         recycler.layoutManager = layoutmanager
-        recycler.adapter = adaptadorInmueble
+        //recycler.adapter = adaptadorInmueble
     }
 
 

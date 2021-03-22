@@ -1,7 +1,10 @@
 package com.example.trobify
 
+import android.app.SearchManager
 import android.content.Intent
+import android.database.MatrixCursor
 import android.os.Bundle
+import android.provider.BaseColumns
 import android.util.Log
 import android.view.View
 import android.widget.*
@@ -24,7 +27,7 @@ class MainTrobify : AppCompatActivity() {
     var test3 = Inmueble("la montaña", 700, 69, arrayOf(R.drawable.piso4, R.drawable.piso5))
 
     lateinit var listaConResultados : RecyclerView
-    lateinit var root : View
+    val sugerencias = Busqueda()
 
     override fun onCreate(savedInstanceState: Bundle?
     ) {
@@ -33,6 +36,7 @@ class MainTrobify : AppCompatActivity() {
         listaConResultados = findViewById(R.id.recycler)
         actionBar?.hide()
         prepararPrimerosResultados()
+        prepararBuscador()
         setListeners()
     }
     private val adaptadorInmueble by lazy {
@@ -48,10 +52,35 @@ class MainTrobify : AppCompatActivity() {
                 listaConResultados.adapter = adapter
         }
     }
+    fun prepararBuscador(){
+        var buscador : SearchView = findViewById(R.id.buscarView)
+        val from = arrayOf(SearchManager.SUGGEST_COLUMN_TEXT_1)
+        val to = intArrayOf(R.id.item_label)
+        var adaptadorCursor = SimpleCursorAdapter(this.baseContext,R.layout.sugerencia_item,
+            null,from,to,CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER)
+        buscador.suggestionsAdapter = adaptadorCursor
+        buscador.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
+            override fun onQueryTextSubmit(query: String): Boolean {
+                mostrarResultados(query)
+                Log.d("busc",query)
+                return false
+            }
+            override fun onQueryTextChange(query : String?) : Boolean {
+                if (query != null) {
+                    sugerencias.obtenerSugerencias(query)
+                    var cursor = MatrixCursor(arrayOf(BaseColumns._ID,SearchManager.SUGGEST_COLUMN_TEXT_1))
+                    sugerencias.sugerencias.forEachIndexed{
+                        indice, item ->
+                        cursor.addRow(arrayOf(indice,item))
+                    }
+                    adaptadorCursor.changeCursor(cursor)
+                }
+                return false
+            }
+        })
+    }
     fun setListeners(){
         var botonLateral : Button = findViewById(R.id.botonLateral)
-        var buscador : SearchView = findViewById(R.id.buscarView)
-        var nav : NavigationView = findViewById(R.id.nav_view)
         var menuLateral : DrawerLayout = findViewById(R.id.drawer_layout)
         var filtrar : TextView = findViewById(R.id.filtrar)
         var mapa : TextView = findViewById(R.id.verMapa)
@@ -59,17 +88,6 @@ class MainTrobify : AppCompatActivity() {
         botonLateral.setOnClickListener {
             menuLateral.openDrawer(GravityCompat.START)
         }
-        buscador.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
-            override fun onQueryTextSubmit(query: String): Boolean {
-                mostrarResultados(query)
-                Log.d("busc",query)
-                return false
-            }
-
-            override fun onQueryTextChange(newText : String?) : Boolean {
-                return false
-            }
-        })
         filtrar.setOnClickListener {
             val irAFiltrar = Intent(this, FiltrosBusqueda::class.java)
             startActivity(irAFiltrar)

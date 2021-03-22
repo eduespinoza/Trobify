@@ -18,8 +18,8 @@ class MainActivity : AppCompatActivity() {
         //startActivity(goLogin)
 
         // para probar maintrobify
-        //val goSearch = Intent(this, MainTrobify::class.java)
-        //startActivity(goSearch)
+        val goSearch = Intent(this, MainTrobify::class.java)
+        startActivity(goSearch)
 
         // para probar Filtros
         //val goFiltros = Intent(this, FiltrosBusqueda::class.java)
@@ -34,9 +34,9 @@ class MainActivity : AppCompatActivity() {
             "obre nueva", false, true, true, false, false,false, false,false)
 
 
-        val goFicha = Intent(this, AdaptadorFichaInmueble::class.java)
+        /*val goFicha = Intent(this, AdaptadorFichaInmueble::class.java)
         goFicha.putExtra("inmueble", pisito )
-        startActivity(goFicha)
+        startActivity(goFicha)*/
 
         // pa los Favoritos
         //val goFav = Intent(this, ListaFavoritos::class.java)
