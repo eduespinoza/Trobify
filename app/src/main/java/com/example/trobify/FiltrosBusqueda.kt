@@ -12,16 +12,14 @@ class FiltrosBusqueda : AppCompatActivity() {
     var tipoInmueble:String = ""
     var numHabitaciones:Int = 1
     var numBaños:Int = 1
-    lateinit var extras:ArrayList<String>
+    lateinit var extras:MutableMap<String, Boolean>
     lateinit var estado:ArrayList<String>
     var precioMin:Int = 0
     var precioMax:Int = 0
     var superficieMin:Int = 0
     var superficieMax:Int = 0
 
-    lateinit var tipoVivienda:Array<String>
-    lateinit var elementosSeleccionadosTipoEdif:BooleanArray
-    lateinit var elementosSeleccionadosTipoPorDefecto:BooleanArray
+    lateinit var tipoVivienda:ArrayList<String>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -226,75 +224,102 @@ class FiltrosBusqueda : AppCompatActivity() {
         }
 
         // EXTRAS /////////////////////////
+        extras = mutableMapOf("Parking" to false,
+            "Ascensor" to false,
+            "Amueblado" to false,
+            "Calefaccion" to false,
+            "Terraza" to false,
+            "Trastero" to false,
+            "Piscina" to false,
+            "Jardin" to false
+        )
         parking.setOnClickListener {
             if(parking.isChecked){
-                extras.add("Parking")
+                extras.put("Parking", true)
             }
             else{
-                extras.remove("Parking")
+                extras.put("Parking", false)
             }
         }
         ascensor.setOnClickListener {
             if(ascensor.isChecked){
-                extras.add("Ascensor")
+                extras.put("Ascensor", true)
             }
             else{
-                extras.remove("Ascensor")
+                extras.put("Ascensor", false)
             }
         }
         amueblado.setOnClickListener {
             if(amueblado.isChecked){
-                extras.add("Amueblado")
+                extras.put("Amueblado", true)
             }
             else{
-                extras.remove("Amueblado")
+                extras.put("Amueblado", false)
             }
         }
         calefaccion.setOnClickListener {
             if(calefaccion.isChecked){
-                extras.add("Calefaccion")
+                extras.put("Calefaccion", true)
             }
             else{
-                extras.remove("Calefaccion")
+                extras.put("Calefaccion", false)
             }
         }
         terraza.setOnClickListener {
             if(terraza.isChecked){
-                extras.add("Terraza")
+                extras.put("Terraza", true)
             }
             else{
-                extras.remove("Terraza")
+                extras.put("Terraza", false)
             }
         }
         trastero.setOnClickListener {
             if(trastero.isChecked){
-                extras.add("Trastero")
+                extras.put("Trastero", true)
             }
             else{
-                extras.remove("Trastero")
+                extras.put("Trastero", false)
             }
         }
         piscina.setOnClickListener {
             if(piscina.isChecked){
-                extras.add("Piscina")
+                extras.put("Piscina", true)
             }
             else{
-                extras.remove("Piscina")
+                extras.put("Piscina", false)
             }
         }
         jardin.setOnClickListener {
             if(jardin.isChecked){
-                extras.add("Jardin")
+                extras.put("Jardin", true)
             }
             else{
-                extras.remove("Jardin")
+                extras.put("Jardin", false)
             }
         }
 
         val builder = AlertDialog.Builder(this@FiltrosBusqueda)
         builder.setTitle("Selecciona el tipo de vivienda")
-        elementosSeleccionadosTipoEdif = booleanArrayOf(false, false, false, false, false, false, false)
-        elementosSeleccionadosTipoPorDefecto = booleanArrayOf(false, false, false, false, false, false, false, false, false, false)
+        val elementosSeleccionadosTipoEdif = booleanArrayOf(
+            false, // Apartamento
+            false, // Ático
+            false, // Dúplex
+            false, // Loft
+            false, // Planta baja
+            false  // Estudio
+        )
+        val elementosSeleccionadosTipoPorDefecto = booleanArrayOf(
+            false, // Apartamento
+            false, // Ático
+            false, // Dúplex
+            false, // Loft
+            false, // Planta baja
+            false, // Estudio
+            false, // Casa
+            false, // Chalet
+            false, // Adosado
+            false  // Finca rústica
+        )
 
         buttonVivienda.setOnClickListener{
             if(spinnerInmueble.selectedItem.equals("Edificio") || spinnerInmueble.selectedItem.equals("Oficina")){
@@ -302,13 +327,25 @@ class FiltrosBusqueda : AppCompatActivity() {
 
                 builder.setMultiChoiceItems(optionsViviendaEdificio, elementosSeleccionadosTipoEdif){dialog, which, isChecked ->
                     elementosSeleccionadosTipoEdif[which] = isChecked
+                    if(elementosSeleccionadosTipoEdif[which]){
+                        tipoVivienda.add(optionsViviendaEdificio[which])
+                    }
+                    else{
+                        tipoVivienda.remove(optionsViviendaEdificio[which])
+                    }
                 }
             }
             else{
-                val optionsViviendaArray = resources.getStringArray(R.array.options_vivienda_por_defecto)
+                val optionsViviendaPorDefecto = resources.getStringArray(R.array.options_vivienda_por_defecto)
 
-                builder.setMultiChoiceItems(optionsViviendaArray, elementosSeleccionadosTipoPorDefecto){dialog, which, isChecked ->
+                builder.setMultiChoiceItems(optionsViviendaPorDefecto, elementosSeleccionadosTipoPorDefecto){dialog, which, isChecked ->
                     elementosSeleccionadosTipoPorDefecto[which] = isChecked
+                    if(elementosSeleccionadosTipoEdif[which]){
+                        tipoVivienda.add(optionsViviendaPorDefecto[which])
+                    }
+                    else{
+                        tipoVivienda.remove(optionsViviendaPorDefecto[which])
+                    }
                 }
             }
             builder.setPositiveButton("Ok"){dialog, which -> dialog.dismiss()}
@@ -419,3 +456,4 @@ class FiltrosBusqueda : AppCompatActivity() {
         }
     }
 }
+
