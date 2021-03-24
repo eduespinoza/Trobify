@@ -9,6 +9,19 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 
 class FiltrosBusqueda : AppCompatActivity() {
+    var tipoInmueble:String = ""
+    var numHabitaciones:Int = 1
+    var numBaños:Int = 1
+    lateinit var extras:ArrayList<String>
+    lateinit var estado:ArrayList<String>
+    var precioMin:Int = 0
+    var precioMax:Int = 0
+    var superficieMin:Int = 0
+    var superficieMax:Int = 0
+
+    lateinit var tipoVivienda:Array<String>
+    lateinit var elementosSeleccionadosTipoEdif:BooleanArray
+    lateinit var elementosSeleccionadosTipoPorDefecto:BooleanArray
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -18,6 +31,10 @@ class FiltrosBusqueda : AppCompatActivity() {
         val buttonVivienda = findViewById<Button>(R.id.buttonTipoVivienda)
         val spinnerHabtiaciones = findViewById<Spinner>(R.id.desplegableNumHabitaciones)
         val spinnerBaños = findViewById<Spinner>(R.id.desplegableNumBaños)
+        val spinnerPrecioMin = findViewById<Spinner>(R.id.desplegableMinPrecio)
+        val spinnerPrecioMax = findViewById<Spinner>(R.id.desplegableMaxPrecio)
+        val spinnerSuperficieMin = findViewById<Spinner>(R.id.desplegableMinSuperficie)
+        val spinnerSuperficieMax = findViewById<Spinner>(R.id.desplegableMaxSuperficie)
 
         val obraNueva = findViewById<CheckBox>(R.id.checkBoxEstadoObraNueva)
         val casiNuevo = findViewById<CheckBox>(R.id.checkBoxEstadoCasiNuevo)
@@ -41,10 +58,51 @@ class FiltrosBusqueda : AppCompatActivity() {
         addOptionsBaños()
         addOptionsSuperficie()
 
+        spinnerInmueble.setOnClickListener {
+            if(spinnerInmueble.selectedItem == true){
+                tipoInmueble = spinnerInmueble.selectedItem.toString()
+            }
+        }
+
+        spinnerPrecioMin.setOnClickListener {
+            if(spinnerPrecioMin.selectedItem == true){
+                precioMin = spinnerPrecioMin.selectedItem.toString().toInt()
+            }
+        }
+        spinnerPrecioMax.setOnClickListener {
+            if(spinnerPrecioMax.selectedItem == true){
+                precioMax = spinnerPrecioMax.selectedItem.toString().toInt()
+            }
+        }
+
+        spinnerHabtiaciones.setOnClickListener {
+            if(spinnerHabtiaciones.selectedItem == true){
+                numHabitaciones = spinnerHabtiaciones.selectedItem.toString().toInt()
+            }
+        }
+
+        spinnerBaños.setOnClickListener {
+            if(spinnerBaños.selectedItem == true){
+                numBaños = spinnerBaños.selectedItem.toString().toInt()
+            }
+        }
+
+        spinnerSuperficieMax.setOnClickListener {
+            if(spinnerSuperficieMax.selectedItem == true){
+                superficieMax = spinnerSuperficieMax.selectedItem.toString().toInt()
+            }
+        }
+        spinnerSuperficieMin.setOnClickListener {
+            if(spinnerSuperficieMin.selectedItem == true){
+                superficieMin = spinnerSuperficieMin.selectedItem.toString().toInt()
+            }
+        }
+
         spinnerInmueble.onItemSelectedListener = object:
             AdapterView.OnItemSelectedListener{
             override fun onNothingSelected(parent: AdapterView<*>?) {}
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+
                 if (spinnerInmueble.selectedItem.equals("Terreno") || spinnerInmueble.selectedItem.equals("Nave")){
                     buttonVivienda.setEnabled(false)
                     spinnerHabtiaciones.setEnabled(false)
@@ -56,9 +114,6 @@ class FiltrosBusqueda : AppCompatActivity() {
                     bien.setEnabled(false)
                     reformado.setEnabled(false)
                     aReformar.setEnabled(false)
-
-                    /*val contenedorEstadoVivienda = findViewById<LinearLayout>(R.id.contenedorEstadoVivienda)
-                    contenedorEstadoVivienda.setVisibility(View.INVISIBLE)*/
 
                 }
                 else if (spinnerInmueble.selectedItem.equals("Garaje")){
@@ -119,10 +174,127 @@ class FiltrosBusqueda : AppCompatActivity() {
             }
         }
 
+        // ESTADO DE LA VIVIENDA ////////////////////////////
+
+        obraNueva.setOnClickListener {
+            if(obraNueva.isChecked){
+                estado.add("Obra nueva")
+            }
+            else{
+                estado.remove("Obra nueva")
+            }
+        }
+        casiNuevo.setOnClickListener {
+            if(casiNuevo.isChecked){
+                estado.add("Casi nuevo")
+            }
+            else{
+                estado.remove("Casi nuevo")
+            }
+        }
+        muyBien.setOnClickListener {
+            if(muyBien.isChecked){
+                estado.add("Muy bien")
+            }
+            else{
+                estado.remove("Muy bien")
+            }
+        }
+        bien.setOnClickListener {
+            if(bien.isChecked){
+                estado.add("Bien")
+            }
+            else{
+                estado.remove("Bien")
+            }
+        }
+        reformado.setOnClickListener {
+            if(reformado.isChecked){
+                estado.add("Reformado")
+            }
+            else{
+                estado.remove("Reformado")
+            }
+        }
+        aReformar.setOnClickListener {
+            if(aReformar.isChecked){
+                estado.add("A reformar")
+            }
+            else{
+                estado.remove("A reformar")
+            }
+        }
+
+        // EXTRAS /////////////////////////
+        parking.setOnClickListener {
+            if(parking.isChecked){
+                extras.add("Parking")
+            }
+            else{
+                extras.remove("Parking")
+            }
+        }
+        ascensor.setOnClickListener {
+            if(ascensor.isChecked){
+                extras.add("Ascensor")
+            }
+            else{
+                extras.remove("Ascensor")
+            }
+        }
+        amueblado.setOnClickListener {
+            if(amueblado.isChecked){
+                extras.add("Amueblado")
+            }
+            else{
+                extras.remove("Amueblado")
+            }
+        }
+        calefaccion.setOnClickListener {
+            if(calefaccion.isChecked){
+                extras.add("Calefaccion")
+            }
+            else{
+                extras.remove("Calefaccion")
+            }
+        }
+        terraza.setOnClickListener {
+            if(terraza.isChecked){
+                extras.add("Terraza")
+            }
+            else{
+                extras.remove("Terraza")
+            }
+        }
+        trastero.setOnClickListener {
+            if(trastero.isChecked){
+                extras.add("Trastero")
+            }
+            else{
+                extras.remove("Trastero")
+            }
+        }
+        piscina.setOnClickListener {
+            if(piscina.isChecked){
+                extras.add("Piscina")
+            }
+            else{
+                extras.remove("Piscina")
+            }
+        }
+        jardin.setOnClickListener {
+            if(jardin.isChecked){
+                extras.add("Jardin")
+            }
+            else{
+                extras.remove("Jardin")
+            }
+        }
+
         val builder = AlertDialog.Builder(this@FiltrosBusqueda)
         builder.setTitle("Selecciona el tipo de vivienda")
-        val elementosSeleccionadosTipoEdif = booleanArrayOf(false, false, false, false, false, false, false)
-        val elementosSeleccionadosTipoPorDefecto = booleanArrayOf(false, false, false, false, false, false, false, false, false, false)
+        elementosSeleccionadosTipoEdif = booleanArrayOf(false, false, false, false, false, false, false)
+        elementosSeleccionadosTipoPorDefecto = booleanArrayOf(false, false, false, false, false, false, false, false, false, false)
 
         buttonVivienda.setOnClickListener{
             if(spinnerInmueble.selectedItem.equals("Edificio") || spinnerInmueble.selectedItem.equals("Oficina")){
@@ -177,7 +349,7 @@ class FiltrosBusqueda : AppCompatActivity() {
         val spinnerPrecioMax = findViewById<Spinner>(R.id.desplegableMaxPrecio)
 
         val options_price = listOf<Int>(0, 50000, 75000, 100000, 125000, 150000, 200000, 300000, 400000, 500000)
-        val options_price_max = listOf<Int>(50000, 75000, 100000, 125000, 150000, 200000, 300000, 400000, 500000)
+        val options_price_max = listOf<Int>(0, 50000, 75000, 100000, 125000, 150000, 200000, 300000, 400000, 500000)
 
         /* AÑADIR LAS OPCIONES A LOS DESPLEGABLES */
         val adapter0 = ArrayAdapter<Int>(this, android.R.layout.simple_spinner_item, options_price)
