@@ -23,6 +23,7 @@ class User : Serializable{
     private var id : String? = null
     private var pass : String? = null
     private var phone : Int? = null
+    private var proilePic : String? = null
     private var favourite : ArrayList<Inmueble> = arrayListOf()
 
 
@@ -33,8 +34,8 @@ class User : Serializable{
         this.email = email
         this.pass = pass
         this.id = id
+        this.proilePic = "default"
 
-        //añadir a base de datos
     }
     constructor(){}
 
@@ -56,6 +57,14 @@ class User : Serializable{
 
     fun getFav() : ArrayList<Inmueble>{
         return this.favourite
+    }
+
+    fun setUserProfilePic(url :String?) {
+        proilePic = url
+    }
+
+    fun getUserProfilePic() : String?{
+        return this.proilePic
     }
 
     private fun updateUI(user: FirebaseUser?) {}

@@ -1,5 +1,6 @@
 package com.example.trobify
 
+import android.content.ContentValues
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -13,18 +14,23 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import android.content.ContentValues.TAG
 import androidx.appcompat.app.AlertDialog
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.toObject
 
 class Login : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
+
     var name:String? = null
     var email:String? = null
     var password:String? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
         auth = Firebase.auth
-        
+
+        checkUser()
 
         val buttonRegistrar = findViewById<Button>(R.id.buttonRegister)
         buttonRegistrar.setOnClickListener{
@@ -47,8 +53,8 @@ class Login : AppCompatActivity() {
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     Log.d(TAG, "signInWithEmail:success")
-                    val user = auth.currentUser
-                    updateUI(user)
+                    checkUser()
+
                 } else {
                     Log.w(TAG, "signInWithEmail:failure", task.exception)
                     Toast.makeText(baseContext, "Authentication failed.",
@@ -59,24 +65,15 @@ class Login : AppCompatActivity() {
 
     }
 
-    private fun updateUI(user: FirebaseUser?) {
-        helloMessage()
-        val returnMain = Intent(this, Pruebas::class.java)
-        returnMain.putExtra("Email",email)
-        startActivity(returnMain)
-        finish()
+    private fun checkUser(){
+        val currentUser = auth.currentUser
+        if(currentUser != null){
+            val intent = Intent(this, ListOfChats::class.java)
+            intent.putExtra("user", currentUser.uid)
+            startActivity(intent)
 
-    }
-
-    private fun helloMessage() {
-        val builder =  AlertDialog.Builder(this)
-        builder.setTitle("Bienvenido: " + name)
-        builder.setMessage(" Su usuario se ha registrado correctamente. ")
-        builder.setIcon(android.R.drawable.ic_dialog_email)
-        builder.setNeutralButton("  Continue  "){ _, _ -> }
-        val alertDialog: AlertDialog = builder.create()
-        alertDialog.setCancelable(false)
-        alertDialog.show()
+            finish()
+        }
     }
 
     private fun errorMessage() {

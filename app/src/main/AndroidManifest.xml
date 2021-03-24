@@ -14,10 +14,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Trobify">
+        <activity android:name=".ListOfChats"></activity>
         <activity
             android:name=".ChatAct"
             android:label="@string/title_activity_chat"
-            android:theme="@style/Theme.Trobify.NoActionBar"></activity>
+            android:theme="@style/Theme.Trobify.NoActionBar" />
         <activity
             android:name=".Buscador"
             android:label="@string/title_activity_buscador"

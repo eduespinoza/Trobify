@@ -80,7 +80,9 @@ class Register : AppCompatActivity() {
             "surname" to surname,
             "email" to email,
             "password" to password,
-            "profilePic" to "default"
+            "profilePic" to "default",
+            "favorites" to arrayListOf<String>()
+
         )
         user.getId()?.let {
             db.collection("users").document(it)
@@ -131,18 +133,14 @@ class Register : AppCompatActivity() {
         if(!password.equals(comPassword)){ PasswordNotEqualMessage(); return false;}
         return true
     }
-    //SOLUCIONAR
+
     private fun getAllEmails() : MutableList<String>{
-        val db = Firebase.firestore
         val emailList : MutableList<String> = mutableListOf()
         val findEmails = db.collection("users").whereEqualTo("email",true)
         findEmails.get()
-            .addOnSuccessListener { document ->
-                if (document != null) {
+            .addOnSuccessListener { documents ->
+                for (document in documents){
                     emailList.add(document.toString())
-                    Log.d(TAG, "DocumentSnapshot data: $document")
-                } else {
-                    Log.d(TAG, "No such document")
                 }
             }
             .addOnFailureListener { exception ->
@@ -176,7 +174,7 @@ class Register : AppCompatActivity() {
         builder.setTitle("Error: Nombre incorrecto")
         builder.setMessage(" Asegúrese de escribir bien el nombre. ")
         builder.setIcon(android.R.drawable.ic_dialog_alert)
-        builder.setNeutralButton("  Continue  "){dialogInterface , which -> }
+        builder.setNeutralButton("  Continue  "){ _, _ -> }
         val alertDialog: AlertDialog = builder.create()
         alertDialog.setCancelable(false)
         alertDialog.show()
@@ -187,7 +185,7 @@ class Register : AppCompatActivity() {
         builder.setTitle("Error: Apellido incorrecto")
         builder.setMessage(" Asegúrese de escribir bien el apellido. ")
         builder.setIcon(android.R.drawable.ic_dialog_alert)
-        builder.setNeutralButton("  Continue  "){dialogInterface , which -> }
+        builder.setNeutralButton("  Continue  "){ _, _ -> }
         val alertDialog: AlertDialog = builder.create()
         alertDialog.setCancelable(false)
         alertDialog.show()
@@ -198,7 +196,7 @@ class Register : AppCompatActivity() {
         builder.setTitle("Error: Email no valido")
         builder.setMessage(" Asegúrese de escribir bien el email. ")
         builder.setIcon(android.R.drawable.ic_dialog_alert)
-        builder.setNeutralButton("  Continue  "){dialogInterface , which -> }
+        builder.setNeutralButton("  Continue  "){ _, _ -> }
         val alertDialog: AlertDialog = builder.create()
         alertDialog.setCancelable(false)
         alertDialog.show()
@@ -209,7 +207,7 @@ class Register : AppCompatActivity() {
         builder.setTitle("Error:Contraseña demasiado corta")
         builder.setMessage(" Por razones de seguridad, prueba a escribir una contraseña más larga. ")
         builder.setIcon(android.R.drawable.ic_dialog_alert)
-        builder.setNeutralButton("  Continue  "){dialogInterface , which -> }
+        builder.setNeutralButton("  Continue  "){ _, _ -> }
         val alertDialog: AlertDialog = builder.create()
         alertDialog.setCancelable(false)
         alertDialog.show()
@@ -231,7 +229,7 @@ class Register : AppCompatActivity() {
         builder.setTitle("Bienvenido: " + name)
         builder.setMessage(" Su usuario se ha registrado correctamente. ")
         builder.setIcon(android.R.drawable.ic_dialog_email)
-        builder.setPositiveButton("  Continue  ", DialogInterface.OnClickListener{ Dialog , id -> finish() })
+        builder.setPositiveButton("  Continue  ", DialogInterface.OnClickListener{ _, _ -> finish() })
         val alertDialog: AlertDialog = builder.create()
         alertDialog.setCancelable(false)
         alertDialog.show()
@@ -242,7 +240,7 @@ class Register : AppCompatActivity() {
         builder.setTitle("Error: Correo ya registrado")
         builder.setMessage(" El correo ya esta asignado a otra cuenta ")
         builder.setIcon(android.R.drawable.ic_dialog_alert)
-        builder.setPositiveButton("  Continue  ", DialogInterface.OnClickListener{ Dialog , id -> finish() })
+        builder.setPositiveButton("  Continue  ", DialogInterface.OnClickListener{ _, _ -> finish() })
         val alertDialog: AlertDialog = builder.create()
         alertDialog.setCancelable(false)
         alertDialog.show()
