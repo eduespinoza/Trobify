@@ -181,6 +181,7 @@ class FiltrosBusqueda : AppCompatActivity() {
             else{
                 estado.remove("Obra nueva")
             }
+            println(estado)
         }
         casiNuevo.setOnClickListener {
             if(casiNuevo.isChecked){
@@ -189,6 +190,7 @@ class FiltrosBusqueda : AppCompatActivity() {
             else{
                 estado.remove("Casi nuevo")
             }
+            println(estado)
         }
         muyBien.setOnClickListener {
             if(muyBien.isChecked){
@@ -197,6 +199,7 @@ class FiltrosBusqueda : AppCompatActivity() {
             else{
                 estado.remove("Muy bien")
             }
+            println(estado)
         }
         bien.setOnClickListener {
             if(bien.isChecked){
@@ -205,6 +208,7 @@ class FiltrosBusqueda : AppCompatActivity() {
             else{
                 estado.remove("Bien")
             }
+            println(estado)
         }
         reformado.setOnClickListener {
             if(reformado.isChecked){
@@ -213,6 +217,7 @@ class FiltrosBusqueda : AppCompatActivity() {
             else{
                 estado.remove("Reformado")
             }
+            println(estado)
         }
         aReformar.setOnClickListener {
             if(aReformar.isChecked){
@@ -221,6 +226,7 @@ class FiltrosBusqueda : AppCompatActivity() {
             else{
                 estado.remove("A reformar")
             }
+            println(estado)
         }
 
         // EXTRAS /////////////////////////
@@ -240,6 +246,7 @@ class FiltrosBusqueda : AppCompatActivity() {
             else{
                 extras.put("Parking", false)
             }
+            println(extras)
         }
         ascensor.setOnClickListener {
             if(ascensor.isChecked){
@@ -248,6 +255,7 @@ class FiltrosBusqueda : AppCompatActivity() {
             else{
                 extras.put("Ascensor", false)
             }
+            println(extras)
         }
         amueblado.setOnClickListener {
             if(amueblado.isChecked){
@@ -256,6 +264,7 @@ class FiltrosBusqueda : AppCompatActivity() {
             else{
                 extras.put("Amueblado", false)
             }
+            println(extras)
         }
         calefaccion.setOnClickListener {
             if(calefaccion.isChecked){
@@ -264,6 +273,7 @@ class FiltrosBusqueda : AppCompatActivity() {
             else{
                 extras.put("Calefaccion", false)
             }
+            println(extras)
         }
         terraza.setOnClickListener {
             if(terraza.isChecked){
@@ -272,6 +282,8 @@ class FiltrosBusqueda : AppCompatActivity() {
             else{
                 extras.put("Terraza", false)
             }
+            println(extras)
+
         }
         trastero.setOnClickListener {
             if(trastero.isChecked){
@@ -280,6 +292,7 @@ class FiltrosBusqueda : AppCompatActivity() {
             else{
                 extras.put("Trastero", false)
             }
+            println(extras)
         }
         piscina.setOnClickListener {
             if(piscina.isChecked){
@@ -288,6 +301,7 @@ class FiltrosBusqueda : AppCompatActivity() {
             else{
                 extras.put("Piscina", false)
             }
+            println(extras)
         }
         jardin.setOnClickListener {
             if(jardin.isChecked){
@@ -296,6 +310,7 @@ class FiltrosBusqueda : AppCompatActivity() {
             else{
                 extras.put("Jardin", false)
             }
+            println(extras)
         }
 
         val builder = AlertDialog.Builder(this@FiltrosBusqueda)
@@ -333,6 +348,7 @@ class FiltrosBusqueda : AppCompatActivity() {
                     else{
                         tipoVivienda.remove(optionsViviendaEdificio[which])
                     }
+                    println(tipoVivienda)
                 }
             }
             else{
@@ -346,6 +362,7 @@ class FiltrosBusqueda : AppCompatActivity() {
                     else{
                         tipoVivienda.remove(optionsViviendaPorDefecto[which])
                     }
+                    println(tipoVivienda)
                 }
             }
             builder.setPositiveButton("Ok"){dialog, which -> dialog.dismiss()}

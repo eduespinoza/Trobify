@@ -25,10 +25,11 @@ class MainActivity : AppCompatActivity() {
         //startActivity(goSearch)
 
         // para probar Filtros
-        //val goFiltros = Intent(this, FiltrosBusqueda::class.java)
-        //startActivity(goFiltros)
+        val goFiltros = Intent(this, FiltrosBusqueda::class.java)
+        startActivity(goFiltros)
 
         // pa probar Ficha
+        /*
         var usuario = User("Pepe", "Viyuela", "correo@correo.com", "pepe123", "123456789")
 
         var pisito = Inmueble("125", usuario, 3,1, 75,"calle" ,"piso", "vender", 500,
@@ -40,7 +41,7 @@ class MainActivity : AppCompatActivity() {
         val goFicha = Intent(this, AdaptadorFichaInmueble::class.java)
         goFicha.putExtra("inmueble", pisito )
         startActivity(goFicha)
-
+        */
         // pa los Favoritos
         //val goFav = Intent(this, ListaFavoritos::class.java)
         //startActivity(goFav)
