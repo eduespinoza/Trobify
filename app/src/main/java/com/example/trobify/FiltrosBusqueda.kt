@@ -1,6 +1,5 @@
 package com.example.trobify
 
-import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -13,13 +12,12 @@ class FiltrosBusqueda : AppCompatActivity() {
     var numHabitaciones:Int = 1
     var numBaños:Int = 1
     lateinit var extras:MutableMap<String, Boolean>
-    lateinit var estado:ArrayList<String>
+    var estado = arrayListOf<String>()
     var precioMin:Int = 0
     var precioMax:Int = 0
     var superficieMin:Int = 0
     var superficieMax:Int = 0
-
-    lateinit var tipoVivienda:ArrayList<String>
+    var tipoVivienda = arrayListOf<String>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,41 +54,41 @@ class FiltrosBusqueda : AppCompatActivity() {
         addOptionsBaños()
         addOptionsSuperficie()
 
-        spinnerInmueble.setOnClickListener {
+        spinnerInmueble.onItemSelectedListener {
             if(spinnerInmueble.selectedItem == true){
                 tipoInmueble = spinnerInmueble.selectedItem.toString()
             }
         }
 
-        spinnerPrecioMin.setOnClickListener {
+        spinnerPrecioMin.onItemSelectedListener {
             if(spinnerPrecioMin.selectedItem == true){
                 precioMin = spinnerPrecioMin.selectedItem.toString().toInt()
             }
         }
-        spinnerPrecioMax.setOnClickListener {
+        spinnerPrecioMax.onItemSelectedListener {
             if(spinnerPrecioMax.selectedItem == true){
                 precioMax = spinnerPrecioMax.selectedItem.toString().toInt()
             }
         }
 
-        spinnerHabtiaciones.setOnClickListener {
+        spinnerHabtiaciones.onItemSelectedListener {
             if(spinnerHabtiaciones.selectedItem == true){
                 numHabitaciones = spinnerHabtiaciones.selectedItem.toString().toInt()
             }
         }
 
-        spinnerBaños.setOnClickListener {
+        spinnerBaños.onItemSelectedListener {
             if(spinnerBaños.selectedItem == true){
                 numBaños = spinnerBaños.selectedItem.toString().toInt()
             }
         }
 
-        spinnerSuperficieMax.setOnClickListener {
+        spinnerSuperficieMax.onItemSelectedListener {
             if(spinnerSuperficieMax.selectedItem == true){
                 superficieMax = spinnerSuperficieMax.selectedItem.toString().toInt()
             }
         }
-        spinnerSuperficieMin.setOnClickListener {
+        spinnerSuperficieMin.onItemSelectedListener {
             if(spinnerSuperficieMin.selectedItem == true){
                 superficieMin = spinnerSuperficieMin.selectedItem.toString().toInt()
             }
@@ -339,28 +337,28 @@ class FiltrosBusqueda : AppCompatActivity() {
         buttonVivienda.setOnClickListener{
             if(spinnerInmueble.selectedItem.equals("Edificio") || spinnerInmueble.selectedItem.equals("Oficina")){
                 val optionsViviendaEdificio = resources.getStringArray(R.array.options_vivienda_edificio)
-
+                tipoVivienda.clear()
                 builder.setMultiChoiceItems(optionsViviendaEdificio, elementosSeleccionadosTipoEdif){dialog, which, isChecked ->
                     elementosSeleccionadosTipoEdif[which] = isChecked
                     if(elementosSeleccionadosTipoEdif[which]){
-                        tipoVivienda.add(optionsViviendaEdificio[which])
+                        tipoVivienda.add(optionsViviendaEdificio[which].toString())
                     }
                     else{
-                        tipoVivienda.remove(optionsViviendaEdificio[which])
+                        tipoVivienda.remove(optionsViviendaEdificio[which].toString())
                     }
                     println(tipoVivienda)
                 }
             }
             else{
                 val optionsViviendaPorDefecto = resources.getStringArray(R.array.options_vivienda_por_defecto)
-
+                tipoVivienda.clear()
                 builder.setMultiChoiceItems(optionsViviendaPorDefecto, elementosSeleccionadosTipoPorDefecto){dialog, which, isChecked ->
                     elementosSeleccionadosTipoPorDefecto[which] = isChecked
-                    if(elementosSeleccionadosTipoEdif[which]){
-                        tipoVivienda.add(optionsViviendaPorDefecto[which])
+                    if(elementosSeleccionadosTipoPorDefecto[which]){
+                        tipoVivienda.add(optionsViviendaPorDefecto[which].toString())
                     }
                     else{
-                        tipoVivienda.remove(optionsViviendaPorDefecto[which])
+                        tipoVivienda.remove(optionsViviendaPorDefecto[which].toString())
                     }
                     println(tipoVivienda)
                 }
@@ -440,7 +438,7 @@ class FiltrosBusqueda : AppCompatActivity() {
         val spinnerSuperficieMin = findViewById<Spinner>(R.id.desplegableMinSuperficie)
         val spinnerSuperficieMax = findViewById<Spinner>(R.id.desplegableMaxSuperficie)
 
-        val options_superficie = listOf<Int>(60, 80, 100, 120, 140, 160, 180, 200, 220, 240, 260, 280, 300)
+        val options_superficie = listOf<Int>(0, 60, 80, 100, 120, 140, 160, 180, 200, 220, 240, 260, 280, 300)
 
         /* AÑADIR LAS OPCIONES A LOS DESPLEGABLES */
         val adapter = ArrayAdapter<Int>(this, android.R.layout.simple_spinner_item, options_superficie)
@@ -473,4 +471,6 @@ class FiltrosBusqueda : AppCompatActivity() {
         }
     }
 }
+
+private operator fun AdapterView.OnItemSelectedListener?.invoke(function : () -> Unit) {}
 
