@@ -155,6 +155,7 @@
                 app:layout_constraintTop_toTopOf="@id/opciones">
 
                 <TextView
+                    android:id="@+id/cabecera"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Inmuebles añadidos recientemente"

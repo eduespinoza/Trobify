@@ -18,13 +18,15 @@ class Busqueda {
     lateinit var motorDeBusqueda : SearchEngine
     lateinit var opcionesDeBusqueda : SearchOptions
     var sugerencias = arrayListOf<String>()
-
+    init {
+        prepararBuscadorHere()
+    }
     fun buscar(busqueda : String){
         this.query = busqueda
     }
     fun obtenerSugerencias(query : String){
-        prepararBuscadorHere()
-        //coordenadas de valencia por defecto
+        //coordenadas de valencia por defecto, esto es para que tenga un rango
+        //de busqueda definido
         var coordenadas = GeoCoordinates(39.46895, -0.37686)
         //var address = AddressQuery(query,coordenadas, arrayListOf(CountryCode.ESP))
         motorDeBusqueda.suggest(TextQuery(query,coordenadas,
@@ -56,7 +58,7 @@ class Busqueda {
     }
     fun obtenerResultados(resultado : (ArrayList<DataInmueble>) -> Unit){
         var inmueblesEncontrados = arrayListOf<DataInmueble>()
-        db.collection("inmuebles").
+        db.collection("inmueblesv2").
         whereEqualTo("direccion",this.query).get()
             .addOnCompleteListener{ task->
                  if(task.isSuccessful){

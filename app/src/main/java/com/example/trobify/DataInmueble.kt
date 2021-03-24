@@ -1,5 +1,27 @@
 package com.example.trobify
 
-data class DataInmueble (var caracteristicas : String? = null, var caractertisicasList : MutableList<Boolean>? = mutableListOf(true,false),var certificadoEnergetico: String?="",
-                         var descripcion : String?="",var direccion : String?="",var estado : String?="",var id : String?="",var intencion : String?="",var numBanos : Int?=-1,
-                         var numHabitaciones : Int?=-1,var precio : Int?=-1,var propietario : User?=null, var superficie : Int?=-1,var tipoInmueble : String?="",var titulo : String?="")
+import java.time.LocalDateTime
+
+data class DataInmueble (var id : String? = null,
+                         var propietario : User? = null,
+                         var numHabitaciones : Int? = null,
+                         var numBanos : Int? = null,
+                         var superficie : Int? = null,
+                         var direccion : String? = null,
+                         var tipoInmueble : String? = null,
+                         var intencion : String? = null,
+                         var precio : Int? = null,
+                         var fotos : ArrayList<Int> = arrayListOf(),
+                         var fotosOrd : ArrayList<String> = arrayListOf(),
+                         var certificadoEnergetico : String? = null,
+                         var descripcion : String? = null,
+                         var estado : String? = null,
+                         var parking : Boolean? = null,
+                         var ascensor : Boolean? = null,
+                         var amueblado : Boolean? = null,
+                         var calefaccion : Boolean? = null,
+                         var jardin : Boolean? = null,
+                         var piscina : Boolean? = null,
+                         var terraza : Boolean? = null,
+                         var trastero : Boolean? = null,
+                         var fechaSubida : String? = null)

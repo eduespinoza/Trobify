@@ -9,11 +9,14 @@ import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.Exclude
 import com.google.firebase.ktx.Firebase
 import io.grpc.Context
 import java.io.Serializable
+import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.*
+import kotlin.collections.ArrayList
 
 
 class Inmueble : Serializable{
@@ -23,14 +26,14 @@ class Inmueble : Serializable{
     var numHabitaciones : Int? = null
     var numBanos : Int? = null
     var superficie : Int? = null
-
-    var direccion : Direccion? = null
+    var direccion : String? = null
+    //var direccion : Direccion? = null
     var tipoInmueble : String? = null
     var intencion : String? = null //vender o alquilar
     var precio : Int? = null
 
-    var fotos : IntArray = intArrayOf()
-    var fotosOrd : Array<String> = arrayOf()
+    var fotos : ArrayList<Int> = arrayListOf()
+    var fotosOrd : ArrayList<String> = arrayListOf()
     var certificadoEnergetico : String? = null  //Desde la A hasta la G, hay que hacer que solo deje poner las letras posibles
     var descripcion : String? = null
 
@@ -53,6 +56,7 @@ class Inmueble : Serializable{
         this.precio = price
         this.superficie = surface
     }
+    constructor()
 
     constructor(
         id : String?,
@@ -60,14 +64,14 @@ class Inmueble : Serializable{
         numHabitaciones : Int?,
         numBanos : Int?,
         superficie : Int?,
-
+        direccion : String?,
         //direccion : Direccion?, descomentar cuando se termine lo de direccion, abajo tmb
         tipoInmueble : String?,
         intencion : String?,
         precio : Int?,
 
-        fotos : IntArray,
-        fotosOrd : Array<String>,
+        fotos : ArrayList<Int>,
+        fotosOrd : ArrayList<String>,
         certificadoEnergetico : String?,
         descripcion : String?,
 
@@ -108,7 +112,7 @@ class Inmueble : Serializable{
         this.trastero = trastero
         this.caracteristicas = caracteristicasToString()
 
-        //this.direccion = direccion
+        this.direccion = direccion
 
         //if (direccion != null) {
         //    this.titulo = "Inmueble en " + direccion.direccionToString()
@@ -132,14 +136,20 @@ class Inmueble : Serializable{
         return res
     }
 
-
-    fun getfotos() : IntArray{
+    fun getfotos() : ArrayList<Int>{
         return fotos
     }
-
-    fun getfotosord() : Array<String>{
+    fun getfotosord() : ArrayList<String>{
         return fotosOrd
 
+    }
+    //FUNCION NECESARIA - para poder coger bien los datos de la bd
+    fun adaptarInmuble(dataInmueble : DataInmueble) : Inmueble{
+        return Inmueble(dataInmueble.id,dataInmueble.propietario,dataInmueble.numHabitaciones,dataInmueble.numBanos
+        ,dataInmueble.superficie,dataInmueble.direccion,dataInmueble.tipoInmueble,dataInmueble.intencion,dataInmueble.precio,dataInmueble.fotos,
+        dataInmueble.fotosOrd,dataInmueble.certificadoEnergetico,dataInmueble.descripcion,dataInmueble.estado,dataInmueble.parking
+        ,dataInmueble.ascensor,dataInmueble.amueblado,dataInmueble.calefaccion,dataInmueble.jardin,dataInmueble.piscina,dataInmueble.terraza,
+            dataInmueble.trastero,LocalDateTime.parse(dataInmueble.fechaSubida))
     }
 
 

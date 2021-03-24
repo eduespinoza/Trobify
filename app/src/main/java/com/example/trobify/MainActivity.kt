@@ -13,7 +13,6 @@ class MainActivity : AppCompatActivity() {
     private val db = FirebaseFirestore.getInstance()
 
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -32,9 +31,9 @@ class MainActivity : AppCompatActivity() {
         // pa probar Ficha
         var usuario = User("Pepe", "Viyuela", "correo@correo.com", "pepe123", "123456789")
 
-        var pisito = Inmueble("125", usuario, 3,1, 75, "piso", "vender", 500,
-            intArrayOf(R.drawable.piso1, R.drawable.piso2, R.drawable.piso3,R.drawable.piso4,R.drawable.piso5),
-            arrayOf("imagen1","imagen2", "imagen3", "imagen4", "imagen5"), "B", "Piso ideal para estudiantes....bla bla ",
+        var pisito = Inmueble("125", usuario, 3,1, 75,"calle" ,"piso", "vender", 500,
+            arrayListOf(R.drawable.piso1, R.drawable.piso2, R.drawable.piso3,R.drawable.piso4,R.drawable.piso5),
+            arrayListOf("imagen1","imagen2", "imagen3", "imagen4", "imagen5"), "B", "Piso ideal para estudiantes....bla bla ",
             "obre nueva", false, true, true, false, false,false, false,false, LocalDateTime.now())
 
 
