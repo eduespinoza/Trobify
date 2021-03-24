@@ -7,17 +7,22 @@ import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 
-class FiltrosBusqueda : AppCompatActivity() {
-    var tipoInmueble:String = ""
-    var numHabitaciones:Int = 1
-    var numBaños:Int = 1
-    lateinit var extras:MutableMap<String, Boolean>
-    var estado = arrayListOf<String>()
-    var precioMin:Int = 0
-    var precioMax:Int = 0
-    var superficieMin:Int = 0
-    var superficieMax:Int = 0
-    var tipoVivienda = arrayListOf<String>()
+open class FiltrosBusqueda : AppCompatActivity() {
+
+    object filtros {
+        var tipoInmueble = GuardaFiltros.filtrosGuardados.tipoInmueble
+        var numHabitaciones = GuardaFiltros.filtrosGuardados.numHabitaciones
+        var numBaños:Int = GuardaFiltros.filtrosGuardados.numBaños
+        var extras = GuardaFiltros.filtrosGuardados.extras
+        var estado = GuardaFiltros.filtrosGuardados.estado
+        var precioMin:Int = GuardaFiltros.filtrosGuardados.precioMin
+        var precioMax:Int = GuardaFiltros.filtrosGuardados.precioMax
+        var superficieMin:Int = GuardaFiltros.filtrosGuardados.superficieMin
+        var superficieMax:Int = GuardaFiltros.filtrosGuardados.superficieMax
+        var tipoVivienda = GuardaFiltros.filtrosGuardados.tipoVivienda
+    }
+    var checkPriceBool = true
+    var checkSurfaceBool = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,41 +61,41 @@ class FiltrosBusqueda : AppCompatActivity() {
 
         spinnerInmueble.onItemSelectedListener {
             if(spinnerInmueble.selectedItem == true){
-                tipoInmueble = spinnerInmueble.selectedItem.toString()
+                filtros.tipoInmueble = spinnerInmueble.selectedItem.toString()
             }
         }
 
         spinnerPrecioMin.onItemSelectedListener {
             if(spinnerPrecioMin.selectedItem == true){
-                precioMin = spinnerPrecioMin.selectedItem.toString().toInt()
+                filtros.precioMin = spinnerPrecioMin.selectedItem.toString().toInt()
             }
         }
         spinnerPrecioMax.onItemSelectedListener {
             if(spinnerPrecioMax.selectedItem == true){
-                precioMax = spinnerPrecioMax.selectedItem.toString().toInt()
+                filtros.precioMax = spinnerPrecioMax.selectedItem.toString().toInt()
             }
         }
 
         spinnerHabtiaciones.onItemSelectedListener {
             if(spinnerHabtiaciones.selectedItem == true){
-                numHabitaciones = spinnerHabtiaciones.selectedItem.toString().toInt()
+                filtros.numHabitaciones = spinnerHabtiaciones.selectedItem.toString().toInt()
             }
         }
 
         spinnerBaños.onItemSelectedListener {
             if(spinnerBaños.selectedItem == true){
-                numBaños = spinnerBaños.selectedItem.toString().toInt()
+                filtros.numBaños = spinnerBaños.selectedItem.toString().toInt()
             }
         }
 
         spinnerSuperficieMax.onItemSelectedListener {
             if(spinnerSuperficieMax.selectedItem == true){
-                superficieMax = spinnerSuperficieMax.selectedItem.toString().toInt()
+                filtros.superficieMax = spinnerSuperficieMax.selectedItem.toString().toInt()
             }
         }
         spinnerSuperficieMin.onItemSelectedListener {
             if(spinnerSuperficieMin.selectedItem == true){
-                superficieMin = spinnerSuperficieMin.selectedItem.toString().toInt()
+                filtros.superficieMin = spinnerSuperficieMin.selectedItem.toString().toInt()
             }
         }
 
@@ -174,61 +179,61 @@ class FiltrosBusqueda : AppCompatActivity() {
 
         obraNueva.setOnClickListener {
             if(obraNueva.isChecked){
-                estado.add("Obra nueva")
+                filtros.estado.add("Obra nueva")
             }
             else{
-                estado.remove("Obra nueva")
+                filtros.estado.remove("Obra nueva")
             }
-            println(estado)
+            println(filtros.estado)
         }
         casiNuevo.setOnClickListener {
             if(casiNuevo.isChecked){
-                estado.add("Casi nuevo")
+                filtros.estado.add("Casi nuevo")
             }
             else{
-                estado.remove("Casi nuevo")
+                filtros.estado.remove("Casi nuevo")
             }
-            println(estado)
+            println(filtros.estado)
         }
         muyBien.setOnClickListener {
             if(muyBien.isChecked){
-                estado.add("Muy bien")
+                filtros.estado.add("Muy bien")
             }
             else{
-                estado.remove("Muy bien")
+                filtros.estado.remove("Muy bien")
             }
-            println(estado)
+            println(filtros.estado)
         }
         bien.setOnClickListener {
             if(bien.isChecked){
-                estado.add("Bien")
+                filtros.estado.add("Bien")
             }
             else{
-                estado.remove("Bien")
+                filtros.estado.remove("Bien")
             }
-            println(estado)
+            println(filtros.estado)
         }
         reformado.setOnClickListener {
             if(reformado.isChecked){
-                estado.add("Reformado")
+                filtros.estado.add("Reformado")
             }
             else{
-                estado.remove("Reformado")
+                filtros.estado.remove("Reformado")
             }
-            println(estado)
+            println(filtros.estado)
         }
         aReformar.setOnClickListener {
             if(aReformar.isChecked){
-                estado.add("A reformar")
+                filtros.estado.add("A reformar")
             }
             else{
-                estado.remove("A reformar")
+                filtros.estado.remove("A reformar")
             }
-            println(estado)
+            println(filtros.estado)
         }
 
         // EXTRAS /////////////////////////
-        extras = mutableMapOf("Parking" to false,
+        filtros.extras = mutableMapOf("Parking" to false,
             "Ascensor" to false,
             "Amueblado" to false,
             "Calefaccion" to false,
@@ -239,76 +244,76 @@ class FiltrosBusqueda : AppCompatActivity() {
         )
         parking.setOnClickListener {
             if(parking.isChecked){
-                extras.put("Parking", true)
+                filtros.extras.put("Parking", true)
             }
             else{
-                extras.put("Parking", false)
+                filtros.extras.put("Parking", false)
             }
-            println(extras)
+            println(filtros.extras)
         }
         ascensor.setOnClickListener {
             if(ascensor.isChecked){
-                extras.put("Ascensor", true)
+                filtros.extras.put("Ascensor", true)
             }
             else{
-                extras.put("Ascensor", false)
+                filtros.extras.put("Ascensor", false)
             }
-            println(extras)
+            println(filtros.extras)
         }
         amueblado.setOnClickListener {
             if(amueblado.isChecked){
-                extras.put("Amueblado", true)
+                filtros.extras.put("Amueblado", true)
             }
             else{
-                extras.put("Amueblado", false)
+                filtros.extras.put("Amueblado", false)
             }
-            println(extras)
+            println(filtros.extras)
         }
         calefaccion.setOnClickListener {
             if(calefaccion.isChecked){
-                extras.put("Calefaccion", true)
+                filtros.extras.put("Calefaccion", true)
             }
             else{
-                extras.put("Calefaccion", false)
+                filtros.extras.put("Calefaccion", false)
             }
-            println(extras)
+            println(filtros.extras)
         }
         terraza.setOnClickListener {
             if(terraza.isChecked){
-                extras.put("Terraza", true)
+                filtros.extras.put("Terraza", true)
             }
             else{
-                extras.put("Terraza", false)
+                filtros.extras.put("Terraza", false)
             }
-            println(extras)
+            println(filtros.extras)
 
         }
         trastero.setOnClickListener {
             if(trastero.isChecked){
-                extras.put("Trastero", true)
+                filtros.extras.put("Trastero", true)
             }
             else{
-                extras.put("Trastero", false)
+                filtros.extras.put("Trastero", false)
             }
-            println(extras)
+            println(filtros.extras)
         }
         piscina.setOnClickListener {
             if(piscina.isChecked){
-                extras.put("Piscina", true)
+                filtros.extras.put("Piscina", true)
             }
             else{
-                extras.put("Piscina", false)
+                filtros.extras.put("Piscina", false)
             }
-            println(extras)
+            println(filtros.extras)
         }
         jardin.setOnClickListener {
             if(jardin.isChecked){
-                extras.put("Jardin", true)
+                filtros.extras.put("Jardin", true)
             }
             else{
-                extras.put("Jardin", false)
+                filtros.extras.put("Jardin", false)
             }
-            println(extras)
+            println(filtros.extras)
         }
 
         val builder = AlertDialog.Builder(this@FiltrosBusqueda)
@@ -337,30 +342,30 @@ class FiltrosBusqueda : AppCompatActivity() {
         buttonVivienda.setOnClickListener{
             if(spinnerInmueble.selectedItem.equals("Edificio") || spinnerInmueble.selectedItem.equals("Oficina")){
                 val optionsViviendaEdificio = resources.getStringArray(R.array.options_vivienda_edificio)
-                tipoVivienda.clear()
+                filtros.tipoVivienda.clear()
                 builder.setMultiChoiceItems(optionsViviendaEdificio, elementosSeleccionadosTipoEdif){dialog, which, isChecked ->
                     elementosSeleccionadosTipoEdif[which] = isChecked
                     if(elementosSeleccionadosTipoEdif[which]){
-                        tipoVivienda.add(optionsViviendaEdificio[which].toString())
+                        filtros.tipoVivienda.add(optionsViviendaEdificio[which].toString())
                     }
                     else{
-                        tipoVivienda.remove(optionsViviendaEdificio[which].toString())
+                        filtros.tipoVivienda.remove(optionsViviendaEdificio[which].toString())
                     }
-                    println(tipoVivienda)
+                    println(filtros.tipoVivienda)
                 }
             }
             else{
                 val optionsViviendaPorDefecto = resources.getStringArray(R.array.options_vivienda_por_defecto)
-                tipoVivienda.clear()
+                filtros.tipoVivienda.clear()
                 builder.setMultiChoiceItems(optionsViviendaPorDefecto, elementosSeleccionadosTipoPorDefecto){dialog, which, isChecked ->
                     elementosSeleccionadosTipoPorDefecto[which] = isChecked
                     if(elementosSeleccionadosTipoPorDefecto[which]){
-                        tipoVivienda.add(optionsViviendaPorDefecto[which].toString())
+                        filtros.tipoVivienda.add(optionsViviendaPorDefecto[which].toString())
                     }
                     else{
-                        tipoVivienda.remove(optionsViviendaPorDefecto[which].toString())
+                        filtros.tipoVivienda.remove(optionsViviendaPorDefecto[which].toString())
                     }
-                    println(tipoVivienda)
+                    println(filtros.tipoVivienda)
                 }
             }
             builder.setPositiveButton("Ok"){dialog, which -> dialog.dismiss()}
@@ -374,8 +379,12 @@ class FiltrosBusqueda : AppCompatActivity() {
             // ACABAR
             checkPrice()
             checkSurface()
-            val goSearch = Intent(this, MainTrobify::class.java)
-            startActivity(goSearch)
+            if(checkPriceBool && checkSurfaceBool){
+                saveFiltros()
+                val goSearch = Intent(this, MainTrobify::class.java)
+                startActivity(goSearch)
+            }
+            else{}
         }
 
         val buttonBack = findViewById<ImageButton>(R.id.buttonBack)
@@ -426,7 +435,7 @@ class FiltrosBusqueda : AppCompatActivity() {
     private fun addOptionsBaños(){
         val spinnerBaños = findViewById<Spinner>(R.id.desplegableNumBaños)
 
-        val options_baños = listOf<Int>(1, 2, 3)
+        val options_baños = listOf<Int>(0, 1, 2, 3)
 
         /* AÑADIR LAS OPCIONES A LOS DESPLEGABLES */
         val adapter = ArrayAdapter<Int>(this, android.R.layout.simple_spinner_item, options_baños)
@@ -450,25 +459,46 @@ class FiltrosBusqueda : AppCompatActivity() {
     private fun checkPrice(){
         val spinnerPrecioMin = findViewById<Spinner>(R.id.desplegableMinPrecio)
         val spinnerPrecioMax = findViewById<Spinner>(R.id.desplegableMaxPrecio)
-        if(compareValues(spinnerPrecioMin.selectedItem.toString().toInt(), spinnerPrecioMax.selectedItem.toString().toInt()) >= 0){
+        if(compareValues(spinnerPrecioMin.selectedItem.toString().toInt(), spinnerPrecioMax.selectedItem.toString().toInt()) > 0){
             AlertDialog.Builder(this@FiltrosBusqueda).apply {
+                checkPriceBool = false
                 setTitle("Error")
                 setMessage("El rango de valores de precio es incorrecto.")
                 setPositiveButton("Ok", null)
             }.show()
+        }
+        else{
+            checkPriceBool = true
         }
     }
 
     private fun checkSurface(){
         val spinnerSuperficieMin = findViewById<Spinner>(R.id.desplegableMinSuperficie)
         val spinnerSuperficieMax = findViewById<Spinner>(R.id.desplegableMaxSuperficie)
-        if(compareValues(spinnerSuperficieMin.selectedItem.toString().toInt(), spinnerSuperficieMax.selectedItem.toString().toInt()) >= 0){
+        if(compareValues(spinnerSuperficieMin.selectedItem.toString().toInt(), spinnerSuperficieMax.selectedItem.toString().toInt()) > 0){
             AlertDialog.Builder(this@FiltrosBusqueda).apply {
+                checkSurfaceBool = false
                 setTitle("Error")
                 setMessage("El rango de valores de superficie es incorrecto.")
                 setPositiveButton("Ok", null)
             }.show()
         }
+        else{
+            checkSurfaceBool = true
+        }
+    }
+
+    private fun saveFiltros(){
+        GuardaFiltros.filtrosGuardados.tipoInmueble = filtros.tipoInmueble
+        GuardaFiltros.filtrosGuardados.tipoVivienda = filtros.tipoVivienda
+        GuardaFiltros.filtrosGuardados.numHabitaciones = filtros.numHabitaciones
+        GuardaFiltros.filtrosGuardados.numBaños = filtros.numBaños
+        GuardaFiltros.filtrosGuardados.extras = filtros.extras
+        GuardaFiltros.filtrosGuardados.precioMin = filtros.precioMin
+        GuardaFiltros.filtrosGuardados.precioMax = filtros.precioMax
+        GuardaFiltros.filtrosGuardados.superficieMin = filtros.superficieMin
+        GuardaFiltros.filtrosGuardados.superficieMax = filtros.superficieMax
+        GuardaFiltros.filtrosGuardados.estado = filtros.estado
     }
 }
 
