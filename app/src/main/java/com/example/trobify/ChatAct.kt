@@ -24,8 +24,6 @@ class ChatAct : AppCompatActivity() {
         intent.getStringExtra("chatId")?.let { chatId = it }
         intent.getStringExtra("user")?.let { user = it }
 
-        println("---------------------------------------------------------------------------- Chat: " + chatId.toString() + "  User: " + user.toString())
-
         if(chatId.isNotEmpty() && user.isNotEmpty()) {
             initViews()
         }
@@ -60,7 +58,6 @@ class ChatAct : AppCompatActivity() {
     }
 
     private fun sendMessage(){
-        println("----------------------------------------------------------------------bbbbbbbbbbb")
         val message = Message(
             message = messageTextField.text.toString(),
             from = user
