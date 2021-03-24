@@ -15,9 +15,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Trobify">
         <activity
+            android:name=".ChatAct"
+            android:label="@string/title_activity_chat"
+            android:theme="@style/Theme.Trobify.NoActionBar"></activity>
+        <activity
             android:name=".Buscador"
             android:label="@string/title_activity_buscador"
-            android:theme="@style/Theme.Trobify.NoActionBar"></activity>
+            android:theme="@style/Theme.Trobify.NoActionBar" />
 
         <meta-data
             android:name="com.here.sdk.access_key_id"
