@@ -1,8 +1,10 @@
 package com.example.trobify
 
+import android.content.ContentValues
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.util.TypedValue
 import android.widget.Button
 import android.widget.EditText
@@ -10,6 +12,9 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.toObject
+import com.google.firebase.ktx.Firebase
 import com.synnapps.carouselview.CarouselView
 
 class AdaptadorFichaInmueble() : AppCompatActivity() {
@@ -18,13 +23,19 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
     //val goFicha = Intent(this, AdaptadorFichaInmueble::class.java)
     //goFicha.putExtra("inmueble", el inmueble que queremos pasar)
 
+    val db = Firebase.firestore
+    lateinit var userId : String
+    lateinit var user : User
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_ficha_inmueble)
 
-        var user = User("Pepe", "Viyuela", "correo@correo.com", "pepe123", "123456789")
-        //var user = intent.extras?.get("usuario") as User
+        user = User("Pepe", "Viyuela", "correo@correo.com", "pepe123", "123456789", arrayListOf(""))
+        //userId = intent.extras?.get("usuarioId") as User
+        userId = user.getId().toString()
+
 
         var inmueble = intent.extras?.get("inmueble") as Inmueble
         var fotos = inmueble.getfotos()
@@ -33,6 +44,7 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
         val buttonAtras = findViewById<Button>(R.id.buttonAtrasFicha)
         buttonAtras.setOnClickListener{
             val goMain = Intent(this, MainTrobify::class.java)
+            //put extra user para devolverlo con la lista de fav actualizada
             startActivity(goMain)
         }
 
@@ -62,7 +74,7 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
 
         val buttonFav = findViewById<Button>(R.id.buttonFav)
         buttonFav.setOnClickListener {
-            addToFav(user, inmueble)
+            addToFav(inmueble)
         }
 
 
@@ -84,12 +96,12 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
 
     }
 
-
-
     private fun rellenar(inmueble : Inmueble) {
 
         val direccion =  findViewById<TextView>(R.id.textViewCalleFicha)
-        direccion.text = inmueble.titulo
+        direccion.text = inmueble.direccionO?.direccionToString()
+        if(inmueble.direccion.equals("")){}else{direccion.text = inmueble.direccion}
+
         direccion.setTextColor(Color.BLACK)
         direccion.setTextSize(TypedValue.COMPLEX_UNIT_PX, 40F)
 
@@ -142,11 +154,37 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
         alertDialog.show()
     }
 
-    private fun addToFav(mainUser : User, inmueble : Inmueble){
-        mainUser.addInmuebleToFav(inmueble)
+    private fun addToFav(inmueble : Inmueble){
+
         val builder =  AlertDialog.Builder(this)
+
+
+        var favoritos : ArrayList<String>? = null
+
+        userId.let {db.collection("users").document("pepe123")
+            .get()
+            .addOnSuccessListener { documentSnapshot ->
+               val userr = documentSnapshot.toObject<User>()
+                if (userr != null) {
+                    favoritos = userr.getFav()
+                }
+            }
+            }
+        Log.d("wiiiiiiiiiiii", "los fav   " + favoritos.toString())
+
+        if (favoritos?.contains(inmueble.id.toString()) == true){
+                builder.setMessage("Inmueble ya en favoritos")
+            }
+            else{
+                user.addFav(inmueble.id.toString())
+                user.getId().toString().let {
+                        db.collection("users").document(it).set(user)
+                        .addOnSuccessListener { Log.d(ContentValues.TAG, "DocumentSnapshot successfully written!") }
+                        .addOnFailureListener { Log.w(ContentValues.TAG, "Error writing document" ) }
+                }
+                builder.setMessage("Inmueble añadido a favoritos correctamente")
+            }
         builder.setTitle("Favoritos")
-        builder.setMessage("Inmueble añadido a favoritos correctamente")
         builder.setIcon(android.R.drawable.star_on)
         builder.setNeutralButton("  Continuar  "){ _, _ -> }
         val alertDialog: AlertDialog = builder.create()
@@ -161,11 +199,12 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
         with(builderIntroduceQuantityOferta){
             setPositiveButton("Enviar oferta"){dialog, which ->
                 val priceIntroduced = dialogLayout.findViewById<EditText>(R.id.editText_oferta).text
-                val message = "Oferta : " + inmueble.titulo + " Cantidad ofrecida : " + priceIntroduced
+                val message = "Oferta : " + inmueble.direccionO?.direccionToString() + " Cantidad ofrecida : " + priceIntroduced
             }
             builderIntroduceQuantityOferta.setNegativeButton("Cancelar") { _, _ -> }
             setView(dialogLayout)
             show()
         }
     }
+
 }

@@ -37,6 +37,19 @@ class User : Serializable{
         this.proilePic = "default"
 
     }
+
+    constructor(name : String?, surname : String?, email : String?, id : String?,
+                pass : String?, fav : ArrayList<String>){
+        this.name = name
+        this.surname = surname
+        this.email = email
+        this.pass = pass
+        this.id = id
+        this.proilePic = "default"
+        this.favourite = fav
+
+    }
+
     constructor(){}
 
     fun getName() : String? {
