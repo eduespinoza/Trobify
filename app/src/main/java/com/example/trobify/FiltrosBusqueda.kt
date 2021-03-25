@@ -442,7 +442,7 @@ open class FiltrosBusqueda : AppCompatActivity() {
     }
 
     private fun addOptionsHabitaciones(){
-        val options_habitaciones = listOf<Int>(0, 1, 2, 3 ,4 ,5)
+        val options_habitaciones = listOf<Int>(1, 2, 3 ,4 ,5)
 
         /* AÑADIR LAS OPCIONES A LOS DESPLEGABLES */
         val adapter = ArrayAdapter<Int>(this, android.R.layout.simple_spinner_item, options_habitaciones)
@@ -454,7 +454,7 @@ open class FiltrosBusqueda : AppCompatActivity() {
     }
 
     private fun addOptionsBaños(){
-        val options_baños = listOf<Int>(0, 1, 2, 3)
+        val options_baños = listOf<Int>(1, 2, 3)
 
         /* AÑADIR LAS OPCIONES A LOS DESPLEGABLES */
         val adapter = ArrayAdapter<Int>(this, android.R.layout.simple_spinner_item, options_baños)
