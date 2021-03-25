@@ -61,7 +61,9 @@ open class FiltrosBusqueda : AppCompatActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+
+        //intent.getStringExtra("user")?.let {userId = it}
+
         setContentView(R.layout.activity_filtros_busqueda)
 
         desplegables.spinnerInmueble = findViewById<Spinner>(R.id.desplegableTipoInmueble)
@@ -388,7 +390,6 @@ open class FiltrosBusqueda : AppCompatActivity() {
 
         val buttonAplicar = findViewById<Button>(R.id.buttonAplicar)
         buttonAplicar.setOnClickListener{
-            // ACABAR
             checkPrice()
             checkSurface()
             if(checkPriceBool && checkSurfaceBool){
@@ -397,6 +398,7 @@ open class FiltrosBusqueda : AppCompatActivity() {
                 val goSearch = Intent(this, MainTrobify::class.java)
                 goSearch.putExtra("filtros",filtros)
                 startActivity(goSearch)
+                //intent.putExtra("user", user.toString())
             }
             else{}
         }
@@ -405,6 +407,7 @@ open class FiltrosBusqueda : AppCompatActivity() {
         buttonBack.setOnClickListener{
             finish()
         }
+        super.onCreate(savedInstanceState)
     }
 
     private fun addOptionsInmueble(){
@@ -422,8 +425,8 @@ open class FiltrosBusqueda : AppCompatActivity() {
     }
 
     private fun addOptionsPrice(){
-        val options_price = listOf<Int>(0, 50000, 75000, 100000, 125000, 150000, 200000, 300000, 400000, 500000)
-        val options_price_max = listOf<Int>(0, 50000, 75000, 100000, 125000, 150000, 200000, 300000, 400000, 500000)
+        val options_price = listOf<Int>(0, 50000, 75000, 100000, 125000, 150000, 200000, 300000, 400000, 500000, 700000)
+        val options_price_max = listOf<Int>(0, 50000, 75000, 100000, 125000, 150000, 200000, 300000, 400000, 500000, 700000)
 
         /* AÑADIR LAS OPCIONES A LOS DESPLEGABLES */
         val adapter0 = ArrayAdapter<Int>(this, android.R.layout.simple_spinner_item, options_price)
