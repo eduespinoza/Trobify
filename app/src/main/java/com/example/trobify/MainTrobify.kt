@@ -54,9 +54,9 @@ class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemClickLi
         if(filtrosAplicados != null){
             mostrarResultadosFiltros()
         }
-        //filtrarBusqueda()
-        //mostrarResultadosFiltros()
-        prepararPrimerosResultados()
+        else {
+            prepararPrimerosResultados()
+        }
         prepararBuscador()
         setListeners()
     }
@@ -128,12 +128,22 @@ class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemClickLi
                     startActivity(irAChats)
                     menuLateral.closeDrawers()
                 }
+                R.id.misfavoritos-> {
+                    val irAMisFavoritos =
+                        Intent(this@MainTrobify, ListaFavoritos::class.java)
+                    irAMisFavoritos.putExtra("user", user.toString())
+                    startActivity(irAMisFavoritos)
+                    menuLateral.closeDrawers()
+                }
 
             }
             true
         }
         cerrarSesion.setOnClickListener {
             auth.signOut()
+            val volverALogin =
+                Intent(this@MainTrobify, Login::class.java)
+            startActivity(volverALogin)
         }
         db.collection("users").document(user.toString()).get()
             .addOnSuccessListener { e ->
