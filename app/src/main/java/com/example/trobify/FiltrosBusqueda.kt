@@ -6,7 +6,7 @@ import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.get
+import kotlinx.android.synthetic.main.activity_filtros_busqueda.*
 import java.io.Serializable
 
 
@@ -24,6 +24,9 @@ open class FiltrosBusqueda : AppCompatActivity() {
         var superficieMax:Int = GuardaFiltros.filtrosGuardados.superficieMax
         var tipoVivienda = GuardaFiltros.filtrosGuardados.tipoVivienda
     }
+
+    var elementosSeleccionadosTipoEdif:BooleanArray = GuardaFiltros.guardaSeleccion.elementosSeleccionadosTipoEdif
+    var elementosSeleccionadosTipoPorDefecto:BooleanArray = GuardaFiltros.guardaSeleccion.elementosSeleccionadosTipoPorDefecto
 
     var checkPriceBool = true
     var checkSurfaceBool = true
@@ -92,47 +95,94 @@ open class FiltrosBusqueda : AppCompatActivity() {
         addOptionsBaños()
         addOptionsSuperficie()
 
+        ////////////// RESTABLECER SELECCION DE EXTRAS Y ESTADO DE LA VIVIENDA ///////////////////
+        ///// ESTADO DEL INMUEBLE /////
+        if(GuardaFiltros.guardaSeleccion.boxObraNueva == true){
+            estadosVivienda.obraNueva.isChecked = true
+        }
+        if(GuardaFiltros.guardaSeleccion.boxMuyBien == true){
+            estadosVivienda.muyBien.isChecked = true
+        }
+        if(GuardaFiltros.guardaSeleccion.boxBien == true){
+            estadosVivienda.bien.isChecked = true
+        }
+        if(GuardaFiltros.guardaSeleccion.boxReformado == true){
+            estadosVivienda.reformado.isChecked = true
+        }
+        if(GuardaFiltros.guardaSeleccion.boxAReformar == true){
+            estadosVivienda.aReformar.isChecked = true
+        }
+        if(GuardaFiltros.guardaSeleccion.boxCasiNuevo == true){
+            estadosVivienda.casiNuevo.isChecked = true
+        }
+        ///// EXTRAS DEL INMUEBLE //////
+        if(GuardaFiltros.guardaSeleccion.boxParking == true){
+            extrasVivienda.parking.isChecked = true
+        }
+        if(GuardaFiltros.guardaSeleccion.boxAscensor == true){
+            extrasVivienda.ascensor.isChecked = true
+        }
+        if(GuardaFiltros.guardaSeleccion.boxAmueblado == true){
+            extrasVivienda.amueblado.isChecked = true
+        }
+        if(GuardaFiltros.guardaSeleccion.boxCalefaccion == true){
+            extrasVivienda.calefaccion.isChecked = true
+        }
+        if(GuardaFiltros.guardaSeleccion.boxJardin == true){
+            extrasVivienda.jardin.isChecked = true
+        }
+        if(GuardaFiltros.guardaSeleccion.boxPiscina == true){
+            extrasVivienda.piscina.isChecked = true
+        }
+        if(GuardaFiltros.guardaSeleccion.boxTerraza == true){
+            extrasVivienda.terraza.isChecked = true
+        }
+        if(GuardaFiltros.guardaSeleccion.boxTrastero == true){
+            extrasVivienda.trastero.isChecked = true
+        }
+        ////////////////////////////////////////////////////////////////////////////
+
         desplegables.spinnerPrecioMin.onItemSelectedListener = object:
             AdapterView.OnItemSelectedListener{
             override fun onNothingSelected(parent: AdapterView<*>?) {}
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 filtros.precioMin = desplegables.spinnerPrecioMin.selectedItem.toString().toInt()
-                println(filtros.precioMin)}
+            }
         }
         desplegables.spinnerPrecioMax.onItemSelectedListener = object:
             AdapterView.OnItemSelectedListener{
             override fun onNothingSelected(parent: AdapterView<*>?) {}
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 filtros.precioMax = desplegables.spinnerPrecioMax.selectedItem.toString().toInt()
-                println(filtros.precioMax)}
+            }
         }
         desplegables.spinnerHabitaciones.onItemSelectedListener = object:
             AdapterView.OnItemSelectedListener{
             override fun onNothingSelected(parent: AdapterView<*>?) {}
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 filtros.numHabitaciones = desplegables.spinnerHabitaciones.selectedItem.toString().toInt()
-                println(filtros.numHabitaciones)}
+            }
         }
         desplegables.spinnerBaños.onItemSelectedListener = object:
             AdapterView.OnItemSelectedListener{
             override fun onNothingSelected(parent: AdapterView<*>?) {}
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 filtros.numBaños = desplegables.spinnerBaños.selectedItem.toString().toInt()
-                println(filtros.numBaños)}
+            }
         }
         desplegables.spinnerSuperficieMax.onItemSelectedListener = object:
             AdapterView.OnItemSelectedListener{
             override fun onNothingSelected(parent: AdapterView<*>?) {}
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 filtros.superficieMax = desplegables.spinnerSuperficieMax.selectedItem.toString().toInt()
-                println(filtros.superficieMax)}
+            }
         }
         desplegables.spinnerSuperficieMin.onItemSelectedListener = object:
             AdapterView.OnItemSelectedListener{
             override fun onNothingSelected(parent: AdapterView<*>?) {}
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 filtros.superficieMin = desplegables.spinnerSuperficieMin.selectedItem.toString().toInt()
-                println(filtros.superficieMin)}
+            }
         }
         desplegables.spinnerInmueble.onItemSelectedListener = object:
             AdapterView.OnItemSelectedListener{
@@ -170,7 +220,6 @@ open class FiltrosBusqueda : AppCompatActivity() {
                     setTrueExtras()
                 }
                 filtros.tipoInmueble = desplegables.spinnerInmueble.selectedItem.toString()
-                println(filtros.tipoInmueble)
             }
         }
 
@@ -183,7 +232,6 @@ open class FiltrosBusqueda : AppCompatActivity() {
             else{
                 filtros.estado.remove("Obra nueva")
             }
-            println(filtros.estado)
         }
         estadosVivienda.casiNuevo.setOnClickListener {
             if(estadosVivienda.casiNuevo.isChecked){
@@ -192,7 +240,6 @@ open class FiltrosBusqueda : AppCompatActivity() {
             else{
                 filtros.estado.remove("Casi nuevo")
             }
-            println(filtros.estado)
         }
         estadosVivienda.muyBien.setOnClickListener {
             if(estadosVivienda.muyBien.isChecked){
@@ -201,7 +248,6 @@ open class FiltrosBusqueda : AppCompatActivity() {
             else{
                 filtros.estado.remove("Muy bien")
             }
-            println(filtros.estado)
         }
         estadosVivienda.bien.setOnClickListener {
             if(estadosVivienda.bien.isChecked){
@@ -210,7 +256,6 @@ open class FiltrosBusqueda : AppCompatActivity() {
             else{
                 filtros.estado.remove("Bien")
             }
-            println(filtros.estado)
         }
         estadosVivienda.reformado.setOnClickListener {
             if(estadosVivienda.reformado.isChecked){
@@ -219,7 +264,6 @@ open class FiltrosBusqueda : AppCompatActivity() {
             else{
                 filtros.estado.remove("Reformado")
             }
-            println(filtros.estado)
         }
         estadosVivienda.aReformar.setOnClickListener {
             if(estadosVivienda.aReformar.isChecked){
@@ -228,7 +272,6 @@ open class FiltrosBusqueda : AppCompatActivity() {
             else{
                 filtros.estado.remove("A reformar")
             }
-            println(filtros.estado)
         }
 
         // EXTRAS /////////////////////////
@@ -248,7 +291,6 @@ open class FiltrosBusqueda : AppCompatActivity() {
             else{
                 filtros.extras.put("Parking", false)
             }
-            println(filtros.extras)
         }
         extrasVivienda.ascensor.setOnClickListener {
             if(extrasVivienda.ascensor.isChecked){
@@ -257,7 +299,6 @@ open class FiltrosBusqueda : AppCompatActivity() {
             else{
                 filtros.extras.put("Ascensor", false)
             }
-            println(filtros.extras)
         }
         extrasVivienda.amueblado.setOnClickListener {
             if(extrasVivienda.amueblado.isChecked){
@@ -266,7 +307,6 @@ open class FiltrosBusqueda : AppCompatActivity() {
             else{
                 filtros.extras.put("Amueblado", false)
             }
-            println(filtros.extras)
         }
         extrasVivienda.calefaccion.setOnClickListener {
             if(extrasVivienda.calefaccion.isChecked){
@@ -275,7 +315,6 @@ open class FiltrosBusqueda : AppCompatActivity() {
             else{
                 filtros.extras.put("Calefaccion", false)
             }
-            println(filtros.extras)
         }
         extrasVivienda.terraza.setOnClickListener {
             if(extrasVivienda.terraza.isChecked){
@@ -284,8 +323,6 @@ open class FiltrosBusqueda : AppCompatActivity() {
             else{
                 filtros.extras.put("Terraza", false)
             }
-            println(filtros.extras)
-
         }
         extrasVivienda.trastero.setOnClickListener {
             if(extrasVivienda.trastero.isChecked){
@@ -294,7 +331,6 @@ open class FiltrosBusqueda : AppCompatActivity() {
             else{
                 filtros.extras.put("Trastero", false)
             }
-            println(filtros.extras)
         }
         extrasVivienda.piscina.setOnClickListener {
             if(extrasVivienda.piscina.isChecked){
@@ -303,7 +339,6 @@ open class FiltrosBusqueda : AppCompatActivity() {
             else{
                 filtros.extras.put("Piscina", false)
             }
-            println(filtros.extras)
         }
         extrasVivienda.jardin.setOnClickListener {
             if(extrasVivienda.jardin.isChecked){
@@ -312,31 +347,11 @@ open class FiltrosBusqueda : AppCompatActivity() {
             else{
                 filtros.extras.put("Jardin", false)
             }
-            println(filtros.extras)
         }
+        //////////////////////////////////////////////////////////////////////////
 
         val builder = AlertDialog.Builder(this@FiltrosBusqueda)
         builder.setTitle("Selecciona el tipo de vivienda")
-        val elementosSeleccionadosTipoEdif = booleanArrayOf(
-            false, // Apartamento
-            false, // Ático
-            false, // Dúplex
-            false, // Loft
-            false, // Planta baja
-            false  // Estudio
-        )
-        val elementosSeleccionadosTipoPorDefecto = booleanArrayOf(
-            false, // Apartamento
-            false, // Ático
-            false, // Dúplex
-            false, // Loft
-            false, // Planta baja
-            false, // Estudio
-            false, // Casa
-            false, // Chalet
-            false, // Adosado
-            false  // Finca rústica
-        )
 
         buttonVivienda.setOnClickListener{
             if(desplegables.spinnerInmueble.selectedItem.equals("Edificio") || desplegables.spinnerInmueble.selectedItem.equals("Oficina")){
@@ -350,7 +365,6 @@ open class FiltrosBusqueda : AppCompatActivity() {
                     else{
                         filtros.tipoVivienda.remove(optionsViviendaEdificio[which].toString())
                     }
-                    println(filtros.tipoVivienda)
                 }
             }
             else{
@@ -364,7 +378,6 @@ open class FiltrosBusqueda : AppCompatActivity() {
                     else{
                         filtros.tipoVivienda.remove(optionsViviendaPorDefecto[which].toString())
                     }
-                    println(filtros.tipoVivienda)
                 }
             }
             builder.setPositiveButton("Ok"){dialog, which -> dialog.dismiss()}
@@ -380,15 +393,8 @@ open class FiltrosBusqueda : AppCompatActivity() {
             checkSurface()
             if(checkPriceBool && checkSurfaceBool){
                 saveFiltros()
-                onPause()
+                saveSeleccionFiltros()
                 val goSearch = Intent(this, MainTrobify::class.java)
-                println(filtros.tipoInmueble)
-                println(filtros.numBaños)
-                println(filtros.numHabitaciones)
-                println(filtros.estado.toString())
-                println("${filtros.precioMin}, ${filtros.precioMax}")
-                println("${filtros.superficieMin}, ${filtros.superficieMax}")
-                println(filtros.extras.toString())
                 goSearch.putExtra("filtros",filtros)
                 startActivity(goSearch)
             }
@@ -402,7 +408,6 @@ open class FiltrosBusqueda : AppCompatActivity() {
     }
 
     private fun addOptionsInmueble(){
-        val spinnerInmueble = findViewById<Spinner>(R.id.desplegableTipoInmueble)
         // El array se encuentra en res -> values -> strings.xml
         // Se ha hecho esto para en caso de traducir la aplicación que estos elemntos también lo hagan
         val options_inmueble = resources.getStringArray(R.array.options_inmueble)
@@ -410,11 +415,13 @@ open class FiltrosBusqueda : AppCompatActivity() {
         /* AÑADIR LAS OPCIONES A LOS DESPLEGABLES */
         val adapter = ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, options_inmueble)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        spinnerInmueble.adapter = adapter
+        desplegables.spinnerInmueble.adapter = adapter
+
+        // Reestablecer la eleccion
+        desplegables.spinnerInmueble.setSelection(GuardaFiltros.guardaSeleccion.desTipoInmueble)
     }
 
     private fun addOptionsPrice(){
-
         val options_price = listOf<Int>(0, 50000, 75000, 100000, 125000, 150000, 200000, 300000, 400000, 500000)
         val options_price_max = listOf<Int>(0, 50000, 75000, 100000, 125000, 150000, 200000, 300000, 400000, 500000)
 
@@ -425,15 +432,22 @@ open class FiltrosBusqueda : AppCompatActivity() {
         adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         desplegables.spinnerPrecioMin.adapter = adapter0
         desplegables.spinnerPrecioMax.adapter = adapter1
+
+        // Reestablecer la eleccion
+        desplegables.spinnerPrecioMin.setSelection(GuardaFiltros.guardaSeleccion.desPrecioMin)
+        desplegables.spinnerPrecioMax.setSelection(GuardaFiltros.guardaSeleccion.desPrecioMax)
     }
 
     private fun addOptionsHabitaciones(){
-        val options_habitaciones = listOf<Int>(1, 2, 3 ,4 ,5)
+        val options_habitaciones = listOf<Int>(0, 1, 2, 3 ,4 ,5)
 
         /* AÑADIR LAS OPCIONES A LOS DESPLEGABLES */
         val adapter = ArrayAdapter<Int>(this, android.R.layout.simple_spinner_item, options_habitaciones)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         desplegables.spinnerHabitaciones.adapter = adapter
+
+        // Reestablecer la eleccion
+        desplegables.spinnerHabitaciones.setSelection(GuardaFiltros.guardaSeleccion.desNumHabitaciones)
     }
 
     private fun addOptionsBaños(){
@@ -443,6 +457,9 @@ open class FiltrosBusqueda : AppCompatActivity() {
         val adapter = ArrayAdapter<Int>(this, android.R.layout.simple_spinner_item, options_baños)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         desplegables.spinnerBaños.adapter = adapter
+
+        // Reestablecer la eleccion
+        desplegables.spinnerBaños.setSelection(GuardaFiltros.guardaSeleccion.desNumBaños)
     }
 
     private fun addOptionsSuperficie(){
@@ -453,6 +470,10 @@ open class FiltrosBusqueda : AppCompatActivity() {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         desplegables.spinnerSuperficieMin.adapter = adapter
         desplegables.spinnerSuperficieMax.adapter = adapter
+
+        // Reestablecer la eleccion
+        desplegables.spinnerSuperficieMin.setSelection(GuardaFiltros.guardaSeleccion.desSurfaceMin)
+        desplegables.spinnerSuperficieMax.setSelection(GuardaFiltros.guardaSeleccion.desSurfaceMax)
     }
 
     private fun checkPrice(){
@@ -496,6 +517,35 @@ open class FiltrosBusqueda : AppCompatActivity() {
         GuardaFiltros.filtrosGuardados.estado = filtros.estado
     }
 
+    private fun saveSeleccionFiltros(){
+        GuardaFiltros.guardaSeleccion.desTipoInmueble = desplegables.spinnerInmueble.selectedItemId.toInt()
+        GuardaFiltros.guardaSeleccion.desNumHabitaciones = desplegables.spinnerHabitaciones.selectedItemId.toInt()
+        GuardaFiltros.guardaSeleccion.desNumBaños = desplegables.spinnerBaños.selectedItemId.toInt()
+        GuardaFiltros.guardaSeleccion.desPrecioMin = desplegables.spinnerPrecioMin.selectedItemId.toInt()
+        GuardaFiltros.guardaSeleccion.desPrecioMax = desplegables.spinnerPrecioMax.selectedItemId.toInt()
+        GuardaFiltros.guardaSeleccion.desSurfaceMin = desplegables.spinnerSuperficieMin.selectedItemId.toInt()
+        GuardaFiltros.guardaSeleccion.desSurfaceMax = desplegables.spinnerSuperficieMax.selectedItemId.toInt()
+
+        GuardaFiltros.guardaSeleccion.boxObraNueva = estadosVivienda.obraNueva.isChecked
+        GuardaFiltros.guardaSeleccion.boxMuyBien = estadosVivienda.muyBien.isChecked
+        GuardaFiltros.guardaSeleccion.boxBien = estadosVivienda.bien.isChecked
+        GuardaFiltros.guardaSeleccion.boxReformado = estadosVivienda.reformado.isChecked
+        GuardaFiltros.guardaSeleccion.boxAReformar = estadosVivienda.aReformar.isChecked
+        GuardaFiltros.guardaSeleccion.boxCasiNuevo = estadosVivienda.casiNuevo.isChecked
+
+        GuardaFiltros.guardaSeleccion.boxParking = extrasVivienda.parking.isChecked
+        GuardaFiltros.guardaSeleccion.boxAscensor = extrasVivienda.ascensor.isChecked
+        GuardaFiltros.guardaSeleccion.boxAmueblado = extrasVivienda.amueblado.isChecked
+        GuardaFiltros.guardaSeleccion.boxCalefaccion = extrasVivienda.calefaccion.isChecked
+        GuardaFiltros.guardaSeleccion.boxJardin = extrasVivienda.jardin.isChecked
+        GuardaFiltros.guardaSeleccion.boxPiscina = extrasVivienda.piscina.isChecked
+        GuardaFiltros.guardaSeleccion.boxTerraza = extrasVivienda.terraza.isChecked
+        GuardaFiltros.guardaSeleccion.boxTrastero = extrasVivienda.trastero.isChecked
+
+        GuardaFiltros.guardaSeleccion.elementosSeleccionadosTipoEdif = elementosSeleccionadosTipoEdif
+        GuardaFiltros.guardaSeleccion.elementosSeleccionadosTipoPorDefecto = elementosSeleccionadosTipoPorDefecto
+    }
+
     private fun setFalseExtras(){
         extrasVivienda.parking.setEnabled(false)
         extrasVivienda.ascensor.setEnabled(false)
@@ -536,5 +586,3 @@ open class FiltrosBusqueda : AppCompatActivity() {
         estadosVivienda.aReformar.setEnabled(true)
     }
 }
-
-private operator fun AdapterView.OnItemSelectedListener?.invoke(function : () -> Unit) {}
