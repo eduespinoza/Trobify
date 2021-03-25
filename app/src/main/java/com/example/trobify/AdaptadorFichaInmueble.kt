@@ -23,7 +23,8 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
     //val goFicha = Intent(this, AdaptadorFichaInmueble::class.java)
     //goFicha.putExtra("inmueble", el inmueble que queremos pasar)
 
-    val db = Firebase.firestore
+    private val db = Firebase.firestore
+    var favoritos = arrayListOf<String>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,19 +36,7 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
         var fotos = inmueble.getfotos()
         var fotosOrd = inmueble.getfotosord()
 
-        var favoritos : ArrayList<String> = arrayListOf()
 
-        userId.let {db.collection("users").whereEqualTo("id",it)
-            .get()
-            .addOnCompleteListener(){ task ->
-                if(task.isSuccessful) {
-                    for(u in task.result) {
-                        favoritos = u.data.get("favorites") as ArrayList<String>
-                    }
-
-                }
-            }
-        }
 
         val buttonAtras = findViewById<Button>(R.id.buttonAtrasFicha)
         buttonAtras.setOnClickListener{
@@ -82,7 +71,7 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
 
         val buttonFav = findViewById<Button>(R.id.buttonFav)
         buttonFav.setOnClickListener {
-            addToFav(inmueble, userId, favoritos)
+            addToFav(inmueble, userId)
         }
 
         rellenar(inmueble)
@@ -159,12 +148,24 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
         alertDialog.show()
     }
 
-    private fun addToFav(inmueble : Inmueble , userId : String , favoritos: ArrayList<String>){
+    private fun addToFav(inmueble : Inmueble , userId : String ){
         //cuando funcione hacer que saque el user al principio con el user id que le llega,
         // y con ese user trabajar, luego cuando actualizamos user en fireston lo actualizamos tmb aqui
 
         val builder =  AlertDialog.Builder(this)
 
+
+
+        userId.let {db.collection("users").whereEqualTo("id",it)
+            .get()
+            .addOnCompleteListener(){ task ->
+                if(task.isSuccessful) {
+                    for(u in task.result) {
+                        favoritos = u.data.get("favorites") as ArrayList<String>
+                    }
+                }
+            }
+        }
         if (favoritos.contains(inmueble.id.toString())){
             builder.setMessage("Inmueble ya en favoritos")
             builder.setTitle("Favoritos")
@@ -189,10 +190,6 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
             alertDialog.setCancelable(false)
             alertDialog.show()
         }
-
-
-
-
     }
 
     private fun introduceQuantityOferta(inmueble : Inmueble){

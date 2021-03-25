@@ -48,6 +48,8 @@ class ListaFavoritos () : AppCompatActivity() , AdaptadorInmuebleBusqueda.OnItem
             startActivity(goMain)
         }
 
+
+
         var listaIdFavoritos = cargarIdFavoritos(userId)
 
         var pisosFav = cargarInmueblesFav(listaIdFavoritos)
@@ -70,6 +72,8 @@ class ListaFavoritos () : AppCompatActivity() , AdaptadorInmuebleBusqueda.OnItem
                         Log.d("wiiiiiiiiiii" , "los fav de jt : " + favoritos.toString())
                     }
 
+                }else{
+                    Log.d("wiiiiiiii", "pk no carga???")
                 }
             }
         }
@@ -83,7 +87,7 @@ class ListaFavoritos () : AppCompatActivity() , AdaptadorInmuebleBusqueda.OnItem
 
         Log.d("wiiiiiiiiiii", listaIdFavoritos.size.toString() )
 
-        if(true){
+        if(listaIdFavoritos.size != 0){
             for (i in 0..listaIdFavoritos.size){
                 var pisoId = listaIdFavoritos.get(i)
 
@@ -99,6 +103,7 @@ class ListaFavoritos () : AppCompatActivity() , AdaptadorInmuebleBusqueda.OnItem
                     }
             }
         }
+        //else no fav show
         return res
     }
 
