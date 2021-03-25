@@ -60,9 +60,11 @@ open class FiltrosBusqueda : AppCompatActivity() {
         lateinit var trastero:CheckBox
     }
 
+    private lateinit var userId:String
+
     override fun onCreate(savedInstanceState: Bundle?) {
 
-        //intent.getStringExtra("user")?.let {userId = it}
+        intent.getStringExtra("user")?.let { userId = it }
 
         setContentView(R.layout.activity_filtros_busqueda)
 
@@ -398,7 +400,8 @@ open class FiltrosBusqueda : AppCompatActivity() {
                 val goSearch = Intent(this, MainTrobify::class.java)
                 goSearch.putExtra("filtros",filtros)
                 startActivity(goSearch)
-                //intent.putExtra("user", user.toString())
+
+                intent.putExtra("user", userId.toString())
             }
             else{}
         }
