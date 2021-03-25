@@ -24,7 +24,7 @@ class User : Serializable{
     private var pass : String? = null
     private var phone : Int? = null
     private var proilePic : String? = null
-    private var favourite : ArrayList<Inmueble> = arrayListOf()
+    private var favourite : ArrayList<String> = arrayListOf()
 
 
     constructor(name : String?, surname : String?, email : String?, id : String?,
@@ -47,15 +47,15 @@ class User : Serializable{
         return this.phone
     }
 
-    fun addInmuebleToFav(inm : Inmueble){
-        favourite.add(inm)
+    fun addFav(idInmueble : String){
+        favourite.add(idInmueble)
 
     }
     fun getId() : String?{
         return this.id
     }
 
-    fun getFav() : ArrayList<Inmueble>{
+    fun getFav() : ArrayList<String>{
         return this.favourite
     }
 
@@ -69,3 +69,4 @@ class User : Serializable{
 
     private fun updateUI(user: FirebaseUser?) {}
 }
+
