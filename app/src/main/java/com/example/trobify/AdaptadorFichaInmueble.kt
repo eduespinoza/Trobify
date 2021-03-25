@@ -24,18 +24,12 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
     //goFicha.putExtra("inmueble", el inmueble que queremos pasar)
 
     val db = Firebase.firestore
-    lateinit var userId : String
-    lateinit var user : User
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_ficha_inmueble)
 
-        user = User("Pepe", "Viyuela", "correo@correo.com", "pepe123", "123456789", arrayListOf(""))
-        //userId = intent.extras?.get("usuarioId") as User
-        userId = user.getId().toString()
-
+        var userId = intent.extras?.get("user") as String
 
         var inmueble = intent.extras?.get("inmueble") as Inmueble
         var fotos = inmueble.getfotos()
@@ -74,10 +68,8 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
 
         val buttonFav = findViewById<Button>(R.id.buttonFav)
         buttonFav.setOnClickListener {
-            addToFav(inmueble)
+            addToFav(inmueble, userId)
         }
-
-
 
         rellenar(inmueble)
 
@@ -92,7 +84,6 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
             Toast.makeText(applicationContext, fotosOrd.get(position), Toast.LENGTH_SHORT).show()
         }
         carouselView.pageCount = fotosOrd.size
-
 
     }
 
@@ -154,36 +145,43 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
         alertDialog.show()
     }
 
-    private fun addToFav(inmueble : Inmueble){
+    private fun addToFav(inmueble : Inmueble , userId : String){
+        //cuando funcione hacer que saque el user al principio con el user id que le llega,
+        // y con ese user trabajar, luego cuando actualizamos user en fireston lo actualizamos tmb aqui
 
         val builder =  AlertDialog.Builder(this)
 
+        var favoritos : ArrayList<String> = arrayListOf()
 
-        var favoritos : ArrayList<String>? = null
-
-        userId.let {db.collection("users").document("pepe123")
+        userId.let {db.collection("users").whereEqualTo("id",it)
             .get()
-            .addOnSuccessListener { documentSnapshot ->
-               val userr = documentSnapshot.toObject<User>()
-                if (userr != null) {
-                    favoritos = userr.getFav()
-                }
-            }
-            }
-        Log.d("wiiiiiiiiiiii", "los fav   " + favoritos.toString())
+            .addOnCompleteListener(){ task ->
+                if(task.isSuccessful) {
+                    for(u in task.result) {
+                        favoritos = u.data.get("favorites") as ArrayList<String>
+                    }
 
-        if (favoritos?.contains(inmueble.id.toString()) == true){
-                builder.setMessage("Inmueble ya en favoritos")
-            }
-            else{
-                user.addFav(inmueble.id.toString())
-                user.getId().toString().let {
-                        db.collection("users").document(it).set(user)
-                        .addOnSuccessListener { Log.d(ContentValues.TAG, "DocumentSnapshot successfully written!") }
-                        .addOnFailureListener { Log.w(ContentValues.TAG, "Error writing document" ) }
+                    if (favoritos.contains(inmueble.id.toString())  == true){
+                        builder.setMessage("Inmueble ya en favoritos")
+                    }
+                    else{
+                        favoritos.add(inmueble.id.toString())
+                        userId.let { db.collection("users").document(it)
+                            .update("favorites", favoritos)
+                            .addOnSuccessListener { Log.d(ContentValues.TAG, "DocumentSnapshot successfully written!") }
+                            .addOnFailureListener { Log.w(ContentValues.TAG, "Error writing document" ) }
+                        }
+                        builder.setMessage("Inmueble añadido a favoritos correctamente")
+                    }
+
+
+
                 }
-                builder.setMessage("Inmueble añadido a favoritos correctamente")
             }
+        }
+
+
+
         builder.setTitle("Favoritos")
         builder.setIcon(android.R.drawable.star_on)
         builder.setNeutralButton("  Continuar  "){ _, _ -> }
@@ -206,5 +204,6 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
             show()
         }
     }
+
 
 }
