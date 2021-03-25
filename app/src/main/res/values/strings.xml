@@ -52,6 +52,7 @@
     <string name="atras">atras</string>
 
     <string-array name="options_inmueble">
+        <item>Tipo de inmueble</item>
         <item>Vivienda</item>
         <item>Edificio</item>
         <item>Oficina</item>

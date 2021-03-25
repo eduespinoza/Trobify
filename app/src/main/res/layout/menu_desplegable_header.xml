@@ -9,26 +9,21 @@
     android:orientation="horizontal"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_weight="0"
+        android:gravity="center"
+        android:orientation="vertical">
 
         <Button
-            android:id="@+id/hideMenu"
-            android:layout_width="0dp"
-            android:layout_height="36dp"
-            android:layout_marginTop="24dp"
-            android:layout_weight="1100"
-            app:backgroundTint="#83000000"
-            app:icon="@drawable/ic_atras"
-            app:iconGravity="start"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.123"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.152" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            android:id="@+id/cerrarSesion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#1565C0"
+            app:icon="@drawable/ic_cerrarsesion" />
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
