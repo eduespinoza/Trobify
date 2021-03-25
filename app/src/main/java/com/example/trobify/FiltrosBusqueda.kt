@@ -6,10 +6,13 @@ import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.get
+import java.io.Serializable
+
 
 open class FiltrosBusqueda : AppCompatActivity() {
 
-    object filtros {
+    object filtros : Serializable {
         var tipoInmueble = GuardaFiltros.filtrosGuardados.tipoInmueble
         var numHabitaciones = GuardaFiltros.filtrosGuardados.numHabitaciones
         var numBaños:Int = GuardaFiltros.filtrosGuardados.numBaños
@@ -89,25 +92,48 @@ open class FiltrosBusqueda : AppCompatActivity() {
         addOptionsBaños()
         addOptionsSuperficie()
 
-        desplegables.spinnerPrecioMin.onItemSelectedListener {
-            filtros.precioMin = desplegables.spinnerPrecioMin.selectedItem.toString().toInt()
+        desplegables.spinnerPrecioMin.onItemSelectedListener = object:
+            AdapterView.OnItemSelectedListener{
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                filtros.precioMin = desplegables.spinnerPrecioMin.selectedItem.toString().toInt()
+                println(filtros.precioMin)}
         }
-        desplegables.spinnerPrecioMax.onItemSelectedListener {
-            filtros.precioMax = desplegables.spinnerPrecioMax.selectedItem.toString().toInt()
+        desplegables.spinnerPrecioMax.onItemSelectedListener = object:
+            AdapterView.OnItemSelectedListener{
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                filtros.precioMax = desplegables.spinnerPrecioMax.selectedItem.toString().toInt()
+                println(filtros.precioMax)}
         }
-        desplegables.spinnerHabitaciones.onItemSelectedListener {
-            filtros.numHabitaciones = desplegables.spinnerHabitaciones.selectedItem.toString().toInt()
+        desplegables.spinnerHabitaciones.onItemSelectedListener = object:
+            AdapterView.OnItemSelectedListener{
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                filtros.numHabitaciones = desplegables.spinnerHabitaciones.selectedItem.toString().toInt()
+                println(filtros.numHabitaciones)}
         }
-        desplegables.spinnerBaños.onItemSelectedListener {
-            filtros.numBaños = desplegables.spinnerBaños.selectedItem.toString().toInt()
+        desplegables.spinnerBaños.onItemSelectedListener = object:
+            AdapterView.OnItemSelectedListener{
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                filtros.numBaños = desplegables.spinnerBaños.selectedItem.toString().toInt()
+                println(filtros.numBaños)}
         }
-        desplegables.spinnerSuperficieMax.onItemSelectedListener {
-            filtros.superficieMax = desplegables.spinnerSuperficieMax.selectedItem.toString().toInt()
+        desplegables.spinnerSuperficieMax.onItemSelectedListener = object:
+            AdapterView.OnItemSelectedListener{
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                filtros.superficieMax = desplegables.spinnerSuperficieMax.selectedItem.toString().toInt()
+                println(filtros.superficieMax)}
         }
-        desplegables.spinnerSuperficieMin.onItemSelectedListener {
-            filtros.superficieMin = desplegables.spinnerSuperficieMin.selectedItem.toString().toInt()
+        desplegables.spinnerSuperficieMin.onItemSelectedListener = object:
+            AdapterView.OnItemSelectedListener{
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                filtros.superficieMin = desplegables.spinnerSuperficieMin.selectedItem.toString().toInt()
+                println(filtros.superficieMin)}
         }
-
         desplegables.spinnerInmueble.onItemSelectedListener = object:
             AdapterView.OnItemSelectedListener{
             override fun onNothingSelected(parent: AdapterView<*>?) {}
@@ -144,6 +170,7 @@ open class FiltrosBusqueda : AppCompatActivity() {
                     setTrueExtras()
                 }
                 filtros.tipoInmueble = desplegables.spinnerInmueble.selectedItem.toString()
+                println(filtros.tipoInmueble)
             }
         }
 
@@ -355,6 +382,14 @@ open class FiltrosBusqueda : AppCompatActivity() {
                 saveFiltros()
                 onPause()
                 val goSearch = Intent(this, MainTrobify::class.java)
+                println(filtros.tipoInmueble)
+                println(filtros.numBaños)
+                println(filtros.numHabitaciones)
+                println(filtros.estado.toString())
+                println("${filtros.precioMin}, ${filtros.precioMax}")
+                println("${filtros.superficieMin}, ${filtros.superficieMax}")
+                println(filtros.extras.toString())
+                goSearch.putExtra("filtros",filtros)
                 startActivity(goSearch)
             }
             else{}
