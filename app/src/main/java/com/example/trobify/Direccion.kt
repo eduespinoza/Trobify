@@ -1,6 +1,8 @@
 package com.example.trobify
 
-class Direccion {
+import java.io.Serializable
+
+class Direccion : Serializable{
 
     private var pais : String? = null
     private var ciudad : String? = null
