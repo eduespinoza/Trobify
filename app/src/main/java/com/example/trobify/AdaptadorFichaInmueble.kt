@@ -30,16 +30,29 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
         setContentView(R.layout.activity_ficha_inmueble)
 
         var userId = intent.extras?.get("user") as String
-
         var inmueble = intent.extras?.get("inmueble") as Inmueble
+
         var fotos = inmueble.getfotos()
         var fotosOrd = inmueble.getfotosord()
+
+        var favoritos : ArrayList<String> = arrayListOf()
+
+        userId.let {db.collection("users").whereEqualTo("id",it)
+            .get()
+            .addOnCompleteListener(){ task ->
+                if(task.isSuccessful) {
+                    for(u in task.result) {
+                        favoritos = u.data.get("favorites") as ArrayList<String>
+                    }
+
+                }
+            }
+        }
 
         val buttonAtras = findViewById<Button>(R.id.buttonAtrasFicha)
         buttonAtras.setOnClickListener{
             val goMain = Intent(this, MainTrobify::class.java)
             goMain.putExtra("user", userId.toString())
-            //put extra user para devolverlo con la lista de fav actualizada
             startActivity(goMain)
         }
 
@@ -69,7 +82,7 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
 
         val buttonFav = findViewById<Button>(R.id.buttonFav)
         buttonFav.setOnClickListener {
-            addToFav(inmueble, userId)
+            addToFav(inmueble, userId, favoritos)
         }
 
         rellenar(inmueble)
@@ -146,49 +159,40 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
         alertDialog.show()
     }
 
-    private fun addToFav(inmueble : Inmueble , userId : String){
+    private fun addToFav(inmueble : Inmueble , userId : String , favoritos: ArrayList<String>){
         //cuando funcione hacer que saque el user al principio con el user id que le llega,
         // y con ese user trabajar, luego cuando actualizamos user en fireston lo actualizamos tmb aqui
 
         val builder =  AlertDialog.Builder(this)
 
-        var favoritos : ArrayList<String> = arrayListOf()
-
-        userId.let {db.collection("users").whereEqualTo("id",it)
-            .get()
-            .addOnCompleteListener(){ task ->
-                if(task.isSuccessful) {
-                    for(u in task.result) {
-                        favoritos = u.data.get("favorites") as ArrayList<String>
-                    }
-
-                    if (favoritos.contains(inmueble.id.toString())  == true){
-                        builder.setMessage("Inmueble ya en favoritos")
-                    }
-                    else{
-                        favoritos.add(inmueble.id.toString())
-                        userId.let { db.collection("users").document(it)
-                            .update("favorites", favoritos)
-                            .addOnSuccessListener { Log.d(ContentValues.TAG, "DocumentSnapshot successfully written!") }
-                            .addOnFailureListener { Log.w(ContentValues.TAG, "Error writing document" ) }
-                        }
-                        builder.setMessage("Inmueble añadido a favoritos correctamente")
-                    }
-
-
-
-                }
+        if (favoritos.contains(inmueble.id.toString())){
+            builder.setMessage("Inmueble ya en favoritos")
+            builder.setTitle("Favoritos")
+            builder.setIcon(android.R.drawable.star_on)
+            builder.setNeutralButton("  Continuar  "){ _, _ -> }
+            val alertDialog: AlertDialog = builder.create()
+            alertDialog.setCancelable(false)
+            alertDialog.show()
+        }
+        else{
+            favoritos.add(inmueble.id.toString())
+            userId.let { db.collection("users").document(it)
+                .update("favorites", favoritos)
+                .addOnSuccessListener { Log.d(ContentValues.TAG, "DocumentSnapshot successfully written!") }
+                .addOnFailureListener { Log.w(ContentValues.TAG, "Error writing document" ) }
             }
+            builder.setMessage("Inmueble añadido a favoritos correctamente")
+            builder.setTitle("Favoritos")
+            builder.setIcon(android.R.drawable.star_on)
+            builder.setNeutralButton("  Continuar  "){ _, _ -> }
+            val alertDialog: AlertDialog = builder.create()
+            alertDialog.setCancelable(false)
+            alertDialog.show()
         }
 
 
 
-        builder.setTitle("Favoritos")
-        builder.setIcon(android.R.drawable.star_on)
-        builder.setNeutralButton("  Continuar  "){ _, _ -> }
-        val alertDialog: AlertDialog = builder.create()
-        alertDialog.setCancelable(false)
-        alertDialog.show()
+
     }
 
     private fun introduceQuantityOferta(inmueble : Inmueble){

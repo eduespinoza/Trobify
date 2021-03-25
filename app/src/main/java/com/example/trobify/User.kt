@@ -24,7 +24,7 @@ class User : Serializable{
     private var pass : String? = null
     private var phone : Int? = null
     private var proilePic : String? = null
-    private var favourite : ArrayList<String> = arrayListOf()
+    private var favorites : ArrayList<String> = arrayListOf()
 
 
     constructor(name : String?, surname : String?, email : String?, id : String?,
@@ -39,14 +39,14 @@ class User : Serializable{
     }
 
     constructor(name : String?, surname : String?, email : String?, id : String?,
-                pass : String?, fav : ArrayList<String>){
+                pass : String?, favorites : ArrayList<String>){
         this.name = name
         this.surname = surname
         this.email = email
         this.pass = pass
         this.id = id
         this.proilePic = "default"
-        this.favourite = fav
+        this.favorites = favorites
 
     }
 
@@ -61,7 +61,7 @@ class User : Serializable{
     }
 
     fun addFav(idInmueble : String){
-        favourite.add(idInmueble)
+        favorites.add(idInmueble)
 
     }
     fun getId() : String?{
@@ -69,7 +69,7 @@ class User : Serializable{
     }
 
     fun getFav() : ArrayList<String>{
-        return this.favourite
+        return this.favorites
     }
 
     fun setUserProfilePic(url :String?) {
