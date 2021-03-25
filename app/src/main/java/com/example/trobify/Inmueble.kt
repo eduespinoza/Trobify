@@ -20,14 +20,13 @@ import kotlin.collections.ArrayList
 
 
 class Inmueble : Serializable{
-    var titulo : String? = null
     var id : String? = null
     var propietario : User? = null
     var numHabitaciones : Int? = null
     var numBanos : Int? = null
     var superficie : Int? = null
     var direccion : String? = null
-    //var direccion : Direccion? = null
+    var direccionO : Direccion? = null
     var tipoInmueble : String? = null
     var intencion : String? = null //vender o alquilar
     var precio : Int? = null
@@ -51,11 +50,6 @@ class Inmueble : Serializable{
 
     var caracteristicas : String? = null
 
-    constructor( title: String,   price: Int,  surface: Int,  photos: Array<Int>){
-        this.titulo = "Inmueble en " + title
-        this.precio = price
-        this.superficie = surface
-    }
     constructor()
 
     constructor(
@@ -65,7 +59,7 @@ class Inmueble : Serializable{
         numBanos : Int?,
         superficie : Int?,
         direccion : String?,
-        //direccion : Direccion?, descomentar cuando se termine lo de direccion, abajo tmb
+        direccionO : Direccion?,
         tipoInmueble : String?,
         intencion : String?,
         precio : Int?,
@@ -113,10 +107,11 @@ class Inmueble : Serializable{
         this.caracteristicas = caracteristicasToString()
 
         this.direccion = direccion
+        this.direccionO = direccionO
 
-        //if (direccion != null) {
-        //    this.titulo = "Inmueble en " + direccion.direccionToString()
-        //}
+        if (direccionO != null) {
+            this.direccion = direccionO.direccionToString()
+        }
 
         this.fechaSubida = fechaSubida
     }
@@ -143,15 +138,15 @@ class Inmueble : Serializable{
         return fotosOrd
 
     }
+
     //FUNCION NECESARIA - para poder coger bien los datos de la bd
     fun adaptarInmuble(dataInmueble : DataInmueble) : Inmueble{
         return Inmueble(dataInmueble.id,dataInmueble.propietario,dataInmueble.numHabitaciones,dataInmueble.numBanos
-        ,dataInmueble.superficie,dataInmueble.direccion,dataInmueble.tipoInmueble,dataInmueble.intencion,dataInmueble.precio,dataInmueble.fotos,
+        ,dataInmueble.superficie,dataInmueble.direccion,direccionO,dataInmueble.tipoInmueble,dataInmueble.intencion,dataInmueble.precio,dataInmueble.fotos,
         dataInmueble.fotosOrd,dataInmueble.certificadoEnergetico,dataInmueble.descripcion,dataInmueble.estado,dataInmueble.parking
         ,dataInmueble.ascensor,dataInmueble.amueblado,dataInmueble.calefaccion,dataInmueble.jardin,dataInmueble.piscina,dataInmueble.terraza,
             dataInmueble.trastero,LocalDateTime.parse(dataInmueble.fechaSubida))
     }
-
 
 
 
