@@ -68,7 +68,7 @@ class Login : AppCompatActivity() {
     private fun checkUser(){
         val currentUser = auth.currentUser
         if(currentUser != null){
-            val intent = Intent(this, ListOfChats::class.java)
+            val intent = Intent(this, MainTrobify::class.java)
             intent.putExtra("user", currentUser.uid)
             startActivity(intent)
 

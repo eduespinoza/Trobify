@@ -17,16 +17,16 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        //val goLogin = Intent(this, Login::class.java)
-        //startActivity(goLogin)
+        val goLogin = Intent(this, Login::class.java)
+        startActivity(goLogin)
 
         // para probar maintrobify
         //val goSearch = Intent(this, MainTrobify::class.java)
         //startActivity(goSearch)
 
         // para probar Filtros
-        val goFiltros = Intent(this, FiltrosBusqueda::class.java)
-        startActivity(goFiltros)
+        //val goFiltros = Intent(this, FiltrosBusqueda::class.java)
+        //startActivity(goFiltros)
 
         // pa probar Ficha
         /*
