@@ -107,4 +107,5 @@
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
     <string name="title_activity_chat">ChatAct</string>
+    <string name="title_activity_main_trobify2">MainTrobify2</string>
 </resources>

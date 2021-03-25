@@ -38,6 +38,7 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
         val buttonAtras = findViewById<Button>(R.id.buttonAtrasFicha)
         buttonAtras.setOnClickListener{
             val goMain = Intent(this, MainTrobify::class.java)
+            goMain.putExtra("user", userId.toString())
             //put extra user para devolverlo con la lista de fav actualizada
             startActivity(goMain)
         }

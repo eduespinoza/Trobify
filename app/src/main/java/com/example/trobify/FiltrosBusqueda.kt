@@ -398,10 +398,9 @@ open class FiltrosBusqueda : AppCompatActivity() {
                 saveFiltros()
                 saveSeleccionFiltros()
                 val goSearch = Intent(this, MainTrobify::class.java)
+                goSearch.putExtra("user", userId.toString())
                 goSearch.putExtra("filtros",filtros)
                 startActivity(goSearch)
-
-                intent.putExtra("user", userId.toString())
             }
             else{}
         }
