@@ -47,7 +47,7 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
             builder.setTitle("Elige una opción: ")
             builder.setItems(R.array.contactOptions) { dialog, which ->
                 if(which.equals(0)) {
-                    val goContactar = Intent(this, Chat::class.java)
+                    val goContactar = Intent(this, ChatAct::class.java)
                     startActivity(goContactar)
                 }
                 else {
