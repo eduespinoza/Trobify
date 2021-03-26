@@ -26,6 +26,8 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
     var favoritos = arrayListOf<String>()
     var oferta : Int = 0
 
+    lateinit var userId:String
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_ficha_inmueble)
@@ -132,7 +134,7 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
         caracteristicas.setTextSize(TypedValue.COMPLEX_UNIT_PX, 40F)
 
         val name = findViewById<TextView>(R.id.textViewPropietarioFicha)
-        name .text = inmueble.propietario?.getName().toString()
+        name .text = inmueble.propietario?.toString()
         name.setTextColor(Color.BLACK)
         name.setTextSize(TypedValue.COMPLEX_UNIT_PX, 40F)
 
@@ -140,9 +142,9 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
 
     private fun llamadaMessage(inmueble : Inmueble) {
         val builder =  AlertDialog.Builder(this)
-        val numero = inmueble.propietario?.getPhone()
+        //val numero = inmueble.propietario?.getPhone()
         builder.setTitle("Contacto")
-        builder.setMessage("El numero del propietarios es:  " + numero)
+        //builder.setMessage("El numero del propietarios es:  " + numero)
         builder.setIcon(android.R.drawable.ic_menu_call)
         builder.setNeutralButton("  Continuar  "){ _, _ -> }
         val alertDialog: AlertDialog = builder.create()
@@ -200,8 +202,22 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
         val dialogLayout = inflater.inflate(R.layout.edit_text_oferta, null)
         with(builderIntroduceQuantityOferta){
             setPositiveButton("Enviar oferta"){dialog, which ->
-                val priceIntroduced = dialogLayout.findViewById<EditText>(R.id.editText_oferta).text as Int
-                val message = "Oferta : " + inmueble.direccionO?.direccionToString() + " Cantidad ofrecida : " + priceIntroduced
+                val priceIntroduced = dialogLayout.findViewById<EditText>(R.id.editText_oferta).text
+                if(compareValues(inmueble.precio.toString().toInt(), priceIntroduced.toString().toInt()) > 0){
+                    val builderAviso = AlertDialog.Builder(this@AdaptadorFichaInmueble)
+                    val message = "Oferta : " + inmueble.direccionO?.direccionToString() + " Cantidad ofrecida : " + priceIntroduced
+                    builderAviso.setTitle("El precio que ha introducido es superior al del inmueble, esta seguro de que quiere enviar la oferta?")
+                    builderAviso.setPositiveButton("Sí"){dialog ,which ->
+                        val goCreateChat = Intent(this@AdaptadorFichaInmueble, ListOfChats::class.java)
+                        goCreateChat.putExtra("user",userId)
+                        goCreateChat.putExtra("otherUserId",getPropietario())
+                        goCreateChat.putExtra("message", message)
+                        startActivity(goCreateChat)
+                    }
+                    builderAviso.setNegativeButton("No"){_,_->}
+                    val dialog = builderAviso.create()
+                    dialog.show()
+                }
             }
             builderIntroduceQuantityOferta.setNegativeButton("Cancelar") { _, _ -> }
             setView(dialogLayout)

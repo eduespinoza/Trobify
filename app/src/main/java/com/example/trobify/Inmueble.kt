@@ -21,7 +21,7 @@ import kotlin.collections.ArrayList
 
 class Inmueble : Serializable{
     var id : String? = null
-    var propietario : User? = null
+    var propietario : String? = null
     var numHabitaciones : Int? = null
     var numBanos : Int? = null
     var superficie : Int? = null
@@ -54,7 +54,7 @@ class Inmueble : Serializable{
 
     constructor(
         id : String?,
-        propietario : User?,
+        propietario : String?,
         numHabitaciones : Int?,
         numBanos : Int?,
         superficie : Int?,
@@ -141,7 +141,7 @@ class Inmueble : Serializable{
 
     //FUNCION NECESARIA - para poder coger bien los datos de la bd
     fun adaptarInmuble(dataInmueble : DataInmueble) : Inmueble{
-        return Inmueble(dataInmueble.id,dataInmueble.propietario,dataInmueble.numHabitaciones,dataInmueble.numBanos
+        return Inmueble(dataInmueble.id,dataInmueble.propietario.toString(),dataInmueble.numHabitaciones,dataInmueble.numBanos
         ,dataInmueble.superficie,dataInmueble.direccion,direccionO,dataInmueble.tipoInmueble,dataInmueble.intencion,dataInmueble.precio,dataInmueble.fotos,
         dataInmueble.fotosOrd,dataInmueble.certificadoEnergetico,dataInmueble.descripcion,dataInmueble.estado,dataInmueble.parking
         ,dataInmueble.ascensor,dataInmueble.amueblado,dataInmueble.calefaccion,dataInmueble.jardin,dataInmueble.piscina,dataInmueble.terraza,

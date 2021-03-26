@@ -386,8 +386,8 @@ open class FiltrosBusqueda : AppCompatActivity() {
             }
             builder.setPositiveButton("Ok"){dialog, which -> dialog.dismiss()}
             builder.setNeutralButton("Cancel"){dialog, which -> dialog.dismiss()}
-            val dialog = builder.create()
-            dialog.show()
+            val options = builder.create()
+            options.show()
         }
 
         val buttonAplicar = findViewById<Button>(R.id.buttonAplicar)

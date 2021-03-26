@@ -83,8 +83,6 @@ class ListOfChats : AppCompatActivity() {
                         val chat1 = Chat( id = chatId, name = "$otherUserName", users = users )
                         val chat2 = Chat(id = chatId, name = "$userName", users = users)
 
-                        if(message != ""){ message = userName.toString() + " le hace una oferta de: " + message + "€"}
-
                         db.collection("chats").document(chatId).set(chat)
                         db.collection("users").document(user.toString()).collection("chats").document(chatId).set(chat1)
                         db.collection("users").document(otherUser.toString()).collection("chats").document(chatId).set(chat2)
