@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="150dp"
+    android:layout_height="200dp"
     android:background="#5C000000"
     android:gravity="bottom|right|fill"
     android:orientation="horizontal"
@@ -18,11 +18,12 @@
         android:orientation="vertical">
 
         <Button
-            android:id="@+id/cerrarSesion"
+            android:id="@+id/volverAtras"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:backgroundTint="#1565C0"
-            app:icon="@drawable/ic_cerrarsesion" />
+            app:icon="@drawable/ic_atras" />
+
     </LinearLayout>
 
     <LinearLayout
@@ -37,6 +38,16 @@
         android:paddingRight="16dp"
         android:paddingBottom="16dp"
         android:theme="@style/ThemeOverlay.AppCompat.Dark">
+
+        <Button
+            android:id="@+id/cerrarSesion"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="8dp"
+            android:layout_weight="1"
+            android:backgroundTint="#1565C0"
+            android:drawableRight="@drawable/ic_cerrarsesion"
+            android:insetTop="10dp" />
 
         <ImageView
             android:id="@+id/fotoUsuario"
