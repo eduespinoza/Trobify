@@ -25,6 +25,8 @@ class ListOfChats : AppCompatActivity() {
         intent.getStringExtra("otherUserId")?.let { otherUser = it }
         intent.getStringExtra("message")?.let { message = it }
 
+        println("------------------------------------------------------------------------User: " + user + "To: " + otherUser + "Message: " + message)
+
         if( message != "" || otherUser != "") { newChat() }
         else { initViews() }
     }

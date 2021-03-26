@@ -3,7 +3,7 @@ package com.example.trobify
 import java.time.LocalDateTime
 
 data class DataInmueble (var id : String? = null,
-                         var propietario : User? = null,
+                         var propietario : String? = null,
                          var numHabitaciones : Int? = null,
                          var numBanos : Int? = null,
                          var superficie : Int? = null,
