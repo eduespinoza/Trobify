@@ -14,23 +14,25 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="69dp"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
 
             <Button
                 android:id="@+id/buttonAtrasFavoritos"
-                android:layout_width="10dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@drawable/flecha_atras"
-                android:text="atras"
-                card_view:backgroundTint="#0025E1" />
+                android:layout_width="57dp"
+                android:layout_height="48dp"
+                android:layout_marginStart="8dp"
+                android:gravity="center_horizontal|center_vertical" />
 
             <TextView
                 android:id="@+id/textView9"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Favoritos" />
+                android:gravity="center"
+                android:text="Favoritos"
+                android:textColor="#000000"
+                android:textSize="30sp" />
         </LinearLayout>
 
         <ScrollView

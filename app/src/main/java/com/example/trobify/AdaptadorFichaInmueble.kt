@@ -13,7 +13,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import com.synnapps.carouselview.CarouselView
 
@@ -23,23 +22,26 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
     //val goFicha = Intent(this, AdaptadorFichaInmueble::class.java)
     //goFicha.putExtra("inmueble", el inmueble que queremos pasar)
 
-    val db = Firebase.firestore
+    private val db = Firebase.firestore
+    var favoritos = arrayListOf<String>()
+    var oferta : Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_ficha_inmueble)
 
         var userId = intent.extras?.get("user") as String
-
         var inmueble = intent.extras?.get("inmueble") as Inmueble
+
         var fotos = inmueble.getfotos()
         var fotosOrd = inmueble.getfotosord()
+
+
 
         val buttonAtras = findViewById<Button>(R.id.buttonAtrasFicha)
         buttonAtras.setOnClickListener{
             val goMain = Intent(this, MainTrobify::class.java)
             goMain.putExtra("user", userId.toString())
-            //put extra user para devolverlo con la lista de fav actualizada
             startActivity(goMain)
         }
 
@@ -54,8 +56,10 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
             builder.setTitle("Elige una opción: ")
             builder.setItems(R.array.contactOptions) { dialog, which ->
                 if(which.equals(0)) {
-                    val goContactar = Intent(this, ChatAct::class.java)
-                    startActivity(goContactar)
+                    val goCreateChat = Intent(this, ListOfChats::class.java)
+                    goCreateChat.putExtra("user",userId.toString())
+                    goCreateChat.putExtra("otherUserId",getPropietario().toString())
+                    startActivity(goCreateChat)
                 }
                 else {
                     introduceQuantityOferta(inmueble)
@@ -146,13 +150,13 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
         alertDialog.show()
     }
 
-    private fun addToFav(inmueble : Inmueble , userId : String){
+    private fun addToFav(inmueble : Inmueble , userId : String ){
         //cuando funcione hacer que saque el user al principio con el user id que le llega,
         // y con ese user trabajar, luego cuando actualizamos user en fireston lo actualizamos tmb aqui
 
         val builder =  AlertDialog.Builder(this)
 
-        var favoritos : ArrayList<String> = arrayListOf()
+
 
         userId.let {db.collection("users").whereEqualTo("id",it)
             .get()
@@ -161,34 +165,33 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
                     for(u in task.result) {
                         favoritos = u.data.get("favorites") as ArrayList<String>
                     }
-
-                    if (favoritos.contains(inmueble.id.toString())  == true){
-                        builder.setMessage("Inmueble ya en favoritos")
-                    }
-                    else{
-                        favoritos.add(inmueble.id.toString())
-                        userId.let { db.collection("users").document(it)
-                            .update("favorites", favoritos)
-                            .addOnSuccessListener { Log.d(ContentValues.TAG, "DocumentSnapshot successfully written!") }
-                            .addOnFailureListener { Log.w(ContentValues.TAG, "Error writing document" ) }
-                        }
-                        builder.setMessage("Inmueble añadido a favoritos correctamente")
-                    }
-
-
-
                 }
             }
         }
-
-
-
-        builder.setTitle("Favoritos")
-        builder.setIcon(android.R.drawable.star_on)
-        builder.setNeutralButton("  Continuar  "){ _, _ -> }
-        val alertDialog: AlertDialog = builder.create()
-        alertDialog.setCancelable(false)
-        alertDialog.show()
+        if (favoritos.contains(inmueble.id.toString())){
+            builder.setMessage("Inmueble ya en favoritos")
+            builder.setTitle("Favoritos")
+            builder.setIcon(android.R.drawable.star_on)
+            builder.setNeutralButton("  Continuar  "){ _, _ -> }
+            val alertDialog: AlertDialog = builder.create()
+            alertDialog.setCancelable(false)
+            alertDialog.show()
+        }
+        else{
+            favoritos.add(inmueble.id.toString())
+            userId.let { db.collection("users").document(it)
+                .update("favorites", favoritos)
+                .addOnSuccessListener { Log.d(ContentValues.TAG, "DocumentSnapshot successfully written!") }
+                .addOnFailureListener { Log.w(ContentValues.TAG, "Error writing document" ) }
+            }
+            builder.setMessage("Inmueble añadido a favoritos correctamente")
+            builder.setTitle("Favoritos")
+            builder.setIcon(android.R.drawable.star_on)
+            builder.setNeutralButton("  Continuar  "){ _, _ -> }
+            val alertDialog: AlertDialog = builder.create()
+            alertDialog.setCancelable(false)
+            alertDialog.show()
+        }
     }
 
     private fun introduceQuantityOferta(inmueble : Inmueble){
@@ -197,14 +200,29 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
         val dialogLayout = inflater.inflate(R.layout.edit_text_oferta, null)
         with(builderIntroduceQuantityOferta){
             setPositiveButton("Enviar oferta"){dialog, which ->
-                val priceIntroduced = dialogLayout.findViewById<EditText>(R.id.editText_oferta).text
+                val priceIntroduced = dialogLayout.findViewById<EditText>(R.id.editText_oferta).text as Int
                 val message = "Oferta : " + inmueble.direccionO?.direccionToString() + " Cantidad ofrecida : " + priceIntroduced
             }
             builderIntroduceQuantityOferta.setNegativeButton("Cancelar") { _, _ -> }
             setView(dialogLayout)
             show()
         }
+        //Hacer que el dialogo tenga que acabar antes -------------
+        //if(oferta < //precio introducido){
+            //Dialogo de ¿estas seguro?
+                //si dice si:
+        //                    val goCreateChat = Intent(this, ListOfChats::class.java)
+        //                    goCreateChat.putExtra("user",userId.toString())
+        //                    goCreateChat.putExtra("otherUserId",getPropietario().toString())
+        //                    goCreateChat.putExtra("message", oferta.toString())
+        //                    startActivity(goCreateChat)
+        //}
     }
 
+    private fun getPropietario() : String{
+        val propietario : String = ""
+        //A completar
+        return propietario
+    }
 
 }
