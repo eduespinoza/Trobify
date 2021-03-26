@@ -34,7 +34,7 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_ficha_inmueble)
 
-        var userId = intent.extras?.get("user") as String
+        userId = intent.extras?.get("user") as String
         var inmueble = intent.extras?.get("inmueble") as Inmueble
 
         var fotos = inmueble.getfotos()
@@ -208,7 +208,7 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
     }
 
     private fun introduceQuantityOferta(inmueble : Inmueble) {
-        val builderIntroduceQuantityOferta = AlertDialog.Builder(this@AdaptadorFichaInmueble)
+        val builderIntroduceQuantityOferta = AlertDialog.Builder(this)
         val inflater = layoutInflater
         val dialogLayout = inflater.inflate(R.layout.edit_text_oferta, null)
         println("------------------------------------------------------- 1")
@@ -216,41 +216,71 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
             println("------------------------------------------------------- 2")
             setPositiveButton("Enviar oferta") { dialog, which ->
                 val priceIntroduced = dialogLayout.findViewById<EditText>(R.id.editText_oferta).text
-                if (compareValues(
-                        inmueble.precio.toString().toInt(),
-                        priceIntroduced.toString().toInt()
-                    ) > 0
-                ) {
+                if (priceIntroduced.toString().toInt().compareTo(inmueble.precio.toString().toInt()) > 0) {
+                    println("----------------------------------------------------------- hola0")
                     val builderAviso = AlertDialog.Builder(this@AdaptadorFichaInmueble)
                     val message =
-                        "Oferta : " + inmueble.direccionO?.direccionToString() + " Cantidad ofrecida : " + priceIntroduced
-                    builderAviso.setTitle("El precio que ha introducido es superior al del inmueble, esta seguro de que quiere enviar la oferta?")
-                    builderAviso.setPositiveButton("Sí") { dialog, which ->
-                        val goCreateChat =
-                            Intent(this@AdaptadorFichaInmueble, ListOfChats::class.java)
-                        db.collection("users").whereEqualTo("email", propietarioMail.toString())
-                            .get()
-                            .addOnCompleteListener { task ->
-                                if (task.isSuccessful) {
-                                    for (u in task.result) {
-                                        propietarioId = u.id.toString()
+                        "Oferta : " + inmueble.direccion?.toString() +'\n' + " Cantidad ofrecida : " + priceIntroduced
+                    println("-------------------------------------------------------- lkjsflhlkjh")
+                    with(builderAviso){
+
+                        setTitle("El precio es superior al del inmueble, quiere enviar la oferta?")
+
+                        setPositiveButton("Sí") { dialog, which ->
+                            println("-------------------------------------------------------- hola1")
+                            val goCreateChat =
+                                Intent(this@AdaptadorFichaInmueble, ListOfChats::class.java)
+                            db.collection("users").whereEqualTo("email", propietarioMail.toString())
+                                .get()
+                                .addOnCompleteListener { task ->
+                                    if (task.isSuccessful) {
+                                        println("-------------------------------------------------------- hola2")
+                                        for (u in task.result) {
+                                            propietarioId = u.id.toString()
+                                        }
+                                        goCreateChat.putExtra("user", userId)
+                                        goCreateChat.putExtra("otherUserId", propietarioId)
+                                        goCreateChat.putExtra("message", message)
+                                        println("-------------------------------------------------------message: "+ message)
+                                        startActivity(goCreateChat)
                                     }
-                                    goCreateChat.putExtra("user", userId)
-                                    goCreateChat.putExtra("otherUserId", propietarioId)
-                                    goCreateChat.putExtra("message", message)
-                                    println("-------------------------------------------------------message: "+ message)
-                                    startActivity(goCreateChat)
                                 }
-                            }
-                        builderAviso.setNegativeButton("No") { _, _ -> }
-                        val dialog = builderAviso.create()
-                        dialog.show()
+                        }
+                        setNegativeButton("No") { _, _ -> }
+                        create()
+                        show()
                     }
                 }
-                builderIntroduceQuantityOferta.setNegativeButton("Cancelar") { _, _ -> }
-                setView(dialogLayout)
-                show()
             }
+            setNegativeButton("Cancelar") { _, _ -> }
+            setView(dialogLayout)
+            show()
         }
     }
+        /*with(builderIntroduceQuantityOferta) {
+            setPositiveButton("Enviar oferta") { dialog, which ->
+                val priceIntroduced = dialogLayout.findViewById<EditText>(R.id.editText_oferta).text
+                val goCreateChat = Intent(this@AdaptadorFichaInmueble, ListOfChats::class.java)
+                val message =
+                    "Oferta : " + inmueble.direccionO?.direccionToString() + " Cantidad ofrecida : " + priceIntroduced
+                db.collection("users").whereEqualTo("email", propietarioMail.toString())
+                    .get()
+                    .addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            for (u in task.result) {
+                                propietarioId = u.id.toString()
+                            }
+                            goCreateChat.putExtra("user", userId)
+                            goCreateChat.putExtra("otherUserId", propietarioId)
+                            goCreateChat.putExtra("message", message)
+                            println("-------------------------------------------------------message: " + message)
+                            startActivity(goCreateChat)
+                        }
+                    }
+                println("------------------------------------------------------- 4")
+            }
+            setNegativeButton("Cancelar") { _, _ -> }
+            setView(dialogLayout)
+            show()
+        }*/
 }
