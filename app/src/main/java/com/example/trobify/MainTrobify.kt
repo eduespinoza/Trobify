@@ -19,6 +19,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.tasks.await
 import java.time.LocalDateTime
 import kotlin.random.Random
 
@@ -27,9 +28,10 @@ class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemClickLi
     //private lateinit var database: DatabaseReference
     var calles =  arrayListOf("RUSSAFA", "JOSÉ GROLLO", "JOSÉ MARIA FUSTER", "JOSE MARIA HARO (MAGISTRAT)", "BADAJOZ", "JACINT LABAILA", "JACOMART", "PERIODISTA JOSÉ OMBUENA", "JOAQUIM DUALDE",
         "JOAQUIM NAVARRO", "JOSEP AGUIRRE", "IFAC", "ESGLÉSIA DEL FORN D'ALCEDO", "IMPERTINÈNCIES", "ENGINYER AUBÁN", "ENGINYER DICENTA", "ENGINYER JOSÉ SIRERA", "ENGINYER MANUEL CÁNOVAS", "ILLA CABRERA", "JACA", "HISTORIADOR COLOMA", "HISTORIADOR DIAGO", "HÒMENS DE LA MAR", "HONORAT JUAN", "FORN DELS APÒSTOLS", "FORN DEL CABANYAL", "HORTICULTOR BOSCH", "HUMANISTA MARINER", "IBANYES", "GERMANS MACHADO", "GERMANS MARISTES", "GERMANS VILLALONGA", "FERRO", "FIGUEROLES DE DOMENYO", "GONZALO RAMIRO PEDRER", "GOYA", "GRAVADOR ESTEVE", "AGUSTÍ CENTELLES OSSÓ (FOTÒGRAF)", "GUILLEM DANGLESOLA", "GUITARRISTA TÀRREGA", "FARINA", "GIBRALTAR", "GEGANT", "GEPA", "GINER", "GLÒRIA", "GODELLA", "GODELLETA", "GOLES", "GONZÁLEZ MARTÍ", "GENERAL AVILÉS", "JERÓNIMA GALÉS (IMPRESSORA)", "BAIX DE MASSARROJOS", "GENERAL LLORENS", "FÉLIX DEL RÍO(ACTIVISTA VEÏNAL)", "GENERAL TOVAR", "POBLE", "AGRÓ", "GARRIGUES", "GARROFA", "GASCÓ OLIAG", "GASPAR TORRELLA", "GAUDÈNCIA TORRES", "GAVINES", "GENERAL", "GENERAL ALMIRANTE", "FRAULES", "FONT D'EN CORTS", "FONT D'EN CARRÒS", "FUENTERROBLES", "FONT DE SANT AGUSTÍ", "FURS", "GABINO", "GABRIEL Y GALÁN", "GALLINES", "FRANCESC EIXIMENIS", "FRANCESC MARTÍNEZ", "FRANCISCO MORENO USEDO", "SANT JACINT CASTANYEDA", "FRA JOAN MONTSÓ", "FRA J. RODRÍGUEZ", "FRA PERE VIVES", "FONTANARS DELS ALFORINS", "FORATA", "FORTALENY", "FRANCESC CLIMENT", "FRANCESC CUBELLS", "FERRAN EL CATÒLIC", "FERRER I BIGNÉ", "FIGUERETA", "FINESTRAT", "FINLÀNDIA", "FLORS", "FOLCH DE CARDONA", "ESPERANÇA", "ESPERÓ DE CANTA-RANES", "ESQUIF", "ESTAMENYERIA VELLA", "ESTEVE VICTÒRIA", "ESTRIBORD", "FELIPE SALVADOR", "FELIP VIVES DE CANYAMARS", "FENOLLOSA", "ERNEST FERRER", "ERUDIT ORELLANA", "PERE COMPTE , MESTRE EN EL NOBLE ART PEDRA", "ESCOLANO", "ESCRIVÀ", "ESCOLES DE MALILLA", "ESCULTOR AIXA", "ESCULTOR PIQUER", "ESPADÀ", "EN PLOM", "EN RODA", "EN SENDRA", "ENCARNACIÓ", "ENRIQUE OLMOS", "ENTENÇA", "ERMITA", "ERNEST ANASTASIO", "EMILI BARÓ", "EMILI MARÍ", "ENLLAÇ", "EMPERADOR", "EN BORRÀS", "EN GALL", "GUILLEM FERRER", "EN LLOPIS", "EN PINA", "EDUARD BOSCÀ", "PERE MARIA ORTS I BOSCH (HISTORIADOR)", "EXÈRCIT ESPANYOL", "BATXILLER", "RULLO", "SALZE", "ELCANO", "ELIES TORMO", "JOAN DE VILA-RASA", "DON QUIJOTE DE LA MANCHA", "DOS D'ABRIL", "DUC DE GAETA", "JUST RAMÍREZ (ARQUITECTE)", "EDETA", "DOCTOR JOSEP JUAN DÒMINE", "DOCTOR LANDETE", "DOCTOR MACHÍ", "DOCTOR MANUEL CANDELA", "DOCTOR MARAÑÓN", "DOCTOR MONSERRAT", "DOCTOR PESET CERVERA", "JUAN DE DIOS MONTAÑÉS", "PEDRAPIQUERS", "TRAGINERS", "DÉNIA", "DOCTOR ANDREU PIQUER", "DOCTOR BLAY", "DOCTOR CONSTANTÍ GÓMEZ", "DOCTOR GIL I MORTE", "MOSSÉN PALANCA", "XALET", "XELLA", "XERA", "XEST", "XIRIVELLA", "DAMA D'ELX", "DANSES", "DAVIDS", "NINOT", "CUBA", "CONCA", "CUENCA TRAMOYERES", "COVES CAROLINES", "MOSSÉN BAU", "COSTA I BORRÀS", "CRESPINS", "CRESPO", "CRESTA", "CREVILLENT", "CRISÒSTOM MARTÍNEZ", "CRONISTA TORRES", "CREU", "ESTACIONETA ", "CONVENT DE SANT FRANCESC", "COOPERATIVA DE SANT FERRAN", "COR DE JESÚS", "CORDELLATS", "CORONA", "CORREDORS", "COMTE D'ALTEA", "COMTE DE MELITO", "COMTE DE MONTORNÉS", "COMTE DEL REAL", "COMTE DE TORREFIEL", "CONVENT DELS CARMELITES", "CONVENT DE JESÚS", "CLERO", "COBERTÍS", "COFRENTS", "COIX CIURANA", "COLERO (POU APARICI 9)", "COLÓN", "COLL DE RATES", "COMUNIÓ DE SANT JOAN", "CONCHA ESPINA", "CEBRIAN MEZQUITA", "CEMENTERI", "SÉNIA", "PERE BORREGO I GALINDO (FALLER)", "CERAMISTA BAYARRI", "CERAMISTA GIMENO", "CERAMISTA ROS", "PROFESSOR DOCTOR SEVERO OCHOA", "CLARIANO", "CASTELL DE POP", "CASTELLÓ", "CASTIELFABIB", "CATALANS", "CATARROJA", "CAUDETE", "CAYUCO", "CASA DEL VINYERO", "CASA DE LA RASO", "CASA DE SANTAPAU", "CASA DE TOTÀ", "CASAS ALTAS", "CASES D'AMÀLIA", "CASAS BAJAS", "CASES DE BÀRCENA", "CASES DE BARRINTO", "CASES DE CARBONELL", "CASES DE GUERRA", "CASES DE MASENA", "DEMOCRÀCIA", "CAPELLETA", "CARPESA A BORBOTÓ", "CARPESA A MONTCADA", "FUSTERS", "CARTERS", "CARRASCA", "CARRERES PUCHALT", "CASA DEL CACHONDO", "CORONACIÓ", "CASA DE GORRITA", "CASA DE MOLINA", "CASA ÑORRO", "CASA DE PERICO", "CAMPAMENT", "CAMPANA", "CAMPORROBLES", "CANALETA", "CANONGE TÀRREGA", "CAÑETE", "CADIS", "CARABASSES", "CALAMOCHA", "CALA-XARXES", "CALVARI", "CALVO ACACIO", "CAMARENA", "BICORP", "BISBE", "BITÀCOLA", "BLANCO BALLESTER", "BLANQUERIA", "BOIX", "BOMBA", "CABANYAL", "CABILLERS", "BENIDOLEIG", "BENIFARAIG A MONTCADA", "BENIFAIÓ", "BENIMACLET", "BENIMODO", "BENIPEIXCAR", "BERENGUER MALLOL", "BERNABÉ GARCIA", "ALCÀSSER", "ALCÚDIA DE CRESPINS", "BENEFICÈNCIA", "BENET BOSCH", "BENICALAP", "BENICARLÓ", "CENTENAR DE LA PLOMA", "ELÍAS BORRÀS (POETA)", "ADREÇADORS", "AGUSTINA D'ARAGÓ", "ALABAU I ARCE", "ALBAL", "ALBENTOSA", "MARE DE DÉU DE LES INJÚRIES", "MARE DE DÉU DEL LEPANT", "MARE DE DÉU DE LA MISERICÒRDIA", "EDUARD SOLER I PÉREZ", "LLORERS", "ÁNGEL VILLENA", "PORTADORS DE LA VERGE", "METGE RAMÓN TARAZONA", "PUEBLA DE VALVERDE", "FRANCISCO COMES MARTINEZ (DRAMATURG)", "TRES D'ABRIL DE 1979", "JOAN AGUILÓ", "JOAN BAPTISTA COMES", "JOAN BAPTISTA LLOVERA", "JUAN BAUTISTA MARCO", "SEQUIOTA", "JUAN CALATRAVA", "JUAN CASTELLÓ", "JUAN DE CELAYA", "JUAN FABREGAT", "JOAQUIM BENLLOCH", "JOAQUIM COSTA", "VILAFERMOSA", "VILAMARXANT", "VINALOPÓ", "VINATEA", "JAUME L'OBRER", "JAUME ROIG", "XALANS", "XARAFULL", "OLIVERETA", "JERONI DE MONTSORIU", "JESÚS MORANTE BORRÁS", "JIJONA", "DOCTOR VILLENA", "DOCTOR WAKSMAN", "DOLORES ALCAIDE", "DOLORES MARQUÉS", "DOMÉNEC GÓMEZ", "ARMANDO PALACIO VALDÉS", "JAIME BELTRÁN", "CARAVACA", "PRESÓ DE SANT VICENT", "CARDENAL BENLLOCH", "CARITAT", "CARDENAL MONESCILLO", "DOCTOR SERRA", "DOCTOR SORIANO BENLLOCH", "DOCTOR VICENTE PALLARÉS", "BORRULL", "BOTÀNIC", "BRETÓN DE LOS HERREROS", "BUGARRA", "BUSOT", "DOCTOR RODRÍGUEZ DE LA FUENTE", "BEAT JUAN GRANDE", "BEATRIZ TORTOSA", "BETLEM", "BELLO", "BONAIRE", "BORBOTÓ", "BORBOTÓ A MASSARROJOS", "BRODADORS", "BORRASCA", "OEST", "BARÓ DE CORTES", "BARÓ DE PETRÉS", "BARÓ DE SAN PETRILLO", "BARRAQUES DE CASTELLÓ", "BARRAQUES DE LLUNA", "BATEL", "BEATA", "BALANDRA", "BALEARS", "BALER", "BALLESTERS", "BARCELLA", "BARÓ DE BARXETA", "AURORA", "AVE MARIA", "AIACOR", "ASSAGADOR", "ASSAGADOR D'ALBORAIA", "ASSAGADOR DE LES MONGES", "ASSAGADOR DEL MORRO", "ASSAGADOR DE LA TORRE", "AZCÁRRAGA", "ARQUITECTE RODRÍGUEZ", "ARQUITECTE TOLSÀ", "ARTÉS", "ARTS GRÀFIQUES", "ARQUEBISBE ALIAGA", "ARQUEBISBE OLAECHEA", "DALT", "ASIL D'INFANTS", "AROLAS", "ARQUITECTE ALFARO", "ARQUITECTE ARNAU", "ARQUITECTE CARBONELL", "ARQUITECTE JUAN PÉREZ", "ARQUITECTE LUCINI", "MALENA", "ARQUITECTE RIBES", "ANTONI SUÁREZ", "APARICIO ALBIÑANA", "APARISI I GUIJARRO", "ARAS DE LOS OLMOS", "ARBOREDA", "ARCHENA", "ARNAU DE VILANOVA", "EMPAR BALLESTER", "EMPAR GUILLEM", "ANDILLA", "ANDRÉS MANCEBO", "ANGELICOT", "ESTRET DE LA COMPANYIA", "ANGUILERA", "ANOUERS", "ANTONI LÁZARO", "ALQUERIES DE BELLVER", "DALT", "DALT DE LA MAR", "ALTAR DE SANT VICENT", "ÁLVAREZ", "ÁLVAREZ DE SOTOMAYOR", "AMÈRICA", "ALQUERIA D'ALBORS", "ALQUERIA D'ANTEQUERA", "ALQUERIA D'ASNAR", "ALQUERIA DE BENLLOCH", "ALQUERIA DE BURGOS", "ALQUERIA DE CANO", "ALQUERIA DE CASSANY", "ALQUERIA DE GILET", "ALQUERIA DE GINER", "ALQUERIA DELS FRARES", "ALQUERIA DE GINER", "ALQUERIA D'ISIDORO", "ALQUERIA DE MARQUET", "ALQUERIA DE LA MORERA", "ALQUERIA DE PIXA-RODA", "ALQUERIA DE ROCATÍ", "ALQUERIA DEL VOLANT", "ALGARÍN", "ALGEMESÍ", "ALGIRÓS", "ALMÀSSERA", "ÀNIMES", "ALMENAR", "ALMIRALL CADARSO", "ALMUDAINA", "ALQUERIA D'ALBA", "ALZIRA", "ALCOI", "ALEGRET", "ALESSANDRO VOLTA", "ALFAFAR", "ALFONS EL MAGNÀNIM", "ALBERIC", "ALBEROLA", "ALBORAIA", "ALBORAIA", "ALBUIXEC A MAUELLA", "ALCALDE REIG", "ALBENIZ", "ACTOR MORA", "ADOR", "AGUSTÍ SALES", "AIRE", "ALABAU", "ALADRERS", "ALBACETE", "ALBAIDA", "JUAN JOSÉ BARCIA GOYANES (PROFESSOR)", "MARGARITA SALAS (CIENTÍFICA)", "CRISTÓBAL VALLS LLORENS (METGE)", "CASES BAIXES", "SANTA PAULA MONTAL", "SANTA MARIA MAZZARELLO", "DIEGO SEVILLA (CATEDRÀTIC)", "ÁNGEL GUARDIA CORTÉS (FUNDADOR AV. BENIMACLET)", "DECIMO JUNIO BRUTO (CONSOL ROMA)", "HUGO ZARATE", "EUROPA", "PONT DE L'ASSUT DE L'OR", "MELCHOR HOYOS PÉREZ", "BARQUERA", "COCOTERS", "JOSE PASTOR MORENO (PRESIDENT TRIBUNAL AIGÜES)", "EP SECTOR FUENTE SAN LUIS A", "EP SAN VICENTE MÁRTIR 254", "HORTOLANES", "CASA DE LA DEMANÀ", "ACADÈMIC CASTAÑEDA", "CUIRASSAT", "E.P. PE. SAN JUAN DE DIOS", "E.P. PE. FRANCISCO FALCONS", "PARC PROL MOTILLA DEL PALANCAR", "EN PROYECTO JUNTO 346 AV CONSTITUCION", "E.P. PE. DUQUE DE MANDAS", "EN PROYECTO PROL. CARLOS CORTINA", "EN PROYECTO PERP.16 SALU CERVERO")
-
+    var listaIDS = arrayListOf<String>()
     lateinit var listaConResultados : RecyclerView
     lateinit var auth : FirebaseAuth
+    val db = Firebase.firestore
     lateinit var user : String
     val sugerencias = Busqueda()
     lateinit var cabecera : TextView
@@ -52,7 +54,7 @@ class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemClickLi
         println("Nomejodasmasporfavortelopido")
         filtrosAplicados = intent.extras!!.get("filtros") as FiltrosBusqueda.filtros?
         if(filtrosAplicados != null){
-            mostrarResultadosFiltros()
+            comprobacionDeFiltrosAplicados()
         }
         else {
             prepararPrimerosResultados()
@@ -60,16 +62,16 @@ class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemClickLi
         prepararBuscador()
         setListeners()
     }
-    fun mostrarResultadosFiltros(){
+    fun mostrarResultadosFiltros(inmuebles : ArrayList<DataInmueble>){
+        cabecera.text = "Inmuebles con filtros aplicados"
         listaConResultados.setHasFixedSize(true)
         val layoutmanager = LinearLayoutManager(baseContext)
         listaConResultados.layoutManager = layoutmanager
-        var data = cargarInmueblesConFiltros {
-            var adapter = AdaptadorInmuebleBusqueda(it,this)
+        var adapter = AdaptadorInmuebleBusqueda(inmuebles,this)
             listaConResultados.adapter = adapter
-        }
     }
     fun prepararPrimerosResultados(){
+        cabecera.text = "Inmuebles añadidos recientemente"
         listaConResultados.setHasFixedSize(true)
         val layoutmanager = LinearLayoutManager(baseContext)
         listaConResultados.layoutManager = layoutmanager
@@ -109,16 +111,15 @@ class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemClickLi
         })
     }
     fun setListeners() {
-        val db = Firebase.firestore
         var botonLateral : Button = findViewById(R.id.botonLateral)
         var menuLateral : DrawerLayout = findViewById(R.id.drawer_layout)
         var navigator : NavigationView = findViewById(R.id.navigator)
         var menuHeader = navigator.inflateHeaderView(R.layout.menu_desplegable_header)
         var nombreUser : TextView = menuHeader.findViewById(R.id.nombreUsuario)
+        var cerrarMenu : Button = menuHeader.findViewById(R.id.volverAtras)
         var filtrar : TextView = findViewById(R.id.filtrar)
         var mapa : TextView = findViewById(R.id.verMapa)
         var cerrarSesion : Button = menuHeader.findViewById(R.id.cerrarSesion)
-        navigator = findViewById<View>(R.id.navigator) as NavigationView
         navigator.setNavigationItemSelectedListener { item ->
             when (item.getItemId()) {
                 R.id.mischats -> {
@@ -138,6 +139,9 @@ class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemClickLi
 
             }
             true
+        }
+        cerrarMenu.setOnClickListener {
+            menuLateral.closeDrawers()
         }
         cerrarSesion.setOnClickListener {
             auth.signOut()
@@ -162,17 +166,7 @@ class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemClickLi
         mapa.setOnClickListener {
             //abrir mapa
             //generatePisos()
-            auth.signOut()
-            Log.d("drawe","subiendo ..")
         }
-
-        /*nav.setOnClickListener {
-            Log.d("drawe","HOOOOLA")
-        }*/
-    }
-
-    fun filtrarBusqueda(){
-        //comprobacionDeFiltrosAplicados()
     }
     class StringOrInt (var str : String?, var num : Int?){
         fun getValue(): Pair<String?,Int?>{
@@ -180,36 +174,157 @@ class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemClickLi
             return Pair(str,null)
         }
     }
-    /*fun comprobacionDeFiltrosAplicados(){
+    fun comprobacionDeFiltrosAplicados(){
         var listaDeFiltros : ArrayList<Pair<String,StringOrInt>> = arrayListOf()
-        var listaDePreciosYSuperficie : ArrayList<Pair<String,Int>> = arrayListOf()
+        var listaDePreciosYSuperficie : ArrayList<Pair<String,Int?>> = arrayListOf()
         var listaDeEstados : ArrayList<Pair<String,String>> = arrayListOf()
         var listaDeExtras : ArrayList<Pair<String,Boolean>> = arrayListOf()
-        if (!filtrosAplicados.tipoInmueble.equals("Tipo de inmueble"))listaDeFiltros.add("tipoInmueble" to StringOrInt(filtrosAplicados.tipoInmueble,null))
-        if (!filtrosAplicados.numHabitaciones.equals(0))listaDeFiltros.add("numHabitaciones" to StringOrInt(null,filtrosAplicados.numHabitaciones))
-        if (!filtrosAplicados.numBaños.equals(0))listaDeFiltros.add("numBaños" to StringOrInt(null,filtrosAplicados.numBaños))
-        if (!filtrosAplicados.precioMin.equals(0))listaDePreciosYSuperficie.add("precioMin" to filtrosAplicados.precioMin)
-        if (!filtrosAplicados.precioMax.equals(0))listaDePreciosYSuperficie.add("precioMax" to filtrosAplicados.precioMax)
-        if (!filtrosAplicados.superficieMin.equals(0))listaDePreciosYSuperficie.add("superficieMin" to filtrosAplicados.superficieMin)
-        if (!filtrosAplicados.superficieMax.equals(0))listaDePreciosYSuperficie.add("superficieMax" to filtrosAplicados.superficieMax)
-        if (!filtrosAplicados.estado.isEmpty())
-            for (estado in filtrosAplicados.estado){
+        var esPrecioMin = false
+        if (!filtrosAplicados?.tipoInmueble.equals("Tipo de inmueble"))listaDeFiltros.add("tipoInmueble" to StringOrInt(filtrosAplicados?.tipoInmueble,null))
+        if (!filtrosAplicados?.numHabitaciones?.equals(0)!!)listaDeFiltros.add("numHabitaciones" to StringOrInt(null,filtrosAplicados?.numHabitaciones))
+        if (!filtrosAplicados?.numBaños?.equals(0)!!)listaDeFiltros.add("numBanos" to StringOrInt(null,filtrosAplicados?.numBaños))
+        if (!filtrosAplicados?.precioMin?.equals(0)!!){
+            esPrecioMin = true
+            listaDePreciosYSuperficie.add("precio" to filtrosAplicados?.precioMin)}
+        if (!filtrosAplicados?.precioMax?.equals(0)!!)listaDePreciosYSuperficie.add("precio" to filtrosAplicados?.precioMax)
+        if (!filtrosAplicados?.superficieMin?.equals(0)!!)listaDePreciosYSuperficie.add("superficieMin" to filtrosAplicados?.superficieMin)
+        if (!filtrosAplicados?.superficieMax?.equals(0)!!)listaDePreciosYSuperficie.add("superficieMax" to filtrosAplicados?.superficieMax)
+        if (!filtrosAplicados?.estado?.isEmpty()!!)
+            for (estado in filtrosAplicados?.estado!!){
                 listaDeEstados.add("estado" to estado)
             }
-        for (extra in filtrosAplicados.extras){
+        for (extra in filtrosAplicados?.extras!!){
             if(extra.value) listaDeExtras.add(extra.key to true)
         }
-        println("filtros")
-        println(listaDeFiltros.toString())
-        println("preciosuper")
-        println(listaDePreciosYSuperficie.toString())
-        println("estados")
-        println(listaDeEstados.toString())
-        println("extras")
-        println(listaDeExtras.toString())
-    }*/
-    fun consultasSegunFiltros(){
-
+        listaIDS.clear()
+        if (listaDeFiltros.size == 2){
+            consultasFiltros2(listaDeFiltros){
+                mostrarResultadosFiltros(it)
+            }
+        }else consultasFiltros3(listaDeFiltros){
+            consultasFiltros3(listaDeFiltros){
+                mostrarResultadosFiltros(it)
+            }
+        }
+        /*if (!listaDeFiltros.isEmpty()){
+            consultasSegunFiltros(listaDeFiltros){
+                listaIDS.addAll(it)
+            }
+                println(listaIDS.groupingBy{it}.eachCount().filter{it.value == listaDeFiltros.size})
+                var perdonabro = listaIDS.groupingBy{it}.eachCount().filter{it.value == listaDeFiltros.size}.keys
+                var porfavor = arrayListOf<DataInmueble>()
+                getInmueblesFromIds(perdonabro){
+                    porfavor.add(it)
+                    mostrarResultadosFiltros(porfavor)
+                }
+        }*/
+        /*if(!listaDePreciosYSuperficie.isEmpty()){
+            if(listaDeFiltros.size == 2 && listaDePreciosYSuperficie.size == 2)consultasFiltros2(listaDeFiltros){
+                mostrarResultadosFiltros(it)
+            }else if (listaDeFiltros.size == 2 && listaDePreciosYSuperficie.size == 1 && esPrecioMin){
+                consultasFiltros2(listaDeFiltros){
+                    mostrarResultadosFiltros(it)
+                }
+            }
+            else consultasFiltros3(listaDeFiltros){
+                mostrarResultadosFiltros(it)
+            }
+        }*/
+    }
+    fun getInmueblesFromIds(listillo : Set<String>, myCallback : (DataInmueble) -> Unit){
+        for (listo in listillo){
+            db.collection("inmueblesv2").document(listo).get().addOnCompleteListener{ task ->
+                if (task.isSuccessful){
+                    var pis = task.result.toObject(DataInmueble::class.java)
+                    if (pis != null) {
+                        myCallback(pis)
+                    }
+                }
+            }
+        }
+    }
+    fun consultasFiltros2(listaFiltros : ArrayList<Pair<String,StringOrInt>>, myCallback : (ArrayList<DataInmueble>) -> Unit){
+        var listaFil = arrayListOf<DataInmueble>()
+        db.collection("inmueblesv2").whereEqualTo("numHabitaciones",listaFiltros[0].second.getValue().second)
+            .whereEqualTo("numBanos",listaFiltros[1].second.getValue().second).get().addOnCompleteListener{ task ->
+                if(task.isSuccessful){
+                    for(result in task.result){
+                        var pis = result.toObject(DataInmueble::class.java)
+                        listaFil.add(pis)
+                    }
+                    myCallback(listaFil)
+                }
+            }
+    }
+    fun consultasFiltros3(listaFiltros : ArrayList<Pair<String,StringOrInt>>, myCallback : (ArrayList<DataInmueble>) -> Unit){
+        var listaFil = arrayListOf<DataInmueble>()
+        db.collection("inmueblesv2").whereEqualTo("tipoInmueble",listaFiltros[0].second.getValue().first)
+            .whereEqualTo("numHabitaciones",listaFiltros[1].second.getValue().second)
+            .whereEqualTo("numBanos",listaFiltros[2].second.getValue().second).get().addOnCompleteListener{ task ->
+                if(task.isSuccessful){
+                    for(result in task.result){
+                        var pis = result.toObject(DataInmueble::class.java)
+                        listaFil.add(pis)
+                    }
+                    myCallback(listaFil)
+                }
+            }
+    }
+    fun consultasSegunFiltros(listaFiltros : ArrayList<Pair<String,StringOrInt>>, myCallback : (ArrayList<String>) -> Unit){
+        var listaDelPerreo = arrayListOf<String>()
+        for (filtro in listaFiltros){
+            if (filtro.second.getValue().first == null){
+                db.collection("inmueblesv2").whereEqualTo(filtro.first,filtro.second.getValue().second)
+                    .get().addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            for (result in task.result) {
+                                var id = result.get("id").toString()
+                                listaDelPerreo.add(id)
+                            }
+                        } else {
+                            db.collection("inmueblesv2")
+                                .whereEqualTo(filtro.first, filtro.second.getValue().second)
+                                .get().addOnCompleteListener { task ->
+                                    if (task.isSuccessful) {
+                                        for (result in task.result) {
+                                            var id = result.get("id").toString()
+                                            listaDelPerreo.add(id)
+                                        }
+                                    }
+                                }
+                        }
+                        myCallback(listaDelPerreo)
+                    }
+            }
+        }
+    }
+    fun consultasSegunFiltros2(listaFiltros : ArrayList<Pair<String,StringOrInt>>, myCallback : (ArrayList<String>) -> Unit){
+        var listaDelPerreo = arrayListOf<String>()
+        for (filtro in listaFiltros){
+            if (filtro.second.getValue().first == null){
+                db.collection("inmueblesv2").whereEqualTo(filtro.first,filtro.second.getValue().second)
+                    .get().addOnCompleteListener{ task ->
+                        if(task.isSuccessful){
+                            for(result in task.result){
+                                var id = result.get("id").toString()
+                                listaDelPerreo.add(id)
+                            }
+                            myCallback(listaDelPerreo)
+                        }
+                    }
+            }else{
+                db.collection("inmueblesv2").whereEqualTo(filtro.first,filtro.second.getValue().first)
+                    .get().addOnCompleteListener{ task ->
+                        if(task.isSuccessful){
+                            for(result in task.result){
+                                var id = result.get("id").toString()
+                                listaDelPerreo.add(id)
+                            }
+                            myCallback(listaDelPerreo)
+                        }
+                    }
+            }
+        }
     }
     fun mostrarResultados(busqueda : String){
         var nuevaBusqueda = Busqueda()
@@ -221,7 +336,6 @@ class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemClickLi
 
     //poner los 10 ultimos añadidos
     fun cargarInmueblesDesdeBd(myCallback : (ArrayList<DataInmueble>) -> Unit){
-        val db = Firebase.firestore
         var pisosTochos = arrayListOf<DataInmueble>()
         db.collection("inmueblesv2").limit(10)
             .get().addOnCompleteListener{ task ->
@@ -236,7 +350,6 @@ class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemClickLi
     }
 
     fun cargarInmueblesConFiltros(myCallback : (ArrayList<DataInmueble>) -> Unit){
-        val db = Firebase.firestore
         var pisosTochos = arrayListOf<DataInmueble>()
 
         db.collection("inmueblesv2").whereEqualTo("numHabitaciones",
@@ -264,7 +377,7 @@ class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemClickLi
         return pathId
     }
     fun getRandom1a4() : Int{
-        return kotlin.random.Random.nextInt(1,4)
+        return kotlin.random.Random.nextInt(1,5)
     }
     fun getRandomSuperficie() : Int{
         return kotlin.random.Random.nextInt(40,180)
@@ -293,7 +406,6 @@ class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemClickLi
 
     //fun para generar pisos en bd
     fun generatePisos() {
-        var calles = arrayListOf<String>("RUSSAFA", "JOSÉ GROLLO", "JOSÉ MARIA FUSTER", "JOSE MARIA HARO (MAGISTRAT)","BADAJOZ", "JACINT", "LABAILA", "JACOMART", "PERIODISTA JOSÉ OMBUENA", "JOAQUIM DUALDE", "JOAQUIM NAVARRO")
         for (venga in 1..100){
             subirInmueblesBD(DataInmueble(generateRandomId(),null,getRandom1a4(),
                 getRandom1a4(),getRandomSuperficie(),getRandomDireccion(),getRandomTipoVivienda(),"Vender",
@@ -306,8 +418,7 @@ class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemClickLi
         }
     }
     private fun subirInmueblesBD(inmueble : DataInmueble){
-        val database = Firebase.firestore
-        inmueble.id?.let { database.collection("inmueblesv2").document(it).set(inmueble) }
+        inmueble.id?.let { db.collection("inmueblesv2").document(it).set(inmueble) }
     }
 
 }
