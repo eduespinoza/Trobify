@@ -3,6 +3,8 @@ package com.example.trobify
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.content.Intent
+import android.widget.Button
+import android.widget.ImageButton
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.trobify.models.Chat
 import com.example.trobify.adapters.ChatAdapter
@@ -21,11 +23,18 @@ class ListOfChats : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_list_of_chats)
 
+        val bBack = findViewById<Button>(R.id.buttonAtras)
+        bBack.setOnClickListener {
+            val goBack = Intent(this, MainTrobify::class.java)
+            goBack.putExtra("user",user)
+            startActivity(goBack)
+        }
+
         intent.getStringExtra("user")?.let { user = it }
         intent.getStringExtra("otherUserId")?.let { otherUser = it }
         intent.getStringExtra("message")?.let { message = it }
 
-        println("------------------------------------------------------------------------User: " + user + "To: " + otherUser + "Message: " + message)
+        println("------------------------------------------------------------------------User: " + user)
 
         if( message != "" || otherUser != "") { newChat() }
         else { initViews() }

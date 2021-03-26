@@ -1,5 +1,6 @@
 package com.example.trobify
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ImageButton
@@ -39,7 +40,11 @@ class ChatAct : AppCompatActivity() {
         messagesRecylerView.adapter = MessageAdapter(user)
 
         val bBack = findViewById<ImageButton>(R.id.buttonGoBack)
-        bBack.setOnClickListener {finish() }
+        bBack.setOnClickListener {
+            val goBack = Intent(this, ListOfChats::class.java)
+            goBack.putExtra("user",user)
+            startActivity(goBack)
+        }
 
         sendMessageButton.setOnClickListener { sendMessage() }
 
