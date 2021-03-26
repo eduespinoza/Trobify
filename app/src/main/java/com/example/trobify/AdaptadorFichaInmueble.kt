@@ -12,6 +12,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.synnapps.carouselview.CarouselView
@@ -23,7 +24,6 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
     //goFicha.putExtra("inmueble", el inmueble que queremos pasar)
 
     private val db = Firebase.firestore
-    var favoritos = arrayListOf<String>()
     var oferta : Int = 0
     var propietarioMail : String = ""
     var propietarioId : String = ""
@@ -169,9 +169,41 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
 
         val builder =  AlertDialog.Builder(this)
 
+        val sfDocRef = db.collection("users").document(userId.toString())
+
+        db.runTransaction { transaction ->
+            val snapshot = transaction.get(sfDocRef)
+            val favoritos = snapshot.get("favorites")!! as ArrayList<String>
+            if (favoritos.contains(inmueble.id.toString())){
+                builder.setMessage("Inmueble ya en favoritos")
+
+            }
+            else{
+                favoritos.add(inmueble.id.toString())
+                userId.let { db.collection("users").document(it)
+                    .update("favorites", favoritos)
+                    .addOnSuccessListener { Log.d(ContentValues.TAG, "DocumentSnapshot successfully written!") }
+                    .addOnFailureListener { Log.w(ContentValues.TAG, "Error writing document" ) }
+                }
+                builder.setMessage("Inmueble añadido a favoritos correctamente")
+
+            }
+        }.addOnSuccessListener { result ->
+            Log.d(ContentValues.TAG, "Transaction success: $result")
+            builder.setTitle("Favoritos")
+            builder.setIcon(android.R.drawable.star_on)
+            builder.setNeutralButton("  Continuar  "){ _, _ -> }
+            val alertDialog: AlertDialog = builder.create()
+            alertDialog.setCancelable(false)
+            alertDialog.show()
+        }.addOnFailureListener { e ->
+            Log.w(ContentValues.TAG, "Transaction failure.", e)
+        }
 
 
-        userId.let {db.collection("users").whereEqualTo("id",it)
+
+
+        /*userId.let {db.collection("users").whereEqualTo("id",it)
             .get()
             .addOnCompleteListener(){ task ->
                 if(task.isSuccessful) {
@@ -180,7 +212,8 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
                     }
                 }
             }
-        }
+        }*/
+        /*
         if (favoritos.contains(inmueble.id.toString())){
             builder.setMessage("Inmueble ya en favoritos")
             builder.setTitle("Favoritos")
@@ -204,7 +237,7 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
             val alertDialog: AlertDialog = builder.create()
             alertDialog.setCancelable(false)
             alertDialog.show()
-        }
+        }*/
     }
 
     private fun introduceQuantityOferta(inmueble : Inmueble) {

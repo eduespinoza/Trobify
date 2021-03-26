@@ -1,12 +1,14 @@
 package com.example.trobify
 
 import android.app.SearchManager
+import android.content.ContentValues
 import android.content.Intent
 import android.database.MatrixCursor
 import android.os.Bundle
 import android.provider.BaseColumns
 import android.util.Log
 import android.widget.*
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
@@ -14,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import java.io.Serializable
 import java.time.LocalDateTime
@@ -47,64 +50,53 @@ class ListaFavoritos () : AppCompatActivity() , AdaptadorInmuebleBusqueda.OnItem
             goMain.putExtra("user", userId)
             startActivity(goMain)
         }
-
-
-
-        var listaIdFavoritos = cargarIdFavoritos(userId)
-
-        var pisosFav = cargarInmueblesFav(listaIdFavoritos)
-
-        mostrar(pisosFav)
+        cargarFavDe(userId)
 
 
     }
 
-    fun cargarIdFavoritos(userId : String) : ArrayList<String>{
+    fun cargarFavDe(userId : String){
 
-        var favoritos : ArrayList<String> = arrayListOf()
 
-        userId.let {db.collection("users").whereEqualTo("id",it)
-            .get()
-            .addOnCompleteListener(){ task ->
-                if(task.isSuccessful) {
-                    for(u in task.result) {
-                        favoritos = u.data.get("favorites") as ArrayList<String>
-                        Log.d("wiiiiiiiiiii" , "los fav de jt : " + favoritos.toString())
+        val sfDocRef = db.collection("users").document(userId.toString())
+
+        db.runTransaction { transaction ->
+            val snapshot = transaction.get(sfDocRef)
+            var favoritosStringArray = snapshot.get("favorites")!! as ArrayList<String>
+
+            cargarInmuebles(favoritosStringArray)
+
+
+        }.addOnSuccessListener { result ->
+            Log.d(ContentValues.TAG, "Transaction success: $result")
+        }.addOnFailureListener { e ->
+            Log.w(ContentValues.TAG, "Transaction failure.", e)
+        }
+
+    }
+
+
+    fun cargarInmuebles(listaIdFavoritos : ArrayList<String>) {
+
+        var arrayDePisos  = arrayListOf<DataInmueble>()
+        Log.d("pepepepepe", "long de array " + listaIdFavoritos.size.toString())
+        if(listaIdFavoritos.size != 0) {
+            for (i in 0..listaIdFavoritos.size) {
+                var pisoId = listaIdFavoritos.get(i)
+                Log.d("pepepepepe", "id del i = " + i + " es  " + pisoId)
+
+                val sfDocRef = db.collection("inmueblesv2").document(pisoId)
+
+                sfDocRef.get().addOnSuccessListener { document ->
+                    val piso = document.toObject<DataInmueble>()
+                    Log.d("pepepepepe", "el inmueble: " + piso.toString())
+                    if (piso != null) {
+                        arrayDePisos.add(piso)
                     }
-
-                }else{
-                    Log.d("wiiiiiiii", "pk no carga???")
+                    if (arrayDePisos.size== listaIdFavoritos.size){mostrar(arrayDePisos)}
                 }
             }
         }
-        return favoritos
-    }
-
-
-    fun cargarInmueblesFav(listaIdFavoritos : ArrayList<String>) : ArrayList<DataInmueble> {
-
-        var res : ArrayList<DataInmueble> = arrayListOf()
-
-        Log.d("wiiiiiiiiiii", listaIdFavoritos.size.toString() )
-
-        if(listaIdFavoritos.size != 0){
-            for (i in 0..listaIdFavoritos.size){
-                var pisoId = listaIdFavoritos.get(i)
-
-                db.collection("inmueblesv2").whereEqualTo("id", pisoId)
-                    .get()
-                    .addOnCompleteListener() { task ->
-                        if (task.isSuccessful) {
-                            for (u in task.result) {
-                                var piso = u.toObject(DataInmueble::class.java)
-                                res.add(piso)
-                            }
-                        }
-                    }
-            }
-        }
-        //else no fav show
-        return res
     }
 
     fun mostrar(pisosFav : ArrayList<DataInmueble>){
