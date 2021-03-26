@@ -6,6 +6,24 @@
     android:layout_height="match_parent"
     tools:context=".ChatAct">
 
+    <ImageButton
+        android:id="@+id/buttonGoBack"
+        android:layout_width="73dp"
+        android:layout_height="38dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="322dp"
+        android:layout_marginBottom="677dp"
+        android:contentDescription="@string/volver"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.194"
+        app:srcCompat="@drawable/abc_vector_test"
+        tools:srcCompat="?attr/actionModeCloseDrawable" />
+
     <EditText
         android:id="@+id/messageTextField"
         android:layout_width="0dp"
@@ -36,10 +54,8 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="1dp"
-        android:layout_marginLeft="1dp"
-        android:layout_marginTop="1dp"
+        android:layout_marginTop="40dp"
         android:layout_marginEnd="1dp"
-        android:layout_marginRight="1dp"
         android:layout_marginBottom="2dp"
         app:layout_constraintBottom_toTopOf="@+id/messageTextField"
         app:layout_constraintEnd_toEndOf="parent"

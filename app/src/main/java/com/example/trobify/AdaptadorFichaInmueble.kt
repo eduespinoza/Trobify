@@ -13,7 +13,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import com.synnapps.carouselview.CarouselView
 
@@ -25,6 +24,7 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
 
     private val db = Firebase.firestore
     var favoritos = arrayListOf<String>()
+    var oferta : Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,8 +56,10 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
             builder.setTitle("Elige una opción: ")
             builder.setItems(R.array.contactOptions) { dialog, which ->
                 if(which.equals(0)) {
-                    val goContactar = Intent(this, ChatAct::class.java)
-                    startActivity(goContactar)
+                    val goCreateChat = Intent(this, ListOfChats::class.java)
+                    goCreateChat.putExtra("user",userId.toString())
+                    goCreateChat.putExtra("otherUserId",getPropietario().toString())
+                    startActivity(goCreateChat)
                 }
                 else {
                     introduceQuantityOferta(inmueble)
@@ -198,14 +200,29 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
         val dialogLayout = inflater.inflate(R.layout.edit_text_oferta, null)
         with(builderIntroduceQuantityOferta){
             setPositiveButton("Enviar oferta"){dialog, which ->
-                val priceIntroduced = dialogLayout.findViewById<EditText>(R.id.editText_oferta).text
+                val priceIntroduced = dialogLayout.findViewById<EditText>(R.id.editText_oferta).text as Int
                 val message = "Oferta : " + inmueble.direccionO?.direccionToString() + " Cantidad ofrecida : " + priceIntroduced
             }
             builderIntroduceQuantityOferta.setNegativeButton("Cancelar") { _, _ -> }
             setView(dialogLayout)
             show()
         }
+        //Hacer que el dialogo tenga que acabar antes -------------
+        //if(oferta < //precio introducido){
+            //Dialogo de ¿estas seguro?
+                //si dice si:
+        //                    val goCreateChat = Intent(this, ListOfChats::class.java)
+        //                    goCreateChat.putExtra("user",userId.toString())
+        //                    goCreateChat.putExtra("otherUserId",getPropietario().toString())
+        //                    goCreateChat.putExtra("message", oferta.toString())
+        //                    startActivity(goCreateChat)
+        //}
     }
 
+    private fun getPropietario() : String{
+        val propietario : String = ""
+        //A completar
+        return propietario
+    }
 
 }

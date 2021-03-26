@@ -1,13 +1,10 @@
 package com.example.trobify
 
-import android.app.Dialog
 import android.content.ContentValues.TAG
 import android.content.DialogInterface
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.util.Patterns
-import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
@@ -15,16 +12,11 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ServerValue
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.StorageReference
-import com.firebase.ui.database.BuildConfig
 import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
+import java.util.regex.Matcher
+import java.util.regex.Pattern
 
 
 class Register : AppCompatActivity() {
@@ -96,20 +88,31 @@ class Register : AppCompatActivity() {
 
     //Checks
     private fun checkName() : Boolean{
-        println(2)
         name  = findViewById<EditText>(R.id.editTextName).text.toString()
+        val pattern : Pattern = Pattern.compile("[ 0-9A-Za-zñÑáéíóúÁÉÍÓÚ]{1,50}")
         if(name!!.isEmpty()){println(3);  emptyMessage(); return false}
-        val regex = "^[A-Za-z]*$".toRegex()
-        if(!name!!.matches(regex)){incorrectNameMessage(); return false}
+        for (element in name!!) {
+            val matcher : Matcher = pattern.matcher(element.toString())
+            if (!(matcher.matches()|| element == ' ')) {
+                incorrectNameMessage()
+                return false
+            }
+        }
         return true
     }
 
     private fun checkSurname() : Boolean{
         surname  = findViewById<EditText>(R.id.editTextSurname).text.toString()
+        val pattern : Pattern = Pattern.compile("[ 0-9A-Za-zñÑáéíóúÁÉÍÓÚ]{1,50}")
         if(surname!!.isEmpty()){ emptyMessage(); return false}
-        val regex = "^[A-Za-z]*$".toRegex()
-        if(!surname!!.matches(regex)){ incorrectSurnameMessage(); return false}
-        return true;
+        for (element in surname!!) {
+            val matcher : Matcher = pattern.matcher(element.toString())
+            if (!(matcher.matches()|| element == ' ')) {
+                incorrectSurnameMessage()
+                return false
+            }
+        }
+        return true
     }
 
     private fun checkEmail() : Boolean{
@@ -118,10 +121,6 @@ class Register : AppCompatActivity() {
         val emailPattern = Patterns.EMAIL_ADDRESS
         if(!emailPattern.matcher(email).matches()){ incorrectEmailMessage(); return false}
         if( emailExist(email) ){ emailAlreadyInUseMessage(); return false}
-
-
-
-
         return true
     }
 

@@ -13,31 +13,29 @@ import java.util.*
 
 class ListOfChats : AppCompatActivity() {
     private var db = Firebase.firestore
-    private var userId : String = ""
     private var user : String = ""
+    private var otherUser : String = ""
+    private var message : String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_list_of_chats)
 
-        intent.getStringExtra("user")?.let { userId = it }
-        db.collection("users").document(userId.toString()).get()
-            .addOnSuccessListener { e ->
-                if (userId.isNotEmpty()) {
-                    user = e.get("email").toString()
-                    initViews()
-                }
-            }
+        intent.getStringExtra("user")?.let { user = it }
+        intent.getStringExtra("otherUserId")?.let { otherUser = it }
+        intent.getStringExtra("message")?.let { message = it }
+
+        if( message != "" || otherUser != "") { newChat() }
+        else { initViews() }
     }
 
     private fun initViews(){
-
         listChatsRecyclerView.layoutManager = LinearLayoutManager(this)
         listChatsRecyclerView.adapter =
             ChatAdapter { chat -> chatSelected(chat)
             }
 
-        val userRef = db.collection("users").document(userId.toString())
+        val userRef = db.collection("users").document(user.toString())
 
         userRef.collection("chats")
             .get()
@@ -67,32 +65,38 @@ class ListOfChats : AppCompatActivity() {
         startActivity(intent)
     }
 
-    protected fun newChat(otherUser : String){
+    private fun newChat(){
         val chatId = UUID.randomUUID().toString()
-        val users = listOf(user, otherUser)
-        var otherUserId = ""
-        val chat = Chat(
-            id = chatId,
-            name = "$otherUser",
-            users = users
-        )
+        var userName = ""
+        var otherUserName = ""
 
+        db.collection("users").document(user.toString()).get()
+            .addOnCompleteListener(){ u ->
+                userName = u.result.data?.get("name").toString() + " " + u.result.data?.get("surname").toString()
 
-        db.collection("users").whereEqualTo("email",otherUser.toString()).get()
-            .addOnCompleteListener(){ task ->
-                if(task.isSuccessful){
-                    for(u in task.result){
-                        otherUserId =u.id.toString()
+                db.collection("users").document(otherUser.toString()).get()
+                    .addOnCompleteListener(){ o ->
+                        otherUserName = o.result.data?.get("name").toString() + " " + o.result.data?.get("surname").toString()
+
+                        val users = listOf(user, otherUser)
+                        val chat = Chat( id = chatId, name = "$otherUserName y $userName", users = users )
+                        val chat1 = Chat( id = chatId, name = "$otherUserName", users = users )
+                        val chat2 = Chat(id = chatId, name = "$userName", users = users)
+
+                        if(message != ""){ message = userName.toString() + " le hace una oferta de: " + message + "€"}
+
+                        db.collection("chats").document(chatId).set(chat)
+                        db.collection("users").document(user.toString()).collection("chats").document(chatId).set(chat1)
+                        db.collection("users").document(otherUser.toString()).collection("chats").document(chatId).set(chat2)
+
+                        val goChat = Intent(this, ChatAct::class.java)
+                        goChat.putExtra("chatId", chatId.toString())
+                        goChat.putExtra("user", user.toString())
+                        goChat.putExtra("message",message.toString())
+
+                        startActivity(goChat)
                     }
-                    db.collection("chats").document(chatId).set(chat)
-                    db.collection("users").document(userId).collection("chats").document(chatId).set(chat)
-                    db.collection("users").document(otherUserId).collection("chats").document(chatId).set(chat)
-
-                    val intent = Intent(this, ChatAct::class.java)
-                    intent.putExtra("chatId", chatId.toString())
-                    intent.putExtra("user", user.toString())
-                    startActivity(intent)
-                }
             }
     }
+
 }
