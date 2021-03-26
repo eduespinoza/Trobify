@@ -60,8 +60,10 @@
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.789" />
 
     <Button
         android:id="@+id/buttonRegister"
@@ -75,7 +77,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewAunNo" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewAunNo"
+        app:layout_constraintVertical_bias="0.0" />
 
     <Button
         android:id="@+id/buttonAcces"
@@ -83,10 +86,11 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="152dp"
         android:layout_marginEnd="140dp"
-        android:layout_marginBottom="45dp"
+        android:layout_marginBottom="32dp"
         android:text="Acceder"
         app:layout_constraintBottom_toTopOf="@+id/textViewAunNo"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.117"
         app:layout_constraintStart_toStartOf="parent" />
 
     <EditText

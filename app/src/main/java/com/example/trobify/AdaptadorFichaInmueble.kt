@@ -244,37 +244,33 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
         val builderIntroduceQuantityOferta = AlertDialog.Builder(this)
         val inflater = layoutInflater
         val dialogLayout = inflater.inflate(R.layout.edit_text_oferta, null)
-        println("------------------------------------------------------- 1")
         with(builderIntroduceQuantityOferta) {
-            println("------------------------------------------------------- 2")
             setPositiveButton("Enviar oferta") { dialog, which ->
                 val priceIntroduced = dialogLayout.findViewById<EditText>(R.id.editText_oferta).text
-                if (priceIntroduced.toString().toInt().compareTo(inmueble.precio.toString().toInt()) > 0) {
-                    println("----------------------------------------------------------- hola0")
+                if (priceIntroduced.toString().toInt()
+                        .compareTo(inmueble.precio.toString().toInt()) > 0
+                ) {
                     val builderAviso = AlertDialog.Builder(this@AdaptadorFichaInmueble)
                     val message =
-                        "Oferta : " + inmueble.direccion?.toString() +'\n' + " Cantidad ofrecida : " + priceIntroduced
-                    println("-------------------------------------------------------- lkjsflhlkjh")
-                    with(builderAviso){
+                        "Oferta : " + inmueble.direccion?.toString() + '\n' + " Cantidad ofrecida : " + priceIntroduced
+                    with(builderAviso) {
 
                         setTitle("El precio es superior al del inmueble, quiere enviar la oferta?")
 
                         setPositiveButton("Sí") { dialog, which ->
-                            println("-------------------------------------------------------- hola1")
                             val goCreateChat =
                                 Intent(this@AdaptadorFichaInmueble, ListOfChats::class.java)
                             db.collection("users").whereEqualTo("email", propietarioMail.toString())
                                 .get()
                                 .addOnCompleteListener { task ->
                                     if (task.isSuccessful) {
-                                        println("-------------------------------------------------------- hola2")
                                         for (u in task.result) {
                                             propietarioId = u.id.toString()
                                         }
                                         goCreateChat.putExtra("user", userId)
                                         goCreateChat.putExtra("otherUserId", propietarioId)
                                         goCreateChat.putExtra("message", message)
-                                        println("-------------------------------------------------------message: "+ message)
+                                        println("-------------------------------------------------------message: " + message)
                                         startActivity(goCreateChat)
                                     }
                                 }
@@ -284,36 +280,30 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
                         show()
                     }
                 }
+                else {
+                    val message =
+                        "Oferta : " + inmueble.direccion?.toString() + '\n' + " Cantidad ofrecida : " + priceIntroduced
+                    val goCreateChat =
+                        Intent(this@AdaptadorFichaInmueble, ListOfChats::class.java)
+                    db.collection("users").whereEqualTo("email", propietarioMail.toString())
+                        .get()
+                        .addOnCompleteListener { task ->
+                            if (task.isSuccessful) {
+                                for (u in task.result) {
+                                    propietarioId = u.id.toString()
+                                }
+                                goCreateChat.putExtra("user", userId)
+                                goCreateChat.putExtra("otherUserId", propietarioId)
+                                goCreateChat.putExtra("message", message)
+                                println("-------------------------------------------------------message: " + message)
+                                startActivity(goCreateChat)
+                            }
+                        }
+                }
             }
             setNegativeButton("Cancelar") { _, _ -> }
             setView(dialogLayout)
             show()
         }
     }
-        /*with(builderIntroduceQuantityOferta) {
-            setPositiveButton("Enviar oferta") { dialog, which ->
-                val priceIntroduced = dialogLayout.findViewById<EditText>(R.id.editText_oferta).text
-                val goCreateChat = Intent(this@AdaptadorFichaInmueble, ListOfChats::class.java)
-                val message =
-                    "Oferta : " + inmueble.direccionO?.direccionToString() + " Cantidad ofrecida : " + priceIntroduced
-                db.collection("users").whereEqualTo("email", propietarioMail.toString())
-                    .get()
-                    .addOnCompleteListener { task ->
-                        if (task.isSuccessful) {
-                            for (u in task.result) {
-                                propietarioId = u.id.toString()
-                            }
-                            goCreateChat.putExtra("user", userId)
-                            goCreateChat.putExtra("otherUserId", propietarioId)
-                            goCreateChat.putExtra("message", message)
-                            println("-------------------------------------------------------message: " + message)
-                            startActivity(goCreateChat)
-                        }
-                    }
-                println("------------------------------------------------------- 4")
-            }
-            setNegativeButton("Cancelar") { _, _ -> }
-            setView(dialogLayout)
-            show()
-        }*/
 }
