@@ -27,6 +27,7 @@ open class FiltrosBusqueda : AppCompatActivity() {
 
     var elementosSeleccionadosTipoEdif:BooleanArray = GuardaFiltros.guardaSeleccion.elementosSeleccionadosTipoEdif
     var elementosSeleccionadosTipoPorDefecto:BooleanArray = GuardaFiltros.guardaSeleccion.elementosSeleccionadosTipoPorDefecto
+    lateinit var options_price:List<Int>
 
     var checkPriceBool = true
     var checkSurfaceBool = true
@@ -192,37 +193,54 @@ open class FiltrosBusqueda : AppCompatActivity() {
             AdapterView.OnItemSelectedListener{
             override fun onNothingSelected(parent: AdapterView<*>?) {}
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-
+                var tituloTipoVivienda = findViewById<TextView>(R.id.textTipoDeVivienda)
+                var tituloNumeroDeHabitaciones = findViewById<TextView>(R.id.textNumeroDeHabitaciones)
+                var tituloNumeroDeBaños = findViewById<TextView>(R.id.textNumeroDeBaños)
                 if (desplegables.spinnerInmueble.selectedItem.equals("Terreno") || desplegables.spinnerInmueble.selectedItem.equals("Nave")){
-                    buttonVivienda.setEnabled(false)
-                    desplegables.spinnerHabitaciones.setEnabled(false)
-                    desplegables.spinnerBaños.setEnabled(false)
+                    tituloTipoVivienda.setVisibility(View.GONE)
+                    buttonVivienda.setVisibility(View.GONE)
+                    tituloNumeroDeHabitaciones.setVisibility(View.GONE)
+                    desplegables.spinnerHabitaciones.setVisibility(View.GONE)
+                    tituloNumeroDeBaños.setVisibility(View.GONE)
+                    desplegables.spinnerBaños.setVisibility(View.GONE)
 
                     setFalseEstadosVivienda()
                     setFalseExtras()
                 }
                 else if (desplegables.spinnerInmueble.selectedItem.equals("Garaje")){
-                    buttonVivienda.setEnabled(false)
-                    desplegables.spinnerHabitaciones.setEnabled(false)
-                    desplegables.spinnerBaños.setEnabled(false)
+                    tituloTipoVivienda.setVisibility(View.GONE)
+                    buttonVivienda.setVisibility(View.GONE)
+                    tituloNumeroDeHabitaciones.setVisibility(View.GONE)
+                    desplegables.spinnerHabitaciones.setVisibility(View.GONE)
+                    tituloNumeroDeBaños.setVisibility(View.GONE)
+                    desplegables.spinnerBaños.setVisibility(View.GONE)
 
                     setFalseExtras()
-                }
-                else if (desplegables.spinnerInmueble.selectedItem.equals("Local")){
-                    buttonVivienda.setEnabled(false)
-
                     setTrueEstadosVivienda()
-                    setFalseExtras()
                 }
-                else {
-                    buttonVivienda.setEnabled(true)
-                    desplegables.spinnerHabitaciones.setEnabled(true)
-                    desplegables.spinnerBaños.setEnabled(true)
-                    desplegables.spinnerBaños.setEnabled(true)
+                else if (desplegables.spinnerInmueble.selectedItem.equals("Local") || desplegables.spinnerInmueble.selectedItem.equals("Oficina")){
+                    tituloTipoVivienda.setVisibility(View.GONE)
+                    buttonVivienda.setVisibility(View.GONE)
+                    tituloNumeroDeHabitaciones.setVisibility(View.GONE)
+                    desplegables.spinnerHabitaciones.setVisibility(View.GONE)
+                    tituloNumeroDeBaños.setVisibility(View.VISIBLE)
+                    desplegables.spinnerBaños.setVisibility(View.VISIBLE)
 
                     setTrueEstadosVivienda()
                     setTrueExtras()
                 }
+                else {
+                    tituloTipoVivienda.setVisibility(View.VISIBLE)
+                    buttonVivienda.setVisibility(View.VISIBLE)
+                    tituloNumeroDeHabitaciones.setVisibility(View.VISIBLE)
+                    desplegables.spinnerHabitaciones.setVisibility(View.VISIBLE)
+                    tituloNumeroDeBaños.setVisibility(View.VISIBLE)
+                    desplegables.spinnerBaños.setVisibility(View.VISIBLE)
+
+                    setTrueEstadosVivienda()
+                    setTrueExtras()
+                }
+                addOptionsPrice()
                 filtros.tipoInmueble = desplegables.spinnerInmueble.selectedItem.toString()
             }
         }
@@ -427,16 +445,21 @@ open class FiltrosBusqueda : AppCompatActivity() {
     }
 
     private fun addOptionsPrice(){
-        val options_price = listOf<Int>(0, 50000, 75000, 100000, 125000, 150000, 200000, 300000, 400000, 500000, 700000)
-        val options_price_max = listOf<Int>(0, 50000, 75000, 100000, 125000, 150000, 200000, 300000, 400000, 500000, 700000)
+        if(desplegables.spinnerInmueble.selectedItem.equals("Garaje")){
+            options_price = listOf<Int>(0, 5000, 7500, 10000, 12500, 15000, 20000, 30000, 40000, 50000, 70000)
+        }
+        else if(desplegables.spinnerInmueble.selectedItem.equals("Local")){
+            options_price = listOf<Int>(0, 10000, 15000, 20000, 25000, 30000, 40000, 50000, 80000, 90000, 100000)
+        }
+        else{
+            options_price = listOf<Int>(0, 50000, 75000, 100000, 125000, 150000, 200000, 300000, 400000, 500000, 700000)
+        }
 
         /* AÑADIR LAS OPCIONES A LOS DESPLEGABLES */
-        val adapter0 = ArrayAdapter<Int>(this, android.R.layout.simple_spinner_item, options_price)
-        val adapter1 = ArrayAdapter<Int>(this, android.R.layout.simple_spinner_item, options_price_max)
-        adapter0.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        desplegables.spinnerPrecioMin.adapter = adapter0
-        desplegables.spinnerPrecioMax.adapter = adapter1
+        val adapter = ArrayAdapter<Int>(this, android.R.layout.simple_spinner_item, options_price)
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        desplegables.spinnerPrecioMin.adapter = adapter
+        desplegables.spinnerPrecioMax.adapter = adapter
 
         // Reestablecer la eleccion
         desplegables.spinnerPrecioMin.setSelection(GuardaFiltros.guardaSeleccion.desPrecioMin)
@@ -552,42 +575,30 @@ open class FiltrosBusqueda : AppCompatActivity() {
     }
 
     private fun setFalseExtras(){
-        extrasVivienda.parking.setEnabled(false)
-        extrasVivienda.ascensor.setEnabled(false)
-        extrasVivienda.amueblado.setEnabled(false)
-        extrasVivienda.calefaccion.setEnabled(false)
-        extrasVivienda.jardin.setEnabled(false)
-        extrasVivienda.piscina.setEnabled(false)
-        extrasVivienda.terraza.setEnabled(false)
-        extrasVivienda.trastero.setEnabled(false)
+        var contenedorExtras:LinearLayout = findViewById<LinearLayout>(R.id.contenedorExtras)
+        var tituloExtras = findViewById<TextView>(R.id.textExtras)
+        tituloExtras.setVisibility(View.GONE)
+        contenedorExtras.setVisibility(View.GONE)
     }
 
     private fun setTrueExtras(){
-        extrasVivienda.parking.setEnabled(true)
-        extrasVivienda.ascensor.setEnabled(true)
-        extrasVivienda.amueblado.setEnabled(true)
-        extrasVivienda.calefaccion.setEnabled(true)
-        extrasVivienda.jardin.setEnabled(true)
-        extrasVivienda.piscina.setEnabled(true)
-        extrasVivienda.terraza.setEnabled(true)
-        extrasVivienda.trastero.setEnabled(true)
+        var contenedorExtras:LinearLayout = findViewById<LinearLayout>(R.id.contenedorExtras)
+        var tituloExtras = findViewById<TextView>(R.id.textExtras)
+        tituloExtras.setVisibility(View.VISIBLE)
+        contenedorExtras.setVisibility(View.VISIBLE)
     }
 
     private fun setFalseEstadosVivienda(){
-        estadosVivienda.obraNueva.setEnabled(false)
-        estadosVivienda.casiNuevo.setEnabled(false)
-        estadosVivienda.muyBien.setEnabled(false)
-        estadosVivienda.bien.setEnabled(false)
-        estadosVivienda.reformado.setEnabled(false)
-        estadosVivienda.aReformar.setEnabled(false)
+        var contenedorEstadoVivienda = findViewById<LinearLayout>(R.id.contenedorEstadoVivienda)
+        var tituloEstadoVivienda = findViewById<TextView>(R.id.textEstadoVivienda)
+        tituloEstadoVivienda.setVisibility(View.GONE)
+        contenedorEstadoVivienda.setVisibility(View.GONE)
     }
 
     private fun setTrueEstadosVivienda(){
-        estadosVivienda.obraNueva.setEnabled(true)
-        estadosVivienda.casiNuevo.setEnabled(true)
-        estadosVivienda.muyBien.setEnabled(true)
-        estadosVivienda.bien.setEnabled(true)
-        estadosVivienda.reformado.setEnabled(true)
-        estadosVivienda.aReformar.setEnabled(true)
+        var contenedorEstadoVivienda = findViewById<LinearLayout>(R.id.contenedorEstadoVivienda)
+        var tituloEstadoVivienda = findViewById<TextView>(R.id.textEstadoVivienda)
+        tituloEstadoVivienda.setVisibility(View.VISIBLE)
+        contenedorEstadoVivienda.setVisibility(View.VISIBLE)
     }
 }
