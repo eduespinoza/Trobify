@@ -1,6 +1,7 @@
 package com.example.trobify
 
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
@@ -33,6 +34,7 @@ class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemClickLi
     lateinit var auth : FirebaseAuth
     val db = Firebase.firestore
     lateinit var user : String
+    val nuevaBusqueda = Busqueda()
     val sugerencias = Busqueda()
     lateinit var cabecera : TextView
     var filtrosAplicados : FiltrosBusqueda.filtros? = null
@@ -120,6 +122,8 @@ class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemClickLi
         var filtrar : TextView = findViewById(R.id.filtrar)
         var mapa : TextView = findViewById(R.id.verMapa)
         var cerrarSesion : Button = menuHeader.findViewById(R.id.cerrarSesion)
+        var alquiler : TextView = findViewById(R.id.BAlquiler)
+        var venta : TextView = findViewById(R.id.BVenta)
         navigator.setNavigationItemSelectedListener { item ->
             when (item.getItemId()) {
                 R.id.mischats -> {
@@ -166,6 +170,16 @@ class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemClickLi
         mapa.setOnClickListener {
             //abrir mapa
             //generatePisos()
+        }
+        alquiler.setOnClickListener {
+            alquiler.setBackgroundColor(Color.BLUE)
+            venta.setBackgroundColor(Color.DKGRAY)
+            alquilerOVenta("Alquiler")
+        }
+        venta.setOnClickListener {
+            alquiler.setBackgroundColor(Color.DKGRAY)
+            venta.setBackgroundColor(Color.BLUE)
+            alquilerOVenta("Vender")
         }
     }
     class StringOrInt (var str : String?, var num : Int?){
@@ -327,13 +341,16 @@ class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemClickLi
         }
     }
     fun mostrarResultados(busqueda : String){
-        var nuevaBusqueda = Busqueda()
         nuevaBusqueda.buscar(busqueda.toUpperCase())
-        var data = nuevaBusqueda.obtenerResultados{
+        nuevaBusqueda.obtenerResultados{
             listaConResultados.adapter = AdaptadorInmuebleBusqueda(it,this)
         }
     }
-
+    fun alquilerOVenta(opcion : String){
+        nuevaBusqueda.getInmueblesIntencion(opcion){
+            listaConResultados.adapter = AdaptadorInmuebleBusqueda(it,this)
+        }
+    }
     //poner los 10 ultimos añadidos
     fun cargarInmueblesDesdeBd(myCallback : (ArrayList<DataInmueble>) -> Unit){
         var pisosTochos = arrayListOf<DataInmueble>()
