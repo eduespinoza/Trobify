@@ -66,9 +66,11 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
                                 for(u in task.result) {
                                     propietarioId = u.id.toString()
                                 }
+
                                 val goCreateChat = Intent(this, ListOfChats::class.java)
                                 goCreateChat.putExtra("user",userId.toString())
                                 goCreateChat.putExtra("otherUserId",propietarioId.toString())
+                                goCreateChat.putExtra("inmueble",inmueble.direccion.toString())
                                 startActivity(goCreateChat)
                             }
                         }
@@ -270,7 +272,8 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
                                         goCreateChat.putExtra("user", userId)
                                         goCreateChat.putExtra("otherUserId", propietarioId)
                                         goCreateChat.putExtra("message", message)
-                                        println("-------------------------------------------------------message: " + message)
+                                        goCreateChat.putExtra("inmueble",inmueble.direccion.toString())
+
                                         startActivity(goCreateChat)
                                     }
                                 }
@@ -295,7 +298,8 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
                                 goCreateChat.putExtra("user", userId)
                                 goCreateChat.putExtra("otherUserId", propietarioId)
                                 goCreateChat.putExtra("message", message)
-                                println("-------------------------------------------------------message: " + message)
+                                goCreateChat.putExtra("inmueble",inmueble.direccion.toString())
+
                                 startActivity(goCreateChat)
                             }
                         }
