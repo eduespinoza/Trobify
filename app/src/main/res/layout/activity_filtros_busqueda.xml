@@ -8,6 +8,7 @@
     tools:layout_editor_absoluteY="81dp">
 
     <LinearLayout
+        android:id="@+id/contenedorPrincipal"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
@@ -23,6 +24,7 @@
             android:layout_height="wrap_content">
 
             <LinearLayout
+                android:id="@+id/contenedorDentroScrollView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
@@ -32,14 +34,14 @@
                     android:id="@+id/buttonBack"
                     style="@style/Widget.AppCompat.ImageButton"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_gravity="right"
                     android:layout_marginRight="5dp"
                     android:tint="#FF0000"
                     app:srcCompat="@drawable/btn_clear" />
 
                 <TextView
-                    android:id="@+id/textView"
+                    android:id="@+id/textTipoDeInmueble"
                     android:layout_width="163dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
@@ -54,7 +56,7 @@
                     android:layout_marginTop="8dp" />
 
                 <TextView
-                    android:id="@+id/textView2"
+                    android:id="@+id/textTipoDeVivienda"
                     android:layout_width="131dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
@@ -72,7 +74,7 @@
                     app:backgroundTint="#DDDDDD"></Button>
 
                 <TextView
-                    android:id="@+id/textView3"
+                    android:id="@+id/textPrecio"
                     android:layout_width="163dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
@@ -81,6 +83,7 @@
                     android:textSize="18sp" />
 
                 <LinearLayout
+                    android:id="@+id/contenedorRangoDePrecio"
                     android:layout_width="300dp"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
@@ -100,7 +103,7 @@
                 </LinearLayout>
 
                 <TextView
-                    android:id="@+id/textView4"
+                    android:id="@+id/textNumeroDeHabitaciones"
                     android:layout_width="208dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
@@ -115,7 +118,7 @@
                     android:layout_marginTop="8dp" />
 
                 <TextView
-                    android:id="@+id/textView5"
+                    android:id="@+id/textNumeroDeBaños"
                     android:layout_width="208dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
@@ -130,7 +133,7 @@
                     android:layout_marginTop="8dp" />
 
                 <TextView
-                    android:id="@+id/textView6"
+                    android:id="@+id/textSuperficie"
                     android:layout_width="131dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15sp"
@@ -139,6 +142,7 @@
                     android:textSize="18sp" />
 
                 <LinearLayout
+                    android:id="@+id/contenedorRangoDeSuperficie"
                     android:layout_width="300dp"
                     android:layout_height="39dp"
                     android:orientation="horizontal">
@@ -158,7 +162,7 @@
                 </LinearLayout>
 
                 <TextView
-                    android:id="@+id/textView7"
+                    android:id="@+id/textEstadoVivienda"
                     android:layout_width="206dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
@@ -211,7 +215,7 @@
                 </LinearLayout>
 
                 <TextView
-                    android:id="@+id/textView8"
+                    android:id="@+id/textExtras"
                     android:layout_width="131dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
@@ -220,6 +224,7 @@
                     android:textSize="18sp" />
 
                 <LinearLayout
+                    android:id="@+id/contenedorExtras"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
@@ -272,17 +277,15 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/trastero" />
-
-                    <Button
-                        android:id="@+id/buttonAplicar"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="25dp"
-                        android:layout_marginRight="20dp"
-                        android:layout_marginBottom="30dp"
-                        android:text="Aplicar" />
                 </LinearLayout>
-
+                <Button
+                    android:id="@+id/buttonAplicar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="25dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginBottom="30dp"
+                    android:text="Aplicar" />
             </LinearLayout>
         </ScrollView>
 

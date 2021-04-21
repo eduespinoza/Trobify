@@ -71,4 +71,18 @@ class Busqueda {
                  }
             }
     }
+    fun getInmueblesIntencion(opcion:String, resultado : (ArrayList<DataInmueble>) -> Unit) {
+        var inmueblesEncontrados = arrayListOf<DataInmueble>()
+        db.collection("inmueblesv2").
+        whereEqualTo("intencion",opcion).get()
+            .addOnCompleteListener{ task->
+                if(task.isSuccessful){
+                    for(resultadoBusqueda in task.result){
+                        var inmueble = resultadoBusqueda.toObject(DataInmueble::class.java)
+                        inmueblesEncontrados.add(inmueble)
+                    }
+                    resultado(inmueblesEncontrados)
+                }
+            }
+    }
 }
