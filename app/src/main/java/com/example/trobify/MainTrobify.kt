@@ -20,7 +20,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.*
 import java.time.LocalDateTime
 import kotlin.random.Random
 
@@ -35,8 +35,11 @@ class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemClickLi
     val db = Firebase.firestore
     lateinit var user : String
     val nuevaBusqueda = Busqueda()
+    var alquilerActivado = false
+    var ventaActivado = false
     val sugerencias = Busqueda()
     lateinit var cabecera : TextView
+    lateinit var nResultados : TextView
     var filtrosAplicados : FiltrosBusqueda.filtros? = null
     override fun onItemClicked(dataInmueble : DataInmueble) {
         val goFicha = Intent(this, AdaptadorFichaInmueble::class.java)
@@ -51,6 +54,7 @@ class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemClickLi
         setContentView(R.layout.main_trobify2)
         listaConResultados = findViewById(R.id.recycler)
         cabecera = findViewById(R.id.cabecera)
+        nResultados = findViewById(R.id.nResultados)
         auth = Firebase.auth
         user = (intent.extras!!.get("user") as String?).toString()
         println("Nomejodasmasporfavortelopido")
@@ -77,9 +81,10 @@ class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemClickLi
         listaConResultados.setHasFixedSize(true)
         val layoutmanager = LinearLayoutManager(baseContext)
         listaConResultados.layoutManager = layoutmanager
-        var data = cargarInmueblesDesdeBd {
+        cargarInmueblesDesdeBd {
             var adapter = AdaptadorInmuebleBusqueda(it,this)
             listaConResultados.adapter = adapter
+            nResultados.text = "${it.size} resultados"
         }
     }
     fun prepararBuscador(){
@@ -172,11 +177,15 @@ class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemClickLi
             //generatePisos()
         }
         alquiler.setOnClickListener {
+            alquilerActivado = !ventaActivado
+            ventaActivado = !alquilerActivado
             alquiler.setBackgroundColor(Color.BLUE)
             venta.setBackgroundColor(Color.DKGRAY)
             alquilerOVenta("Alquiler")
         }
         venta.setOnClickListener {
+            alquilerActivado = !ventaActivado
+            ventaActivado = !alquilerActivado
             alquiler.setBackgroundColor(Color.DKGRAY)
             venta.setBackgroundColor(Color.BLUE)
             alquilerOVenta("Vender")
@@ -344,12 +353,19 @@ class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemClickLi
         nuevaBusqueda.buscar(busqueda.toUpperCase())
         nuevaBusqueda.obtenerResultados{
             listaConResultados.adapter = AdaptadorInmuebleBusqueda(it,this)
+            nResultados.text = "${it.size} resultados"
         }
     }
     fun alquilerOVenta(opcion : String){
+        runBlocking{
         nuevaBusqueda.getInmueblesIntencion(opcion){
-            listaConResultados.adapter = AdaptadorInmuebleBusqueda(it,this)
+            println("Ahora por aquí")
+            listaConResultados.adapter = AdaptadorInmuebleBusqueda(it,this@MainTrobify)
+            nResultados.text = "${it.size} resultados"
+            println("Ahora por aquí2")
         }
+        }
+        println(" por aquí")
     }
     //poner los 10 ultimos añadidos
     fun cargarInmueblesDesdeBd(myCallback : (ArrayList<DataInmueble>) -> Unit){

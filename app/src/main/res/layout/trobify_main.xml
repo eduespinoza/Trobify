@@ -181,9 +181,17 @@
                     android:id="@+id/cabecera"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
                     android:text="Inmuebles añadidos recientemente"
                     android:textSize="25sp"
                     android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/nResultados"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:text="Resultados" />
 
             </LinearLayout>
 
