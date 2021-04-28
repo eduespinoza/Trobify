@@ -58,7 +58,7 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
         val builder = AlertDialog.Builder(this@AdaptadorFichaInmueble)
         buttonContactar.setOnClickListener {
             builder.setTitle("Elige una opción: ")
-            builder.setItems(R.array.contactOptions) { dialog, which ->
+            builder.setItems(R.array.contactOptions) { _, which ->
                 if(which.equals(0)) {
                     db.collection("users").whereEqualTo("email",propietarioMail.toString()).get()
                         .addOnCompleteListener { task->
@@ -247,11 +247,9 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
         val inflater = layoutInflater
         val dialogLayout = inflater.inflate(R.layout.edit_text_oferta, null)
         with(builderIntroduceQuantityOferta) {
-            setPositiveButton("Enviar oferta") { dialog, which ->
+            setPositiveButton("Enviar oferta") { _, _ ->
                 val priceIntroduced = dialogLayout.findViewById<EditText>(R.id.editText_oferta).text
-                if (priceIntroduced.toString().toInt()
-                        .compareTo(inmueble.precio.toString().toInt()) > 0
-                ) {
+                if (priceIntroduced.toString().toInt().compareTo(inmueble.precio.toString().toInt()) > 0) {
                     val builderAviso = AlertDialog.Builder(this@AdaptadorFichaInmueble)
                     val message =
                         "Oferta : " + inmueble.direccion?.toString() + '\n' + " Cantidad ofrecida : " + priceIntroduced
@@ -259,7 +257,7 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
 
                         setTitle("El precio es superior al del inmueble, quiere enviar la oferta?")
 
-                        setPositiveButton("Sí") { dialog, which ->
+                        setPositiveButton("Sí") { _, _ ->
                             val goCreateChat =
                                 Intent(this@AdaptadorFichaInmueble, ListOfChats::class.java)
                             db.collection("users").whereEqualTo("email", propietarioMail.toString())

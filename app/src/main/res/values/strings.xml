@@ -89,6 +89,13 @@
         <item>Hacer oferta</item>
     </string-array>
 
+    <string-array name="orderOptions">
+        <item>Precio ascendente</item>
+        <item>Precio descendente</item>
+        <item>Más recientes</item>
+        <item>Más antiguos</item>
+    </string-array>
+
     <string name="title_activity_pruebas">Pruebas</string>
     <string name="nombre_del_inmueble">Nombre del inmueble</string>
     <string name="loacalizaci_n">Loacalización</string>
