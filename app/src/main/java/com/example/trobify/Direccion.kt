@@ -1,37 +1,8 @@
 package com.example.trobify
-
-import java.io.Serializable
-
-class Direccion : Serializable{
-
-    private var pais : String? = null
-    private var ciudad : String? = null
-    private var codigoPostal : String? = null
-    private var calle : String? = null
-    private var numeroPortal : String? = null
-    private var planta : String? = null
-    private var numeroPuerta : String? = null
-
-    constructor(
-        pais : String?,
-        ciudad : String?,
-        codigoPostal : String?,
-        calle : String?,
-        numeroPortal : String?,
-        planta : String?,
-        numeroPuerta : String?
-    ) {
-        this.pais = pais
-        this.ciudad = ciudad
-        this.codigoPostal = codigoPostal
-        this.calle = calle
-        this.numeroPortal = numeroPortal
-        this.planta = planta
-        this.numeroPuerta = numeroPuerta
-    }
-
-    fun direccionToString() : String{
-        return calle + ", numero " + numeroPortal + ", planta " + planta + ", puerta" + numeroPuerta
-    }
-
-}
+data class Direccion (var pais : String? = null,
+        var ciudad : String? = null,
+        var codigoPostal : String? = null,
+        var calle : String? = null,
+        var numeroPortal : String? = null,
+        var latitude : Double? = null,
+        var longitud : Double?= null)

@@ -109,10 +109,6 @@ class Inmueble : Serializable{
         this.direccion = direccion
         this.direccionO = direccionO
 
-        if (direccionO != null) {
-            this.direccion = direccionO.direccionToString()
-        }
-
         this.fechaSubida = fechaSubida
     }
 
@@ -142,7 +138,8 @@ class Inmueble : Serializable{
     //FUNCION NECESARIA - para poder coger bien los datos de la bd
     fun adaptarInmuble(dataInmueble : DataInmueble) : Inmueble{
         return Inmueble(dataInmueble.id,dataInmueble.propietario.toString(),dataInmueble.numHabitaciones,dataInmueble.numBanos
-        ,dataInmueble.superficie,dataInmueble.direccion,direccionO,dataInmueble.tipoInmueble,dataInmueble.intencion,dataInmueble.precio,dataInmueble.fotos,
+        ,dataInmueble.superficie,
+            dataInmueble.direccion?.titulo,direccionO,dataInmueble.tipoInmueble,dataInmueble.intencion,dataInmueble.precio,dataInmueble.fotos,
         dataInmueble.fotosOrd,dataInmueble.certificadoEnergetico,dataInmueble.descripcion,dataInmueble.estado,dataInmueble.parking
         ,dataInmueble.ascensor,dataInmueble.amueblado,dataInmueble.calefaccion,dataInmueble.jardin,dataInmueble.piscina,dataInmueble.terraza,
             dataInmueble.trastero,LocalDateTime.parse(dataInmueble.fechaSubida))

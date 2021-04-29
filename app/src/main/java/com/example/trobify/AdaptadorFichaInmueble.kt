@@ -109,7 +109,7 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
     private fun rellenar(inmueble : Inmueble) {
 
         val direccion =  findViewById<TextView>(R.id.textViewCalleFicha)
-        direccion.text = inmueble.direccionO?.direccionToString()
+        direccion.text = inmueble.direccion
         if(inmueble.direccion.equals("")){}else{direccion.text = inmueble.direccion}
 
         direccion.setTextColor(Color.BLACK)

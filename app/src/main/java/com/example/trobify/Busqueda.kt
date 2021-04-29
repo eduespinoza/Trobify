@@ -7,23 +7,22 @@ import com.here.sdk.core.CountryCode
 import com.here.sdk.core.GeoCoordinates
 import com.here.sdk.core.LanguageCode
 import com.here.sdk.core.errors.InstantiationErrorException
-import com.here.sdk.search.SearchEngine
-import com.here.sdk.search.SearchOptions
-import com.here.sdk.search.SuggestCallback
-import com.here.sdk.search.TextQuery
+import com.here.sdk.search.*
 
 class Busqueda {
     val db = Firebase.firestore
     var query : String = ""
     lateinit var motorDeBusqueda : SearchEngine
     lateinit var opcionesDeBusqueda : SearchOptions
-    var sugerencias = arrayListOf<String>()
+    //var sugerencias = mutableMapOf<String,GeoCoordinates>()
+    var sugerencias = arrayListOf<Place>()
     init {
         prepararBuscadorHere()
     }
     fun buscar(busqueda : String){
         this.query = busqueda
     }
+
     fun obtenerSugerencias(query : String){
         //coordenadas de valencia por defecto, esto es para que tenga un rango
         //de busqueda definido
@@ -41,11 +40,15 @@ class Busqueda {
             var res = ""
             sugerencias.clear()
             for (geocodingResult in list!!) {
-                val address = geocodingResult.title
-                sugerencias.add(address)
-                res += "$address\n"
+                geocodingResult.place?.let { sugerencias.add(it) }
+                //val address = geocodingResult.title
+                //val geoCoordinates = geocodingResult.place?.geoCoordinates
+                //if (geoCoordinates != null) {
+                    //sugerencias[address] = geoCoordinates
+                //}
+                //res += "$address\n"
             }
-            Log.d("SuggestionCallBack","$res")
+            //Log.d("SuggestionCallBack","$res")
         }
     fun prepararBuscadorHere(){
         try {
@@ -73,7 +76,7 @@ class Busqueda {
     }
     fun getInmueblesIntencion(opcion:String, resultado : (ArrayList<DataInmueble>) -> Unit) {
         var inmueblesEncontrados = arrayListOf<DataInmueble>()
-        db.collection("inmueblesv2").
+        db.collection("inmueblesv3").
         whereEqualTo("intencion",opcion).get()
             .addOnCompleteListener{ task->
                 if(task.isSuccessful){
