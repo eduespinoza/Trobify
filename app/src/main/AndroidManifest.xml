@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.trobify" >
+    package="com.example.trobify">
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -15,14 +15,13 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Trobify" >
-
+        android:theme="@style/Theme.Trobify">
+        <activity android:name=".OfertarInmueble"></activity>
         <activity android:name=".ListOfChats" />
         <activity
             android:name=".ChatAct"
             android:label="@string/title_activity_chat"
             android:theme="@style/Theme.Trobify.NoActionBar" />
-
 
         <meta-data
             android:name="com.here.sdk.access_key_id"
@@ -30,8 +29,6 @@
         <meta-data
             android:name="com.here.sdk.access_key_secret"
             android:value="KWuRO85k2HN54edM9rQzV2yNr1BAISz5DQtbxHFVN-7WQyiwbHFN0--JbDc_KZTPlCKUSoGAIEJowimD9Yhhyw" />
-
-
 
         <activity android:name=".Register" />
         <activity
@@ -47,7 +44,7 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/Theme.Trobify.NoActionBar" >
+            android:theme="@style/Theme.Trobify.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
