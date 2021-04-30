@@ -56,25 +56,36 @@
 
                 </LinearLayout>
 
-                <com.synnapps.carouselview.CarouselView
-                    android:id="@+id/carouselPhotosOfertar"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="250dp"
-                    app:fillColor="#FFFFFFFF"
-                    app:pageColor="#00000000"
-                    app:radius="6dp"
-                    app:slideInterval="3000"
-                    app:strokeColor="#FF777777"
-                    app:strokeWidth="1dp">
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
 
-                    <com.google.android.material.floatingactionbutton.FloatingActionButton
-                        android:id="@+id/button_add_photo"
-                        android:layout_width="wrap_content"
-                        android:layout_height="74dp"
-                        android:layout_margin="@dimen/nav_header_height"
-                        android:clickable="true"
-                        app:srcCompat="@android:drawable/ic_menu_camera" />
-                </com.synnapps.carouselview.CarouselView>
+                    <com.synnapps.carouselview.CarouselView
+                        android:id="@+id/carouselPhotosOfertar"
+                        android:layout_width="match_parent"
+                        android:layout_height="265dp"
+                        app:fillColor="#FFFFFFFF"
+                        app:pageColor="#00000000"
+                        app:radius="6dp"
+                        app:slideInterval="3000"
+                        app:strokeColor="#FF777777"
+                        app:strokeWidth="1dp" >
+
+                        <ImageView
+                            android:id="@+id/imageView"
+                            android:layout_width="200dp"
+                            android:layout_height="200dp"
+                            android:layout_gravity="center"
+                            app:srcCompat="@drawable/image_placeholder" />
+                    </com.synnapps.carouselview.CarouselView>
+
+                    <Button
+                        android:id="@+id/buttonAddPhoto"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Añadir foto" />
+                </LinearLayout>
 
 
                 <LinearLayout

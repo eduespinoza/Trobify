@@ -3,21 +3,23 @@ package com.example.trobify
 import android.content.Intent
 import android.media.Image
 import android.os.Bundle
-import android.widget.Button
-import android.widget.CheckBox
-import android.widget.ImageButton
+import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
+import com.bumptech.glide.Glide
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
+import com.synnapps.carouselview.CarouselView
+import com.synnapps.carouselview.ImageListener
 import java.time.LocalDateTime
+import java.util.*
+
 
 class OfertarInmueble : AppCompatActivity() {
 
     private var user : String? = null
 
-    private var fotos : ArrayList<Int> = arrayListOf()
+    private var fotos : ArrayList<Image> = arrayListOf()
     private var fotosOrd : ArrayList<String> = arrayListOf()
     private var tipoInmueble : String? = null
     private var tipoVivienda : String? = null
@@ -41,26 +43,25 @@ class OfertarInmueble : AppCompatActivity() {
     private var piscina : Boolean? = null
     private var terraza : Boolean? = null
     private var trastero : Boolean? = null
+    private var image : ImageView? = null
+    private lateinit var carimages : CarouselView
 
     private var caracteristicas : String? = null
 
-    object estadosVivienda{
-        lateinit var obraNueva: CheckBox
-        lateinit var casiNuevo: CheckBox
-        lateinit var muyBien: CheckBox
-        lateinit var bien: CheckBox
-        lateinit var reformado: CheckBox
-        lateinit var aReformar: CheckBox
-    }
-    object extrasVivienda{
-        lateinit var parking:CheckBox
-        lateinit var ascensor:CheckBox
-        lateinit var amueblado:CheckBox
-        lateinit var calefaccion:CheckBox
-        lateinit var jardin:CheckBox
-        lateinit var piscina:CheckBox
-        lateinit var terraza:CheckBox
-        lateinit var trastero:CheckBox
+    private val SELECT_FILE  = 1
+    private var pos = 0
+
+
+
+    private var mStorage : StorageReference? = null
+
+
+    var sampleImages = intArrayOf()
+
+
+    object text {
+        lateinit var tipoInmuebleElegidoText:TextView
+        lateinit var tipoViviendaElegidoText:TextView
     }
 
     override fun onCreate(savedInstanceState : Bundle?) {
@@ -69,14 +70,23 @@ class OfertarInmueble : AppCompatActivity() {
 
         intent.getStringExtra("user")?.let { user = it }
 
+        mStorage = FirebaseStorage.getInstance().reference
+
+
+
+        image  = findViewById<ImageView>(R.id.imageView)
+        carimages = findViewById<CarouselView>(R.id.carouselPhotosOfertar) as CarouselView
+        carimages.setPageCount(sampleImages.size);
+        carimages.setImageListener(imageListener);
+
+
+        text.tipoViviendaElegidoText = findViewById<TextView>(R.id.textTipoDeVivienda)
+
+
+
+
         val bBack = findViewById<Button>(R.id.buttonBackOfertar)
         bBack.setOnClickListener { goBack() }
-
-        //val bPhoto = findViewById<FloatingActionButton>(R.id.button_add_photo)
-        //bPhoto.setOnClickListener{
-            //addPhoto()
-        //}
-
 
         val bCompare = findViewById<Button>(R.id.buttonComparar)
         bCompare.setOnClickListener { compare() }
@@ -99,21 +109,54 @@ class OfertarInmueble : AppCompatActivity() {
         val bPost = findViewById<Button>(R.id.buttonPublicar)
         bPost.setOnClickListener { post() }
 
+
+        val bPhoto = findViewById<Button>(R.id.buttonAddPhoto)
+        bPhoto.setOnClickListener{
+            val intent = Intent(Intent.ACTION_PICK)
+            intent.type = "image/*"
+            startActivityForResult(intent, SELECT_FILE)
         }
+
+    }
+
+   override fun onActivityResult(requestCode : Int, resultCode : Int, data : Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+       if(requestCode == SELECT_FILE && resultCode == RESULT_OK ) {
+           var uri = data?.data
+           if (uri != null) {
+               var imageId : String = UUID.randomUUID().toString()
+               var filePath : StorageReference? = mStorage?.child("imagenesinmueble")?.child(imageId)
+               filePath?.putFile(uri)?.addOnSuccessListener(this) { taskSnapshot ->
+
+                   filePath.downloadUrl.addOnSuccessListener { url ->
+                       //Glide.with(this).load(url).into(image)
+                       Glide.with(this).load(url).into(image)
+                   }
+
+
+               }
+
+
+           }
+       }
+
+   }
+
+
+    var imageListener =
+        ImageListener { position, imageView -> imageView.setImageResource(sampleImages[position]) }
+
 
     private fun goBack(){
         val goBack = Intent(this, MainTrobify::class.java)
-        goBack.putExtra("user",user)
+        goBack.putExtra("user", user)
         startActivity(goBack)
     }
-    private fun addPhoto(){
 
-
-
-    }
     private fun compare(){
         val builder =  AlertDialog.Builder(this)
-        builder.setTitle("Funcion no implementada" )
+        builder.setTitle("Funcion no implementada")
         builder.setIcon(android.R.drawable.stat_notify_error)
         builder.setNeutralButton("  Continue  "){ _, _ -> }
         val alertDialog: AlertDialog = builder.create()
@@ -125,44 +168,112 @@ class OfertarInmueble : AppCompatActivity() {
 
 
     private fun chooseInmueble() {
-
         val builder = AlertDialog.Builder(this@OfertarInmueble)
         builder.setTitle("Selecciona el tipo de inmueble")
+        val optionsInmueble = arrayOf("Vivienda","Edificio","Oficina","Garaje","Local","Terreno","Nave")
+        builder.setItems(optionsInmueble) { _, which ->
+            when {
+                which.equals(0) // Vivienda
+                -> {
+                    text.tipoInmuebleElegidoText.text = optionsInmueble[0]
+                }
+                which.equals(1)// Edificio
+                -> {
+                    text.tipoInmuebleElegidoText.text = optionsInmueble[1]
+                }
+                which.equals(2) // Oficina
+                -> {
+                    text.tipoInmuebleElegidoText.text = optionsInmueble[2]
+                }
+                which.equals(3) // Garaje
+                -> {
+                    text.tipoInmuebleElegidoText.text = optionsInmueble[3]
+                }
+                which.equals(4) // Local
+                -> {
+                    text.tipoInmuebleElegidoText.text = optionsInmueble[4]
+                }
+                which.equals(5) // Terreno
+                -> {
+                    text.tipoInmuebleElegidoText.text = optionsInmueble[5]
+                }
+                which.equals(6) // Nave
+                -> {
+                    text.tipoInmuebleElegidoText.text = optionsInmueble[6]
+                }
+            }
 
-        val optionsInmueble = resources.getStringArray(R.array.options_inmueble)
-        builder.setItems(optionsInmueble) { _, witch ->
-
-            //if(elementosSeleccionadosTipoEdif[which]){
-            //FiltrosBusqueda.filtros.tipoVivienda.add(optionsViviendaEdificio[which].toString())
-            //}
-            //else{
-            //FiltrosBusqueda.filtros.tipoVivienda.remove(optionsViviendaEdificio[which].toString())
-            //}
-            //}
-
-            //else{
-            //val optionsViviendaPorDefecto = resources.getStringArray(R.array.options_vivienda_por_defecto)
-            //FiltrosBusqueda.filtros.tipoVivienda.clear()
-            //builder.setMultiChoiceItems(optionsViviendaPorDefecto, elementosSeleccionadosTipoPorDefecto){dialog, which, isChecked ->
-            //elementosSeleccionadosTipoPorDefecto[which] = isChecked
-            //if(elementosSeleccionadosTipoPorDefecto[which]){
-            //FiltrosBusqueda.filtros.tipoVivienda.add(optionsViviendaPorDefecto[which].toString())
-            //}
-            //else{
-            //FiltrosBusqueda.filtros.tipoVivienda.remove(optionsViviendaPorDefecto[which].toString())
-            //}
-            //}
-
-            //builder.setPositiveButton("Ok"){dialog, which -> dialog.dismiss()}
-            //builder.setNeutralButton("Cancel"){dialog, which -> dialog.dismiss()}
-            //val options = builder.create()
-            //options.show()
+            builder.setPositiveButton("Ok"){dialog, which -> dialog.dismiss()}
+            val options = builder.create()
+            options.show()
         }
+
     }
 
     private fun chooseAnuncio(){}
     private fun chooseVivienda(){
-
+        val builder = AlertDialog.Builder(this@OfertarInmueble)
+        builder.setTitle("Selecciona el tipo de vivienda")
+        if(text.tipoInmuebleElegidoText.text == "Edificio" || text.tipoInmuebleElegidoText.text == "Oficina"){
+            val optionsViviendaEdificio = resources.getStringArray(R.array.options_vivienda_edificio)
+            builder.setItems(optionsViviendaEdificio) { _, which ->
+                when {
+                    which.equals(0)
+                    -> {
+                        text.tipoViviendaElegidoText.text = optionsViviendaEdificio[0]
+                    }
+                    which.equals(1)
+                    -> {
+                        text.tipoViviendaElegidoText.text = optionsViviendaEdificio[1]
+                    }
+                    which.equals(2)
+                    -> {
+                        text.tipoViviendaElegidoText.text = optionsViviendaEdificio[2]
+                    }
+                    which.equals(3)
+                    -> {
+                        text.tipoViviendaElegidoText.text = optionsViviendaEdificio[3]
+                    }
+                    which.equals(4)
+                    -> {
+                        text.tipoViviendaElegidoText.text = optionsViviendaEdificio[4]
+                    }
+                    which.equals(5)
+                    -> {
+                        text.tipoViviendaElegidoText.text = optionsViviendaEdificio[5]
+                    }
+                }
+                builder.setPositiveButton("Ok"){dialog, which -> dialog.dismiss()}
+                val options = builder.create()
+                options.show()
+            }
+        }
+        else{
+            val optionsVivienda = arrayOf("Casa","Chalet","Adosado","Finca rÃºstica")
+            builder.setItems(optionsVivienda) { _, which ->
+                when {
+                    which.equals(0)
+                    -> {
+                        text.tipoViviendaElegidoText.text = optionsVivienda[0]
+                    }
+                    which.equals(1)
+                    -> {
+                        text.tipoViviendaElegidoText.text = optionsVivienda[1]
+                    }
+                    which.equals(2)
+                    -> {
+                        text.tipoViviendaElegidoText.text = optionsVivienda[2]
+                    }
+                    which.equals(3)
+                    -> {
+                        text.tipoViviendaElegidoText.text = optionsVivienda[3]
+                    }
+                }
+                builder.setPositiveButton("Ok"){dialog, which -> dialog.dismiss()}
+                val options = builder.create()
+                options.show()
+            }
+        }
     }
 
     private fun selectExtras(){
