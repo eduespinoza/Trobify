@@ -79,18 +79,12 @@ class OfertarInmueble : AppCompatActivity() {
         carimages.setPageCount(sampleImages.size);
         carimages.setImageListener(imageListener);
 
-
-        text.tipoViviendaElegidoText = findViewById<TextView>(R.id.textTipoDeVivienda)
-
-
-
+        text.tipoInmuebleElegidoText = findViewById(R.id.textViewTipodetipo)
+        text.tipoViviendaElegidoText = findViewById(R.id.textViewTipodeViviendaElegido)
 
         val bBack = findViewById<Button>(R.id.buttonBackOfertar)
         bBack.setOnClickListener { goBack() }
-
-        val bCompare = findViewById<Button>(R.id.buttonComparar)
-        bCompare.setOnClickListener { compare() }
-
+        
         val bExtra = findViewById<Button>(R.id.buttonExtras)
         bExtra.setOnClickListener { selectExtras()}
 
@@ -202,11 +196,10 @@ class OfertarInmueble : AppCompatActivity() {
                     text.tipoInmuebleElegidoText.text = optionsInmueble[6]
                 }
             }
-
-            builder.setPositiveButton("Ok"){dialog, which -> dialog.dismiss()}
-            val options = builder.create()
-            options.show()
         }
+        builder.setNegativeButton("Cancelar"){_, _ -> }
+        val options = builder.create()
+        options.show()
 
     }
 
@@ -243,10 +236,10 @@ class OfertarInmueble : AppCompatActivity() {
                         text.tipoViviendaElegidoText.text = optionsViviendaEdificio[5]
                     }
                 }
-                builder.setPositiveButton("Ok"){dialog, which -> dialog.dismiss()}
-                val options = builder.create()
-                options.show()
             }
+            builder.setNegativeButton("Cancelar"){_, _ -> }
+            val options = builder.create()
+            options.show()
         }
         else{
             val optionsVivienda = arrayOf("Casa","Chalet","Adosado","Finca rÃºstica")
@@ -269,10 +262,10 @@ class OfertarInmueble : AppCompatActivity() {
                         text.tipoViviendaElegidoText.text = optionsVivienda[3]
                     }
                 }
-                builder.setPositiveButton("Ok"){dialog, which -> dialog.dismiss()}
-                val options = builder.create()
-                options.show()
             }
+            builder.setNegativeButton("Cancelar"){_, _ -> }
+            val options = builder.create()
+            options.show()
         }
     }
 
