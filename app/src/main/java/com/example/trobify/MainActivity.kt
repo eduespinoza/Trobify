@@ -18,11 +18,11 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val goPublicarInmueble = Intent(this, OfertarInmueble::class.java)
-        startActivity(goPublicarInmueble)
+        //val goPublicarInmueble = Intent(this, OfertarInmueble::class.java)
+        //startActivity(goPublicarInmueble)
 
-        //val goLogin = Intent(this, Login::class.java)
-        //startActivity(goLogin)
+        val goLogin = Intent(this, Login::class.java)
+        startActivity(goLogin)
 
         // para probar maintrobify
         //val goSearch = Intent(this, MainTrobify::class.java)
