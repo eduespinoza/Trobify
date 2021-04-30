@@ -11,6 +11,7 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.synnapps.carouselview.CarouselView
 import com.synnapps.carouselview.ImageListener
+import kotlinx.android.synthetic.main.inmueble_card_busqueda.*
 import java.time.LocalDateTime
 import java.util.*
 
@@ -62,6 +63,8 @@ class OfertarInmueble : AppCompatActivity() {
     object text {
         lateinit var tipoInmuebleElegidoText:TextView
         lateinit var tipoViviendaElegidoText:TextView
+        lateinit var tipoAnuncioText:TextView
+        lateinit var textViewPreciodeVenta:TextView
     }
 
     override fun onCreate(savedInstanceState : Bundle?) {
@@ -79,8 +82,10 @@ class OfertarInmueble : AppCompatActivity() {
         carimages.setPageCount(sampleImages.size);
         carimages.setImageListener(imageListener);
 
-        text.tipoInmuebleElegidoText = findViewById(R.id.textViewTipodetipo)
+        text.tipoInmuebleElegidoText = findViewById(R.id.textViewTipoElegido)
         text.tipoViviendaElegidoText = findViewById(R.id.textViewTipodeViviendaElegido)
+        text.tipoAnuncioText = findViewById(R.id.textViewTipodeanuncioelegido)
+        text.textViewPreciodeVenta = findViewById(R.id.textViewPreciodeVenta)
 
         val bBack = findViewById<Button>(R.id.buttonBackOfertar)
         bBack.setOnClickListener { goBack() }
@@ -160,6 +165,30 @@ class OfertarInmueble : AppCompatActivity() {
 
 
 
+    private fun chooseAnuncio(){
+        val builder = AlertDialog.Builder(this@OfertarInmueble)
+        builder.setTitle("Selecciona el tipo de anuncio")
+        val optionsAnuncio = resources.getStringArray(R.array.options_anuncio)
+        builder.setItems(optionsAnuncio) { _, which ->
+            when {
+                which.equals(0)
+                -> {
+                    text.tipoAnuncioText.text = optionsAnuncio[0]
+                    tipoAnuncio = "Venta"
+                    text.textViewPreciodeVenta.setText("Precio de venta")
+                }
+                which.equals(1)
+                -> {
+                    text.tipoAnuncioText.text = optionsAnuncio[1]
+                    tipoAnuncio = "Alquiler"
+                    text.textViewPreciodeVenta.setText("Precio de alquiler")
+                }
+            }
+        }
+        builder.setNegativeButton("Cancelar"){_, _ -> }
+        val options = builder.create()
+        options.show()
+    }
 
     private fun chooseInmueble() {
         val builder = AlertDialog.Builder(this@OfertarInmueble)
@@ -167,33 +196,40 @@ class OfertarInmueble : AppCompatActivity() {
         val optionsInmueble = arrayOf("Vivienda","Edificio","Oficina","Garaje","Local","Terreno","Nave")
         builder.setItems(optionsInmueble) { _, which ->
             when {
-                which.equals(0) // Vivienda
+                which.equals(0)
                 -> {
                     text.tipoInmuebleElegidoText.text = optionsInmueble[0]
+                    tipoInmueble = "Vivienda"
                 }
-                which.equals(1)// Edificio
+                which.equals(1)
                 -> {
                     text.tipoInmuebleElegidoText.text = optionsInmueble[1]
+                    tipoInmueble = "Edificio"
                 }
-                which.equals(2) // Oficina
+                which.equals(2)
                 -> {
                     text.tipoInmuebleElegidoText.text = optionsInmueble[2]
+                    tipoInmueble = "Oficina"
                 }
-                which.equals(3) // Garaje
+                which.equals(3)
                 -> {
                     text.tipoInmuebleElegidoText.text = optionsInmueble[3]
+                    tipoInmueble = "Garaje"
                 }
-                which.equals(4) // Local
+                which.equals(4)
                 -> {
                     text.tipoInmuebleElegidoText.text = optionsInmueble[4]
+                    tipoInmueble = "Local"
                 }
-                which.equals(5) // Terreno
+                which.equals(5)
                 -> {
                     text.tipoInmuebleElegidoText.text = optionsInmueble[5]
+                    tipoInmueble = "Terreno"
                 }
-                which.equals(6) // Nave
+                which.equals(6)
                 -> {
                     text.tipoInmuebleElegidoText.text = optionsInmueble[6]
+                    tipoInmueble = "Nave"
                 }
             }
         }
@@ -203,7 +239,6 @@ class OfertarInmueble : AppCompatActivity() {
 
     }
 
-    private fun chooseAnuncio(){}
     private fun chooseVivienda(){
         val builder = AlertDialog.Builder(this@OfertarInmueble)
         builder.setTitle("Selecciona el tipo de vivienda")
@@ -214,26 +249,32 @@ class OfertarInmueble : AppCompatActivity() {
                     which.equals(0)
                     -> {
                         text.tipoViviendaElegidoText.text = optionsViviendaEdificio[0]
+                        tipoVivienda = "Apartamento"
                     }
                     which.equals(1)
                     -> {
                         text.tipoViviendaElegidoText.text = optionsViviendaEdificio[1]
+                        tipoVivienda = "Ático"
                     }
                     which.equals(2)
                     -> {
                         text.tipoViviendaElegidoText.text = optionsViviendaEdificio[2]
+                        tipoVivienda = "Dúplex"
                     }
                     which.equals(3)
                     -> {
                         text.tipoViviendaElegidoText.text = optionsViviendaEdificio[3]
+                        tipoVivienda = "Loft"
                     }
                     which.equals(4)
                     -> {
                         text.tipoViviendaElegidoText.text = optionsViviendaEdificio[4]
+                        tipoVivienda = "Planta"
                     }
                     which.equals(5)
                     -> {
                         text.tipoViviendaElegidoText.text = optionsViviendaEdificio[5]
+                        tipoVivienda = "Estudio"
                     }
                 }
             }
@@ -242,24 +283,28 @@ class OfertarInmueble : AppCompatActivity() {
             options.show()
         }
         else{
-            val optionsVivienda = arrayOf("Casa","Chalet","Adosado","Finca rÃºstica")
+            val optionsVivienda = arrayOf("Casa","Chalet","Adosado","Finca rústica")
             builder.setItems(optionsVivienda) { _, which ->
                 when {
                     which.equals(0)
                     -> {
                         text.tipoViviendaElegidoText.text = optionsVivienda[0]
+                        tipoVivienda = "Casa"
                     }
                     which.equals(1)
                     -> {
                         text.tipoViviendaElegidoText.text = optionsVivienda[1]
+                        tipoVivienda = "Chalet"
                     }
                     which.equals(2)
                     -> {
                         text.tipoViviendaElegidoText.text = optionsVivienda[2]
+                        tipoVivienda = "Adosado"
                     }
                     which.equals(3)
                     -> {
                         text.tipoViviendaElegidoText.text = optionsVivienda[3]
+                        tipoVivienda = "Finca rústica"
                     }
                 }
             }
@@ -275,7 +320,11 @@ class OfertarInmueble : AppCompatActivity() {
 
     }
     private fun selectCondition(){}
-    private fun post(){}
+
+    private fun post(){
+
+
+    }
 
 
 
