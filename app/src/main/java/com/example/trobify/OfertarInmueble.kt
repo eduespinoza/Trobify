@@ -11,7 +11,6 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.synnapps.carouselview.CarouselView
 import com.synnapps.carouselview.ImageListener
-import kotlinx.android.synthetic.main.inmueble_card_busqueda.*
 import java.time.LocalDateTime
 import java.util.*
 
@@ -52,7 +51,8 @@ class OfertarInmueble : AppCompatActivity() {
     private val SELECT_FILE  = 1
     private var pos = 0
 
-
+    val elementosExtras = booleanArrayOf(false, false, false, false, false, false, false, false)
+    val elementosEsatdos = booleanArrayOf(false, false, false, false, false, false)
 
     private var mStorage : StorageReference? = null
 
@@ -315,11 +315,39 @@ class OfertarInmueble : AppCompatActivity() {
     }
 
     private fun selectExtras(){
-
-
-
+        val builder = AlertDialog.Builder(this@OfertarInmueble)
+        val extrasArray = arrayOf<String>("Parking","Ascensor","Amueblado","Calefacción","Jardín","Piscina","Terraza", "Trastero")
+        val extrasInmueble = arrayListOf<String>()
+        builder.setMultiChoiceItems(extrasArray, elementosExtras){ dialog, which, isChecked ->
+            elementosExtras[which] = isChecked
+            if(elementosExtras[which]){
+                extrasInmueble.add(extrasArray[which].toString())
+            }
+            else{
+                extrasInmueble.remove(extrasArray[which].toString())
+            }
+        }
+        builder.setNegativeButton("Ok"){_, _ -> }
+        val options = builder.create()
+        options.show()
     }
-    private fun selectCondition(){}
+    private fun selectCondition(){
+        val builder = AlertDialog.Builder(this@OfertarInmueble)
+        val estadoInmuebleArray = arrayOf("Obra nueva","Casi nuevo","Muy bien","Bien","Reformado","A reformar")
+        val estadoInmueble = arrayListOf<String>()
+        builder.setMultiChoiceItems(estadoInmuebleArray, elementosEsatdos){ dialog, which, isChecked ->
+            elementosEsatdos[which] = isChecked
+            if(elementosEsatdos[which]){
+                estadoInmueble.add(estadoInmuebleArray[which].toString())
+            }
+            else{
+                estadoInmueble.remove(estadoInmuebleArray[which].toString())
+            }
+        }
+        builder.setNegativeButton("Ok"){_, _ -> }
+        val options = builder.create()
+        options.show()
+    }
 
     private fun post(){
 
