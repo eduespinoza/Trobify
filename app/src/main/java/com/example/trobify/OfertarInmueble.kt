@@ -3,7 +3,9 @@ package com.example.trobify
 import android.content.Intent
 import android.media.Image
 import android.os.Bundle
-import android.widget.*
+import android.widget.Button
+import android.widget.CheckBox
+import android.widget.ImageButton
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -61,11 +63,6 @@ class OfertarInmueble : AppCompatActivity() {
         lateinit var trastero:CheckBox
     }
 
-    object text {
-        lateinit var tipoInmuebleElegidoText:TextView
-        lateinit var tipoViviendaElegidoText:TextView
-    }
-
     override fun onCreate(savedInstanceState : Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_ofertar_inmueble)
@@ -79,8 +76,6 @@ class OfertarInmueble : AppCompatActivity() {
         //bPhoto.setOnClickListener{
             //addPhoto()
         //}
-        text.tipoInmuebleElegidoText = findViewById<TextView>(R.id.textTipoDeInmueble)
-        text.tipoViviendaElegidoText = findViewById<TextView>(R.id.textTipoDeVivienda)
 
 
         val bCompare = findViewById<Button>(R.id.buttonComparar)
@@ -130,121 +125,54 @@ class OfertarInmueble : AppCompatActivity() {
 
 
     private fun chooseInmueble() {
+
         val builder = AlertDialog.Builder(this@OfertarInmueble)
         builder.setTitle("Selecciona el tipo de inmueble")
-        val optionsInmueble = arrayOf("Vivienda","Edificio","Oficina","Garaje","Local","Terreno","Nave")
-        builder.setItems(optionsInmueble) { _, which ->
-            when {
-                which.equals(0) // Vivienda
-                -> {
-                    text.tipoInmuebleElegidoText.text = optionsInmueble[0]
-                }
-                which.equals(1)// Edificio
-                -> {
-                    text.tipoInmuebleElegidoText.text = optionsInmueble[1]
-                }
-                which.equals(2) // Oficina
-                -> {
-                    text.tipoInmuebleElegidoText.text = optionsInmueble[2]
-                }
-                which.equals(3) // Garaje
-                -> {
-                    text.tipoInmuebleElegidoText.text = optionsInmueble[3]
-                }
-                which.equals(4) // Local
-                -> {
-                    text.tipoInmuebleElegidoText.text = optionsInmueble[4]
-                }
-                which.equals(5) // Terreno
-                -> {
-                    text.tipoInmuebleElegidoText.text = optionsInmueble[5]
-                }
-                which.equals(6) // Nave
-                -> {
-                    text.tipoInmuebleElegidoText.text = optionsInmueble[6]
-                }
-            }
 
-            builder.setPositiveButton("Ok"){dialog, which -> dialog.dismiss()}
-            val options = builder.create()
-            options.show()
+        val optionsInmueble = resources.getStringArray(R.array.options_inmueble)
+        builder.setItems(optionsInmueble) { _, witch ->
+
+            //if(elementosSeleccionadosTipoEdif[which]){
+            //FiltrosBusqueda.filtros.tipoVivienda.add(optionsViviendaEdificio[which].toString())
+            //}
+            //else{
+            //FiltrosBusqueda.filtros.tipoVivienda.remove(optionsViviendaEdificio[which].toString())
+            //}
+            //}
+
+            //else{
+            //val optionsViviendaPorDefecto = resources.getStringArray(R.array.options_vivienda_por_defecto)
+            //FiltrosBusqueda.filtros.tipoVivienda.clear()
+            //builder.setMultiChoiceItems(optionsViviendaPorDefecto, elementosSeleccionadosTipoPorDefecto){dialog, which, isChecked ->
+            //elementosSeleccionadosTipoPorDefecto[which] = isChecked
+            //if(elementosSeleccionadosTipoPorDefecto[which]){
+            //FiltrosBusqueda.filtros.tipoVivienda.add(optionsViviendaPorDefecto[which].toString())
+            //}
+            //else{
+            //FiltrosBusqueda.filtros.tipoVivienda.remove(optionsViviendaPorDefecto[which].toString())
+            //}
+            //}
+
+            //builder.setPositiveButton("Ok"){dialog, which -> dialog.dismiss()}
+            //builder.setNeutralButton("Cancel"){dialog, which -> dialog.dismiss()}
+            //val options = builder.create()
+            //options.show()
         }
     }
 
     private fun chooseAnuncio(){}
     private fun chooseVivienda(){
-        val builder = AlertDialog.Builder(this@OfertarInmueble)
-        builder.setTitle("Selecciona el tipo de vivienda")
-        if(text.tipoInmuebleElegidoText.text == "Edificio" || text.tipoInmuebleElegidoText.text == "Oficina"){
-            val optionsViviendaEdificio = resources.getStringArray(R.array.options_vivienda_edificio)
-            builder.setItems(optionsViviendaEdificio) { _, which ->
-                when {
-                    which.equals(0)
-                    -> {
-                        text.tipoViviendaElegidoText.text = optionsViviendaEdificio[0]
-                    }
-                    which.equals(1)
-                    -> {
-                        text.tipoViviendaElegidoText.text = optionsViviendaEdificio[1]
-                    }
-                    which.equals(2)
-                    -> {
-                        text.tipoViviendaElegidoText.text = optionsViviendaEdificio[2]
-                    }
-                    which.equals(3)
-                    -> {
-                        text.tipoViviendaElegidoText.text = optionsViviendaEdificio[3]
-                    }
-                    which.equals(4)
-                    -> {
-                        text.tipoViviendaElegidoText.text = optionsViviendaEdificio[4]
-                    }
-                    which.equals(5)
-                    -> {
-                        text.tipoViviendaElegidoText.text = optionsViviendaEdificio[5]
-                    }
-                }
-                builder.setPositiveButton("Ok"){dialog, which -> dialog.dismiss()}
-                val options = builder.create()
-                options.show()
-            }
-        }
-        else{
-            val optionsVivienda = arrayOf("Casa","Chalet","Adosado","Finca rústica")
-            builder.setItems(optionsVivienda) { _, which ->
-                when {
-                    which.equals(0)
-                    -> {
-                        text.tipoViviendaElegidoText.text = optionsVivienda[0]
-                    }
-                    which.equals(1)
-                    -> {
-                        text.tipoViviendaElegidoText.text = optionsVivienda[1]
-                    }
-                    which.equals(2)
-                    -> {
-                        text.tipoViviendaElegidoText.text = optionsVivienda[2]
-                    }
-                    which.equals(3)
-                    -> {
-                        text.tipoViviendaElegidoText.text = optionsVivienda[3]
-                    }
-                }
-                builder.setPositiveButton("Ok"){dialog, which -> dialog.dismiss()}
-                val options = builder.create()
-                options.show()
-            }
-        }
+
     }
 
     private fun selectExtras(){
 
-    }
-    private fun selectCondition(){
+
 
     }
-    private fun post(){
+    private fun selectCondition(){}
+    private fun post(){}
+
+
 
     }
-
-}
