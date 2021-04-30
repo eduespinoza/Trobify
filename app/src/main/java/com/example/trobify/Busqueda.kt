@@ -76,7 +76,7 @@ class Busqueda {
     }
     fun getInmueblesIntencion(opcion:String, resultado : (ArrayList<DataInmueble>) -> Unit) {
         var inmueblesEncontrados = arrayListOf<DataInmueble>()
-        db.collection("inmueblesv3").
+        db.collection("inmueblesv2").
         whereEqualTo("intencion",opcion).get()
             .addOnCompleteListener{ task->
                 if(task.isSuccessful){
