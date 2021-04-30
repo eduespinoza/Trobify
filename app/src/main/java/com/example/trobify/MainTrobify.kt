@@ -18,7 +18,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.here.sdk.core.GeoCoordinates
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import java.time.LocalDateTime
@@ -64,7 +63,6 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
         nResultados = findViewById(R.id.nResultados)
         auth = Firebase.auth
         user = (intent.extras!!.get("user") as String?).toString()
-        println("Nomejodasmasporfavortelopido")
         filtrosAplicados = intent.extras!!.get("filtros") as FiltrosBusqueda.filtros?
         if(filtrosAplicados != null){
             comprobacionDeFiltrosAplicados()
@@ -81,10 +79,8 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
         listaConResultados.setHasFixedSize(true)
         val layoutmanager = LinearLayoutManager(baseContext)
         listaConResultados.layoutManager = layoutmanager
-        var adapter = AdaptadorInmuebleBusqueda(inmuebles,this)
-            listaConResultados.adapter = adapter
-            nResultados.text = "${inmuebles.size} resultados"
-
+        listaConResultados.adapter = AdaptadorInmuebleBusqueda(inmuebles,this)
+        nResultados.text = "${inmuebles.size} resultados"
     }
     fun prepararPrimerosResultados(){
         cabecera.text = "Inmuebles añadidos recientemente"
@@ -93,8 +89,7 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
         listaConResultados.layoutManager = layoutmanager
         cargarInmueblesDesdeBd {
             inmueblesEnPantalla = it
-            var adapter = AdaptadorInmuebleBusqueda(it,this)
-            listaConResultados.adapter = adapter
+            listaConResultados.adapter = AdaptadorInmuebleBusqueda(it,this)
             nResultados.text = "${it.size} resultados"
         }
     }
@@ -213,22 +208,22 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
                 when {
                     which.equals(0) // Ordenar por precio ascendente
                     -> {
-                        ordenarPrecioAscendente()
+                        ordenar(0)
                         orden.ordenSeleccionado = 0
                     }
                     which.equals(1)// Ordenar por precio descendente
                     -> {
-                        ordenarPrecioDescendente()
+                        ordenar(1)
                         orden.ordenSeleccionado = 1
                     }
                     which.equals(2) // Ordenar por más recientes
                     -> {
-                        ordenarMasRecientes()
+                        ordenar(2)
                         orden.ordenSeleccionado = 2
                     }
                     which.equals(3) // Ordenar por más antiguos
                     -> {
-                        ordenarMasAntiguos()
+                        ordenar(3)
                         orden.ordenSeleccionado = 3
                     }
                 }
@@ -419,7 +414,7 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
     //poner los 10 ultimos añadidos
     fun cargarInmueblesDesdeBd(myCallback : (ArrayList<DataInmueble>) -> Unit){
         var pisosTochos = arrayListOf<DataInmueble>()
-        db.collection("inmueblesv3").limit(10)
+        db.collection("inmueblesv3").limit(50)
             .get().addOnCompleteListener{ task ->
                 if(task.isSuccessful){
                     for(ficha in task.result){
@@ -515,54 +510,46 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
     private fun subirInmueblesBD(inmueble : DataInmueble){
         inmueble.id?.let { db.collection("inmueblesv3").document(it).set(inmueble) }
     }
-    fun ordenarPrecioAscendente(){
+
+    fun ordenar(tipoSeleccionado:Int){
+        lateinit var inmueblesOrdenados :List<DataInmueble>
+        if(tipoSeleccionado.equals(0)){
+            inmueblesOrdenados = inmueblesEnPantalla.sortedBy{it.precio}
+            println("MENOR A MAYOR ******************************************************************************************")
+            //println(h.toString())
+            println(inmueblesEnPantalla.toString())
+            cabecera.text = "Inmuebles ordenados ascendentemente"
+        }
+        else if(tipoSeleccionado.equals(1)){
+            inmueblesOrdenados = inmueblesEnPantalla.sortedByDescending{it.precio}
+            println("MAYOR A MENOR ******************************************************************************************")
+            println(inmueblesEnPantalla.toString())
+            cabecera.text = "Inmuebles ordenados descendentemente"
+        }
+        else if(tipoSeleccionado.equals(2)){
+            inmueblesOrdenados = inmueblesEnPantalla.sortedBy{it.fechaSubida}
+            println("RECIENTES ******************************************************************************************")
+            println(inmueblesEnPantalla.toString())
+            cabecera.text = "Inmuebles añadidos recientemente"
+        }
+        else if(tipoSeleccionado.equals(3)){
+            inmueblesOrdenados = inmueblesEnPantalla.sortedByDescending{it.fechaSubida}
+            println("ANTIGUOS ******************************************************************************************")
+            println(inmueblesEnPantalla.toString())
+            cabecera.text = "Inmuebles ordenados por antiguedad"
+        }
+        inmueblesEnPantalla = inmueblesOrdenados.toMutableList() as ArrayList<DataInmueble>
         cargarInmueblesDesdeBd {
-            AdaptadorInmuebleBusqueda(it,this)
-            val datos = ArrayList<DataInmueble>()
-            datos.addAll(it.sortedBy{it.precio})
-            listaConResultados.adapter = AdaptadorInmuebleBusqueda(datos,this)
-            nResultados.text = "${it.size} resultados"
+            println("¿MUESTRO LOS INMUEBLES? ******************************************************************************************")
+            listaConResultados.adapter = AdaptadorInmuebleBusqueda(inmueblesEnPantalla,this)
+            println("MOSTRANDO LISTA CON RESULTADOS ******************************************************************************************")
+            println(listaConResultados.toString())
+            nResultados.text = "${inmueblesEnPantalla.size} resultados"
         }
     }
-    fun ordenarPrecioDescendente(){
-        cargarInmueblesDesdeBd {
-            AdaptadorInmuebleBusqueda(it,this)
-            val datos = ArrayList<DataInmueble>()
-            datos.addAll(it.sortedByDescending{it.precio})
-            listaConResultados.adapter = AdaptadorInmuebleBusqueda(datos,this)
-            nResultados.text = "${it.size} resultados"
-        }
-    }
-    fun ordenarMasRecientes(){
-        cargarInmueblesDesdeBd {
-            AdaptadorInmuebleBusqueda(it,this)
-            val datos = ArrayList<DataInmueble>()
-            datos.addAll(it.sortedBy{it.fechaSubida})
-            listaConResultados.adapter = AdaptadorInmuebleBusqueda(datos,this)
-            nResultados.text = "${it.size} resultados"
-        }
-    }
-    fun ordenarMasAntiguos(){
-        cargarInmueblesDesdeBd {
-            AdaptadorInmuebleBusqueda(it,this)
-            val datos = ArrayList<DataInmueble>()
-            datos.addAll(it.sortedByDescending{it.fechaSubida})
-            listaConResultados.adapter = AdaptadorInmuebleBusqueda(datos,this)
-            nResultados.text = "${it.size} resultados"
-        }
-    }
+
     fun verificarOrdenacion(){
-        if (GuardaOrdenacion.guardaOrdenacion.ordenGuardado.equals(0)){
-            ordenarPrecioAscendente()
-        }
-        else if(GuardaOrdenacion.guardaOrdenacion.ordenGuardado.equals(1)){
-            ordenarPrecioDescendente()
-        }
-        else if(GuardaOrdenacion.guardaOrdenacion.ordenGuardado.equals(2)){
-            ordenarMasRecientes()
-        }
-        else if(GuardaOrdenacion.guardaOrdenacion.ordenGuardado.equals(3)){
-            ordenarMasAntiguos()
-        }
+        ordenar(GuardaOrdenacion.guardaOrdenacion.ordenGuardado)
     }
+
 }
