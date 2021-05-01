@@ -61,7 +61,7 @@ class Busqueda {
     }
     fun obtenerResultados(resultado : (ArrayList<DataInmueble>) -> Unit){
         var inmueblesEncontrados = arrayListOf<DataInmueble>()
-        db.collection("inmueblesv2").
+        db.collection("inmueblesv3").
         whereEqualTo("direccion",this.query).get()
             .addOnCompleteListener{ task->
                  if(task.isSuccessful){
@@ -76,7 +76,7 @@ class Busqueda {
     }
     fun getInmueblesIntencion(opcion:String, resultado : (ArrayList<DataInmueble>) -> Unit) {
         var inmueblesEncontrados = arrayListOf<DataInmueble>()
-        db.collection("inmueblesv2").
+        db.collection("inmueblesv3").
         whereEqualTo("intencion",opcion).get()
             .addOnCompleteListener{ task->
                 if(task.isSuccessful){
