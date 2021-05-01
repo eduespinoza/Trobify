@@ -65,7 +65,8 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
         user = (intent.extras!!.get("user") as String?).toString()
         filtrosAplicados = intent.extras!!.get("filtros") as FiltrosBusqueda.filtros?
         if(filtrosAplicados != null){
-            comprobacionDeFiltrosAplicados()
+            //comprobacionDeFiltrosAplicados()
+            aplicarFiltros {  }
         }
         else {
             prepararPrimerosResultados()
@@ -240,6 +241,74 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
             return Pair(str,null)
         }
     }
+
+    var inmueblesConFiltrosAMostrar = arrayListOf<DataInmueble>()
+    fun aplicarFiltros(myCallback : (ArrayList<DataInmueble>) -> Unit){
+        val inmueblesEnBd =  db.collection("inmueblesv3")
+        var inmueblesConFiltros = arrayListOf<DataInmueble>()
+        if(!filtrosAplicados?.tipoInmueble.equals("Cualquiera")){
+            var i = inmueblesEnBd.whereEqualTo("tipoInmueble", filtrosAplicados?.tipoInmueble).get()
+            println("AQUI 00000--------------------------------------------------------")
+            println(i.toString())
+            inmueblesEnBd.whereEqualTo("tipoInmueble", filtrosAplicados?.tipoInmueble).get().addOnCompleteListener { task ->
+                if(task.isSuccessful){
+                    for(inmueble in task.result){
+                        val fichaInmueble = inmueble.toObject(DataInmueble::class.java)
+                        inmueblesConFiltros.add(fichaInmueble)
+                    }
+                    myCallback(inmueblesConFiltros)
+                }
+            }
+            println("AQUI --------------------------------------------------------")
+            println(inmueblesConFiltros.toString())
+        }
+        /*if(!filtrosAplicados?.tipoVivienda?.isNotEmpty()!!){
+            inmueblesEnBd.whereEqualTo("tipoInmueble", filtrosAplicados?.tipoInmueble).get().addOnCompleteListener { task ->
+                if(task.isSuccessful){
+                    for(inmueble in task.result){
+                        inmueblesConFiltros.add(inmueble.toObject(DataInmueble::class.java))
+                    }
+                    myCallback(inmueblesConFiltros)
+                }
+            }
+        }*/
+        if(!filtrosAplicados?.precioMin?.equals(0)!!){
+            inmueblesEnBd.whereGreaterThanOrEqualTo("precio", filtrosAplicados?.precioMin!!).get().addOnCompleteListener { task ->
+                if(task.isSuccessful){
+                    for(inmueble in task.result){
+                        inmueblesConFiltros.add(inmueble.toObject(DataInmueble::class.java))
+                    }
+                    myCallback(inmueblesConFiltros)
+
+                }
+            }
+        }
+        if(!filtrosAplicados?.precioMax?.equals(0)!!){
+            inmueblesEnBd.whereLessThanOrEqualTo("precio", filtrosAplicados?.precioMax!!).get().addOnCompleteListener { task ->
+                if(task.isSuccessful){
+                    for(inmueble in task.result){
+                        inmueblesConFiltros.add(inmueble.toObject(DataInmueble::class.java))
+                    }
+                    myCallback(inmueblesConFiltros)
+                }
+            }
+        }
+        println("HOLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+        for (inmueble in inmueblesConFiltros.distinctBy{ it.id }){
+            inmueblesConFiltrosAMostrar.add(inmueble)
+            println(inmueble.toString())
+        }
+        inmueblesEnPantalla = inmueblesConFiltrosAMostrar
+        println("FINNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN")
+        cargarInmueblesDesdeBd {
+            println("¿MUESTRO LOS INMUEBLES CON FILTROS? ******************************************************************************************")
+            listaConResultados.adapter = AdaptadorInmuebleBusqueda(inmueblesEnPantalla,this)
+            println("MOSTRANDO INMUEBLES CON FILTROS ******************************************************************************************")
+            println(listaConResultados.toString())
+            nResultados.text = "${inmueblesEnPantalla.size} resultados"
+        }
+    }
+
     fun comprobacionDeFiltrosAplicados(){
         var listaDeFiltros : ArrayList<Pair<String,StringOrInt>> = arrayListOf()
         var listaDePreciosYSuperficie : ArrayList<Pair<String,Int?>> = arrayListOf()
@@ -426,7 +495,7 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
             }
     }
 
-    fun cargarInmueblesConFiltros(myCallback : (ArrayList<DataInmueble>) -> Unit) {
+    /*fun cargarInmueblesConFiltros(myCallback : (ArrayList<DataInmueble>) -> Unit) {
         var pisosTochos = arrayListOf<DataInmueble>()
 
         db.collection("inmueblesv2").whereEqualTo(
@@ -442,7 +511,7 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
                     myCallback(pisosTochos)
                 }
             }
-    }
+    }*/
 
     //fun para generar id's de inmuebles aleatorios *** se podria meter en clase inmueble
     // no se comprueba que el id se repita con otro ya puesto
