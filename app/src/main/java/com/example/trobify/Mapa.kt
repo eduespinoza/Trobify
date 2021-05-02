@@ -24,15 +24,14 @@ import com.here.sdk.core.Point2D
 import com.here.sdk.gestures.TapListener
 import com.here.sdk.mapviewlite.*
 import com.here.sdk.mapviewlite.MapScene.LoadSceneCallback
-import com.here.sdk.mapviewlite.PickMapItemsCallback
-
 
 
 class Mapa : AppCompatActivity(){
     lateinit var mapa : MapViewLite
     var latitudDefault = 39.48204
     var longitudDefault = -0.33876
-    var sugerencias = Busqueda()
+    lateinit var coordenadas : GeoCoordinates
+    var buscador = Busqueda()
     lateinit var buscadorMapa : SearchView
     lateinit var user : String
     var esPrimera = true
@@ -68,9 +67,9 @@ class Mapa : AppCompatActivity(){
             }
             override fun onQueryTextChange(query : String?) : Boolean {
                 if (query != null) {
-                    sugerencias.obtenerSugerencias("$query ")
+                    buscador.obtenerSugerencias("$query ",coordenadas)
                     var cursor = MatrixCursor(arrayOf(BaseColumns._ID,SearchManager.SUGGEST_COLUMN_TEXT_1))
-                    sugerencias.sugerencias.forEachIndexed{
+                    buscador.sugerencias.forEachIndexed{
                         indice, item ->
                         cursor.addRow(arrayOf(indice,item.title))
                     }
@@ -91,18 +90,24 @@ class Mapa : AppCompatActivity(){
         })
     }
     private fun muestraResultados(query:String){
+        buscador.obtenerSugerencias(query,coordenadas)
         var localCoordinates = GeoCoordinates(longitudDefault,latitudDefault)
-        sugerencias.sugerencias.forEach{
+        buscador.sugerencias.forEach{
             if(it.title.equals(query)){
                 localCoordinates = it.geoCoordinates!!
-                var sitio = Sitio(it.title,
-                    mutableMapOf("latitud" to it.geoCoordinates!!.latitude,
-                        "longitud" to it.geoCoordinates!!.longitude),it.id)
+                return@forEach
+                //var sitio = Sitio(it.title,
+                   // mutableMapOf("latitud" to it.geoCoordinates!!.latitude,
+                     //   "longitud" to it.geoCoordinates!!.longitude),it.id)
                 //sitio.id?.let { it1 -> db.collection("testingPlacesv2").document(it1).set(sitio) }
+            }
+            else{
+                localCoordinates = buscador.sugerencias[0].geoCoordinates!!
+                return@forEach
             }
         }
         mapa.camera.target = localCoordinates
-        mapa.camera.zoomLevel = 16.0
+        mapa.camera.zoomLevel = 15.0
         if(esPrimera)markerDeResultado(localCoordinates)
         resMarker.coordinates = localCoordinates
     }
@@ -139,10 +144,12 @@ class Mapa : AppCompatActivity(){
         if(locationGPS != null){
             longitudDefault = locationGPS.longitude
             latitudDefault = locationGPS.latitude
+            coordenadas = GeoCoordinates(latitudDefault,longitudDefault)
         }
         if(locationNet != null){
             longitudDefault = locationNet.longitude
             latitudDefault = locationNet.latitude
+            coordenadas = GeoCoordinates(latitudDefault,longitudDefault)
         }
     }
 
@@ -205,6 +212,7 @@ class Mapa : AppCompatActivity(){
                 return@stop
             }
         }
+        goFicha.putExtra("desdeMapa",true)
         startActivity(goFicha)
     }
     private fun loadMapScene() {
@@ -232,5 +240,9 @@ class Mapa : AppCompatActivity(){
     override fun onDestroy() {
         super.onDestroy()
         mapa.onDestroy()
+    }
+
+    override fun onBackPressed() {
+        finish()
     }
 }

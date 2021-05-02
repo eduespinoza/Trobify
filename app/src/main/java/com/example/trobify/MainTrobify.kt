@@ -52,8 +52,8 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
         val goFicha = Intent(this, AdaptadorFichaInmueble::class.java)
         goFicha.putExtra("user", user.toString())
         goFicha.putExtra("inmueble", Inmueble().adaptarInmuble(dataInmueble))
+        goFicha.putExtra("desdeMapa",false)
         startActivity(goFicha)
-        Log.i("inmueble",dataInmueble.id.toString())
     }
     override fun onCreate(savedInstanceState: Bundle?)
     {
@@ -105,7 +105,6 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
         buscador.suggestionsAdapter = adaptadorCursor*/
         buscador.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
             override fun onQueryTextSubmit(query: String): Boolean {
-                cabecera.text = "Inmuebles en " + query
                 mostrarResultados(query)
                 Log.d("busc",query)
                 return false
@@ -189,16 +188,20 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
             //generatePisos()
         }
         alquiler.setOnClickListener {
-            alquilerActivado = !ventaActivado
-            ventaActivado = !alquilerActivado
+            alquilerActivado = true
+            ventaActivado = false
             alquiler.setBackgroundColor(Color.BLUE)
+            alquiler.setTextColor(Color.WHITE)
+            venta.setTextColor(Color.BLACK)
             venta.setBackgroundColor(Color.DKGRAY)
             alquilerOVenta("Alquiler")
         }
         venta.setOnClickListener {
-            alquilerActivado = !ventaActivado
-            ventaActivado = !alquilerActivado
+            ventaActivado = true
+            alquilerActivado = false
             alquiler.setBackgroundColor(Color.DKGRAY)
+            alquiler.setTextColor(Color.BLACK)
+            venta.setTextColor(Color.WHITE)
             venta.setBackgroundColor(Color.BLUE)
             alquilerOVenta("Vender")
         }
@@ -233,13 +236,6 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
             builder.setNegativeButton("Cancelar") { _, _ -> }
             val dialog = builder.create()
             dialog.show()
-        }
-    }
-
-    class StringOrInt (var str : String?, var num : Int?){
-        fun getValue(): Pair<String?,Int?>{
-            if(str.isNullOrBlank()) return Pair(null,num)
-            return Pair(str,null)
         }
     }
 
@@ -338,63 +334,6 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
         inmueblesEnPantalla.addAll(i)
     }
 
-    fun comprobacionDeFiltrosAplicados(){
-        var listaDeFiltros : ArrayList<Pair<String,StringOrInt>> = arrayListOf()
-        var listaDePreciosYSuperficie : ArrayList<Pair<String,Int?>> = arrayListOf()
-        var listaDeEstados : ArrayList<Pair<String,String>> = arrayListOf()
-        var listaDeExtras : ArrayList<Pair<String,Boolean>> = arrayListOf()
-        var esPrecioMin = false
-        if (!filtrosAplicados?.tipoInmueble.equals("Tipo de inmueble"))listaDeFiltros.add("tipoInmueble" to StringOrInt(filtrosAplicados?.tipoInmueble,null))
-        if (!filtrosAplicados?.numHabitaciones?.equals(0)!!)listaDeFiltros.add("numHabitaciones" to StringOrInt(null,filtrosAplicados?.numHabitaciones))
-        if (!filtrosAplicados?.numBaños?.equals(0)!!)listaDeFiltros.add("numBanos" to StringOrInt(null,filtrosAplicados?.numBaños))
-        if (!filtrosAplicados?.precioMin?.equals(0)!!){
-            esPrecioMin = true
-            listaDePreciosYSuperficie.add("precio" to filtrosAplicados?.precioMin)}
-        if (!filtrosAplicados?.precioMax?.equals(0)!!)listaDePreciosYSuperficie.add("precio" to filtrosAplicados?.precioMax)
-        if (!filtrosAplicados?.superficieMin?.equals(0)!!)listaDePreciosYSuperficie.add("superficieMin" to filtrosAplicados?.superficieMin)
-        if (!filtrosAplicados?.superficieMax?.equals(0)!!)listaDePreciosYSuperficie.add("superficieMax" to filtrosAplicados?.superficieMax)
-        if (!filtrosAplicados?.estado?.isEmpty()!!)
-            for (estado in filtrosAplicados?.estado!!){
-                listaDeEstados.add("estado" to estado)
-            }
-        for (extra in filtrosAplicados?.extras!!){
-            if(extra.value) listaDeExtras.add(extra.key to true)
-        }
-        listaIDS.clear()
-        if (listaDeFiltros.size == 2){
-            consultasFiltros2(listaDeFiltros){
-                mostrarResultadosFiltros(it)
-            }
-        }else consultasFiltros3(listaDeFiltros){
-            consultasFiltros3(listaDeFiltros){
-                mostrarResultadosFiltros(it)
-            }
-        }
-        /*if (!listaDeFiltros.isEmpty()){
-            consultasSegunFiltros(listaDeFiltros){
-                listaIDS.addAll(it)
-            }
-                println(listaIDS.groupingBy{it}.eachCount().filter{it.value == listaDeFiltros.size})
-                var perdonabro = listaIDS.groupingBy{it}.eachCount().filter{it.value == listaDeFiltros.size}.keys
-                var porfavor = arrayListOf<DataInmueble>()
-                getInmueblesFromIds(perdonabro){
-                    porfavor.add(it)
-                    mostrarResultadosFiltros(porfavor)
-                }
-        }*/
-        /*if(!listaDePreciosYSuperficie.isEmpty()){
-            if(listaDeFiltros.size == 2 && listaDePreciosYSuperficie.size == 2)consultasFiltros2(listaDeFiltros){
-                mostrarResultadosFiltros(it)
-            }else if (listaDeFiltros.size == 2 && listaDePreciosYSuperficie.size == 1 && esPrecioMin){
-                consultasFiltros2(listaDeFiltros){
-                    mostrarResultadosFiltros(it)
-                }
-            }
-            else consultasFiltros3(listaDeFiltros){
-                mostrarResultadosFiltros(it)
-            }
-        }*/
-    }
     fun getInmueblesFromIds(listillo : Set<String>, myCallback : (DataInmueble) -> Unit){
         for (listo in listillo){
             db.collection("inmueblesv3").document(listo).get().addOnCompleteListener{ task ->
@@ -407,107 +346,28 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
             }
         }
     }
-    fun consultasFiltros2(listaFiltros : ArrayList<Pair<String,StringOrInt>>, myCallback : (ArrayList<DataInmueble>) -> Unit){
-        var listaFil = arrayListOf<DataInmueble>()
-        db.collection("inmueblesv3").whereEqualTo("numHabitaciones",listaFiltros[0].second.getValue().second)
-            .whereEqualTo("numBanos",listaFiltros[1].second.getValue().second).get().addOnCompleteListener{ task ->
-                if(task.isSuccessful){
-                    for(result in task.result){
-                        var pis = result.toObject(DataInmueble::class.java)
-                        listaFil.add(pis)
-                    }
-                    myCallback(listaFil)
-                }
-            }
+    fun intencionActual():String{
+        println("$alquilerActivado $ventaActivado")
+        if(alquilerActivado)return "Alquiler"
+        else return "Vender"
     }
-    fun consultasFiltros3(listaFiltros : ArrayList<Pair<String,StringOrInt>>, myCallback : (ArrayList<DataInmueble>) -> Unit){
-        var listaFil = arrayListOf<DataInmueble>()
-        db.collection("inmueblesv3").whereEqualTo("tipoInmueble",listaFiltros[0].second.getValue().first)
-            .whereEqualTo("numHabitaciones",listaFiltros[1].second.getValue().second)
-            .whereEqualTo("numBanos",listaFiltros[2].second.getValue().second).get().addOnCompleteListener{ task ->
-                if(task.isSuccessful){
-                    for(result in task.result){
-                        var pis = result.toObject(DataInmueble::class.java)
-                        listaFil.add(pis)
-                    }
-                    myCallback(listaFil)
-                }
-            }
-    }
-
-    fun consultasSegunFiltros(listaFiltros : ArrayList<Pair<String,StringOrInt>>, myCallback : (ArrayList<String>) -> Unit){
-        var listaDelPerreo = arrayListOf<String>()
-        for (filtro in listaFiltros){
-            if (filtro.second.getValue().first == null){
-                db.collection("inmueblesv2").whereEqualTo(filtro.first,filtro.second.getValue().second)
-                    .get().addOnCompleteListener { task ->
-                        if (task.isSuccessful) {
-                            for (result in task.result) {
-                                var id = result.get("id").toString()
-                                listaDelPerreo.add(id)
-                            }
-                        } else {
-                            db.collection("inmueblesv2")
-                                .whereEqualTo(filtro.first, filtro.second.getValue().second)
-                                .get().addOnCompleteListener { task ->
-                                    if (task.isSuccessful) {
-                                        for (result in task.result) {
-                                            var id = result.get("id").toString()
-                                            listaDelPerreo.add(id)
-                                        }
-                                    }
-                                }
-                        }
-                        myCallback(listaDelPerreo)
-                    }
-            }
-        }
-    }
-    fun consultasSegunFiltros2(listaFiltros : ArrayList<Pair<String,StringOrInt>>, myCallback : (ArrayList<String>) -> Unit){
-        var listaDelPerreo = arrayListOf<String>()
-        for (filtro in listaFiltros){
-            if (filtro.second.getValue().first == null){
-                db.collection("inmueblesv2").whereEqualTo(filtro.first,filtro.second.getValue().second)
-                    .get().addOnCompleteListener{ task ->
-                        if(task.isSuccessful){
-                            for(result in task.result){
-                                var id = result.get("id").toString()
-                                listaDelPerreo.add(id)
-                            }
-                            myCallback(listaDelPerreo)
-                        }
-                    }
-            }else{
-                db.collection("inmueblesv2").whereEqualTo(filtro.first,filtro.second.getValue().first)
-                    .get().addOnCompleteListener{ task ->
-                        if(task.isSuccessful){
-                            for(result in task.result){
-                                var id = result.get("id").toString()
-                                listaDelPerreo.add(id)
-                            }
-                            myCallback(listaDelPerreo)
-                        }
-                    }
-            }
-        }
-    }
-
     fun mostrarResultados(busqueda : String){
-        nuevaBusqueda.buscar(busqueda.toUpperCase())
-        nuevaBusqueda.obtenerResultados{
+        if(alquilerActivado || ventaActivado) inmueblesEnPantalla = nuevaBusqueda.buscarConIntencion(busqueda.toUpperCase(),intencionActual())
+        else inmueblesEnPantalla = nuevaBusqueda.buscar(busqueda.toUpperCase())
+        listaConResultados.adapter = AdaptadorInmuebleBusqueda(inmueblesEnPantalla,this)
+        nResultados.text = "${inmueblesEnPantalla.size} resultados"
+        cabecera.text = "Inmuebles en " + busqueda
+        /*nuevaBusqueda.obtenerResultados{
             inmueblesEnPantalla = it
             listaConResultados.adapter = AdaptadorInmuebleBusqueda(it,this)
             nResultados.text = "${it.size} resultados"
-        }
+        }*/
     }
     fun alquilerOVenta(opcion : String){
-        runBlocking{
-            nuevaBusqueda.getInmueblesIntencion(opcion){
-                inmueblesEnPantalla = it
-                listaConResultados.adapter = AdaptadorInmuebleBusqueda(it,this@MainTrobify)
-                nResultados.text = "${it.size} resultados"
-            }
-        }
+        inmueblesEnPantalla = nuevaBusqueda.getInmueblesIntencion(opcion)
+        listaConResultados.adapter = AdaptadorInmuebleBusqueda(inmueblesEnPantalla,this@MainTrobify)
+        nResultados.text = "${inmueblesEnPantalla.size} resultados"
+
     }
     //poner los 10 ultimos añadidos
     fun cargarInmueblesDesdeBd(myCallback : (ArrayList<DataInmueble>) -> Unit){
@@ -544,7 +404,7 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
 
     //fun para generar id's de inmuebles aleatorios *** se podria meter en clase inmueble
     // no se comprueba que el id se repita con otro ya puesto
-    fun generateRandomId() : String {
+    /*fun generateRandomId() : String {
         val charPool : List<Char> = ('a'..'z') + ('A'..'Z') + ('0'..'9')
         val pathId = (1..5)
             .map { i -> kotlin.random.Random.nextInt(0, charPool.size) }
@@ -590,7 +450,7 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
             }}
     }
     fun getRandomIntencion():String{
-        return arrayListOf("Alquiler","Vender")[kotlin.random.Random.nextInt(0,1)]
+        return arrayListOf("Alquiler","Vender")[kotlin.random.Random.nextInt(0,2)]
     }
     //fun para generar pisos en bd
     fun generatePisos() {
@@ -607,7 +467,7 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
     }
     private fun subirInmueblesBD(inmueble : DataInmueble){
         inmueble.id?.let { db.collection("inmueblesv3").document(it).set(inmueble) }
-    }
+    }*/
 
     fun ordenar(tipoSeleccionado:Int){
         lateinit var inmueblesOrdenados :List<DataInmueble>
@@ -625,13 +485,13 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
             cabecera.text = "Inmuebles ordenados descendentemente"
         }
         else if(tipoSeleccionado.equals(2)){
-            inmueblesOrdenados = inmueblesEnPantalla.sortedBy{it.fechaSubida}
+            inmueblesOrdenados = inmueblesEnPantalla.sortedByDescending{it.fechaSubida}
             println("RECIENTES ******************************************************************************************")
             println(inmueblesEnPantalla.toString())
             cabecera.text = "Inmuebles añadidos recientemente"
         }
         else if(tipoSeleccionado.equals(3)){
-            inmueblesOrdenados = inmueblesEnPantalla.sortedByDescending{it.fechaSubida}
+            inmueblesOrdenados = inmueblesEnPantalla.sortedBy{it.fechaSubida}
             println("ANTIGUOS ******************************************************************************************")
             println(inmueblesEnPantalla.toString())
             cabecera.text = "Inmuebles ordenados por antiguedad"

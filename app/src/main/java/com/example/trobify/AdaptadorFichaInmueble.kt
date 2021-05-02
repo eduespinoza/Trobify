@@ -27,6 +27,7 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
     var oferta : Int = 0
     var propietarioMail : String = ""
     var propietarioId : String = ""
+    var desdeMapa = false
 
     lateinit var userId:String
 
@@ -36,7 +37,7 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
 
         userId = intent.extras?.get("user") as String
         var inmueble = intent.extras?.get("inmueble") as Inmueble
-
+        desdeMapa = intent.extras?.get("desdeMapa") as Boolean
         var fotos = inmueble.getfotos()
         var fotosOrd = inmueble.getfotosord()
 
@@ -44,9 +45,16 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
 
         val buttonAtras = findViewById<Button>(R.id.buttonAtrasFicha)
         buttonAtras.setOnClickListener{
+            finish()
+            /*if(desdeMapa){
+                val irAMapa = Intent(this, Mapa::class.java)
+                irAMapa.putExtra("user", userId)
+                startActivity(irAMapa)
+            }else{
             val goMain = Intent(this, MainTrobify::class.java)
             goMain.putExtra("user", userId.toString())
             startActivity(goMain)
+            }*/
         }
 
         val buttonLlamar = findViewById<Button>(R.id.buttonLlamar)
