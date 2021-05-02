@@ -1,25 +1,32 @@
 package com.example.trobify
 
+import android.content.ClipDescription
 import android.content.Intent
 import android.media.Image
 import android.os.Bundle
+import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
+import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import com.google.type.DateTime
 import com.synnapps.carouselview.CarouselView
 import com.synnapps.carouselview.ImageListener
+import kotlinx.android.synthetic.main.activity_ofertar_inmueble.*
+import kotlinx.android.synthetic.main.inmueble_card_busqueda.*
 import java.time.LocalDateTime
 import java.util.*
+import kotlin.collections.ArrayList
 
 
 class OfertarInmueble : AppCompatActivity() {
 
     private var user : String? = null
 
-    private var fotos : ArrayList<Image> = arrayListOf()
+    private var fotos : ArrayList<Int> = arrayListOf()
     private var fotosOrd : ArrayList<String> = arrayListOf()
     private var tipoInmueble : String? = null
     private var tipoVivienda : String? = null
@@ -34,6 +41,7 @@ class OfertarInmueble : AppCompatActivity() {
     private var descripcion : String? = null
     private var fechaSubida : LocalDateTime? = null
     private var estado : String? = null
+    private var imageId : String = "no_tiene"
 
     private var parking : Boolean? = null
     private var ascensor : Boolean? = null
@@ -45,6 +53,9 @@ class OfertarInmueble : AppCompatActivity() {
     private var trastero : Boolean? = null
     private var image : ImageView? = null
     private lateinit var carimages : CarouselView
+
+    private lateinit var extrasInmueble : ArrayList<String>
+    private lateinit var estadoInmueble : ArrayList<String>
 
     private var caracteristicas : String? = null
 
@@ -65,6 +76,14 @@ class OfertarInmueble : AppCompatActivity() {
         lateinit var tipoViviendaElegidoText:TextView
         lateinit var tipoAnuncioText:TextView
         lateinit var textViewPreciodeVenta:TextView
+        lateinit var layoutBaños : LinearLayout
+        lateinit var layoutHabitaciones : LinearLayout
+        lateinit var inPrecio : EditText
+        lateinit var inSuperficie : EditText
+        lateinit var inDireccion  : EditText
+        lateinit var inHabitaciones : EditText
+        lateinit var inBaños : EditText
+        lateinit var inDescripcion : EditText
     }
 
     override fun onCreate(savedInstanceState : Bundle?) {
@@ -86,6 +105,15 @@ class OfertarInmueble : AppCompatActivity() {
         text.tipoViviendaElegidoText = findViewById(R.id.textViewTipodeViviendaElegido)
         text.tipoAnuncioText = findViewById(R.id.textViewTipodeanuncioelegido)
         text.textViewPreciodeVenta = findViewById(R.id.textViewPreciodeVenta)
+        text.layoutHabitaciones = findViewById(R.id.layoutHabitaciones)
+        text.layoutBaños = findViewById(R.id.layoutBaños)
+        text.inPrecio = findViewById(R.id.inPrecio)
+        text.inSuperficie = findViewById(R.id.inSuperficie)
+        text.inDireccion = findViewById(R.id.inDireccion)
+        text.inHabitaciones = findViewById(R.id.inHabitaciones)
+        text.inBaños = findViewById(R.id.inBaños)
+        text.inDescripcion = findViewById(R.id.inDescripcion)
+
 
         val bBack = findViewById<Button>(R.id.buttonBackOfertar)
         bBack.setOnClickListener { goBack() }
@@ -124,7 +152,8 @@ class OfertarInmueble : AppCompatActivity() {
        if(requestCode == SELECT_FILE && resultCode == RESULT_OK ) {
            var uri = data?.data
            if (uri != null) {
-               var imageId : String = UUID.randomUUID().toString()
+               imageId = UUID.randomUUID().toString()
+               fotosOrd.add(imageId)
                var filePath : StorageReference? = mStorage?.child("imagenesinmueble")?.child(imageId)
                filePath?.putFile(uri)?.addOnSuccessListener(this) { taskSnapshot ->
 
@@ -132,14 +161,9 @@ class OfertarInmueble : AppCompatActivity() {
                        //Glide.with(this).load(url).into(image)
                        Glide.with(this).load(url).into(image)
                    }
-
-
                }
-
-
            }
        }
-
    }
 
 
@@ -215,21 +239,28 @@ class OfertarInmueble : AppCompatActivity() {
                 -> {
                     text.tipoInmuebleElegidoText.text = optionsInmueble[3]
                     tipoInmueble = "Garaje"
+                    text.layoutHabitaciones.setVisibility(View.GONE)
+                    text.layoutBaños.setVisibility(View.GONE)
                 }
                 which.equals(4)
                 -> {
                     text.tipoInmuebleElegidoText.text = optionsInmueble[4]
                     tipoInmueble = "Local"
+                    text.layoutHabitaciones.setVisibility(View.GONE)
                 }
                 which.equals(5)
                 -> {
                     text.tipoInmuebleElegidoText.text = optionsInmueble[5]
                     tipoInmueble = "Terreno"
+                    text.layoutHabitaciones.setVisibility(View.GONE)
+                    text.layoutBaños.setVisibility(View.GONE)
                 }
                 which.equals(6)
                 -> {
                     text.tipoInmuebleElegidoText.text = optionsInmueble[6]
                     tipoInmueble = "Nave"
+                    text.layoutHabitaciones.setVisibility(View.GONE)
+                    text.layoutBaños.setVisibility(View.GONE)
                 }
             }
         }
@@ -317,7 +348,7 @@ class OfertarInmueble : AppCompatActivity() {
     private fun selectExtras(){
         val builder = AlertDialog.Builder(this@OfertarInmueble)
         val extrasArray = arrayOf<String>("Parking","Ascensor","Amueblado","Calefacción","Jardín","Piscina","Terraza", "Trastero")
-        val extrasInmueble = arrayListOf<String>()
+        extrasInmueble = arrayListOf<String>()
         builder.setMultiChoiceItems(extrasArray, elementosExtras){ dialog, which, isChecked ->
             elementosExtras[which] = isChecked
             if(elementosExtras[which]){
@@ -334,7 +365,7 @@ class OfertarInmueble : AppCompatActivity() {
     private fun selectCondition(){
         val builder = AlertDialog.Builder(this@OfertarInmueble)
         val estadoInmuebleArray = arrayOf("Obra nueva","Casi nuevo","Muy bien","Bien","Reformado","A reformar")
-        val estadoInmueble = arrayListOf<String>()
+        estadoInmueble = arrayListOf<String>()
         builder.setMultiChoiceItems(estadoInmuebleArray, elementosEsatdos){ dialog, which, isChecked ->
             elementosEsatdos[which] = isChecked
             if(elementosEsatdos[which]){
@@ -350,10 +381,107 @@ class OfertarInmueble : AppCompatActivity() {
     }
 
     private fun post(){
+        if(tipoInmueble == null){
+            messageInmNull()
+        }else if(tipoVivienda == null){
+            messageVivNull()
+        }else if( tipoAnuncio == null){
+            messageAnuNull()
+        }else if( (text.inPrecio.text.toString()   == null )|| (text.inPrecio.text.toString().toInt()  <= 0)){
+            messagePreInc()
+        }else if(text.inSuperficie.text.toString() == null ||text.inSuperficie.text.toString().toInt()!! <= 0){
+            messageSupInc()
+        }else if(text.inDireccion.text.toString() == null){
+            messageDirNull()
+        }else{
+
+            precioDeVenta = text.inPrecio.text.toString().toInt()
+            superficie = text.inSuperficie.text.toString().toInt()
+            direccion = text.inDireccion.text.toString()
+            if(text.inDescripcion.text != null){ descripcion = text.inDescripcion.text.toString() }
+            else{descripcion = ""}
+            if(text.inBaños.text != null){ numBanos = text.inBaños.text.toString().toInt() }
+            else{numBanos = 0}
+            if(text.inHabitaciones.text != null){ numHabitaciones = text.inHabitaciones.text.toString().toInt() }
+            else{numHabitaciones = 0}
+            var id : String = UUID.randomUUID().toString()
+            //Fotos esta vacia, y en fotosord estan las ids de las fotos subidas a firebase y direccion contiene el string de la direccion mientras que direccion0 esta vacio
+
+
+            val anuncio : Inmueble = Inmueble(id,user,numHabitaciones,numBanos,superficie,direccion,direccionO,tipoInmueble,tipoAnuncio,precioDeVenta,fotos,fotosOrd,
+                "",descripcion,estado,parking,ascensor,amueblado,calefaccion,jardin,piscina,terraza,trastero, LocalDateTime.now())
+
+            val builder =  AlertDialog.Builder(this)
+            builder.setTitle(" Se ha publicado el piso correctamente " )
+            builder.setIcon(android.R.drawable.ic_dialog_info)
+            builder.setNeutralButton("  Continue  "){ _, _ -> }
+            val alertDialog: AlertDialog = builder.create()
+            alertDialog.setCancelable(false)
+            alertDialog.show()
+        }
+    }
+
+    private fun messageInmNull(){
+        val builder =  AlertDialog.Builder(this)
+        builder.setTitle(" Por favor seleccione el tipo de Inmueble" )
+        builder.setIcon(android.R.drawable.stat_notify_error)
+        builder.setNeutralButton("  Continue  "){ _, _ -> }
+        val alertDialog: AlertDialog = builder.create()
+        alertDialog.setCancelable(false)
+        alertDialog.show()
+    }
+    private fun messageVivNull(){
+        val builder =  AlertDialog.Builder(this)
+        builder.setTitle("Por favor seleccione el tipo de Vivienda" )
+        builder.setIcon(android.R.drawable.stat_notify_error)
+        builder.setNeutralButton("  Continue  "){ _, _ -> }
+        val alertDialog: AlertDialog = builder.create()
+        alertDialog.setCancelable(false)
+        alertDialog.show()
+    }
+    private fun messageAnuNull(){
+        val builder =  AlertDialog.Builder(this)
+        builder.setTitle("Por favor seleccione el tipo de Anuncio" )
+        builder.setIcon(android.R.drawable.stat_notify_error)
+        builder.setNeutralButton("  Continue  "){ _, _ -> }
+        val alertDialog: AlertDialog = builder.create()
+        alertDialog.setCancelable(false)
+        alertDialog.show()
+    }
+    private fun messagePreInc(){
+        val builder =  AlertDialog.Builder(this)
+        builder.setTitle("Error en el Precio de venta " )
+        builder.setMessage(" Por favor intruduzca un precio de venta valido. ")
+        builder.setIcon(android.R.drawable.stat_notify_error)
+        builder.setNeutralButton("  Continue  "){ _, _ -> }
+        val alertDialog: AlertDialog = builder.create()
+        alertDialog.setCancelable(false)
+        alertDialog.show()
+    }
+    private fun messageSupInc(){
+        val builder =  AlertDialog.Builder(this)
+        builder.setTitle("Error en la superficie " )
+        builder.setMessage(" Por favor intruduzca un valor valido para la superficie. ")
+        builder.setIcon(android.R.drawable.stat_notify_error)
+        builder.setNeutralButton("  Continue  "){ _, _ -> }
+        val alertDialog: AlertDialog = builder.create()
+        alertDialog.setCancelable(false)
+        alertDialog.show()
+    }
+    private fun messageDirNull(){
+        val builder =  AlertDialog.Builder(this)
+        builder.setTitle("Error en la dirección " )
+        builder.setMessage(" Por favor intruduzca un valor valido para la dirección. ")
+        builder.setIcon(android.R.drawable.stat_notify_error)
+        builder.setNeutralButton("  Continue  "){ _, _ -> }
+        val alertDialog: AlertDialog = builder.create()
+        alertDialog.setCancelable(false)
+        alertDialog.show()
+    }
+    private fun iExtras(){
+        extrasInmueble
+        estadoInmueble
 
 
     }
-
-
-
-    }
+}

@@ -132,7 +132,7 @@
                             android:layout_width="20dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="Vivienda"
+                            android:text="Seleccione"
                             android:textSize="14sp" />
 
                     </LinearLayout>
@@ -182,7 +182,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="Piso" />
+                            android:text="Seleccione" />
 
                     </LinearLayout>
 
@@ -230,7 +230,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="Vendo" />
+                            android:text="Seleccione" />
 
                     </LinearLayout>
 
@@ -266,16 +266,13 @@
                         android:layout_weight="1"
                         android:orientation="horizontal">
 
-                        <com.google.android.material.textfield.TextInputLayout
+                        <EditText
                             android:id="@+id/inPrecio"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent">
-
-                            <com.google.android.material.textfield.TextInputEditText
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:hint="Precio de venta" />
-                        </com.google.android.material.textfield.TextInputLayout>
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:ems="10"
+                            android:inputType="number" />
                     </LinearLayout>
 
                 </LinearLayout>
@@ -310,16 +307,13 @@
                         android:layout_weight="1"
                         android:orientation="horizontal">
 
-                        <com.google.android.material.textfield.TextInputLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent">
-
-                            <com.google.android.material.textfield.TextInputEditText
-                                android:id="@+id/inSuperficie"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:hint="Superficie" />
-                        </com.google.android.material.textfield.TextInputLayout>
+                        <EditText
+                            android:id="@+id/inSuperficie"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:ems="10"
+                            android:inputType="number" />
                     </LinearLayout>
 
                 </LinearLayout>
@@ -353,21 +347,19 @@
                         android:layout_weight="1"
                         android:orientation="horizontal">
 
-                        <com.google.android.material.textfield.TextInputLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent">
-
-                            <com.google.android.material.textfield.TextInputEditText
-                                android:id="@+id/intDireccion"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:hint="Calle, número y población" />
-                        </com.google.android.material.textfield.TextInputLayout>
+                        <EditText
+                            android:id="@+id/inDireccion"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:ems="10"
+                            android:inputType="textPersonName" />
                     </LinearLayout>
 
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/layoutHabitaciones"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="8dp"
@@ -395,23 +387,19 @@
                         android:layout_height="39dp"
                         android:orientation="horizontal">
 
-                        <com.google.android.material.textfield.TextInputLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1">
-
-                            <com.google.android.material.textfield.TextInputEditText
-                                android:id="@+id/inputHab"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:hint="Habitaciones" />
-                        </com.google.android.material.textfield.TextInputLayout>
-
+                        <EditText
+                            android:id="@+id/inHabitaciones"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:ems="10"
+                            android:inputType="number" />
                     </LinearLayout>
 
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/layoutBaños"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="8dp"
@@ -439,23 +427,13 @@
                         android:layout_height="39dp"
                         android:orientation="horizontal">
 
-                        <com.google.android.material.textfield.TextInputLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1">
-
-                            <com.google.android.material.textfield.TextInputLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent">
-
-                                <com.google.android.material.textfield.TextInputEditText
-                                    android:id="@+id/inBaños"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:hint="Baños" />
-                            </com.google.android.material.textfield.TextInputLayout>
-                        </com.google.android.material.textfield.TextInputLayout>
-
+                        <EditText
+                            android:id="@+id/inBaños"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:ems="10"
+                            android:inputType="number" />
                     </LinearLayout>
 
                 </LinearLayout>
@@ -489,16 +467,14 @@
                         android:layout_weight="1"
                         android:orientation="horizontal">
 
-                        <com.google.android.material.textfield.TextInputLayout
+                        <EditText
                             android:id="@+id/inDescripcion"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent">
-
-                            <com.google.android.material.textfield.TextInputEditText
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:hint="Descripción" />
-                        </com.google.android.material.textfield.TextInputLayout>
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:ems="10"
+                            android:gravity="start|top"
+                            android:inputType="textMultiLine" />
                     </LinearLayout>
 
                 </LinearLayout>
@@ -571,10 +547,12 @@
                     android:id="@+id/buttonPublicar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Publicar" />
+                    android:text="Publicar"
+                    android:visibility="visible" />
 
             </LinearLayout>
         </ScrollView>
 
     </LinearLayout>
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
