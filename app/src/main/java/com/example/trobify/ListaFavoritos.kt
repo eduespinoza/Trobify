@@ -22,7 +22,7 @@ import java.io.Serializable
 import java.time.LocalDateTime
 import kotlin.random.Random
 
-class ListaFavoritos () : AppCompatActivity() , AdaptadorInmuebleBusqueda.OnItemClickListener {
+class  ListaFavoritos () : AppCompatActivity() , AdaptadorInmuebleBusqueda.OnItemClickListener {
 
     val db = Firebase.firestore
     lateinit var caja : RecyclerView
@@ -32,8 +32,8 @@ class ListaFavoritos () : AppCompatActivity() , AdaptadorInmuebleBusqueda.OnItem
         val goFicha = Intent(this, AdaptadorFichaInmueble::class.java)
         goFicha.putExtra("inmueble", Inmueble().adaptarInmuble(dataInmueble))
         goFicha.putExtra("user", userId)
+        goFicha.putExtra("desdeMapa",false)
         startActivity(goFicha)
-        Log.i("inmueble", dataInmueble.id.toString())
     }
 
     override fun onCreate(savedInstanceState : Bundle?) {
@@ -64,7 +64,7 @@ class ListaFavoritos () : AppCompatActivity() , AdaptadorInmuebleBusqueda.OnItem
             val snapshot = transaction.get(sfDocRef)
             var favoritosStringArray = snapshot.get("favorites")!! as ArrayList<String>
 
-            cargarInmuebles(favoritosStringArray)
+            cargarInmuebles(favoritosStringArray.distinct() as ArrayList<String>)
 
 
         }.addOnSuccessListener { result ->
@@ -85,7 +85,7 @@ class ListaFavoritos () : AppCompatActivity() , AdaptadorInmuebleBusqueda.OnItem
                 var pisoId = listaIdFavoritos.get(i)
                 Log.d("pepepepepe", "id del i = " + i + " es  " + pisoId)
 
-                val sfDocRef = db.collection("inmueblesv2").document(pisoId)
+                val sfDocRef = db.collection("inmueblesv3").document(pisoId)
 
                 sfDocRef.get().addOnSuccessListener { document ->
                     val piso = document.toObject<DataInmueble>()
@@ -104,9 +104,9 @@ class ListaFavoritos () : AppCompatActivity() , AdaptadorInmuebleBusqueda.OnItem
         val layoutmanager = LinearLayoutManager(baseContext)
         caja.layoutManager = layoutmanager
         caja.adapter = AdaptadorInmuebleBusqueda(pisosFav,this)
-
-
     }
+
+
 }
 
 

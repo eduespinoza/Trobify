@@ -6,6 +6,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.util.TypedValue
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -159,6 +160,12 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
         name.setTextColor(Color.BLACK)
         name.setTextSize(TypedValue.COMPLEX_UNIT_PX, 40F)
 
+        val estrella = findViewById<Button>(R.id.estrellita_ficha)
+        isFav(inmueble, userId)
+
+
+
+
     }
 
     private fun llamadaMessage(inmueble : Inmueble) {
@@ -185,69 +192,68 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
             val snapshot = transaction.get(sfDocRef)
             val favoritos = snapshot.get("favorites")!! as ArrayList<String>
             if (favoritos.contains(inmueble.id.toString())){
-                builder.setMessage("Inmueble ya en favoritos")
+
+                userId.let { db.collection("users").document(it)
+                    .update("favorites", favoritos.distinct())
+                    .addOnSuccessListener { Log.d(ContentValues.TAG, "DocumentSnapshot successfully written!")
+                        builder.setMessage("Inmueble ya en favoritos")
+                        builder.setTitle("Favoritos")
+                        builder.setIcon(android.R.drawable.star_on)
+                        builder.setNeutralButton("  Continuar  "){ _, _ -> }
+                        val alertDialog: AlertDialog = builder.create()
+                        alertDialog.setCancelable(false)
+                        alertDialog.show()
+                    }
+                    .addOnFailureListener { Log.w(ContentValues.TAG, "Error writing document" ) }
+                }
 
             }
             else{
                 favoritos.add(inmueble.id.toString())
                 userId.let { db.collection("users").document(it)
-                    .update("favorites", favoritos)
-                    .addOnSuccessListener { Log.d(ContentValues.TAG, "DocumentSnapshot successfully written!") }
+                    .update("favorites", favoritos.distinct())
+                    .addOnSuccessListener { Log.d(ContentValues.TAG, "DocumentSnapshot successfully written!")
+                        builder.setMessage("Inmueble añadido a favoritos correctamente")
+                        builder.setTitle("Favoritos")
+                        builder.setIcon(android.R.drawable.star_on)
+                        builder.setNeutralButton("  Continuar  "){ _, _ -> }
+                        val alertDialog: AlertDialog = builder.create()
+                        alertDialog.setCancelable(false)
+                        alertDialog.show()
+                        showEstrella(true)
+                    }
                     .addOnFailureListener { Log.w(ContentValues.TAG, "Error writing document" ) }
                 }
-                builder.setMessage("Inmueble añadido a favoritos correctamente")
 
             }
         }.addOnSuccessListener { result ->
             Log.d(ContentValues.TAG, "Transaction success: $result")
-            builder.setTitle("Favoritos")
-            builder.setIcon(android.R.drawable.star_on)
-            builder.setNeutralButton("  Continuar  "){ _, _ -> }
-            val alertDialog: AlertDialog = builder.create()
-            alertDialog.setCancelable(false)
-            alertDialog.show()
         }.addOnFailureListener { e ->
             Log.w(ContentValues.TAG, "Transaction failure.", e)
         }
 
+    }
 
+    private fun isFav(inmueble : Inmueble, userId : String){
+        val sfDocRef = db.collection("users").document(userId.toString())
 
-
-        /*userId.let {db.collection("users").whereEqualTo("id",it)
-            .get()
-            .addOnCompleteListener(){ task ->
-                if(task.isSuccessful) {
-                    for(u in task.result) {
-                        favoritos = u.data.get("favorites") as ArrayList<String>
-                    }
-                }
+        db.runTransaction { transaction ->
+            val snapshot = transaction.get(sfDocRef)
+            val favoritos = snapshot.get("favorites")!! as ArrayList<String>
+            if (favoritos.contains(inmueble.id.toString())){
+                showEstrella(true)
             }
-        }*/
-        /*
-        if (favoritos.contains(inmueble.id.toString())){
-            builder.setMessage("Inmueble ya en favoritos")
-            builder.setTitle("Favoritos")
-            builder.setIcon(android.R.drawable.star_on)
-            builder.setNeutralButton("  Continuar  "){ _, _ -> }
-            val alertDialog: AlertDialog = builder.create()
-            alertDialog.setCancelable(false)
-            alertDialog.show()
+            else{showEstrella(false)}
+
         }
-        else{
-            favoritos.add(inmueble.id.toString())
-            userId.let { db.collection("users").document(it)
-                .update("favorites", favoritos)
-                .addOnSuccessListener { Log.d(ContentValues.TAG, "DocumentSnapshot successfully written!") }
-                .addOnFailureListener { Log.w(ContentValues.TAG, "Error writing document" ) }
-            }
-            builder.setMessage("Inmueble añadido a favoritos correctamente")
-            builder.setTitle("Favoritos")
-            builder.setIcon(android.R.drawable.star_on)
-            builder.setNeutralButton("  Continuar  "){ _, _ -> }
-            val alertDialog: AlertDialog = builder.create()
-            alertDialog.setCancelable(false)
-            alertDialog.show()
-        }*/
+
+    }
+
+    private fun showEstrella(visible : Boolean){
+        val estrella = findViewById<Button>(R.id.estrellita_ficha)
+        if(visible){estrella.visibility = View.VISIBLE}
+        else{estrella.visibility = View.INVISIBLE}
+
     }
 
     private fun introduceQuantityOferta(inmueble : Inmueble) {
