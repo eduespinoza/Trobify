@@ -1,5 +1,6 @@
 package com.example.trobify
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
@@ -18,11 +19,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.runBlocking
-import java.io.ObjectOutput
-import java.time.LocalDateTime
-import kotlin.random.Random
 
 
 open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemClickListener {
@@ -81,8 +77,7 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
         listaConResultados.setHasFixedSize(true)
         val layoutmanager = LinearLayoutManager(baseContext)
         listaConResultados.layoutManager = layoutmanager
-        listaConResultados.adapter = AdaptadorInmuebleBusqueda(inmuebles,this)
-        nResultados.text = "${inmuebles.size} resultados"
+        mostrarInmuebles(inmuebles)
     }
     fun prepararPrimerosResultados(){
         cabecera.text = "Inmuebles añadidos recientemente"
@@ -91,8 +86,7 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
         listaConResultados.layoutManager = layoutmanager
         cargarInmueblesDesdeBd {
             inmueblesEnPantalla = it
-            listaConResultados.adapter = AdaptadorInmuebleBusqueda(it,this)
-            nResultados.text = "${it.size} resultados"
+            mostrarInmuebles(inmueblesEnPantalla)
         }
     }
     fun prepararBuscador(){
@@ -124,6 +118,7 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
             }
         })
     }
+
     fun setListeners() {
         var botonLateral : Button = findViewById(R.id.botonLateral)
         var menuLateral : DrawerLayout = findViewById(R.id.drawer_layout)
@@ -205,30 +200,38 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
             venta.setBackgroundColor(Color.BLUE)
             alquilerOVenta("Vender")
         }
-
-        verificarOrdenacion()
+        
         val builder = AlertDialog.Builder(this)
         ordenar.setOnClickListener {
             builder.setItems(R.array.orderOptions) { _, which ->
                 when {
                     which.equals(0) // Ordenar por precio ascendente
                     -> {
-                        ordenar(0)
+                        inmueblesEnPantalla = ordenar(0, inmueblesEnPantalla)
+                        cabecera.text = "Inmuebles ordenados ascendentemente"
+                        mostrarInmuebles(inmueblesEnPantalla)
                         orden.ordenSeleccionado = 0
                     }
                     which.equals(1)// Ordenar por precio descendente
                     -> {
-                        ordenar(1)
+                        inmueblesEnPantalla = ordenar(1, inmueblesEnPantalla)
+                        cabecera.text = "Inmuebles ordenados descendentemente"
+                        mostrarInmuebles(inmueblesEnPantalla)
                         orden.ordenSeleccionado = 1
+
                     }
                     which.equals(2) // Ordenar por más recientes
                     -> {
-                        ordenar(2)
+                        inmueblesEnPantalla = ordenar(2, inmueblesEnPantalla)
+                        cabecera.text = "Inmuebles añadidos recientemente"
+                        mostrarInmuebles(inmueblesEnPantalla)
                         orden.ordenSeleccionado = 2
                     }
                     which.equals(3) // Ordenar por más antiguos
                     -> {
-                        ordenar(3)
+                        inmueblesEnPantalla = ordenar(3, inmueblesEnPantalla)
+                        cabecera.text = "Inmuebles ordenados por antiguedad"
+                        mostrarInmuebles(inmueblesEnPantalla)
                         orden.ordenSeleccionado = 3
                     }
                 }
@@ -365,9 +368,7 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
     }
     fun alquilerOVenta(opcion : String){
         inmueblesEnPantalla = nuevaBusqueda.getInmueblesIntencion(opcion)
-        listaConResultados.adapter = AdaptadorInmuebleBusqueda(inmueblesEnPantalla,this@MainTrobify)
-        nResultados.text = "${inmueblesEnPantalla.size} resultados"
-
+        mostrarInmuebles(inmueblesEnPantalla)
     }
     //poner los 10 ultimos añadidos
     fun cargarInmueblesDesdeBd(myCallback : (ArrayList<DataInmueble>) -> Unit){
@@ -469,45 +470,30 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
         inmueble.id?.let { db.collection("inmueblesv3").document(it).set(inmueble) }
     }*/
 
-    fun ordenar(tipoSeleccionado:Int){
-        lateinit var inmueblesOrdenados :List<DataInmueble>
+    fun ordenar(tipoSeleccionado:Int, arrayListInmuebles: ArrayList<DataInmueble>) : ArrayList<DataInmueble>{
+        lateinit var inmueblesOrdenados : List<DataInmueble>
         if(tipoSeleccionado.equals(0)){
-            inmueblesOrdenados = inmueblesEnPantalla.sortedBy{it.precio}
-            println("MENOR A MAYOR ******************************************************************************************")
-            //println(h.toString())
-            println(inmueblesEnPantalla.toString())
-            cabecera.text = "Inmuebles ordenados ascendentemente"
+            inmueblesOrdenados = arrayListInmuebles.sortedBy{it.precio}
         }
         else if(tipoSeleccionado.equals(1)){
-            inmueblesOrdenados = inmueblesEnPantalla.sortedByDescending{it.precio}
-            println("MAYOR A MENOR ******************************************************************************************")
-            println(inmueblesEnPantalla.toString())
-            cabecera.text = "Inmuebles ordenados descendentemente"
+            inmueblesOrdenados = arrayListInmuebles.sortedByDescending{it.precio}
         }
         else if(tipoSeleccionado.equals(2)){
-            inmueblesOrdenados = inmueblesEnPantalla.sortedByDescending{it.fechaSubida}
-            println("RECIENTES ******************************************************************************************")
-            println(inmueblesEnPantalla.toString())
-            cabecera.text = "Inmuebles añadidos recientemente"
+            inmueblesOrdenados = arrayListInmuebles.sortedByDescending{it.fechaSubida}
         }
         else if(tipoSeleccionado.equals(3)){
-            inmueblesOrdenados = inmueblesEnPantalla.sortedBy{it.fechaSubida}
-            println("ANTIGUOS ******************************************************************************************")
-            println(inmueblesEnPantalla.toString())
-            cabecera.text = "Inmuebles ordenados por antiguedad"
+            inmueblesOrdenados = arrayListInmuebles.sortedBy{it.fechaSubida}
         }
-        inmueblesEnPantalla = inmueblesOrdenados.toMutableList() as ArrayList<DataInmueble>
-        cargarInmueblesDesdeBd {
-            println("¿MUESTRO LOS INMUEBLES? ******************************************************************************************")
-            listaConResultados.adapter = AdaptadorInmuebleBusqueda(inmueblesEnPantalla,this)
-            println("MOSTRANDO LISTA CON RESULTADOS ******************************************************************************************")
-            println(listaConResultados.toString())
-            nResultados.text = "${inmueblesEnPantalla.size} resultados"
-        }
+        return inmueblesOrdenados.toMutableList() as ArrayList<DataInmueble>
+    }
+
+    fun mostrarInmuebles(arrayListInmuebles: ArrayList<DataInmueble>){
+        listaConResultados.adapter = AdaptadorInmuebleBusqueda(arrayListInmuebles,this)
+        nResultados.text = "${arrayListInmuebles.size} resultados"
     }
 
     fun verificarOrdenacion(){
-        ordenar(GuardaOrdenacion.guardaOrdenacion.ordenGuardado)
+        ordenar(GuardaOrdenacion.guardaOrdenacion.ordenGuardado, inmueblesEnPantalla)
     }
 
 }
