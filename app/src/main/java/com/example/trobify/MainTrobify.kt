@@ -217,32 +217,37 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
             else activarVenta(alquiler, venta)
         }
 
-        //verificarOrdenacion()
+        verificarOrdenacion()
         val builder = AlertDialog.Builder(this)
         ordenar.setOnClickListener {
             builder.setItems(R.array.orderOptions) { _, which ->
                 when {
                     which.equals(0) // Ordenar por precio ascendente
                     -> {
-                        ordenar(0)
+                        inmueblesEnPantalla = ordenarInmuebles(0, inmueblesEnPantalla)
+                        cabecera.text = "Inmuebles ordenados ascendentemente"
                         orden.ordenSeleccionado = 0
                     }
                     which.equals(1)// Ordenar por precio descendente
                     -> {
-                        ordenar(1)
+                        inmueblesEnPantalla = ordenarInmuebles(1, inmueblesEnPantalla)
+                        cabecera.text = "Inmuebles ordenados descendentemente"
                         orden.ordenSeleccionado = 1
                     }
                     which.equals(2) // Ordenar por más recientes
                     -> {
-                        ordenar(2)
+                        inmueblesEnPantalla = ordenarInmuebles(2, inmueblesEnPantalla)
+                        cabecera.text = "Inmuebles añadidos recientemente"
                         orden.ordenSeleccionado = 2
                     }
                     which.equals(3) // Ordenar por más antiguos
                     -> {
-                        ordenar(3)
+                        inmueblesEnPantalla = ordenarInmuebles(3, inmueblesEnPantalla)
+                        cabecera.text = "Inmuebles ordenados por antiguedad"
                         orden.ordenSeleccionado = 3
                     }
                 }
+                mostrarInmuebles(inmueblesEnPantalla)
             }
             builder.setNegativeButton("Cancelar") { _, _ -> }
             val dialog = builder.create()
@@ -299,8 +304,7 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
         if(alquilerActivado || ventaActivado) inmueblesEnPantalla = //firebase.getInmueblesIntecion()
             nuevaBusqueda.buscarConIntencion(busqueda.toUpperCase(),intencionActual())
         else inmueblesEnPantalla = nuevaBusqueda.buscar(busqueda.toUpperCase())
-        listaConResultados.adapter = AdaptadorInmuebleBusqueda(inmueblesEnPantalla,this)
-        nResultados.text = "${inmueblesEnPantalla.size} resultados"
+       mostrarInmuebles(inmueblesEnPantalla)
         cabecera.text = "Inmuebles en " + busqueda
         /*nuevaBusqueda.obtenerResultados{
             inmueblesEnPantalla = it
@@ -313,8 +317,7 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
 
         //inmueblesEnPantalla = nuevaBusqueda.getInmueblesIntencion(opcion)
 
-        listaConResultados.adapter = AdaptadorInmuebleBusqueda(inmueblesEnPantalla,this@MainTrobify)
-        nResultados.text = "${inmueblesEnPantalla.size} resultados"
+        mostrarInmuebles(inmueblesEnPantalla)
 
     }
 
@@ -403,43 +406,31 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
         inmueble.id?.let { db.collection("inmueblesv3").document(it).set(inmueble) }
     }*/
 
-    fun ordenar(tipoSeleccionado:Int){
+    fun ordenarInmuebles(tipoSeleccionado:Int, listaInmuebles : ArrayList<DataInmueble>) : ArrayList<DataInmueble>{
         lateinit var inmueblesOrdenados :List<DataInmueble>
         if(tipoSeleccionado.equals(0)){
-            inmueblesOrdenados = inmueblesEnPantalla.sortedBy{it.precio}
-            println("MENOR A MAYOR ******************************************************************************************")
-            //println(h.toString())
-            println(inmueblesEnPantalla.toString())
-            cabecera.text = "Inmuebles ordenados ascendentemente"
+            inmueblesOrdenados = listaInmuebles.sortedBy{it.precio}
         }
         else if(tipoSeleccionado.equals(1)){
-            inmueblesOrdenados = inmueblesEnPantalla.sortedByDescending{it.precio}
-            println("MAYOR A MENOR ******************************************************************************************")
-            println(inmueblesEnPantalla.toString())
-            cabecera.text = "Inmuebles ordenados descendentemente"
+            inmueblesOrdenados = listaInmuebles.sortedByDescending{it.precio}
         }
         else if(tipoSeleccionado.equals(2)){
-            inmueblesOrdenados = inmueblesEnPantalla.sortedByDescending{it.fechaSubida}
-            println("RECIENTES ******************************************************************************************")
-            println(inmueblesEnPantalla.toString())
-            cabecera.text = "Inmuebles añadidos recientemente"
+            inmueblesOrdenados = listaInmuebles.sortedByDescending{it.fechaSubida}
         }
         else if(tipoSeleccionado.equals(3)){
-            inmueblesOrdenados = inmueblesEnPantalla.sortedBy{it.fechaSubida}
-            println("ANTIGUOS ******************************************************************************************")
-            println(inmueblesEnPantalla.toString())
-            cabecera.text = "Inmuebles ordenados por antiguedad"
+            inmueblesOrdenados = listaInmuebles.sortedBy{it.fechaSubida}
         }
-        inmueblesEnPantalla = inmueblesOrdenados.toMutableList() as ArrayList<DataInmueble>
-            println("¿MUESTRO LOS INMUEBLES? ******************************************************************************************")
-            listaConResultados.adapter = AdaptadorInmuebleBusqueda(inmueblesEnPantalla,this)
-            println("MOSTRANDO LISTA CON RESULTADOS ******************************************************************************************")
-            println(listaConResultados.toString())
-            nResultados.text = "${inmueblesEnPantalla.size} resultados"
+        return inmueblesOrdenados.toMutableList() as ArrayList<DataInmueble>
+    }
+
+    fun mostrarInmuebles(listaInmuebles : ArrayList<DataInmueble>){
+        listaConResultados.adapter = AdaptadorInmuebleBusqueda(listaInmuebles,this)
+        nResultados.text = "${listaInmuebles.size} resultados"
     }
 
     fun verificarOrdenacion(){
-        ordenar(GuardaOrdenacion.guardaOrdenacion.ordenGuardado)
+        val inmuebles = ordenarInmuebles(GuardaOrdenacion.guardaOrdenacion.ordenGuardado, inmueblesEnPantalla)
+        mostrarInmuebles(inmuebles)
     }
 
 }
