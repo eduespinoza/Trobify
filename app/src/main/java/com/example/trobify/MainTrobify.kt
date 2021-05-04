@@ -100,8 +100,7 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
         listaConResultados.setHasFixedSize(true)
         val layoutmanager = LinearLayoutManager(baseContext)
         listaConResultados.layoutManager = layoutmanager
-        listaConResultados.adapter = AdaptadorInmuebleBusqueda(inmuebles,this)
-        nResultados.text = "${inmuebles.size} resultados"
+        mostrarInmuebles(inmuebles)
     }
 
 
@@ -111,8 +110,8 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
         listaConResultados.setHasFixedSize(true)
         val layoutmanager = LinearLayoutManager(baseContext)
         listaConResultados.layoutManager = layoutmanager
-        listaConResultados.adapter = AdaptadorInmuebleBusqueda(inmuebles,this)
-        nResultados.text = "${inmuebles.size} resultados"
+        mostrarInmuebles(inmuebles)
+        inmueblesEnPantalla = inmuebles
         println("${listaConResultados.size} resultadoooooos")
     }
     fun prepararBuscador(){
@@ -217,7 +216,6 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
             else activarVenta(alquiler, venta)
         }
 
-        verificarOrdenacion()
         val builder = AlertDialog.Builder(this)
         ordenar.setOnClickListener {
             builder.setItems(R.array.orderOptions) { _, which ->
@@ -427,10 +425,4 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
         listaConResultados.adapter = AdaptadorInmuebleBusqueda(listaInmuebles,this)
         nResultados.text = "${listaInmuebles.size} resultados"
     }
-
-    fun verificarOrdenacion(){
-        val inmuebles = ordenarInmuebles(GuardaOrdenacion.guardaOrdenacion.ordenGuardado, inmueblesEnPantalla)
-        mostrarInmuebles(inmuebles)
-    }
-
 }
