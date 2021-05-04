@@ -49,8 +49,6 @@ class Register : AppCompatActivity() {
     }
 
     private  fun createNewUser(uEmail :String, uPassword :String){
-        val id :Int = -1
-
         auth.createUserWithEmailAndPassword(uEmail, uPassword).addOnCompleteListener(this) { task ->
             if (task.isSuccessful) {
                 Log.d(TAG, "createUserWithEmail:success")

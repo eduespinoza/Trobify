@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import kotlinx.android.synthetic.*
 import kotlinx.android.synthetic.main.activity_filtros_busqueda.*
 import java.io.Serializable
 
