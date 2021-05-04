@@ -103,7 +103,8 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
 
         val carouselView = findViewById<CarouselView>(R.id.carouselView)
         carouselView.setImageListener{ position, imageView ->
-                imageView.setImageResource(fotos.get(position))
+                //if(fotos.get(position) != null)
+                  //  imageView.setImageResource(fotos.get(position))
 
         }
 
