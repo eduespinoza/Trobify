@@ -10,6 +10,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.Exclude
+import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import io.grpc.Context
 import java.io.Serializable
@@ -110,6 +111,8 @@ class Inmueble : Serializable{
         this.direccionO = direccionO
 
         this.fechaSubida = fechaSubida
+
+
     }
 
     fun caracteristicasToString( ) : String {
@@ -135,6 +138,12 @@ class Inmueble : Serializable{
 
     }
 
+    fun getIdd() : String?{
+        return id
+    }
+
+
+
     //FUNCION NECESARIA - para poder coger bien los datos de la bd
     fun adaptarInmuble(dataInmueble : DataInmueble) : Inmueble{
         return Inmueble(dataInmueble.id,dataInmueble.propietario.toString(),dataInmueble.numHabitaciones,dataInmueble.numBanos
@@ -144,6 +153,8 @@ class Inmueble : Serializable{
         ,dataInmueble.ascensor,dataInmueble.amueblado,dataInmueble.calefaccion,dataInmueble.jardin,dataInmueble.piscina,dataInmueble.terraza,
             dataInmueble.trastero,LocalDateTime.parse(dataInmueble.fechaSubida))
     }
+
+
 
 
 

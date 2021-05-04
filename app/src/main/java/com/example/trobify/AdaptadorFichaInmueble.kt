@@ -1,8 +1,10 @@
 package com.example.trobify
 
+import android.content.ClipData
 import android.content.ContentValues
 import android.content.Intent
 import android.graphics.Color
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
 import android.util.TypedValue
@@ -13,10 +15,19 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.synnapps.carouselview.CarouselView
+import java.io.File
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.ListResult
+import com.google.firebase.storage.StorageException
+import com.google.firebase.storage.StorageReference
+import com.squareup.picasso.Picasso
+import java.io.InputStream
+import java.util.stream.Stream
 
 class AdaptadorFichaInmueble() : AppCompatActivity() {
 
@@ -31,6 +42,7 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
     var desdeMapa = false
 
     lateinit var userId:String
+    var fotos = arrayListOf<String>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,9 +51,14 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
         userId = intent.extras?.get("user") as String
         var inmueble = intent.extras?.get("inmueble") as Inmueble
         desdeMapa = intent.extras?.get("desdeMapa") as Boolean
-        var fotos = inmueble.getfotos()
-        var fotosOrd = inmueble.getfotosord()
 
+        var path = "imagenesinmueble/" + inmueble.getIdd()
+
+        downloadFotos(path){ transformatiooooon(it)}
+
+
+
+        Log.d("itemm" , "this is fotos " + fotos.toString())
 
 
         val buttonAtras = findViewById<Button>(R.id.buttonAtrasFicha)
@@ -102,16 +119,13 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
         rellenar(inmueble)
 
         val carouselView = findViewById<CarouselView>(R.id.carouselView)
+
         carouselView.setImageListener{ position, imageView ->
-                imageView.setImageResource(fotos.get(position))
+            Picasso.get().load(fotos[position]).into(imageView)
 
         }
 
-
-        carouselView.setImageClickListener{ position ->
-            Toast.makeText(applicationContext, fotosOrd.get(position), Toast.LENGTH_SHORT).show()
-        }
-        carouselView.pageCount = fotosOrd.size
+        carouselView.pageCount = fotos.size
 
     }
 
@@ -255,6 +269,35 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
         else{estrella.visibility = View.INVISIBLE}
 
     }
+
+    private fun downloadFotos(path : String , myCallback : (ArrayList<Item>) -> Unit) {
+        val storage = FirebaseStorage.getInstance().reference
+        var ref = storage.child(path)
+        val imageList : ArrayList<Item> = ArrayList()
+
+        val listAllTask: Task<ListResult> = ref.listAll()
+        listAllTask.addOnCompleteListener {result ->
+            val items : List<StorageReference> = result.result!!.items
+            items.forEachIndexed { index , item ->
+                    item.downloadUrl.addOnSuccessListener {
+                        Log.d("itemm", "$it")
+                        imageList.add(Item(it.toString()))
+
+                    }.addOnCompleteListener{
+                        Log.d("itemm", "this is imageList in task "  + imageList.toString())
+                        myCallback(imageList)
+                    }
+            }
+        }
+    }
+
+    private fun transformatiooooon(list : ArrayList<Item>){
+        for(i in 0 .. list.size - 1){
+            fotos.add(list.get(i).imageUrl)
+
+        }
+    }
+
 
     private fun introduceQuantityOferta(inmueble : Inmueble) {
         val builderIntroduceQuantityOferta = AlertDialog.Builder(this)

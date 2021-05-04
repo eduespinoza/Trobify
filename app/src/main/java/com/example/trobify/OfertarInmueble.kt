@@ -10,6 +10,8 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.google.android.material.textfield.TextInputLayout
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.google.type.DateTime
@@ -25,6 +27,7 @@ import kotlin.collections.ArrayList
 class OfertarInmueble : AppCompatActivity() {
 
     private var user : String? = null
+    var id : String = UUID.randomUUID().toString()
 
     private var fotos : ArrayList<Int> = arrayListOf()
     private var fotosOrd : ArrayList<String> = arrayListOf()
@@ -69,6 +72,8 @@ class OfertarInmueble : AppCompatActivity() {
 
 
     var sampleImages = intArrayOf()
+
+
 
 
     object text {
@@ -153,8 +158,8 @@ class OfertarInmueble : AppCompatActivity() {
            var uri = data?.data
            if (uri != null) {
                imageId = UUID.randomUUID().toString()
-               fotosOrd.add(imageId)
-               var filePath : StorageReference? = mStorage?.child("imagenesinmueble")?.child(imageId)
+               var filePath : StorageReference? = mStorage?.child("imagenesinmueble/"+ id)?.child(imageId)
+               fotosOrd.add(filePath.toString())
                filePath?.putFile(uri)?.addOnSuccessListener(this) { taskSnapshot ->
 
                    filePath.downloadUrl.addOnSuccessListener { url ->
@@ -404,12 +409,15 @@ class OfertarInmueble : AppCompatActivity() {
             else{numBanos = 0}
             if(text.inHabitaciones.text != null){ numHabitaciones = text.inHabitaciones.text.toString().toInt() }
             else{numHabitaciones = 0}
-            var id : String = UUID.randomUUID().toString()
+
             //Fotos esta vacia, y en fotosord estan las ids de las fotos subidas a firebase y direccion contiene el string de la direccion mientras que direccion0 esta vacio
 
 
-            val anuncio : Inmueble = Inmueble(id,user,numHabitaciones,numBanos,superficie,direccion,direccionO,tipoInmueble,tipoAnuncio,precioDeVenta,fotos,fotosOrd,
-                "",descripcion,estado,parking,ascensor,amueblado,calefaccion,jardin,piscina,terraza,trastero, LocalDateTime.now())
+            val anuncio = DataInmueble(id,user,numHabitaciones,numBanos,superficie,Sitio(),tipoInmueble,tipoAnuncio,precioDeVenta,fotos,fotosOrd,
+                "",descripcion,estado,parking,ascensor,amueblado,calefaccion,jardin,piscina,terraza,trastero, LocalDateTime.now().toString())
+
+            subirInmuebleBD(anuncio)
+
 
             val builder =  AlertDialog.Builder(this)
             builder.setTitle(" Se ha publicado el piso correctamente " )
@@ -419,6 +427,12 @@ class OfertarInmueble : AppCompatActivity() {
             alertDialog.setCancelable(false)
             alertDialog.show()
         }
+    }
+
+    private fun subirInmuebleBD(inmueble : DataInmueble){
+        val db = Firebase.firestore
+
+        inmueble.id?.let { db.collection("inmueblesv3").document(it).set(inmueble) }
     }
 
     private fun messageInmNull(){
@@ -484,4 +498,5 @@ class OfertarInmueble : AppCompatActivity() {
 
 
     }
+
 }
