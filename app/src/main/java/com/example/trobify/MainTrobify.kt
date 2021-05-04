@@ -1,7 +1,7 @@
 package com.example.trobify
 
-import android.annotation.SuppressLint
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
@@ -11,6 +11,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
+import androidx.core.view.size
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -19,6 +20,9 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.tasks.await
 
 
 open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemClickListener {
@@ -28,8 +32,11 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
     var listaIDS = arrayListOf<String>()
     lateinit var listaConResultados : RecyclerView
     lateinit var auth : FirebaseAuth
+    val database = Database()
+    lateinit var inmuebles : ArrayList<DataInmueble>
     val db = Firebase.firestore
-    var inmueblesEnPantalla = arrayListOf<DataInmueble>()
+
+    lateinit var inmueblesEnPantalla : ArrayList<DataInmueble>
     lateinit var user : String
     val nuevaBusqueda = Busqueda()
     var alquilerActivado = false
@@ -37,6 +44,7 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
     val sugerencias = Busqueda()
     lateinit var cabecera : TextView
     lateinit var nResultados : TextView
+    lateinit var colorDefaultText : ColorStateList
     //var sitios = arrayListOf<Sitio>()
     var filtrosAplicados : FiltrosBusqueda.filtros? = null
 
@@ -55,21 +63,36 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
     {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_trobify2)
+        user = (intent.extras!!.get("user") as String?).toString()
+        filtrosAplicados = intent.extras!!.get("filtros") as FiltrosBusqueda.filtros?
+        //Se obtienen resultados de la base de datos
+        GlobalScope.launch(IO){
+            var pisos = database.gimme().await().toObjects(DataInmueble::class.java)
+            withContext(Dispatchers.Main){
+                inmuebles = pisos as ArrayList<DataInmueble>
+                if(filtrosAplicados != null){
+                    //comprobacionDeFiltrosAplicados()
+                    //aplicarFiltros()
+                    println("${filtrosAplicados!!.tipoInmueble}")
+                    println("${filtrosAplicados!!.tipoVivienda}")
+                    println("${filtrosAplicados!!.precioMin}")
+                    println("${filtrosAplicados!!.precioMax}")
+                    prepararPrimerosResultados(inmuebles)
+                }
+                else prepararPrimerosResultados(inmuebles)
+            }
+        }
+        //Se obtienen resultados de base de datos
+
         listaConResultados = findViewById(R.id.recycler)
         cabecera = findViewById(R.id.cabecera)
         nResultados = findViewById(R.id.nResultados)
         auth = Firebase.auth
-        user = (intent.extras!!.get("user") as String?).toString()
-        filtrosAplicados = intent.extras!!.get("filtros") as FiltrosBusqueda.filtros?
-        if(filtrosAplicados != null){
-            //comprobacionDeFiltrosAplicados()
-            aplicarFiltros()
-        }
-        else {
-            prepararPrimerosResultados()
-        }
+
         prepararBuscador()
         setListeners()
+
+
     }
     fun mostrarResultadosFiltros(inmuebles : ArrayList<DataInmueble>){
         inmueblesEnPantalla = inmuebles
@@ -77,17 +100,20 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
         listaConResultados.setHasFixedSize(true)
         val layoutmanager = LinearLayoutManager(baseContext)
         listaConResultados.layoutManager = layoutmanager
-        mostrarInmuebles(inmuebles)
+        listaConResultados.adapter = AdaptadorInmuebleBusqueda(inmuebles,this)
+        nResultados.text = "${inmuebles.size} resultados"
     }
-    fun prepararPrimerosResultados(){
+
+
+    fun prepararPrimerosResultados(inm : ArrayList<DataInmueble>){
+        inmuebles = inm
         cabecera.text = "Inmuebles añadidos recientemente"
         listaConResultados.setHasFixedSize(true)
         val layoutmanager = LinearLayoutManager(baseContext)
         listaConResultados.layoutManager = layoutmanager
-        cargarInmueblesDesdeBd {
-            inmueblesEnPantalla = it
-            mostrarInmuebles(inmueblesEnPantalla)
-        }
+        listaConResultados.adapter = AdaptadorInmuebleBusqueda(inmuebles,this)
+        nResultados.text = "${inmuebles.size} resultados"
+        println("${listaConResultados.size} resultadoooooos")
     }
     fun prepararBuscador(){
         var buscador : SearchView = findViewById(R.id.buscarView)
@@ -118,7 +144,6 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
             }
         })
     }
-
     fun setListeners() {
         var botonLateral : Button = findViewById(R.id.botonLateral)
         var menuLateral : DrawerLayout = findViewById(R.id.drawer_layout)
@@ -131,6 +156,7 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
         var cerrarSesion : Button = menuHeader.findViewById(R.id.cerrarSesion)
         var alquiler : TextView = findViewById(R.id.BAlquiler)
         var venta : TextView = findViewById(R.id.BVenta)
+        colorDefaultText = venta.textColors
         var ordenar = findViewById<TextView>(R.id.ordenarPor)
         navigator.setNavigationItemSelectedListener { item ->
             when (item.getItemId()) {
@@ -183,55 +209,37 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
             //generatePisos()
         }
         alquiler.setOnClickListener {
-            alquilerActivado = true
-            ventaActivado = false
-            alquiler.setBackgroundColor(Color.BLUE)
-            alquiler.setTextColor(Color.WHITE)
-            venta.setTextColor(Color.BLACK)
-            venta.setBackgroundColor(Color.DKGRAY)
-            alquilerOVenta("Alquiler")
+            if(alquilerActivado)desactivarIntenciones(alquiler,venta)
+            else activalAlquiler(alquiler, venta)
         }
         venta.setOnClickListener {
-            ventaActivado = true
-            alquilerActivado = false
-            alquiler.setBackgroundColor(Color.DKGRAY)
-            alquiler.setTextColor(Color.BLACK)
-            venta.setTextColor(Color.WHITE)
-            venta.setBackgroundColor(Color.BLUE)
-            alquilerOVenta("Vender")
+            if(ventaActivado)desactivarIntenciones(alquiler,venta)
+            else activarVenta(alquiler, venta)
         }
-        
+
+        //verificarOrdenacion()
         val builder = AlertDialog.Builder(this)
         ordenar.setOnClickListener {
             builder.setItems(R.array.orderOptions) { _, which ->
                 when {
                     which.equals(0) // Ordenar por precio ascendente
                     -> {
-                        inmueblesEnPantalla = ordenar(0, inmueblesEnPantalla)
-                        cabecera.text = "Inmuebles ordenados ascendentemente"
-                        mostrarInmuebles(inmueblesEnPantalla)
+                        ordenar(0)
                         orden.ordenSeleccionado = 0
                     }
                     which.equals(1)// Ordenar por precio descendente
                     -> {
-                        inmueblesEnPantalla = ordenar(1, inmueblesEnPantalla)
-                        cabecera.text = "Inmuebles ordenados descendentemente"
-                        mostrarInmuebles(inmueblesEnPantalla)
+                        ordenar(1)
                         orden.ordenSeleccionado = 1
-
                     }
                     which.equals(2) // Ordenar por más recientes
                     -> {
-                        inmueblesEnPantalla = ordenar(2, inmueblesEnPantalla)
-                        cabecera.text = "Inmuebles añadidos recientemente"
-                        mostrarInmuebles(inmueblesEnPantalla)
+                        ordenar(2)
                         orden.ordenSeleccionado = 2
                     }
                     which.equals(3) // Ordenar por más antiguos
                     -> {
-                        inmueblesEnPantalla = ordenar(3, inmueblesEnPantalla)
-                        cabecera.text = "Inmuebles ordenados por antiguedad"
-                        mostrarInmuebles(inmueblesEnPantalla)
+                        ordenar(3)
                         orden.ordenSeleccionado = 3
                     }
                 }
@@ -242,101 +250,33 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
         }
     }
 
-    var inmueblesConFiltrosAMostrar = arrayListOf<String>()
-    val inmueblesEnBd = db.collection("inmueblesv3")
-    var inmueblesConFiltros = arrayListOf<String>()
-    fun aplicarFiltros(){
-        inmbueblesConFiltroTipoInmueble{}
-        //inmueblesConFiltroTipoVivienda{}
-        inmueblesConFiltroPrecioMin {}
-        inmueblesConFiltroPrecioMax {}
-
-        for (inmueble in inmueblesConFiltros.distinct()){
-            inmueblesConFiltrosAMostrar.add(inmueble)
-            println(inmueble)
-        }
-        recuperarInmueblesConFiltros(inmueblesConFiltrosAMostrar){
-            cargarInmueblesDesdeBd {
-                listaConResultados.adapter = AdaptadorInmuebleBusqueda(inmueblesEnPantalla,this)
-                nResultados.text = "${inmueblesEnPantalla.size} resultados"
-            }
-        }
+    private fun desactivarIntenciones(alquiler : TextView, venta : TextView){
+        alquilerActivado = false
+        ventaActivado = false
+        alquiler.setBackgroundColor(Color.WHITE)
+        alquiler.setTextColor(colorDefaultText)
+        venta.setTextColor(colorDefaultText)
+        venta.setBackgroundColor(Color.WHITE)
+        prepararPrimerosResultados(inmuebles)
     }
-
-    fun inmbueblesConFiltroTipoInmueble(myCallback : (ArrayList<String>) -> Unit){
-        var idInmueblesFiltroTipoInmueble = arrayListOf<String>()
-        if(filtrosAplicados?.tipoInmueble != "Cualquiera"){
-            inmueblesEnBd.whereEqualTo("tipoInmueble", filtrosAplicados?.tipoInmueble).get().addOnCompleteListener { task ->
-                if(task.isSuccessful){
-                    for(inmueble in task.result){
-                        idInmueblesFiltroTipoInmueble.add(inmueble.get("id").toString())
-                    }
-                    myCallback(idInmueblesFiltroTipoInmueble)
-                }
-            }
-            inmueblesConFiltrosAMostrar.addAll(idInmueblesFiltroTipoInmueble)
-        }
+    private fun activalAlquiler(alquiler : TextView, venta : TextView){
+        alquilerActivado = true
+        ventaActivado = false
+        alquiler.setBackgroundColor(Color.BLUE)
+        alquiler.setTextColor(Color.WHITE)
+        venta.setTextColor(Color.BLACK)
+        venta.setBackgroundColor(Color.DKGRAY)
+        alquilerOVenta("Alquiler")
     }
-
-    /*fun inmueblesConFiltroTipoVivienda(myCallback : (ArrayList<DataInmueble>) -> Unit){
-        if(!filtrosAplicados?.tipoVivienda?.isNotEmpty()!!){
-            inmueblesEnBd.whereEqualTo("tipoInmueble", filtrosAplicados?.tipoInmueble).get().addOnCompleteListener { task ->
-                if(task.isSuccessful){
-                    for(inmueble in task.result){
-                        inmueblesConFiltros.add(inmueble.toObject(DataInmueble::class.java))
-                    }
-                    myCallback(inmueblesConFiltros)
-                }
-            }
-        }
-    }*/
-
-    fun inmueblesConFiltroPrecioMin(myCallback : (ArrayList<String>) -> Unit){
-        var idInmueblesFiltroPrecioMax = arrayListOf<String>()
-        if(!filtrosAplicados?.precioMin?.equals(0)!!){
-            inmueblesEnBd.whereGreaterThanOrEqualTo("precio", filtrosAplicados?.precioMin!!).get().addOnCompleteListener { task ->
-                if(task.isSuccessful){
-                    for(inmueble in task.result){
-                        idInmueblesFiltroPrecioMax.add(inmueble.get("id").toString())
-                    }
-                    myCallback(idInmueblesFiltroPrecioMax)
-                }
-            }
-            inmueblesConFiltrosAMostrar.addAll(idInmueblesFiltroPrecioMax)
-        }
+    private fun activarVenta(alquiler : TextView, venta : TextView){
+        alquilerActivado = false
+        ventaActivado = true
+        venta.setBackgroundColor(Color.BLUE)
+        venta.setTextColor(Color.WHITE)
+        alquiler.setTextColor(Color.BLACK)
+        alquiler.setBackgroundColor(Color.DKGRAY)
+        alquilerOVenta("Vender")
     }
-
-    fun inmueblesConFiltroPrecioMax(myCallback : (ArrayList<String>) -> Unit){
-        var idInmueblesFiltroTipoPrecioMax = arrayListOf<String>()
-        if(!filtrosAplicados?.precioMax?.equals(0)!!){
-            inmueblesEnBd.whereLessThanOrEqualTo("precio", filtrosAplicados?.precioMax!!).get().addOnCompleteListener { task ->
-                if(task.isSuccessful){
-                    for(inmueble in task.result){
-                        idInmueblesFiltroTipoPrecioMax.add(inmueble.get("id").toString())
-                    }
-                    myCallback(idInmueblesFiltroTipoPrecioMax)
-                }
-            }
-            inmueblesConFiltrosAMostrar.addAll(idInmueblesFiltroTipoPrecioMax)
-        }
-    }
-
-    fun recuperarInmueblesConFiltros(listaIds : ArrayList<String>, myCallback : (DataInmueble) -> Unit){
-        var i = ArrayList<DataInmueble>()
-        for (id in listaIds){
-            db.collection("inmueblesv3").document(id).get().addOnCompleteListener{ task ->
-                if (task.isSuccessful){
-                    var inmuebleRecuperado = task.result.toObject(DataInmueble::class.java)
-                    if (inmuebleRecuperado != null) {
-                        i.add(inmuebleRecuperado)
-                        myCallback(inmuebleRecuperado)
-                    }
-                }
-            }
-        }
-        inmueblesEnPantalla.addAll(i)
-    }
-
     fun getInmueblesFromIds(listillo : Set<String>, myCallback : (DataInmueble) -> Unit){
         for (listo in listillo){
             db.collection("inmueblesv3").document(listo).get().addOnCompleteListener{ task ->
@@ -355,7 +295,9 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
         else return "Vender"
     }
     fun mostrarResultados(busqueda : String){
-        if(alquilerActivado || ventaActivado) inmueblesEnPantalla = nuevaBusqueda.buscarConIntencion(busqueda.toUpperCase(),intencionActual())
+
+        if(alquilerActivado || ventaActivado) inmueblesEnPantalla = //firebase.getInmueblesIntecion()
+            nuevaBusqueda.buscarConIntencion(busqueda.toUpperCase(),intencionActual())
         else inmueblesEnPantalla = nuevaBusqueda.buscar(busqueda.toUpperCase())
         listaConResultados.adapter = AdaptadorInmuebleBusqueda(inmueblesEnPantalla,this)
         nResultados.text = "${inmueblesEnPantalla.size} resultados"
@@ -367,22 +309,13 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
         }*/
     }
     fun alquilerOVenta(opcion : String){
-        inmueblesEnPantalla = nuevaBusqueda.getInmueblesIntencion(opcion)
-        mostrarInmuebles(inmueblesEnPantalla)
-    }
-    //poner los 10 ultimos añadidos
-    fun cargarInmueblesDesdeBd(myCallback : (ArrayList<DataInmueble>) -> Unit){
-        var pisosTochos = arrayListOf<DataInmueble>()
-        db.collection("inmueblesv3").limit(10)
-            .get().addOnCompleteListener{ task ->
-                if(task.isSuccessful){
-                    for(ficha in task.result){
-                        var pisito = ficha.toObject(DataInmueble::class.java)
-                        pisosTochos.add(pisito)
-                    }
-                    myCallback(pisosTochos)
-                }
-            }
+        inmueblesEnPantalla = database.getInmueblesIntencion(opcion)
+
+        //inmueblesEnPantalla = nuevaBusqueda.getInmueblesIntencion(opcion)
+
+        listaConResultados.adapter = AdaptadorInmuebleBusqueda(inmueblesEnPantalla,this@MainTrobify)
+        nResultados.text = "${inmueblesEnPantalla.size} resultados"
+
     }
 
     /*fun cargarInmueblesConFiltros(myCallback : (ArrayList<DataInmueble>) -> Unit) {
@@ -470,30 +403,43 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
         inmueble.id?.let { db.collection("inmueblesv3").document(it).set(inmueble) }
     }*/
 
-    fun ordenar(tipoSeleccionado:Int, arrayListInmuebles: ArrayList<DataInmueble>) : ArrayList<DataInmueble>{
-        lateinit var inmueblesOrdenados : List<DataInmueble>
+    fun ordenar(tipoSeleccionado:Int){
+        lateinit var inmueblesOrdenados :List<DataInmueble>
         if(tipoSeleccionado.equals(0)){
-            inmueblesOrdenados = arrayListInmuebles.sortedBy{it.precio}
+            inmueblesOrdenados = inmueblesEnPantalla.sortedBy{it.precio}
+            println("MENOR A MAYOR ******************************************************************************************")
+            //println(h.toString())
+            println(inmueblesEnPantalla.toString())
+            cabecera.text = "Inmuebles ordenados ascendentemente"
         }
         else if(tipoSeleccionado.equals(1)){
-            inmueblesOrdenados = arrayListInmuebles.sortedByDescending{it.precio}
+            inmueblesOrdenados = inmueblesEnPantalla.sortedByDescending{it.precio}
+            println("MAYOR A MENOR ******************************************************************************************")
+            println(inmueblesEnPantalla.toString())
+            cabecera.text = "Inmuebles ordenados descendentemente"
         }
         else if(tipoSeleccionado.equals(2)){
-            inmueblesOrdenados = arrayListInmuebles.sortedByDescending{it.fechaSubida}
+            inmueblesOrdenados = inmueblesEnPantalla.sortedByDescending{it.fechaSubida}
+            println("RECIENTES ******************************************************************************************")
+            println(inmueblesEnPantalla.toString())
+            cabecera.text = "Inmuebles añadidos recientemente"
         }
         else if(tipoSeleccionado.equals(3)){
-            inmueblesOrdenados = arrayListInmuebles.sortedBy{it.fechaSubida}
+            inmueblesOrdenados = inmueblesEnPantalla.sortedBy{it.fechaSubida}
+            println("ANTIGUOS ******************************************************************************************")
+            println(inmueblesEnPantalla.toString())
+            cabecera.text = "Inmuebles ordenados por antiguedad"
         }
-        return inmueblesOrdenados.toMutableList() as ArrayList<DataInmueble>
-    }
-
-    fun mostrarInmuebles(arrayListInmuebles: ArrayList<DataInmueble>){
-        listaConResultados.adapter = AdaptadorInmuebleBusqueda(arrayListInmuebles,this)
-        nResultados.text = "${arrayListInmuebles.size} resultados"
+        inmueblesEnPantalla = inmueblesOrdenados.toMutableList() as ArrayList<DataInmueble>
+            println("¿MUESTRO LOS INMUEBLES? ******************************************************************************************")
+            listaConResultados.adapter = AdaptadorInmuebleBusqueda(inmueblesEnPantalla,this)
+            println("MOSTRANDO LISTA CON RESULTADOS ******************************************************************************************")
+            println(listaConResultados.toString())
+            nResultados.text = "${inmueblesEnPantalla.size} resultados"
     }
 
     fun verificarOrdenacion(){
-        ordenar(GuardaOrdenacion.guardaOrdenacion.ordenGuardado, inmueblesEnPantalla)
+        ordenar(GuardaOrdenacion.guardaOrdenacion.ordenGuardado)
     }
 
 }

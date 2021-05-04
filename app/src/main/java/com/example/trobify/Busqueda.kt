@@ -10,9 +10,11 @@ import com.here.sdk.core.errors.InstantiationErrorException
 import com.here.sdk.search.*
 
 class Busqueda {
-    val db = Firebase.firestore
+    //val inmuebles = Database().inmuebles
+    var db = Firebase.firestore
     var query : String = ""
-    var pisos = arrayListOf<DataInmueble>()
+    lateinit var database : Database
+    lateinit var inmuebles : ArrayList<DataInmueble>
     lateinit var motorDeBusqueda : SearchEngine
     lateinit var opcionesDeBusqueda : SearchOptions
     //var sugerencias = mutableMapOf<String,GeoCoordinates>()
@@ -22,20 +24,23 @@ class Busqueda {
     }
     fun buscar(busqueda : String) : ArrayList<DataInmueble>{
         this.query = busqueda
-        println(" wachooooo")
+        println("wachooooo")
+        println(inmuebles.size)
         var resultado = arrayListOf<DataInmueble>()
-        pisos.forEach {
+        inmuebles.forEach {
             if(it.direccion?.titulo?.toUpperCase()?.contains(busqueda)!!)
                 resultado.add(it)
         }
         return resultado
     }
+    //ESTO LO HACE FIREBASE
     fun buscarConIntencion(busqueda : String, intencion : String) : ArrayList<DataInmueble>{
         println("Con intencion wachooooo")
         println(intencion)
+        println(inmuebles.size)
         this.query = busqueda
         var resultado = arrayListOf<DataInmueble>()
-        pisos.forEach {
+        inmuebles.forEach {
             if(it.direccion?.titulo?.toUpperCase()?.contains(busqueda)!!
                 && it.intencion.equals(intencion))resultado.add(it)
         }
@@ -101,13 +106,20 @@ class Busqueda {
         }
         var numMaxSugerencias = 6
         opcionesDeBusqueda = SearchOptions(LanguageCode.ES_ES,numMaxSugerencias)
+        database = Database()
+        inmuebles = database.inmuebles
+        /*
+        //BAD SMELL
         var t = db.collection("inmueblesv3").get()
         t.addOnCompleteListener {
             for (res in it.result){
                 var inmueble = res.toObject(DataInmueble::class.java)
-                pisos.add(inmueble)
+                inmuebles.add(inmueble)
             }
         }
+        //BAD SMELL
+
+         */
     }
     fun obtenerResultados(resultado : (ArrayList<DataInmueble>) -> Unit){
         var inmueblesEncontrados = arrayListOf<DataInmueble>()
@@ -128,7 +140,7 @@ class Busqueda {
     }
     fun getInmueblesIntencion(intencion : String) : ArrayList<DataInmueble> {
         var resultado = arrayListOf<DataInmueble>()
-        pisos.forEach {
+        inmuebles.forEach {
             if(it.intencion?.equals(intencion)!!)resultado.add(it)
         }
         return resultado
