@@ -2,6 +2,7 @@ package com.example.trobify
 
 import android.content.ClipData
 import android.content.ContentValues
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.Drawable
@@ -26,6 +27,11 @@ import com.google.firebase.storage.ListResult
 import com.google.firebase.storage.StorageException
 import com.google.firebase.storage.StorageReference
 import com.squareup.picasso.Picasso
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 import java.io.InputStream
 import java.util.stream.Stream
 
@@ -42,7 +48,6 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
     var desdeMapa = false
 
     lateinit var userId:String
-    var fotos = arrayListOf<String>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,11 +59,11 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
 
         var path = "imagenesinmueble/" + inmueble.getIdd()
 
-        downloadFotos(path){ transformatiooooon(it)}
+        downloadFotos(path)
 
 
 
-        Log.d("itemm" , "this is fotos " + fotos.toString())
+
 
 
         val buttonAtras = findViewById<Button>(R.id.buttonAtrasFicha)
@@ -118,14 +123,7 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
 
         rellenar(inmueble)
 
-        val carouselView = findViewById<CarouselView>(R.id.carouselView)
 
-        carouselView.setImageListener{ position, imageView ->
-            Picasso.get().load(fotos[position]).into(imageView)
-
-        }
-
-        carouselView.pageCount = fotos.size
 
     }
 
@@ -270,10 +268,10 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
 
     }
 
-    private fun downloadFotos(path : String , myCallback : (ArrayList<Item>) -> Unit) {
+    private fun downloadFotos(path : String ) {
         val storage = FirebaseStorage.getInstance().reference
         var ref = storage.child(path)
-        val imageList : ArrayList<Item> = ArrayList()
+        val imageList : ArrayList<String> = ArrayList()
 
         val listAllTask: Task<ListResult> = ref.listAll()
         listAllTask.addOnCompleteListener {result ->
@@ -281,23 +279,30 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
             items.forEachIndexed { index , item ->
                     item.downloadUrl.addOnSuccessListener {
                         Log.d("itemm", "$it")
-                        imageList.add(Item(it.toString()))
+                        imageList.add(Item(it.toString()).imageUrl)
+
 
                     }.addOnCompleteListener{
                         Log.d("itemm", "this is imageList in task "  + imageList.toString())
-                        myCallback(imageList)
+                        showImages(imageList,this)
                     }
             }
         }
     }
 
-    private fun transformatiooooon(list : ArrayList<Item>){
-        for(i in 0 .. list.size - 1){
-            fotos.add(list.get(i).imageUrl)
+    private fun showImages(urls : ArrayList<String> , context : Context){
+        val carouselView = findViewById<CarouselView>(R.id.carouselView)
+
+        carouselView.setImageListener{ position, imageView ->
+            Picasso.get().load(urls[position]).into(imageView)
 
         }
-    }
+        carouselView.setImageClickListener{ position ->
+            Toast.makeText(applicationContext, urls.get(position), Toast.LENGTH_SHORT).show()
+        }
 
+        carouselView.pageCount = urls.size
+    }
 
     private fun introduceQuantityOferta(inmueble : Inmueble) {
         val builderIntroduceQuantityOferta = AlertDialog.Builder(this)
