@@ -1,26 +1,18 @@
 package com.example.trobify
 
-import android.app.SearchManager
 import android.content.ContentValues
 import android.content.Intent
-import android.database.MatrixCursor
 import android.os.Bundle
-import android.provider.BaseColumns
 import android.util.Log
 import android.widget.*
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.GravityCompat
-import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.navigation.NavigationView
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
-import java.io.Serializable
-import java.time.LocalDateTime
-import kotlin.random.Random
+import java.util.*
+import kotlin.collections.ArrayList
 
 class  ListaFavoritos () : AppCompatActivity() , AdaptadorInmuebleBusqueda.OnItemClickListener {
 
@@ -28,11 +20,14 @@ class  ListaFavoritos () : AppCompatActivity() , AdaptadorInmuebleBusqueda.OnIte
     lateinit var caja : RecyclerView
     lateinit var userId : String
 
+
+
+
     override fun onItemClicked(dataInmueble : DataInmueble) {
         val goFicha = Intent(this, AdaptadorFichaInmueble::class.java)
         goFicha.putExtra("inmueble", Inmueble().adaptarInmuble(dataInmueble))
         goFicha.putExtra("user", userId)
-        goFicha.putExtra("desdeMapa",false)
+        goFicha.putExtra("desdeMapa", false)
         startActivity(goFicha)
     }
 
@@ -44,6 +39,7 @@ class  ListaFavoritos () : AppCompatActivity() , AdaptadorInmuebleBusqueda.OnIte
         userId = intent.extras!!.get("user") as String
 
 
+
         val buttonAtras = findViewById<Button>(R.id.buttonAtrasFavoritos)
         buttonAtras.setOnClickListener {
             val goMain = Intent(this, MainTrobify::class.java)
@@ -51,6 +47,10 @@ class  ListaFavoritos () : AppCompatActivity() , AdaptadorInmuebleBusqueda.OnIte
             startActivity(goMain)
         }
         cargarFavDe(userId)
+
+        /*val noFav = findViewById<TextView>(R.id.noFavText)
+        noFav.setTextSize(TypedValue.COMPLEX_UNIT_PX, 40F)
+        noFav.text = "No hay favoritos"*/
 
 
     }
@@ -62,10 +62,8 @@ class  ListaFavoritos () : AppCompatActivity() , AdaptadorInmuebleBusqueda.OnIte
 
         db.runTransaction { transaction ->
             val snapshot = transaction.get(sfDocRef)
-            var favoritosStringArray = snapshot.get("favorites")!! as ArrayList<String>
-
-            cargarInmuebles(favoritosStringArray.distinct() as ArrayList<String>)
-
+            var favoritosStringArray = snapshot.get("favorites")
+            cargarInmuebles(favoritosStringArray as ArrayList<String>)
 
         }.addOnSuccessListener { result ->
             Log.d(ContentValues.TAG, "Transaction success: $result")
@@ -77,34 +75,33 @@ class  ListaFavoritos () : AppCompatActivity() , AdaptadorInmuebleBusqueda.OnIte
 
 
     fun cargarInmuebles(listaIdFavoritos : ArrayList<String>) {
-
         var arrayDePisos  = arrayListOf<DataInmueble>()
-        Log.d("pepepepepe", "long de array " + listaIdFavoritos.size.toString())
-        if(listaIdFavoritos.size != 0) {
-            for (i in 0..listaIdFavoritos.size) {
-                var pisoId = listaIdFavoritos.get(i)
-                Log.d("pepepepepe", "id del i = " + i + " es  " + pisoId)
 
-                val sfDocRef = db.collection("inmueblesv3").document(pisoId)
-
-                sfDocRef.get().addOnSuccessListener { document ->
-                    val piso = document.toObject<DataInmueble>()
-                    Log.d("pepepepepe", "el inmueble: " + piso.toString())
-                    if (piso != null) {
-                        arrayDePisos.add(piso)
-                    }
-                    if (arrayDePisos.size== listaIdFavoritos.size){mostrar(arrayDePisos)}
+        for (i in 0..listaIdFavoritos.size) {
+            var pisoId = listaIdFavoritos[i]
+            val sfDocRef = db.collection("inmueblesv3").document(pisoId)
+            sfDocRef.get().addOnSuccessListener { document ->
+                val piso = document.toObject<DataInmueble>()
+                if (piso != null) {
+                    arrayDePisos.add(piso)
+                }
+                if (arrayDePisos.size == listaIdFavoritos.size) {
+                    mostrar(arrayDePisos)
                 }
             }
         }
     }
 
-    fun mostrar(pisosFav : ArrayList<DataInmueble>){
+    private fun mostrar(pisosFav : ArrayList<DataInmueble>){
         caja.setHasFixedSize(true)
         val layoutmanager = LinearLayoutManager(baseContext)
         caja.layoutManager = layoutmanager
-        caja.adapter = AdaptadorInmuebleBusqueda(pisosFav,this)
+        caja.adapter = AdaptadorInmuebleBusqueda(pisosFav, this)
     }
+
+
+
+
 
 
 }
