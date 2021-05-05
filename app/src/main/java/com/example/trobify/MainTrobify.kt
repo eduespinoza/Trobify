@@ -289,7 +289,7 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
         alquiler.setBackgroundColor(Color.BLUE)
         alquiler.setTextColor(Color.WHITE)
         venta.setTextColor(Color.BLACK)
-        venta.setBackgroundColor(Color.DKGRAY)
+        venta.setBackgroundColor(Color.GRAY)
         alquilerOVenta("Alquiler")
     }
     private fun activarVenta(alquiler : TextView, venta : TextView){
@@ -298,7 +298,7 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
         venta.setBackgroundColor(Color.BLUE)
         venta.setTextColor(Color.WHITE)
         alquiler.setTextColor(Color.BLACK)
-        alquiler.setBackgroundColor(Color.DKGRAY)
+        alquiler.setBackgroundColor(Color.GRAY)
         alquilerOVenta("Vender")
     }
     fun getInmueblesFromIds(listillo : Set<String>, myCallback : (DataInmueble) -> Unit){

@@ -83,7 +83,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="0dp"
+            android:layout_marginTop="10dp"
             android:dividerPadding="10dp"
             android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -138,6 +138,7 @@
                 android:id="@+id/intercambio"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 android:gravity="center|fill_horizontal"
                 android:orientation="horizontal"
                 android:padding="5dp"
@@ -182,6 +183,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
+                    android:layout_marginTop="5dp"
                     android:text="Inmuebles añadidos recientemente"
                     android:textSize="25sp"
                     android:textStyle="bold" />
@@ -191,6 +193,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
+                    android:layout_marginTop="5dp"
                     android:text="Resultados" />
 
             </LinearLayout>
