@@ -41,6 +41,7 @@
         <activity android:name=".FiltrosBusqueda" />
         <activity android:name=".AdaptadorFichaInmueble" />
         <activity android:name=".ListaFavoritos" />
+        <activity android:name=".GestionarInmueble" />
         <activity android:name=".Login" />
         <activity
             android:name=".MainActivity"

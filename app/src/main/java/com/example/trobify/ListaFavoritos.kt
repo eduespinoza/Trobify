@@ -77,7 +77,7 @@ class  ListaFavoritos () : AppCompatActivity() , AdaptadorInmuebleBusqueda.OnIte
     fun cargarInmuebles(listaIdFavoritos : ArrayList<String>) {
         var arrayDePisos  = arrayListOf<DataInmueble>()
 
-        for (i in 0..listaIdFavoritos.size) {
+        for (i in 0..listaIdFavoritos.size - 1) {
             var pisoId = listaIdFavoritos[i]
             val sfDocRef = db.collection("inmueblesv3").document(pisoId)
             sfDocRef.get().addOnSuccessListener { document ->
@@ -85,9 +85,8 @@ class  ListaFavoritos () : AppCompatActivity() , AdaptadorInmuebleBusqueda.OnIte
                 if (piso != null) {
                     arrayDePisos.add(piso)
                 }
-                if (arrayDePisos.size == listaIdFavoritos.size) {
-                    mostrar(arrayDePisos)
-                }
+            }.addOnSuccessListener {
+                mostrar(arrayDePisos)
             }
         }
     }
