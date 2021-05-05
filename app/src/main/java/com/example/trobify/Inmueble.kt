@@ -28,6 +28,7 @@ class Inmueble : Serializable{
     var superficie : Int? = null
     var direccion : String? = null
     var direccionO : Direccion? = null
+    var tipoVivienda : String? = null
     var tipoInmueble : String? = null
     var intencion : String? = null //vender o alquilar
     var precio : Int? = null
@@ -61,6 +62,7 @@ class Inmueble : Serializable{
         superficie : Int?,
         direccion : String?,
         direccionO : Direccion?,
+        tipoVivienda : String?,
         tipoInmueble : String?,
         intencion : String?,
         precio : Int?,
@@ -90,6 +92,7 @@ class Inmueble : Serializable{
         this.numBanos = numBanos
         this.superficie = superficie
         this.tipoInmueble = tipoInmueble
+        this.tipoVivienda = tipoVivienda
         this.intencion = intencion
         this.precio = precio
         this.fotos = fotos
@@ -148,7 +151,7 @@ class Inmueble : Serializable{
     fun adaptarInmuble(dataInmueble : DataInmueble) : Inmueble{
         return Inmueble(dataInmueble.id,dataInmueble.propietario.toString(),dataInmueble.numHabitaciones,dataInmueble.numBanos
         ,dataInmueble.superficie,
-            dataInmueble.direccion?.titulo,direccionO,dataInmueble.tipoInmueble,dataInmueble.intencion,dataInmueble.precio,dataInmueble.fotos,
+            dataInmueble.direccion?.titulo,direccionO,dataInmueble.tipoVivienda,dataInmueble.tipoInmueble,dataInmueble.intencion,dataInmueble.precio,dataInmueble.fotos,
         dataInmueble.fotosOrd,dataInmueble.certificadoEnergetico,dataInmueble.descripcion,dataInmueble.estado,dataInmueble.parking
         ,dataInmueble.ascensor,dataInmueble.amueblado,dataInmueble.calefaccion,dataInmueble.jardin,dataInmueble.piscina,dataInmueble.terraza,
             dataInmueble.trastero,LocalDateTime.parse(dataInmueble.fechaSubida))

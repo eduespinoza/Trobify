@@ -29,7 +29,7 @@ class Database {
     }
 
     fun gimme() : Task<QuerySnapshot> {
-        return db.collection("inmueblesv3").get()
+        return db.collection("inmueblesv4").get()
     }
 
     interface FirebaseCallback{
@@ -37,7 +37,7 @@ class Database {
     }
 
     private fun getAllInmuebles(callback : FirebaseCallback){
-        db.collection("inmueblesv3")
+        db.collection("inmueblesv4")
             .get().addOnCompleteListener{ task ->
                 if(task.isSuccessful){
                     for(inmueble in task.result){
@@ -61,36 +61,71 @@ class Database {
             }
     }
     // INMUEBLES QUERIES
+    fun getInmueblesByIds(ids : ArrayList<String>):ArrayList<DataInmueble>{
+        var inmueblesEncontrados = arrayListOf<DataInmueble>()
+        for (ident in ids) {
+            inmuebles.forEach ok@{inmueble->
+                if (inmueble.id.equals(ident))
+                    inmueblesEncontrados.add(inmueble)
+                return@ok
+            }
+        }
+        return inmueblesEncontrados
+    }
     fun getInmueblesIntencion(opcion:String):ArrayList<DataInmueble> {
         var inmueblesEncontrados = arrayListOf<DataInmueble>()
         inmuebles.forEach { inmueble ->
-            if (inmueble.intencion.equals(opcion)) inmueblesEncontrados.add(inmueble)
+            if (inmueble.intencion.equals(opcion))
+                inmueblesEncontrados.add(inmueble)
         }
         return inmueblesEncontrados
     }
-
-    fun getInmueblesByTipoInmueble(tipo : String):ArrayList<DataInmueble>{
-        var inmueblesEncontrados = arrayListOf<DataInmueble>()
+    fun getInmueblesByTipoVivienda(tipo : String):ArrayList<String>{
+        var inmueblesEncontrados = arrayListOf<String>()
         inmuebles.forEach { inmueble ->
             if (inmueble.tipoInmueble.equals(tipo))
-                inmueblesEncontrados.add(inmueble)
+                inmueble.id?.let { inmueblesEncontrados.add(it) }
         }
         return inmueblesEncontrados
     }
-    fun getInmueblesByPrecioMenorIgual(precio : Int):ArrayList<DataInmueble>{
-        var inmueblesEncontrados = arrayListOf<DataInmueble>()
+    fun getInmueblesByTipoInmueble(tipo : String):ArrayList<String>{
+        var inmueblesEncontrados = arrayListOf<String>()
+        inmuebles.forEach { inmueble ->
+            if (inmueble.tipoVivienda.equals(tipo))
+                inmueble.id?.let { inmueblesEncontrados.add(it) }
+        }
+        return inmueblesEncontrados
+    }
+    fun getInmueblesByPrecioMenorIgual(precio : Int):ArrayList<String>{
+        var inmueblesEncontrados = arrayListOf<String>()
         inmuebles.forEach { inmueble ->
             if (inmueble.precio!! <= precio)
-                inmueblesEncontrados.add(inmueble)
+                inmueble.id?.let { inmueblesEncontrados.add(it) }
         }
         return inmueblesEncontrados
     }
 
-    fun getInmueblesByPrecioMayorIgual(precio : Int):ArrayList<DataInmueble>{
-        var inmueblesEncontrados = arrayListOf<DataInmueble>()
+    fun getInmueblesByPrecioMayorIgual(precio : Int):ArrayList<String>{
+        var inmueblesEncontrados = arrayListOf<String>()
         inmuebles.forEach { inmueble ->
             if (inmueble.precio!! >= precio)
-                inmueblesEncontrados.add(inmueble)
+                inmueble.id?.let { inmueblesEncontrados.add(it) }
+        }
+        return inmueblesEncontrados
+    }
+    fun getInmueblesBySuperficieMax(sup : Int):ArrayList<String>{
+        var inmueblesEncontrados = arrayListOf<String>()
+        inmuebles.forEach { inmueble ->
+            if (inmueble.superficie!! <= sup)
+                inmueble.id?.let { inmueblesEncontrados.add(it) }
+        }
+        return inmueblesEncontrados
+    }
+    fun getInmueblesBySuperficieMin(sup : Int):ArrayList<String>{
+        var inmueblesEncontrados = arrayListOf<String>()
+        inmuebles.forEach { inmueble ->
+            if (inmueble.superficie!! >= sup)
+                inmueble.id?.let { inmueblesEncontrados.add(it) }
         }
         return inmueblesEncontrados
     }

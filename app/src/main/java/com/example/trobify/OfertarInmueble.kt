@@ -413,7 +413,7 @@ class OfertarInmueble : AppCompatActivity() {
             //Fotos esta vacia, y en fotosord estan las ids de las fotos subidas a firebase y direccion contiene el string de la direccion mientras que direccion0 esta vacio
 
 
-            val anuncio = DataInmueble(id,user,numHabitaciones,numBanos,superficie,Sitio(),tipoInmueble,tipoAnuncio,precioDeVenta,fotos,fotosOrd,
+            val anuncio = DataInmueble(id,user,numHabitaciones,numBanos,superficie,Sitio(),tipoVivienda,tipoInmueble,tipoAnuncio,precioDeVenta,fotos,fotosOrd,
                 "",descripcion,estado,parking,ascensor,amueblado,calefaccion,jardin,piscina,terraza,trastero, LocalDateTime.now().toString())
 
             subirInmuebleBD(anuncio)

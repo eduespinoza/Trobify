@@ -83,7 +83,7 @@ class Mapa : AppCompatActivity(){
             override fun onSuggestionClick(position: Int): Boolean {
                 val cursor = buscadorMapa.suggestionsAdapter.getItem(position) as MatrixCursor
                 val selection = cursor.getString(cursor.getColumnIndex(SearchManager.SUGGEST_COLUMN_TEXT_1))
-                buscadorMapa.setQuery(selection, true)
+                buscadorMapa.setQuery(selection, false)
                 // Do something with selection
                 return true
             }
@@ -96,10 +96,10 @@ class Mapa : AppCompatActivity(){
             if(it.title.equals(query)){
                 localCoordinates = it.geoCoordinates!!
                 return@forEach
-                //var sitio = Sitio(it.title,
-                   // mutableMapOf("latitud" to it.geoCoordinates!!.latitude,
-                     //   "longitud" to it.geoCoordinates!!.longitude),it.id)
-                //sitio.id?.let { it1 -> db.collection("testingPlacesv2").document(it1).set(sitio) }
+                /*var sitio = Sitio(it.title,
+                    mutableMapOf("latitud" to it.geoCoordinates!!.latitude,
+                      "longitud" to it.geoCoordinates!!.longitude),it.id)
+                sitio.id?.let { it1 -> db.collection("testingPlacesv2").document(it1).set(sitio) }*/
             }
             else{
                 localCoordinates = buscador.sugerencias[0].geoCoordinates!!
@@ -154,7 +154,7 @@ class Mapa : AppCompatActivity(){
     }
 
     private fun loadMarkers(){
-        db.collection("inmueblesv3").get().addOnCompleteListener {
+        db.collection("inmueblesv4").get().addOnCompleteListener {
             if(it.isSuccessful){
                 for(result in it.result){
                     val inmueble = result.toObject(DataInmueble::class.java)

@@ -8,6 +8,7 @@ import android.util.Log
 import android.widget.Button
 import android.widget.SearchView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
@@ -23,6 +24,8 @@ import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.tasks.await
+import java.time.LocalDateTime
+import kotlin.random.Random
 
 
 open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemClickListener {
@@ -71,13 +74,18 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
             withContext(Dispatchers.Main){
                 inmuebles = pisos as ArrayList<DataInmueble>
                 if(filtrosAplicados != null){
-                    //comprobacionDeFiltrosAplicados()
-                    //aplicarFiltros()
-                    println("${filtrosAplicados!!.tipoInmueble}")
-                    println("${filtrosAplicados!!.tipoVivienda}")
-                    println("${filtrosAplicados!!.precioMin}")
-                    println("${filtrosAplicados!!.precioMax}")
-                    prepararPrimerosResultados(inmuebles)
+                    var result = GestionFiltros(database).aplicar(filtrosAplicados!!)
+                    if(result.size != 0)
+                        mostrarResultadosFiltros(result)
+                    else {
+                        println("no results")
+                        prepararPrimerosResultados(inmuebles)
+                        AlertDialog.Builder(this@MainTrobify).apply {
+                            setTitle("Información")
+                            setMessage("No se han obtenido resultados con esos filtros")
+                            setPositiveButton("Ok", null)
+                        }.show()
+                    }
                 }
                 else prepararPrimerosResultados(inmuebles)
             }
@@ -205,7 +213,7 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
             val irAMapa = Intent(this, Mapa::class.java)
             irAMapa.putExtra("user", user)
             startActivity(irAMapa)
-            //generatePisos()
+            //getPlaces()
         }
         alquiler.setOnClickListener {
             if(alquilerActivado)desactivarIntenciones(alquiler,venta)
@@ -339,7 +347,7 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
 
     //fun para generar id's de inmuebles aleatorios *** se podria meter en clase inmueble
     // no se comprueba que el id se repita con otro ya puesto
-    /*fun generateRandomId() : String {
+    fun generateRandomId() : String {
         val charPool : List<Char> = ('a'..'z') + ('A'..'Z') + ('0'..'9')
         val pathId = (1..5)
             .map { i -> kotlin.random.Random.nextInt(0, charPool.size) }
@@ -351,17 +359,21 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
         return kotlin.random.Random.nextInt(1,5)
     }
     fun getRandomSuperficie() : Int{
-        return kotlin.random.Random.nextInt(40,180)
+        return kotlin.random.Random.nextInt(40,220)
     }
     fun getRandomTipoVivienda() : String{
+        return arrayListOf("Apartamento","Ático","Dúplex","Loft",
+            "Planta baja","Estudio","Casa","Chalet","Adosado","Finca rústica")[kotlin.random.Random.nextInt(0,10)]
+    }
+    fun getRandomTipoInmueble() : String{
         return arrayListOf("Vivienda","Edificio","Oficina","Garaje",
-            "Local","Terreno","Nave")[kotlin.random.Random.nextInt(0,6)]
+            "Local","Terreno","Nave")[kotlin.random.Random.nextInt(0,7)]
     }
     fun getRandomCertificado() : String {
         return arrayListOf("A","B","C","D","E","F","G")[kotlin.random.Random.nextInt(0,6)]
     }
     fun getRandomPrice() : Int {
-        return arrayListOf<Int>(0, 50000, 75000, 100000, 125000, 150000, 200000,
+        return arrayListOf<Int>(50000, 75000, 100000, 125000, 150000, 200000,
             300000, 400000, 500000)[kotlin.random.Random.nextInt(0,9)]
     }
     fun getRandomEstado() : String {
@@ -375,34 +387,38 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
         return calles[kotlin.random.Random.nextInt(0,calles.size)]
     }
     fun getPlaces(){
+        var sitios = arrayListOf<Sitio>()
         runBlocking(Dispatchers.Default) {
             db.collection("testingPlacesv2").get().addOnCompleteListener {
                 if(it.isSuccessful){
                     for(result in it.result){
                         var place = result.toObject(Sitio::class.java)
-                        //sitios.add(place)
-                    }}
+                        sitios.add(place)
+                    }
+                    //generatePisos(sitios)
+                }
             }}
     }
     fun getRandomIntencion():String{
         return arrayListOf("Alquiler","Vender")[kotlin.random.Random.nextInt(0,2)]
     }
     //fun para generar pisos en bd
-    fun generatePisos() {
-        for (venga in 1..10){
+    fun generatePisos(sitios : ArrayList<Sitio>) {
+        for (venga in sitios){
             subirInmueblesBD(DataInmueble(generateRandomId(),null,getRandom1a4(),
-                getRandom1a4(),getRandomSuperficie(),Sitio(),getRandomTipoVivienda(),getRandomIntencion(),
+                getRandom1a4(),getRandomSuperficie(),venga,getRandomTipoInmueble(),getRandomTipoVivienda(),getRandomIntencion(),
                 getRandomPrice(), arrayListOf(R.drawable.piso1, R.drawable.piso2, R.drawable.piso3,
                     R.drawable.piso4,R.drawable.piso5),
                 arrayListOf("imagen1","imagen2", "imagen3", "imagen4", "imagen5"),
                 getRandomCertificado(),"Bueno bonito y barato",getRandomEstado(), Random.nextBoolean(),Random.nextBoolean(),
-                Random.nextBoolean(),Random.nextBoolean(),Random.nextBoolean(),Random.nextBoolean(),Random.nextBoolean(),Random.nextBoolean(),
+                Random.nextBoolean(),Random.nextBoolean(),
+                Random.nextBoolean(),Random.nextBoolean(),Random.nextBoolean(),Random.nextBoolean(),
                 getRandomDate()))
         }
     }
     private fun subirInmueblesBD(inmueble : DataInmueble){
-        inmueble.id?.let { db.collection("inmueblesv3").document(it).set(inmueble) }
-    }*/
+        inmueble.id?.let { db.collection("inmueblesv4").document(it).set(inmueble) }
+    }
 
     fun ordenarInmuebles(tipoSeleccionado:Int, listaInmuebles : ArrayList<DataInmueble>) : ArrayList<DataInmueble>{
         lateinit var inmueblesOrdenados :List<DataInmueble>
