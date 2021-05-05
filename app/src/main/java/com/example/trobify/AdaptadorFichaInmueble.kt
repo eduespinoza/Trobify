@@ -212,7 +212,6 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
     }
 
     private fun addToFav(inmueble : Inmueble , userId : String ){
-        val builder =  AlertDialog.Builder(this)
 
         val sfDocRef = db.collection("users").document(userId)
 
@@ -221,14 +220,12 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
             var favoritos = snapshot.get("favorites")!! as ArrayList<String>
             if (favoritos.contains(inmueble.id.toString())){
 
-
+               /* val builder =  AlertDialog.Builder(this)
                 builder.setMessage("Inmueble ya en favoritos")
-                builder.setTitle("Favoritos")
-                builder.setIcon(android.R.drawable.star_on)
-                builder.setNeutralButton("  Continuar  "){ _, _ -> }
-                val alertDialog: AlertDialog = builder.create()
-                alertDialog.setCancelable(false)
-                alertDialog.show()
+                    .setCancelable(false)
+                    .setNeutralButton("  Continuar  "){ _, _ -> }
+                val alert= builder.create()
+                alert.show()*/
 
             }
             else{
@@ -243,14 +240,15 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
                     .addOnSuccessListener {
                         Log.d(ContentValues.TAG, "DocumentSnapshot successfully written!")
 
-                        builder.setMessage("Inmueble añadido correctamente a Favoritos")
-                        builder.setTitle("Favoritos")
-                        builder.setIcon(android.R.drawable.star_on)
-                        builder.setNeutralButton("  Continuar  "){ _, _ -> }
-                        val alertDialog: AlertDialog = builder.create()
-                        alertDialog.setCancelable(false)
-                        alertDialog.show()
-                        showEstrella(true)}
+                        val builder =  AlertDialog.Builder(this)
+                        builder.setMessage("Inmueble añadido a favoritos")
+                            .setCancelable(false)
+                            .setNeutralButton("  Continuar  "){ _, _ -> }
+                        val alert= builder.create()
+                        alert.show()
+
+                        showEstrella(true)
+                    }
                     .addOnFailureListener { Log.w(ContentValues.TAG, "Error writing document" ) }
                 }
 
@@ -266,7 +264,7 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
     }
 
     private fun eliminarDeFav(inmueble : Inmueble , userId : String ){
-        val builder =  AlertDialog.Builder(this)
+
 
         val sfDocRef = db.collection("users").document(userId)
 
@@ -281,13 +279,13 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
                 userId.let { db.collection("users").document(it)
                     .update("favorites", favoritos)
                     .addOnSuccessListener { Log.d(ContentValues.TAG, "DocumentSnapshot successfully written!")
+
+                        val builder =  AlertDialog.Builder(this)
                         builder.setMessage("Inmueble eliminado de favoritos")
-                        builder.setTitle("Favoritos")
-                        builder.setIcon(android.R.drawable.star_on)
-                        builder.setNeutralButton("  Continuar  "){ _, _ -> }
-                        val alertDialog: AlertDialog = builder.create()
-                        alertDialog.setCancelable(false)
-                        alertDialog.show()
+                            .setCancelable(false)
+                            .setNeutralButton("  Continuar  "){ _, _ -> }
+                        val alert= builder.create()
+                        alert.show()
                         showEstrella(false)
                     }
                     .addOnFailureListener { Log.w(ContentValues.TAG, "Error writing document" ) }
@@ -295,13 +293,13 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
 
             }
             else{
+
+               /* val builder =  AlertDialog.Builder(this)
                 builder.setMessage("Inmueble no en favoritos")
-                builder.setTitle("Favoritos")
-                builder.setIcon(android.R.drawable.star_on)
-                builder.setNeutralButton("  Continuar  "){ _, _ -> }
-                val alertDialog: AlertDialog = builder.create()
-                alertDialog.setCancelable(false)
-                alertDialog.show()
+                    .setCancelable(false)
+                    .setNeutralButton("  Continuar  "){ _, _ -> }
+                val alert= builder.create()
+                alert.show()*/
 
             }
         }.addOnSuccessListener { result ->
@@ -344,7 +342,7 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
         val listAllTask: Task<ListResult> = ref.listAll()
         listAllTask.addOnCompleteListener {result ->
             val items : List<StorageReference> = result.result!!.items
-            items.forEachIndexed { index , item ->
+            items.forEachIndexed { _ , item ->
                     item.downloadUrl.addOnSuccessListener {
                         Log.d("itemm", "$it")
                         imageList.add(Item(it.toString()).imageUrl)

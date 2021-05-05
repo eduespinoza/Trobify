@@ -1,7 +1,9 @@
 package com.example.trobify
 
+import android.content.ContentValues
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -9,14 +11,14 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_gestion.*
 
-class GestionarInmueble : AppCompatActivity(){
+class GestionarInmueble : AppCompatActivity() {
 
     private val db = Firebase.firestore
-    lateinit var userId:String
+    lateinit var userId : String
 
     lateinit var tipoAnuncio : Spinner
     lateinit var tipoVivienda : Spinner
-    lateinit var tipoInmueble  : Spinner
+    lateinit var tipoInmueble : Spinner
     lateinit var estado : Spinner
 
     lateinit var precio : EditText
@@ -26,20 +28,17 @@ class GestionarInmueble : AppCompatActivity(){
     lateinit var descripcion : EditText
     lateinit var certificado : EditText
 
-    lateinit var parking:CheckBox
-    lateinit var ascensor:CheckBox
-    lateinit var amueblado:CheckBox
-    lateinit var calefaccion:CheckBox
-    lateinit var jardin:CheckBox
-    lateinit var piscina:CheckBox
-    lateinit var terraza:CheckBox
-    lateinit var trastero:CheckBox
+    lateinit var parking : CheckBox
+    lateinit var ascensor : CheckBox
+    lateinit var amueblado : CheckBox
+    lateinit var calefaccion : CheckBox
+    lateinit var jardin : CheckBox
+    lateinit var piscina : CheckBox
+    lateinit var terraza : CheckBox
+    lateinit var trastero : CheckBox
 
 
-
-
-
-    override fun onCreate(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState : Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_gestion)
 
@@ -56,13 +55,47 @@ class GestionarInmueble : AppCompatActivity(){
 
         val buttonSave = findViewById<Button>(R.id.buttonSaveGestion)
         buttonSave.setOnClickListener {
-            setData(inmueble)
 
-            val intent = Intent(this, MainTrobify::class.java)
-            intent.putExtra("user", userId)
-            startActivity(intent)
+            val builder = AlertDialog.Builder(this)
+            builder.setMessage("¿Seguro que quieres guardar asi el inmueble?")
+                .setCancelable(false)
+                .setPositiveButton("Yes") { dialog, id ->
+                    setData(inmueble)
 
-            finish()
+                    val intent = Intent(this, MainTrobify::class.java)
+                    intent.putExtra("user", userId)
+                    startActivity(intent)
+
+                    finish()
+                }
+                .setNegativeButton("No") { dialog, id ->
+                    // Dismiss the dialog
+                    dialog.dismiss()
+                }
+            val alert = builder.create()
+            alert.show()
+
+        }
+        val buttonDelete = findViewById<Button>(R.id.buttonDeleteGestion)
+        buttonDelete.setOnClickListener {
+            val builder = AlertDialog.Builder(this)
+            builder.setMessage("¿Seguro que quieres eliminar este inmueble?")
+                .setCancelable(false)
+                .setPositiveButton("Yes") { dialog, id ->
+                    delete(inmueble)
+
+                    val intent = Intent(this, MainTrobify::class.java)
+                    intent.putExtra("user", userId)
+                    startActivity(intent)
+
+                    finish()
+                }
+                .setNegativeButton("No") { dialog, id ->
+                    // Dismiss the dialog
+                    dialog.dismiss()
+                }
+            val alert = builder.create()
+            alert.show()
         }
     }
 
@@ -79,8 +112,10 @@ class GestionarInmueble : AppCompatActivity(){
         tipoAnuncio.setSelection(dataTipoAnuncio.indexOf(inmueble.intencion))
 
 
-        val dataTipoInmueble = arrayListOf("Vivienda","Edificio","Oficina","Garaje",
-            "Local","Terreno","Nave")
+        val dataTipoInmueble = arrayListOf(
+            "Vivienda", "Edificio", "Oficina", "Garaje",
+            "Local", "Terreno", "Nave"
+        )
         tipoInmueble = findViewById(R.id.spinnerTipoInmueble)
         if (tipoInmueble != null) {
             val adapter = ArrayAdapter<String>(
@@ -92,8 +127,10 @@ class GestionarInmueble : AppCompatActivity(){
         tipoInmueble.setSelection(dataTipoInmueble.indexOf(inmueble.tipoInmueble))
 
 
-        val dataTipoVivienda = arrayListOf("Apartamento","Ático","Dúplex","Loft",
-            "Planta baja","Estudio","Casa","Chalet","Adosado","Finca rústica")
+        val dataTipoVivienda = arrayListOf(
+            "Apartamento", "Ático", "Dúplex", "Loft",
+            "Planta baja", "Estudio", "Casa", "Chalet", "Adosado", "Finca rústica"
+        )
         tipoVivienda = findViewById(R.id.spinnerTipoVivienda)
         if (tipoVivienda != null) {
             val adapter = ArrayAdapter<String>(
@@ -123,8 +160,10 @@ class GestionarInmueble : AppCompatActivity(){
         certificado = findViewById(R.id.certificadoBox)
         certificado.setText(inmueble.certificadoEnergetico)
 
-        val dataEstado = arrayListOf("Obra nueva","Casi nuevo","Muy bien",
-            "Bien","Reformado","A reformar")
+        val dataEstado = arrayListOf(
+            "Obra nueva", "Casi nuevo", "Muy bien",
+            "Bien", "Reformado", "A reformar"
+        )
         estado = findViewById(R.id.spinnerEstado)
         if (estado != null) {
             val adapter = ArrayAdapter<String>(
@@ -163,7 +202,7 @@ class GestionarInmueble : AppCompatActivity(){
 
     }
 
-    private fun setData(inmueble : Inmueble){
+    private fun setData(inmueble : Inmueble) {
 
         //checkFormats()
 
@@ -192,10 +231,32 @@ class GestionarInmueble : AppCompatActivity(){
         val certificado = certificado.text.toString()
 
 
-        val updatedInmueble = DataInmueble(inmueble.getIdd(), inmueble.propietario, habitaciones, banos, superficie,
-                                           inmueble.direccionSitio
-            , vivendaTipo, inmuebleTipo, anuncioTipo, precio, inmueble.fotos, inmueble.fotosOrd,
-            certificado, descripcion, estado, parking, ascensor, amueblado, calefaccion, jardin, piscina, terraza, trastero, inmueble.fechaSubida.toString()  )
+        val updatedInmueble = DataInmueble(
+            inmueble.getIdd(),
+            inmueble.propietario,
+            habitaciones,
+            banos,
+            superficie,
+            inmueble.direccionSitio,
+            vivendaTipo,
+            inmuebleTipo,
+            anuncioTipo,
+            precio,
+            inmueble.fotos,
+            inmueble.fotosOrd,
+            certificado,
+            descripcion,
+            estado,
+            parking,
+            ascensor,
+            amueblado,
+            calefaccion,
+            jardin,
+            piscina,
+            terraza,
+            trastero,
+            inmueble.fechaSubida.toString()
+        )
         val ref = db.collection("inmueblesv3").document(inmueble.getIdd().toString())
 
         db.runBatch { batch ->
@@ -214,5 +275,30 @@ class GestionarInmueble : AppCompatActivity(){
 
     }
 
+    private fun delete(inmueble : Inmueble) {
 
+        val ref = db.collection("inmueblesv3").document(inmueble.getIdd().toString())
+        val refUser = db.collection("users").document(userId)
+        db.runBatch { batch ->
+            batch.delete(ref)
+        }.addOnCompleteListener {}
+
+        db.runTransaction { transaction ->
+            val snapshot = transaction.get(refUser)
+            var pisos = snapshot.get("pisos")!! as ArrayList<String>
+            pisos.remove(inmueble.getIdd())
+
+            userId.let {
+                db.collection("users").document(it)
+                    .update("pisos", pisos)
+                    .addOnSuccessListener {
+                        Log.d(
+                            ContentValues.TAG,
+                            "DocumentSnapshot successfully written!"
+                        )
+                    }
+                    .addOnFailureListener { Log.w(ContentValues.TAG, "Error writing document") }
+            }
+        }
+    }
 }
