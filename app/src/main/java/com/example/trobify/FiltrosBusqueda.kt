@@ -101,52 +101,9 @@ open class FiltrosBusqueda : AppCompatActivity() {
         addOptionsBaños()
         addOptionsSuperficie()
 
-        ////////////// RESTABLECER SELECCION DE EXTRAS Y ESTADO DE LA VIVIENDA ///////////////////
-        ///// ESTADO DEL INMUEBLE /////
-        if(GuardaFiltros.guardaSeleccion.boxObraNueva == true){
-            estadosVivienda.obraNueva.isChecked = true
-        }
-        if(GuardaFiltros.guardaSeleccion.boxMuyBien == true){
-            estadosVivienda.muyBien.isChecked = true
-        }
-        if(GuardaFiltros.guardaSeleccion.boxBien == true){
-            estadosVivienda.bien.isChecked = true
-        }
-        if(GuardaFiltros.guardaSeleccion.boxReformado == true){
-            estadosVivienda.reformado.isChecked = true
-        }
-        if(GuardaFiltros.guardaSeleccion.boxAReformar == true){
-            estadosVivienda.aReformar.isChecked = true
-        }
-        if(GuardaFiltros.guardaSeleccion.boxCasiNuevo == true){
-            estadosVivienda.casiNuevo.isChecked = true
-        }
-        ///// EXTRAS DEL INMUEBLE //////
-        if(GuardaFiltros.guardaSeleccion.boxParking == true){
-            extrasVivienda.parking.isChecked = true
-        }
-        if(GuardaFiltros.guardaSeleccion.boxAscensor == true){
-            extrasVivienda.ascensor.isChecked = true
-        }
-        if(GuardaFiltros.guardaSeleccion.boxAmueblado == true){
-            extrasVivienda.amueblado.isChecked = true
-        }
-        if(GuardaFiltros.guardaSeleccion.boxCalefaccion == true){
-            extrasVivienda.calefaccion.isChecked = true
-        }
-        if(GuardaFiltros.guardaSeleccion.boxJardin == true){
-            extrasVivienda.jardin.isChecked = true
-        }
-        if(GuardaFiltros.guardaSeleccion.boxPiscina == true){
-            extrasVivienda.piscina.isChecked = true
-        }
-        if(GuardaFiltros.guardaSeleccion.boxTerraza == true){
-            extrasVivienda.terraza.isChecked = true
-        }
-        if(GuardaFiltros.guardaSeleccion.boxTrastero == true){
-            extrasVivienda.trastero.isChecked = true
-        }
-        ////////////////////////////////////////////////////////////////////////////
+        // RESTABLECER SELECCION DE EXTRAS Y ESTADO DE LA VIVIENDA
+        reestrablecerGuardaFiltrosExtras()
+        reestablecerGuardaFiltrosEstado()
 
         desplegables.spinnerPrecioMin.onItemSelectedListener = object:
             AdapterView.OnItemSelectedListener{
@@ -424,6 +381,18 @@ open class FiltrosBusqueda : AppCompatActivity() {
             else{}
         }
 
+        val buttonBorrarFiltros = findViewById<Button>(R.id.buttonBorrarFiltros)
+        buttonBorrarFiltros.setOnClickListener {
+            val builder = AlertDialog.Builder(this@FiltrosBusqueda)
+            builder.setMessage("¿ Estas seguro de querer borrar los filtros seleccionados ?")
+            builder.setPositiveButton("Sí"){_, _ ->
+                limpiarFiltros()
+            }
+            builder.setNegativeButton("No"){_, _ ->}
+            val options = builder.create()
+            options.show()
+        }
+
         val buttonBack = findViewById<ImageButton>(R.id.buttonBack)
         buttonBack.setOnClickListener{
             finish()
@@ -506,7 +475,7 @@ open class FiltrosBusqueda : AppCompatActivity() {
     }
 
     private fun checkPrice(){
-        if(compareValues(desplegables.spinnerPrecioMin.selectedItem.toString().toInt(), desplegables.spinnerPrecioMax.selectedItem.toString().toInt()) > 0){
+        if(compareValues(desplegables.spinnerPrecioMin.selectedItem.toString().toInt(), desplegables.spinnerPrecioMax.selectedItem.toString().toInt()) > 0 && (desplegables.spinnerPrecioMax.selectedItem.toString().toInt() != 0)){
             AlertDialog.Builder(this@FiltrosBusqueda).apply {
                 checkPriceBool = false
                 setTitle("Error")
@@ -520,7 +489,7 @@ open class FiltrosBusqueda : AppCompatActivity() {
     }
 
     private fun checkSurface(){
-        if(compareValues(desplegables.spinnerSuperficieMin.selectedItem.toString().toInt(), desplegables.spinnerSuperficieMax.selectedItem.toString().toInt()) > 0){
+        if(compareValues(desplegables.spinnerSuperficieMin.selectedItem.toString().toInt(), desplegables.spinnerSuperficieMax.selectedItem.toString().toInt()) > 0 && (desplegables.spinnerSuperficieMax.selectedItem.toString().toInt() != 0)){
             AlertDialog.Builder(this@FiltrosBusqueda).apply {
                 checkSurfaceBool = false
                 setTitle("Error")
@@ -601,5 +570,97 @@ open class FiltrosBusqueda : AppCompatActivity() {
         var tituloEstadoVivienda = findViewById<TextView>(R.id.textEstadoVivienda)
         tituloEstadoVivienda.setVisibility(View.VISIBLE)
         contenedorEstadoVivienda.setVisibility(View.VISIBLE)
+    }
+
+    private fun reestrablecerGuardaFiltrosExtras(){
+        ///// EXTRAS DEL INMUEBLE //////
+        if(GuardaFiltros.guardaSeleccion.boxParking == true){
+            extrasVivienda.parking.isChecked = true
+        }
+        if(GuardaFiltros.guardaSeleccion.boxAscensor == true){
+            extrasVivienda.ascensor.isChecked = true
+        }
+        if(GuardaFiltros.guardaSeleccion.boxAmueblado == true){
+            extrasVivienda.amueblado.isChecked = true
+        }
+        if(GuardaFiltros.guardaSeleccion.boxCalefaccion == true){
+            extrasVivienda.calefaccion.isChecked = true
+        }
+        if(GuardaFiltros.guardaSeleccion.boxJardin == true){
+            extrasVivienda.jardin.isChecked = true
+        }
+        if(GuardaFiltros.guardaSeleccion.boxPiscina == true){
+            extrasVivienda.piscina.isChecked = true
+        }
+        if(GuardaFiltros.guardaSeleccion.boxTerraza == true){
+            extrasVivienda.terraza.isChecked = true
+        }
+        if(GuardaFiltros.guardaSeleccion.boxTrastero == true){
+            extrasVivienda.trastero.isChecked = true
+        }
+    }
+
+    private fun reestablecerGuardaFiltrosEstado(){
+        if(GuardaFiltros.guardaSeleccion.boxObraNueva == true){
+            estadosVivienda.obraNueva.isChecked = true
+        }
+        if(GuardaFiltros.guardaSeleccion.boxMuyBien == true){
+            estadosVivienda.muyBien.isChecked = true
+        }
+        if(GuardaFiltros.guardaSeleccion.boxBien == true){
+            estadosVivienda.bien.isChecked = true
+        }
+        if(GuardaFiltros.guardaSeleccion.boxReformado == true){
+            estadosVivienda.reformado.isChecked = true
+        }
+        if(GuardaFiltros.guardaSeleccion.boxAReformar == true){
+            estadosVivienda.aReformar.isChecked = true
+        }
+        if(GuardaFiltros.guardaSeleccion.boxCasiNuevo == true){
+            estadosVivienda.casiNuevo.isChecked = true
+        }
+    }
+
+    private fun limpiarFiltros(){
+        filtros.tipoInmueble = ""
+        filtros.numHabitaciones = 0
+        filtros.numBaños = 0
+        filtros.extras = mutableMapOf<String, Boolean>()
+        filtros.estado = arrayListOf<String>()
+        filtros.precioMin = 0
+        filtros.precioMax = 0
+        filtros.superficieMin = 0
+        filtros.superficieMax = 0
+        filtros.tipoVivienda = arrayListOf<String>()
+
+        desplegables.spinnerInmueble.setSelection(0)
+        desplegables.spinnerHabitaciones.setSelection(0)
+        desplegables.spinnerBaños.setSelection(0)
+        desplegables.spinnerPrecioMin.setSelection(0)
+        desplegables.spinnerPrecioMax.setSelection(0)
+        desplegables.spinnerSuperficieMin.setSelection(0)
+        desplegables.spinnerSuperficieMax.setSelection(0)
+
+        estadosVivienda.obraNueva.isChecked = false
+        estadosVivienda.muyBien.isChecked = false
+        estadosVivienda.bien.isChecked = false
+        estadosVivienda.casiNuevo.isChecked = false
+        estadosVivienda.aReformar.isChecked = false
+        estadosVivienda.reformado.isChecked = false
+
+        extrasVivienda.parking.isChecked = false
+        extrasVivienda.ascensor.isChecked = false
+        extrasVivienda.amueblado.isChecked = false
+        extrasVivienda.calefaccion.isChecked = false
+        extrasVivienda.jardin.isChecked = false
+        extrasVivienda.piscina.isChecked = false
+        extrasVivienda.terraza.isChecked = false
+        extrasVivienda.trastero.isChecked = false
+
+        elementosSeleccionadosTipoEdif = booleanArrayOf(false,/*Apartamento*/ false,/*Ático*/ false,/*Dúplex*/ false,/*Loft*/ false,/*Planta baja*/ false/*Estudio*/)
+        elementosSeleccionadosTipoPorDefecto = booleanArrayOf(false,/*Apartamento*/ false,/*Ático*/ false,/*Dúplex*/ false,/*Loft*/ false,/*Planta baja*/ false,/*Estudio*/ false, /*Casa*/ false,/*Chalet*/ false,/*Adosado*/ false/*Finca rústica*/)
+
+        saveFiltros()
+        saveSeleccionFiltros()
     }
 }
