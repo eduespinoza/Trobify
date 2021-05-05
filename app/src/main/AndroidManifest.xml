@@ -42,6 +42,7 @@
         <activity android:name=".AdaptadorFichaInmueble" />
         <activity android:name=".ListaFavoritos" />
         <activity android:name=".GestionarInmueble" />
+        <activity android:name=".MisPisos" />
         <activity android:name=".Login" />
         <activity
             android:name=".MainActivity"

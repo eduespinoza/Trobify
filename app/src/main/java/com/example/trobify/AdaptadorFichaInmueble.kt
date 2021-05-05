@@ -43,6 +43,7 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
     var desdeMapa = false
 
     lateinit var userId:String
+    var desdeMisPisos = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,6 +52,7 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
         userId = intent.extras?.get("user") as String
         var inmueble = intent.extras?.get("inmueble") as Inmueble
         desdeMapa = intent.extras?.get("desdeMapa") as Boolean
+        desdeMisPisos = intent.extras?.get("desdeMisPisos") as Boolean
 
         var path = "imagenesinmueble/" + inmueble.getIdd()
 
@@ -120,6 +122,28 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
         elimarDeFav.setOnClickListener {
             eliminarDeFav(inmueble, userId)
         }
+
+        val edit = findViewById<Button>(R.id.editButtonGestion)
+        edit.setOnClickListener {
+            val goGestion = Intent(this, GestionarInmueble::class.java)
+            goGestion.putExtra("inmueble", inmueble)
+            goGestion.putExtra("user", userId)
+            goGestion.putExtra("desdeMapa", false)
+            startActivity(goGestion)
+        }
+
+        if (desdeMisPisos){
+            edit.visibility = View.VISIBLE
+            edit.isClickable = true
+        }
+        else{
+
+            edit.visibility = View.INVISIBLE
+            edit.isClickable = false
+        }
+
+
+
 
         rellenar(inmueble)
 

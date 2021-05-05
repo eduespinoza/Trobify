@@ -16,7 +16,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
@@ -38,11 +38,24 @@
                 app:strokeColor="#00FFFFFF" />
 
             <Button
+                android:id="@+id/editButtonGestion"
+                style="@style/FiamUI.Card.ActionBar.Button"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="140dp"
+                android:layout_weight="1"
+                android:backgroundTint="#00FFFFFF"
+                app:icon="@android:drawable/ic_menu_edit"
+                app:iconSize="50dp"
+                app:iconTint="#000000"
+                app:strokeColor="#00FFFFFF" />
+
+            <Button
                 android:id="@+id/estrellita_ficha"
                 style="@style/FiamUI.Card.ActionBar.Button"
-                android:layout_width="15dp"
+                android:layout_width="78dp"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="230dp"
+                android:layout_marginLeft="10dp"
                 android:layout_weight="1"
                 android:backgroundTint="#00FFFFFF"
                 android:clickable="false"

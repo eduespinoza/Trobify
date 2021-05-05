@@ -60,6 +60,7 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
         goFicha.putExtra("user", user.toString())
         goFicha.putExtra("inmueble", Inmueble().adaptarInmuble(dataInmueble))
         goFicha.putExtra("desdeMapa",false)
+        goFicha.putExtra("desdeMisPisos", false)
         startActivity(goFicha)
     }
     override fun onCreate(savedInstanceState: Bundle?)
@@ -189,7 +190,9 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
                     menuLateral.closeDrawers()
                 }
                 R.id.mispisos -> {
-                    // escribe tu codigo manin
+                    val edit = Intent(this, MisPisos::class.java)
+                    edit.putExtra("user",user.toString())
+                    startActivity(edit)
                 }
 
             }

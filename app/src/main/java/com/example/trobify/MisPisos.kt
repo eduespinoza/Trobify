@@ -14,7 +14,7 @@ import com.google.firebase.ktx.Firebase
 import java.util.*
 import kotlin.collections.ArrayList
 
-class  ListaFavoritos () : AppCompatActivity() , AdaptadorInmuebleBusqueda.OnItemClickListener {
+class  MisPisos : AppCompatActivity() , AdaptadorInmuebleBusqueda.OnItemClickListener {
 
     val db = Firebase.firestore
     lateinit var caja : RecyclerView
@@ -24,47 +24,44 @@ class  ListaFavoritos () : AppCompatActivity() , AdaptadorInmuebleBusqueda.OnIte
 
 
     override fun onItemClicked(dataInmueble : DataInmueble) {
+
         val goFicha = Intent(this, AdaptadorFichaInmueble::class.java)
-        goFicha.putExtra("inmueble", Inmueble().adaptarInmuble(dataInmueble))
         goFicha.putExtra("user", userId)
-        goFicha.putExtra("desdeMapa", false)
-        goFicha.putExtra("desdeMisPisos", false)
+        goFicha.putExtra("inmueble", Inmueble().adaptarInmuble(dataInmueble))
+        goFicha.putExtra("desdeMapa",false)
+        goFicha.putExtra("desdeMisPisos", true)
         startActivity(goFicha)
     }
 
     override fun onCreate(savedInstanceState : Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.lista_favoritos)
-        caja = findViewById(R.id.recyclerFavoritos)
+        setContentView(R.layout.activity_mis_pisos)
+        caja = findViewById(R.id.recyclerMisPisos)
 
         userId = intent.extras!!.get("user") as String
 
 
 
-        val buttonAtras = findViewById<Button>(R.id.buttonAtrasFavoritos)
+        val buttonAtras = findViewById<Button>(R.id.buttonAtrasMisPisos)
         buttonAtras.setOnClickListener {
-            val goMain = Intent(this, MainTrobify::class.java)
-            goMain.putExtra("user", userId)
-            startActivity(goMain)
+            finish()
         }
-        cargarFavDe(userId)
+        cargarPisosDe(userId)
 
-        /*val noFav = findViewById<TextView>(R.id.noFavText)
-        noFav.setTextSize(TypedValue.COMPLEX_UNIT_PX, 40F)
-        noFav.text = "No hay favoritos"*/
+
 
 
     }
 
-    fun cargarFavDe(userId : String){
+    fun cargarPisosDe(userId : String){
 
 
         val sfDocRef = db.collection("users").document(userId.toString())
 
         db.runTransaction { transaction ->
             val snapshot = transaction.get(sfDocRef)
-            var favoritosStringArray = snapshot.get("favorites")
-            cargarInmuebles(favoritosStringArray as ArrayList<String>)
+            var pisosStringArray = snapshot.get("pisos")
+            cargarInmuebles(pisosStringArray as ArrayList<String>)
 
         }.addOnSuccessListener { result ->
             Log.d(ContentValues.TAG, "Transaction success: $result")
@@ -75,11 +72,11 @@ class  ListaFavoritos () : AppCompatActivity() , AdaptadorInmuebleBusqueda.OnIte
     }
 
 
-    fun cargarInmuebles(listaIdFavoritos : ArrayList<String>) {
+    fun cargarInmuebles(listaIdPisos : ArrayList<String>) {
         var arrayDePisos  = arrayListOf<DataInmueble>()
 
-        for (i in 0..listaIdFavoritos.size - 1) {
-            var pisoId = listaIdFavoritos[i]
+        for (i in 0..listaIdPisos.size - 1) {
+            var pisoId = listaIdPisos[i]
             val sfDocRef = db.collection("inmueblesv3").document(pisoId)
             sfDocRef.get().addOnSuccessListener { document ->
                 val piso = document.toObject<DataInmueble>()
@@ -105,5 +102,3 @@ class  ListaFavoritos () : AppCompatActivity() , AdaptadorInmuebleBusqueda.OnIte
 
 
 }
-
-
