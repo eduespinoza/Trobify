@@ -85,14 +85,15 @@
                 android:layout_height="wrap_content"
                 android:text="Precio"
                 android:textColor="#000000"
-                android:textSize="22sp" />
+                android:textSize="22sp"
+                />
 
             <EditText
                 android:id="@+id/precioBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:inputType="textPersonName"
+                android:inputType="number"
                 android:textSize="17sp" />
 
             <TextView
@@ -108,13 +109,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:inputType="textPersonName"
+                android:inputType="number"
                 android:textSize="17sp" />
 
             <TextView
                 android:id="@+id/textView7"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:text="Numero de baños"
                 android:textColor="#000000"
                 android:textSize="22sp" />
 
@@ -123,7 +125,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:inputType="textPersonName"
+                android:inputType="number"
                 android:textSize="17sp" />
             <TextView
                 android:id="@+id/textView8"
@@ -138,7 +140,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:inputType="textPersonName"
+                android:inputType="number"
                 android:textSize="17sp" />
             <TextView
                 android:id="@+id/textView14"

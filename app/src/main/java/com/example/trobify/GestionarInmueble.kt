@@ -62,11 +62,7 @@ class GestionarInmueble : AppCompatActivity() {
                 .setPositiveButton("Yes") { dialog, id ->
                     setData(inmueble)
 
-                    val intent = Intent(this, MainTrobify::class.java)
-                    intent.putExtra("user", userId)
-                    startActivity(intent)
 
-                    finish()
                 }
                 .setNegativeButton("No") { dialog, id ->
                     // Dismiss the dialog
@@ -204,7 +200,7 @@ class GestionarInmueble : AppCompatActivity() {
 
     private fun setData(inmueble : Inmueble) {
 
-        //checkFormats()
+
 
         val anuncioTipo = tipoAnuncio.selectedItem.toString()
         val inmuebleTipo = tipoInmueble.selectedItem.toString()
@@ -259,20 +255,31 @@ class GestionarInmueble : AppCompatActivity() {
         )
         val ref = db.collection("inmueblesv3").document(inmueble.getIdd().toString())
 
-        db.runBatch { batch ->
-            batch.set(ref, updatedInmueble)
-        }.addOnCompleteListener {
-            /*val builder =  AlertDialog.Builder(this)
-            builder.setMessage("Inmueble actualizado")
-            builder.setTitle("Favoritos")
-            builder.setIcon(android.R.drawable.star_on)
-            builder.setNeutralButton("  Continuar  "){ _, _ -> }
-            val alertDialog: AlertDialog = builder.create()
-            alertDialog.setCancelable(false)
-            alertDialog.show()*/
+        if(checkFormats()) {
+            db.runBatch { batch ->
+                batch.set(ref, updatedInmueble)
+            }.addOnCompleteListener {
+                val intent = Intent(this, MainTrobify::class.java)
+                intent.putExtra("user", userId)
+                startActivity(intent)
+
+                finish()
+
+            }
+        }
+        else{
+            val builder = AlertDialog.Builder(this)
+            builder.setMessage("Formato incorrecto, porfavor, compruebe los datos")
+                .setCancelable(false)
+                .setNeutralButton("OK") { dialog, _ ->
+                    // Dismiss the dialog
+                    dialog.dismiss()
+                }
+            val alert = builder.create()
+            alert.show()
+
 
         }
-
     }
 
     private fun delete(inmueble : Inmueble) {
@@ -300,5 +307,20 @@ class GestionarInmueble : AppCompatActivity() {
                     .addOnFailureListener { Log.w(ContentValues.TAG, "Error writing document") }
             }
         }
+    }
+
+    private fun checkFormats() : Boolean{
+
+
+        if(precioBox.text.toString().matches("-?\\d+(\\.\\d+)?".toRegex()) &&
+            habitacionesBox.text.toString().matches("-?\\d+(\\.\\d+)?".toRegex()) &&
+            banosBox.text.toString().matches("-?\\d+(\\.\\d+)?".toRegex()) &&
+            superficieBox.text.toString().matches("-?\\d+(\\.\\d+)?".toRegex()) &&
+            certificadoBox.text.toString().trim().length == 1)
+            {
+            return true
+        }
+
+        return false
     }
 }
