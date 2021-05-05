@@ -181,6 +181,16 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
                     startActivity(irAMisFavoritos)
                     menuLateral.closeDrawers()
                 }
+                R.id.ofertar -> {
+                    val irAOfertarInmueble =
+                        Intent(this@MainTrobify, OfertarInmueble::class.java)
+                    irAOfertarInmueble.putExtra("user", user.toString())
+                    startActivity(irAOfertarInmueble)
+                    menuLateral.closeDrawers()
+                }
+                R.id.mispisos -> {
+                    // escribe tu codigo manin
+                }
 
             }
             true
