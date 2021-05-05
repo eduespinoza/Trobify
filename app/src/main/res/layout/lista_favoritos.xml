@@ -21,13 +21,15 @@
 
             <Button
                 android:id="@+id/buttonAtrasFavoritos"
-                android:layout_width="57dp"
-                android:layout_height="48dp"
+                android:layout_width="50dp"
+                android:layout_height="40dp"
                 android:layout_marginStart="8dp"
                 android:background="#FAFAFA"
-                android:backgroundTint="#00FFFFFF"
+                android:backgroundTint="#1E150909"
                 android:foreground="@drawable/flecha_atras"
                 android:gravity="center_horizontal|center_vertical"
+                android:iconTint="#000000"
+                card_view:iconSize="15dp"
                 card_view:iconTint="#000000" />
 
             <TextView

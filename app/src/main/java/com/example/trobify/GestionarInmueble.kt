@@ -1,5 +1,6 @@
 package com.example.trobify
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
@@ -56,7 +57,12 @@ class GestionarInmueble : AppCompatActivity(){
         val buttonSave = findViewById<Button>(R.id.buttonSaveGestion)
         buttonSave.setOnClickListener {
             setData(inmueble)
-            //finish()
+
+            val intent = Intent(this, MainTrobify::class.java)
+            intent.putExtra("user", userId)
+            startActivity(intent)
+
+            finish()
         }
     }
 
@@ -187,7 +193,7 @@ class GestionarInmueble : AppCompatActivity(){
 
 
         val updatedInmueble = DataInmueble(inmueble.getIdd(), inmueble.propietario, habitaciones, banos, superficie,
-                                           Sitio("nuse",  mutableMapOf(Pair("log",555.6), Pair("lat",666.2)),"id de d")
+                                           inmueble.direccionSitio
             , vivendaTipo, inmuebleTipo, anuncioTipo, precio, inmueble.fotos, inmueble.fotosOrd,
             certificado, descripcion, estado, parking, ascensor, amueblado, calefaccion, jardin, piscina, terraza, trastero, inmueble.fechaSubida.toString()  )
         val ref = db.collection("inmueblesv3").document(inmueble.getIdd().toString())

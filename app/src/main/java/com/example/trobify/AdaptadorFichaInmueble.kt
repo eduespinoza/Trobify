@@ -32,10 +32,6 @@ import java.util.stream.Stream
 
 class AdaptadorFichaInmueble() : AppCompatActivity() {
 
-    //Si se quiere pasar un inmueble hay que pasarlo con el putextra al intent de la siguiente forma
-    //val goFicha = Intent(this, AdaptadorFichaInmueble::class.java)
-    //goFicha.putExtra("inmueble", el inmueble que queremos pasar)
-
     private val db = Firebase.firestore
     var oferta : Int = 0
     var propietarioMail : String = ""

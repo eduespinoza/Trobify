@@ -33,7 +33,7 @@
                     <Button
                         android:id="@+id/buttonBackOfertar"
                         android:layout_width="57dp"
-                        android:layout_height="48dp"
+                        android:layout_height="match_parent"
                         android:layout_marginStart="8dp"
                         android:gravity="center_horizontal|center_vertical"
                         app:backgroundTint="#1E150909"

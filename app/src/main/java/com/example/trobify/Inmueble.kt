@@ -51,6 +51,7 @@ class Inmueble : Serializable{
     var trastero : Boolean? = null
 
     var caracteristicas : String? = null
+    var direccionSitio : Sitio? = null
 
     constructor()
 
@@ -83,7 +84,8 @@ class Inmueble : Serializable{
         terraza : Boolean?,
         trastero : Boolean?,
 
-        fechaSubida : LocalDateTime?
+        fechaSubida : LocalDateTime?,
+        direccionSitio : Sitio?
     ) {
 
         this.id = id
@@ -114,7 +116,7 @@ class Inmueble : Serializable{
         this.direccionO = direccionO
 
         this.fechaSubida = fechaSubida
-
+        this.direccionSitio = direccionSitio
 
     }
 
@@ -133,13 +135,7 @@ class Inmueble : Serializable{
         return res
     }
 
-    fun getfotos() : ArrayList<Int>{
-        return fotos
-    }
-    fun getfotosord() : ArrayList<String>{
-        return fotosOrd
 
-    }
 
     fun getIdd() : String?{
         return id
@@ -154,7 +150,7 @@ class Inmueble : Serializable{
             dataInmueble.direccion?.titulo,direccionO,dataInmueble.tipoVivienda,dataInmueble.tipoInmueble,dataInmueble.intencion,dataInmueble.precio,dataInmueble.fotos,
         dataInmueble.fotosOrd,dataInmueble.certificadoEnergetico,dataInmueble.descripcion,dataInmueble.estado,dataInmueble.parking
         ,dataInmueble.ascensor,dataInmueble.amueblado,dataInmueble.calefaccion,dataInmueble.jardin,dataInmueble.piscina,dataInmueble.terraza,
-            dataInmueble.trastero,LocalDateTime.parse(dataInmueble.fechaSubida))
+            dataInmueble.trastero,LocalDateTime.parse(dataInmueble.fechaSubida), dataInmueble.direccion)
     }
 
 

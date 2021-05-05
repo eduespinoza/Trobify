@@ -24,11 +24,14 @@
                 android:layout_width="57dp"
                 android:layout_height="48dp"
                 android:layout_marginStart="8dp"
-                android:background="#FAFAFA"
-                android:backgroundTint="#00FFFFFF"
+
                 android:foreground="@drawable/flecha_atras"
                 android:gravity="center_horizontal|center_vertical"
-                card_view:iconTint="#000000" />
+                card_view:iconTint="#000000"
+                android:backgroundTint="#1E150909"
+                android:icon="@drawable/flecha_atras"
+                android:iconTint="#000000"
+                />
 
             <TextView
                 android:id="@+id/textView9"

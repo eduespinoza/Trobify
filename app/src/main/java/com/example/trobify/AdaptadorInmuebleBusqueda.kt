@@ -6,10 +6,7 @@ import android.view.LayoutInflater
 import android.view.OrientationEventListener
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
 import java.time.Duration
 import java.time.LocalDate
@@ -27,6 +24,7 @@ class AdaptadorInmuebleBusqueda(private val fichainmueble : ArrayList<DataInmueb
         var fhabitaciones = view.findViewById<TextView>(R.id.habitaciones)
         var fdescripcion = view.findViewById<TextView>(R.id.descripcion)
         var ftiempo = view.findViewById<TextView>(R.id.tiempo)
+        var estrella = view.findViewById<Button>(R.id.estrellita_tarjetita)
         fun bind(inmueble : DataInmueble, clickListener : OnItemClickListener){
             view.setOnClickListener {
                 clickListener.onItemClicked(inmueble)
@@ -59,6 +57,7 @@ class AdaptadorInmuebleBusqueda(private val fichainmueble : ArrayList<DataInmueb
         holder.fsuperficie.text = fichainmueble[position].superficie.toString()
         holder.ftiempo.text = getTiempoToString(fichainmueble[position].fechaSubida)
         holder.bind(fichainmueble[position],itemClickListener)
+        holder.estrella.visibility = View.INVISIBLE
     }
     interface OnItemClickListener{
         fun onItemClicked(dataInmueble : DataInmueble)

@@ -31,6 +31,8 @@ class  MisPisos : AppCompatActivity() , AdaptadorInmuebleBusqueda.OnItemClickLis
         goFicha.putExtra("desdeMapa",false)
         goFicha.putExtra("desdeMisPisos", true)
         startActivity(goFicha)
+
+
     }
 
     override fun onCreate(savedInstanceState : Bundle?) {

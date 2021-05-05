@@ -1,5 +1,7 @@
 package com.example.trobify
 
-data class Sitio(var titulo : String? = null,
+import java.io.Serializable
+
+data class  Sitio (var titulo : String? = null,
                 var coordenadas : MutableMap<String,Double>? = null,
-                var id : String? = null)
+                var id : String? = null) : Serializable
