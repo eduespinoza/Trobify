@@ -82,7 +82,7 @@ class  ListaFavoritos () : AppCompatActivity() , AdaptadorInmuebleBusqueda.OnIte
 
         for (i in 0..listaIdFavoritos.size - 1) {
             var pisoId = listaIdFavoritos[i]
-            val sfDocRef = db.collection("inmueblesv3").document(pisoId)
+            val sfDocRef = db.collection("inmueblesv4").document(pisoId)
             sfDocRef.get().addOnSuccessListener { document ->
                 val piso = document.toObject<DataInmueble>()
                 if (piso != null) {
