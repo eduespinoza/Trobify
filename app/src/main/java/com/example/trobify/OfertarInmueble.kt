@@ -44,8 +44,8 @@ class OfertarInmueble : AppCompatActivity() {
     private var superficie : Int? = null
     private var direccion : Sitio? = null
     private var direccionO : Direccion? = null
-    private var numHabitaciones : Int? = null
-    private var numBanos : Int? = null
+    private var numHabitaciones : Int = 0
+    private var numBanos : Int = 0
     private var certificadoEnergetico : String? = null  //Desde la A hasta la G, hay que hacer que solo deje poner las letras posibles
     private var descripcion : String? = null
     private var fechaSubida : LocalDateTime? = null
@@ -478,9 +478,9 @@ class OfertarInmueble : AppCompatActivity() {
             if(sitio != null) direccion = sitio
             if(text.inDescripcion.text != null){ descripcion = text.inDescripcion.text.toString() }
             else{descripcion = ""}
-            if(text.inBaños.text != null){ numBanos = text.inBaños.text.toString().toInt() }
+            if(text.inBaños.text != null && text.inBaños.text.toString() != ""){ numBanos = Integer.parseInt(text.inBaños.text.toString())}
             else{numBanos = 0}
-            if(text.inHabitaciones.text != null){ numHabitaciones = text.inHabitaciones.text.toString().toInt() }
+            if(text.inHabitaciones.text != null && text.inHabitaciones.text.toString() != ""){ numHabitaciones = Integer.parseInt(text.inHabitaciones.text.toString())}
             else{numHabitaciones = 0}
 
             //Fotos esta vacia, y en fotosord estan las ids de las fotos subidas a firebase y direccion contiene el string de la direccion mientras que direccion0 esta vacio
