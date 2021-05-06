@@ -461,7 +461,7 @@ class OfertarInmueble : AppCompatActivity() {
     private fun post(){
         if(tipoInmueble == null){
             messageInmNull()
-        }else if(tipoVivienda == null){
+        }else if(tipoVivienda == null && text.layoutVivienda.visibility != View.GONE){
             messageVivNull()
         }else if( tipoAnuncio == null){
             messageAnuNull()
