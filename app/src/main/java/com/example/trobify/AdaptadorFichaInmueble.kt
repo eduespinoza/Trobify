@@ -50,7 +50,8 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
         desdeMapa = intent.extras?.get("desdeMapa") as Boolean
         desdeMisPisos = intent.extras?.get("desdeMisPisos") as Boolean
 
-        var path = "imagenesinmueble/" + inmueble.getIdd()
+        //var path = "imagenesinmueble/" + inmueble.getIdd()
+        var path = "imagenesinmueble/0Fphs"
 
         downloadFotos(path)
 

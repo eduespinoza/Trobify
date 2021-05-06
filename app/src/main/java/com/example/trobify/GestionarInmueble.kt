@@ -1,20 +1,32 @@
 package com.example.trobify
 
 import android.content.ContentValues
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import com.bumptech.glide.Glide
+import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.ListResult
+import com.google.firebase.storage.StorageReference
+import com.squareup.picasso.Picasso
+import com.synnapps.carouselview.CarouselView
 import kotlinx.android.synthetic.main.activity_gestion.*
+import java.util.*
+import kotlin.collections.ArrayList
 
 class GestionarInmueble : AppCompatActivity() {
 
     private val db = Firebase.firestore
+    val storage = FirebaseStorage.getInstance().reference
     lateinit var userId : String
+    lateinit var inmuebleId : String
 
     lateinit var tipoAnuncio : Spinner
     lateinit var tipoVivienda : Spinner
@@ -37,6 +49,7 @@ class GestionarInmueble : AppCompatActivity() {
     lateinit var terraza : CheckBox
     lateinit var trastero : CheckBox
 
+    private val SELECT_FILE  = 1
 
     override fun onCreate(savedInstanceState : Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,13 +57,30 @@ class GestionarInmueble : AppCompatActivity() {
 
         userId = intent.extras?.get("user") as String
         var inmueble = intent.extras?.get("inmueble") as Inmueble
+        inmuebleId = inmueble.id as String
 
 
         rellenarData(inmueble)
 
+        var path = "imagenesinmueble/" + inmueble.getIdd()
+
+        downloadFotos(path, "mostrar")
+
         val buttonBack = findViewById<Button>(R.id.buttonAtrasGestion)
         buttonBack.setOnClickListener {
             finish()
+        }
+
+        val buttonEliminarFotos = findViewById<Button>(R.id.buttonEliminarFotos)
+        buttonEliminarFotos.setOnClickListener{
+           downloadFotos(path,"eliminar")
+        }
+
+        val addFoto = findViewById<Button>(R.id.buttonAddFotoGestion)
+        addFoto.setOnClickListener{
+            val intent = Intent(Intent.ACTION_PICK)
+            intent.type = "image/*"
+            startActivityForResult(intent, SELECT_FILE)
         }
 
         val buttonSave = findViewById<Button>(R.id.buttonSaveGestion)
@@ -92,6 +122,22 @@ class GestionarInmueble : AppCompatActivity() {
                 }
             val alert = builder.create()
             alert.show()
+        }
+    }
+
+    override fun onActivityResult(requestCode : Int, resultCode : Int, data : Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if(requestCode == SELECT_FILE && resultCode == RESULT_OK ) {
+            var uri = data?.data
+            if (uri != null) {
+                val imageId = UUID.randomUUID().toString()
+                var filePath : StorageReference? = storage?.child("imagenesinmueble/"+ inmuebleId)?.child(imageId)
+                filePath?.putFile(uri)?.addOnSuccessListener(this) { taskSnapshot ->
+
+                    downloadFotos("imagenesinmueble/"+ inmuebleId, "mostrar")
+                }
+            }
         }
     }
 
@@ -322,5 +368,59 @@ class GestionarInmueble : AppCompatActivity() {
         }
 
         return false
+    }
+
+    private fun downloadFotos(path : String, para : String ) {
+
+        var ref = storage.child(path)
+        val imageList : ArrayList<String> = ArrayList()
+
+        val listAllTask: Task<ListResult> = ref.listAll()
+        listAllTask.addOnCompleteListener {result ->
+            val items : List<StorageReference> = result.result!!.items
+            items.forEachIndexed { _ , item ->
+                item.downloadUrl.addOnSuccessListener {
+                    Log.d("itemm", "$it")
+                    imageList.add(Item(it.toString()).imageUrl)
+
+
+                }.addOnCompleteListener{
+                    Log.d("itemm", "this is imageList in task "  + imageList.toString())
+                    if(para.equals("mostrar")){showImages(imageList,this)}
+                    else{eliminarFotos(imageList , path)}
+
+                }
+            }
+        }
+    }
+
+    private fun showImages(urls : ArrayList<String> , context : Context){
+        val carouselView = findViewById<CarouselView>(R.id.carouselGestion)
+
+        carouselView.setImageListener{ position, imageView ->
+            Picasso.get().load(urls[position]).into(imageView)
+
+        }
+        carouselView.setImageClickListener{ position ->
+            Toast.makeText(applicationContext, urls.get(position), Toast.LENGTH_SHORT).show()
+        }
+
+        carouselView.pageCount = urls.size
+    }
+
+
+
+    private fun eliminarFotos(urls : ArrayList<String> , path : String){
+
+
+    }
+
+
+    private fun shameTransform(list : ArrayList<String>) : Array<String>{
+        var res = arrayOfNulls<String>(list.size)
+        for(i in 0 .. list.size -1 ){
+            res[i] = list.get(i)
+        }
+        return res as Array<String>
     }
 }
