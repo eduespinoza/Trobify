@@ -1,9 +1,13 @@
 package com.example.trobify
 
+import android.app.SearchManager
 import android.content.ClipDescription
 import android.content.Intent
+import android.database.MatrixCursor
 import android.media.Image
 import android.os.Bundle
+import android.provider.BaseColumns
+import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
@@ -15,6 +19,7 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.google.type.DateTime
+import com.here.sdk.core.GeoCoordinates
 import com.synnapps.carouselview.CarouselView
 import com.synnapps.carouselview.ImageListener
 import kotlinx.android.synthetic.main.activity_ofertar_inmueble.*
@@ -28,7 +33,7 @@ class OfertarInmueble : AppCompatActivity() {
 
     private var user : String? = null
     var id : String = UUID.randomUUID().toString()
-
+    var buscador = Busqueda()
     private var fotos : ArrayList<Int> = arrayListOf()
     private var fotosOrd : ArrayList<String> = arrayListOf()
     private var tipoInmueble : String? = null
@@ -36,7 +41,7 @@ class OfertarInmueble : AppCompatActivity() {
     private var tipoAnuncio : String? = null
     private var precioDeVenta : Int? = null
     private var superficie : Int? = null
-    private var direccion : String? = null
+    private var direccion : Sitio? = null
     private var direccionO : Direccion? = null
     private var numHabitaciones : Int? = null
     private var numBanos : Int? = null
@@ -73,7 +78,9 @@ class OfertarInmueble : AppCompatActivity() {
 
     var sampleImages = intArrayOf()
 
-
+    lateinit var buscadorMapa : SearchView
+    lateinit var sitio : Sitio
+    var direccionCorrecta = false
 
 
     object text {
@@ -85,7 +92,7 @@ class OfertarInmueble : AppCompatActivity() {
         lateinit var layoutHabitaciones : LinearLayout
         lateinit var inPrecio : EditText
         lateinit var inSuperficie : EditText
-        lateinit var inDireccion  : EditText
+        lateinit var inDireccion  : TextView
         lateinit var inHabitaciones : EditText
         lateinit var inBaños : EditText
         lateinit var inDescripcion : EditText
@@ -119,6 +126,7 @@ class OfertarInmueble : AppCompatActivity() {
         text.inBaños = findViewById(R.id.inBaños)
         text.inDescripcion = findViewById(R.id.inDescripcion)
 
+        prepararBuscador()
 
         val bBack = findViewById<Button>(R.id.buttonBackOfertar)
         bBack.setOnClickListener { goBack() }
@@ -192,7 +200,55 @@ class OfertarInmueble : AppCompatActivity() {
         alertDialog.show()
     }
 
-
+    private fun prepararBuscador(){
+        buscadorMapa = findViewById(R.id.buscadorDirecciones)
+        val from = arrayOf(SearchManager.SUGGEST_COLUMN_TEXT_1)
+        val to = intArrayOf(R.id.item_label)
+        var adaptadorCursor = SimpleCursorAdapter(this.baseContext,R.layout.sugerencia_item,
+            null,from,to, CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER)
+        buscadorMapa.suggestionsAdapter = adaptadorCursor
+        buscadorMapa.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
+            override fun onQueryTextSubmit(query: String): Boolean {return false}
+            override fun onQueryTextChange(query : String?) : Boolean {
+                if (query != null) {
+                    buscador.obtenerSugerencias("$query",GeoCoordinates(39.48204,-0.33876))
+                    var cursor = MatrixCursor(arrayOf(BaseColumns._ID, SearchManager.SUGGEST_COLUMN_TEXT_1))
+                    buscador.sugerencias.forEachIndexed{
+                            indice, item ->
+                        cursor.addRow(arrayOf(indice,item.title))
+                    }
+                    adaptadorCursor.changeCursor(cursor)
+                }
+                direccionCorrecta = false
+                return false
+            }
+        })
+        buscadorMapa.setOnSuggestionListener(object: SearchView.OnSuggestionListener {
+            override fun onSuggestionSelect(position: Int): Boolean {return false}
+            override fun onSuggestionClick(position: Int): Boolean {
+                val cursor = buscadorMapa.suggestionsAdapter.getItem(position) as MatrixCursor
+                val selection = cursor.getString(cursor.getColumnIndex(SearchManager.SUGGEST_COLUMN_TEXT_1))
+                buscadorMapa.setQuery("",true)
+                buscadorMapa.isIconified = true
+                text.inDireccion.visibility = View.VISIBLE
+                text.inDireccion.text = selection
+                buscador.sugerencias.forEach{
+                    if(it.title.equals(selection)){
+                        sitio = Sitio(it.title,
+                            mutableMapOf("latitud" to it.geoCoordinates!!.latitude,
+                              "longitud" to it.geoCoordinates!!.longitude),it.id)
+                    }
+                }
+                direccionCorrecta = true
+                text.inHabitaciones.requestFocus()
+                return true
+            }
+        })
+        buscadorMapa.setOnSearchClickListener{
+            text.inDireccion.text = ""
+            text.inDireccion.visibility = View.GONE
+        }
+    }
 
     private fun chooseAnuncio(){
         val builder = AlertDialog.Builder(this@OfertarInmueble)
@@ -396,13 +452,13 @@ class OfertarInmueble : AppCompatActivity() {
             messagePreInc()
         }else if(text.inSuperficie.text.toString() == null ||text.inSuperficie.text.toString().toInt()!! <= 0){
             messageSupInc()
-        }else if(text.inDireccion.text.toString() == null){
+        }else if(text.inDireccion.text == "" || !direccionCorrecta){
             messageDirNull()
         }else{
 
             precioDeVenta = text.inPrecio.text.toString().toInt()
             superficie = text.inSuperficie.text.toString().toInt()
-            direccion = text.inDireccion.text.toString()
+            if(sitio != null)direccion = sitio
             if(text.inDescripcion.text != null){ descripcion = text.inDescripcion.text.toString() }
             else{descripcion = ""}
             if(text.inBaños.text != null){ numBanos = text.inBaños.text.toString().toInt() }
@@ -413,7 +469,7 @@ class OfertarInmueble : AppCompatActivity() {
             //Fotos esta vacia, y en fotosord estan las ids de las fotos subidas a firebase y direccion contiene el string de la direccion mientras que direccion0 esta vacio
 
 
-            val anuncio = DataInmueble(id,user,numHabitaciones,numBanos,superficie,Sitio(),tipoVivienda,tipoInmueble,tipoAnuncio,precioDeVenta,fotos,fotosOrd,
+            val anuncio = DataInmueble(id,user,numHabitaciones,numBanos,superficie,direccion,tipoVivienda,tipoInmueble,tipoAnuncio,precioDeVenta,fotos,fotosOrd,
                 "",descripcion,estado,parking,ascensor,amueblado,calefaccion,jardin,piscina,terraza,trastero, LocalDateTime.now().toString())
 
             subirInmuebleBD(anuncio)
@@ -432,7 +488,7 @@ class OfertarInmueble : AppCompatActivity() {
     private fun subirInmuebleBD(inmueble : DataInmueble){
         val db = Firebase.firestore
 
-        inmueble.id?.let { db.collection("inmueblesv3").document(it).set(inmueble) }
+        inmueble.id?.let { db.collection("inmueblesv4").document(it).set(inmueble) }
     }
 
     private fun messageInmNull(){

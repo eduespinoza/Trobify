@@ -344,16 +344,23 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_weight="1"
                         android:orientation="horizontal">
 
-                        <EditText
+                        <SearchView
+                            android:id="@+id/buscadorDirecciones"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:clickable="true"
+                            android:queryHint="Elige una sugerencia" />
+
+                        <TextView
                             android:id="@+id/inDireccion"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
                             android:layout_weight="1"
-                            android:ems="10"
-                            android:inputType="textPersonName" />
+                            android:gravity="center|start"
+                            android:textSize="18sp" />
+
                     </LinearLayout>
 
                 </LinearLayout>
