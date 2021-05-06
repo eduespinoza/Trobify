@@ -354,7 +354,6 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
 
 
                     }.addOnCompleteListener{
-                        Log.d("itemm", "this is imageList in task "  + imageList.toString())
                         showImages(imageList,this)
                     }
             }

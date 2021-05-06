@@ -18,8 +18,15 @@ import com.google.firebase.storage.StorageReference
 import com.squareup.picasso.Picasso
 import com.synnapps.carouselview.CarouselView
 import kotlinx.android.synthetic.main.activity_gestion.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.withContext
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.tasks.await
 
 class GestionarInmueble : AppCompatActivity() {
 
@@ -27,6 +34,8 @@ class GestionarInmueble : AppCompatActivity() {
     val storage = FirebaseStorage.getInstance().reference
     lateinit var userId : String
     lateinit var inmuebleId : String
+    lateinit var urls : ArrayList<String>
+    lateinit var path : String
 
     lateinit var tipoAnuncio : Spinner
     lateinit var tipoVivienda : Spinner
@@ -62,7 +71,10 @@ class GestionarInmueble : AppCompatActivity() {
 
         rellenarData(inmueble)
 
-        var path = "imagenesinmueble/" + inmueble.getIdd()
+        path = "imagenesinmueble/" + inmueble.getIdd()
+
+
+
 
         downloadFotos(path, "mostrar")
 
@@ -73,7 +85,12 @@ class GestionarInmueble : AppCompatActivity() {
 
         val buttonEliminarFotos = findViewById<Button>(R.id.buttonEliminarFotos)
         buttonEliminarFotos.setOnClickListener{
-           downloadFotos(path,"eliminar")
+            val intent = Intent(this, EliminarFotos::class.java)
+            intent.putExtra("path", path)
+            intent.putExtra("urls", urls)
+            startActivity(intent)
+
+            downloadFotos(path , "mostrar")
         }
 
         val addFoto = findViewById<Button>(R.id.buttonAddFotoGestion)
@@ -139,6 +156,7 @@ class GestionarInmueble : AppCompatActivity() {
                 }
             }
         }
+        downloadFotos(path, "mostrar")
     }
 
     private fun rellenarData(inmueble : Inmueble) {
@@ -375,26 +393,35 @@ class GestionarInmueble : AppCompatActivity() {
         var ref = storage.child(path)
         val imageList : ArrayList<String> = ArrayList()
 
-        val listAllTask: Task<ListResult> = ref.listAll()
-        listAllTask.addOnCompleteListener {result ->
-            val items : List<StorageReference> = result.result!!.items
-            items.forEachIndexed { _ , item ->
-                item.downloadUrl.addOnSuccessListener {
-                    Log.d("itemm", "$it")
-                    imageList.add(Item(it.toString()).imageUrl)
+        GlobalScope.launch(IO) {
+
+            withContext(Dispatchers.Main){
+                val listAllTask : Task<ListResult> = ref.listAll()
+                listAllTask.addOnCompleteListener { result ->
+                    val items : List<StorageReference> = result.result!!.items
+                    items.forEachIndexed { _, item ->
+                        item.downloadUrl.addOnSuccessListener {
+                            Log.d("itemm", "$it")
+                            imageList.add(Item(it.toString()).imageUrl)
 
 
-                }.addOnCompleteListener{
-                    Log.d("itemm", "this is imageList in task "  + imageList.toString())
-                    if(para.equals("mostrar")){showImages(imageList,this)}
-                    else{eliminarFotos(imageList , path)}
+                        }.addOnCompleteListener {
+                            urls = imageList
+                            if (para.equals("mostrar")) {
+                                showImages(imageList)
+                            }
 
+
+                        }
+                    }
                 }
             }
         }
+
+
     }
 
-    private fun showImages(urls : ArrayList<String> , context : Context){
+    private fun showImages(urls : ArrayList<String>){
         val carouselView = findViewById<CarouselView>(R.id.carouselGestion)
 
         carouselView.setImageListener{ position, imageView ->
@@ -403,24 +430,10 @@ class GestionarInmueble : AppCompatActivity() {
         }
         carouselView.setImageClickListener{ position ->
             Toast.makeText(applicationContext, urls.get(position), Toast.LENGTH_SHORT).show()
-        }
 
+        }
         carouselView.pageCount = urls.size
     }
 
 
-
-    private fun eliminarFotos(urls : ArrayList<String> , path : String){
-
-
-    }
-
-
-    private fun shameTransform(list : ArrayList<String>) : Array<String>{
-        var res = arrayOfNulls<String>(list.size)
-        for(i in 0 .. list.size -1 ){
-            res[i] = list.get(i)
-        }
-        return res as Array<String>
-    }
 }
