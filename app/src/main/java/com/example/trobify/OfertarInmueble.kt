@@ -7,6 +7,7 @@ import android.database.MatrixCursor
 import android.media.Image
 import android.os.Bundle
 import android.provider.BaseColumns
+import android.text.Layout
 import android.util.Log
 import android.view.View
 import android.widget.*
@@ -51,14 +52,14 @@ class OfertarInmueble : AppCompatActivity() {
     private var estado : String? = null
     private var imageId : String = "no_tiene"
 
-    private var parking : Boolean? = null
-    private var ascensor : Boolean? = null
-    private var amueblado : Boolean? = null
-    private var calefaccion : Boolean? = null
-    private var jardin : Boolean? = null
-    private var piscina : Boolean? = null
-    private var terraza : Boolean? = null
-    private var trastero : Boolean? = null
+    private var parking : Boolean = false
+    private var ascensor : Boolean = false
+    private var amueblado : Boolean = false
+    private var calefaccion : Boolean = false
+    private var jardin : Boolean = false
+    private var piscina : Boolean = false
+    private var terraza : Boolean = false
+    private var trastero : Boolean = false
     private var image : ImageView? = null
     private lateinit var carimages : CarouselView
 
@@ -79,7 +80,7 @@ class OfertarInmueble : AppCompatActivity() {
     var sampleImages = intArrayOf()
 
     lateinit var buscadorMapa : SearchView
-    lateinit var sitio : Sitio
+    var sitio : Sitio? = null
     var direccionCorrecta = false
 
 
@@ -96,6 +97,7 @@ class OfertarInmueble : AppCompatActivity() {
         lateinit var inHabitaciones : EditText
         lateinit var inBaños : EditText
         lateinit var inDescripcion : EditText
+        lateinit var layoutVivienda : LinearLayout
     }
 
     override fun onCreate(savedInstanceState : Bundle?) {
@@ -113,6 +115,8 @@ class OfertarInmueble : AppCompatActivity() {
         carimages.setPageCount(sampleImages.size);
         carimages.setImageListener(imageListener);
 
+
+        text.layoutVivienda = findViewById(R.id.layoutTipoVivienda)
         text.tipoInmuebleElegidoText = findViewById(R.id.textViewTipoElegido)
         text.tipoViviendaElegidoText = findViewById(R.id.textViewTipodeViviendaElegido)
         text.tipoAnuncioText = findViewById(R.id.textViewTipodeanuncioelegido)
@@ -285,16 +289,25 @@ class OfertarInmueble : AppCompatActivity() {
                 -> {
                     text.tipoInmuebleElegidoText.text = optionsInmueble[0]
                     tipoInmueble = "Vivienda"
+                    text.layoutHabitaciones.setVisibility(View.VISIBLE)
+                    text.layoutBaños.setVisibility(View.VISIBLE)
+                    text.layoutVivienda.setVisibility(View.VISIBLE)
                 }
                 which.equals(1)
                 -> {
                     text.tipoInmuebleElegidoText.text = optionsInmueble[1]
                     tipoInmueble = "Edificio"
+                    text.layoutHabitaciones.setVisibility(View.VISIBLE)
+                    text.layoutBaños.setVisibility(View.VISIBLE)
+                    text.layoutVivienda.setVisibility(View.VISIBLE)
                 }
                 which.equals(2)
                 -> {
                     text.tipoInmuebleElegidoText.text = optionsInmueble[2]
                     tipoInmueble = "Oficina"
+                    text.layoutHabitaciones.setVisibility(View.GONE)
+                    text.layoutBaños.setVisibility(View.VISIBLE)
+                    text.layoutVivienda.setVisibility(View.GONE)
                 }
                 which.equals(3)
                 -> {
@@ -302,12 +315,14 @@ class OfertarInmueble : AppCompatActivity() {
                     tipoInmueble = "Garaje"
                     text.layoutHabitaciones.setVisibility(View.GONE)
                     text.layoutBaños.setVisibility(View.GONE)
+                    text.layoutVivienda.setVisibility(View.GONE)
                 }
                 which.equals(4)
                 -> {
                     text.tipoInmuebleElegidoText.text = optionsInmueble[4]
                     tipoInmueble = "Local"
                     text.layoutHabitaciones.setVisibility(View.GONE)
+                    text.layoutVivienda.setVisibility(View.GONE)
                 }
                 which.equals(5)
                 -> {
@@ -315,6 +330,7 @@ class OfertarInmueble : AppCompatActivity() {
                     tipoInmueble = "Terreno"
                     text.layoutHabitaciones.setVisibility(View.GONE)
                     text.layoutBaños.setVisibility(View.GONE)
+                    text.layoutVivienda.setVisibility(View.GONE)
                 }
                 which.equals(6)
                 -> {
@@ -322,6 +338,7 @@ class OfertarInmueble : AppCompatActivity() {
                     tipoInmueble = "Nave"
                     text.layoutHabitaciones.setVisibility(View.GONE)
                     text.layoutBaños.setVisibility(View.GONE)
+                    text.layoutVivienda.setVisibility(View.GONE)
                 }
             }
         }
@@ -458,7 +475,7 @@ class OfertarInmueble : AppCompatActivity() {
 
             precioDeVenta = text.inPrecio.text.toString().toInt()
             superficie = text.inSuperficie.text.toString().toInt()
-            if(sitio != null)direccion = sitio
+            if(sitio != null) direccion = sitio
             if(text.inDescripcion.text != null){ descripcion = text.inDescripcion.text.toString() }
             else{descripcion = ""}
             if(text.inBaños.text != null){ numBanos = text.inBaños.text.toString().toInt() }
