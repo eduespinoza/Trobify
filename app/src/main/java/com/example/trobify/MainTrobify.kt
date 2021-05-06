@@ -1,5 +1,6 @@
 package com.example.trobify
 
+import android.content.ContentValues
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
@@ -51,6 +52,8 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
     //var sitios = arrayListOf<Sitio>()
     var filtrosAplicados : FiltrosBusqueda.filtros? = null
 
+    lateinit var userFav : ArrayList<String>
+
     object orden{
         var ordenSeleccionado : Int = 2
     }
@@ -71,8 +74,10 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
         filtrosAplicados = intent.extras!!.get("filtros") as FiltrosBusqueda.filtros?
         //Se obtienen resultados de la base de datos
         GlobalScope.launch(IO){
+            getFavs { userFav = it }
             var pisos = database.gimme().await().toObjects(DataInmueble::class.java)
             withContext(Dispatchers.Main){
+                Log.d("itemm", "esto pasa por aqui vd?? " + userFav.toString())
                 inmuebles = pisos as ArrayList<DataInmueble>
                 if(filtrosAplicados != null){
                     var result = GestionFiltros(database).aplicar(filtrosAplicados!!)
@@ -451,7 +456,22 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
     }
 
     fun mostrarInmuebles(listaInmuebles : ArrayList<DataInmueble>){
-        listaConResultados.adapter = AdaptadorInmuebleBusqueda(listaInmuebles,this)
+        listaConResultados.adapter = AdaptadorInmuebleBusqueda(listaInmuebles, userFav,this)
         nResultados.text = "${listaInmuebles.size} resultados"
+    }
+
+    private fun getFavs(myCallback : (ArrayList<String>) -> Unit){
+        val sfDocRef = db.collection("users").document(user)
+
+        db.runTransaction { transaction ->
+            val snapshot = transaction.get(sfDocRef)
+            var favoritosStringArray = snapshot.get("favorites")
+            myCallback(favoritosStringArray as ArrayList<String>)
+
+        }.addOnSuccessListener { result ->
+            Log.d(ContentValues.TAG, "Transaction success: $result")
+        }.addOnFailureListener { e ->
+            Log.w(ContentValues.TAG, "Transaction failure.", e)
+        }
     }
 }

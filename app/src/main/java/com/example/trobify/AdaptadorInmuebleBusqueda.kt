@@ -8,11 +8,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import java.time.Duration
 import java.time.LocalDate
 import java.time.LocalDateTime
 
-class AdaptadorInmuebleBusqueda(private val fichainmueble : ArrayList<DataInmueble>,
+class AdaptadorInmuebleBusqueda(private val fichainmueble : ArrayList<DataInmueble>, private val favs : ArrayList<String>,
     val itemClickListener : OnItemClickListener)
     : RecyclerView.Adapter<AdaptadorInmuebleBusqueda.ViewHolder>() {
 
@@ -44,6 +46,7 @@ class AdaptadorInmuebleBusqueda(private val fichainmueble : ArrayList<DataInmueb
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+
         var tipo = fichainmueble[position].tipoVivienda
         if(tipo.equals("Vivienda") || tipo.equals("Edificio"))
             tipo = fichainmueble[position].tipoInmueble
@@ -57,7 +60,13 @@ class AdaptadorInmuebleBusqueda(private val fichainmueble : ArrayList<DataInmueb
         holder.fsuperficie.text = fichainmueble[position].superficie.toString()
         holder.ftiempo.text = getTiempoToString(fichainmueble[position].fechaSubida)
         holder.bind(fichainmueble[position],itemClickListener)
-        holder.estrella.visibility = View.INVISIBLE
+        if(favs.contains(fichainmueble[position].id)){
+            holder.estrella.visibility = View.VISIBLE
+        }
+        else{
+            holder.estrella.visibility = View.INVISIBLE
+        }
+
     }
     interface OnItemClickListener{
         fun onItemClicked(dataInmueble : DataInmueble)

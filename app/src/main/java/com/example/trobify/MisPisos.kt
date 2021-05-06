@@ -95,7 +95,7 @@ class  MisPisos : AppCompatActivity() , AdaptadorInmuebleBusqueda.OnItemClickLis
         caja.setHasFixedSize(true)
         val layoutmanager = LinearLayoutManager(baseContext)
         caja.layoutManager = layoutmanager
-        caja.adapter = AdaptadorInmuebleBusqueda(pisosFav, this)
+        caja.adapter = AdaptadorInmuebleBusqueda(pisosFav, arrayListOf(""),this)
     }
 
 

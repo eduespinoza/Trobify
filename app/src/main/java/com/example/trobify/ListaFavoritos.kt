@@ -46,6 +46,8 @@ class  ListaFavoritos () : AppCompatActivity() , AdaptadorInmuebleBusqueda.OnIte
             val goMain = Intent(this, MainTrobify::class.java)
             goMain.putExtra("user", userId)
             startActivity(goMain)
+
+            finish()
         }
         cargarFavDe(userId)
 
@@ -96,7 +98,7 @@ class  ListaFavoritos () : AppCompatActivity() , AdaptadorInmuebleBusqueda.OnIte
         caja.setHasFixedSize(true)
         val layoutmanager = LinearLayoutManager(baseContext)
         caja.layoutManager = layoutmanager
-        caja.adapter = AdaptadorInmuebleBusqueda(pisosFav, this)
+        caja.adapter = AdaptadorInmuebleBusqueda(pisosFav, arrayListOf(""),this)
     }
 
 
