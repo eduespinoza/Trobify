@@ -40,7 +40,7 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
     lateinit var inmuebles : ArrayList<DataInmueble>
     val db = Firebase.firestore
 
-    lateinit var inmueblesEnPantalla : ArrayList<DataInmueble>
+    var inmueblesEnPantalla : ArrayList<DataInmueble> = arrayListOf()
     lateinit var userId : String
     lateinit var user : DataUser
     val nuevaBusqueda = Busqueda()
@@ -107,8 +107,7 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
 
         prepararBuscador()
         setListeners()
-
-
+        if(!inmueblesEnPantalla.isNullOrEmpty()) {verficarOrdenacion()}
     }
     fun mostrarResultadosFiltros(inmuebles : ArrayList<DataInmueble>){
         inmueblesEnPantalla = inmuebles
@@ -253,27 +252,27 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
                 when {
                     which.equals(0) // Ordenar por precio ascendente
                     -> {
-                        inmueblesEnPantalla = ordenarInmuebles(0, inmueblesEnPantalla)
-                        cabecera.text = "Inmuebles ordenados ascendentemente"
                         orden.ordenSeleccionado = 0
+                        inmueblesEnPantalla = ordenarInmuebles()
+                        cabecera.text = "Inmuebles ordenados ascendentemente"
                     }
                     which.equals(1)// Ordenar por precio descendente
                     -> {
-                        inmueblesEnPantalla = ordenarInmuebles(1, inmueblesEnPantalla)
-                        cabecera.text = "Inmuebles ordenados descendentemente"
                         orden.ordenSeleccionado = 1
+                        inmueblesEnPantalla = ordenarInmuebles()
+                        cabecera.text = "Inmuebles ordenados descendentemente"
                     }
                     which.equals(2) // Ordenar por más recientes
                     -> {
-                        inmueblesEnPantalla = ordenarInmuebles(2, inmueblesEnPantalla)
-                        cabecera.text = "Inmuebles añadidos recientemente"
                         orden.ordenSeleccionado = 2
+                        inmueblesEnPantalla = ordenarInmuebles()
+                        cabecera.text = "Inmuebles añadidos recientemente"
                     }
                     which.equals(3) // Ordenar por más antiguos
                     -> {
-                        inmueblesEnPantalla = ordenarInmuebles(3, inmueblesEnPantalla)
-                        cabecera.text = "Inmuebles ordenados por antiguedad"
                         orden.ordenSeleccionado = 3
+                        inmueblesEnPantalla = ordenarInmuebles()
+                        cabecera.text = "Inmuebles ordenados por antiguedad"
                     }
                 }
                 mostrarInmuebles(inmueblesEnPantalla)
@@ -429,19 +428,19 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
         }
     }
 
-    fun ordenarInmuebles(tipoSeleccionado:Int, listaInmuebles : ArrayList<DataInmueble>) : ArrayList<DataInmueble>{
+    fun ordenarInmuebles() : ArrayList<DataInmueble>{
         lateinit var inmueblesOrdenados :List<DataInmueble>
-        if(tipoSeleccionado.equals(0)){
-            inmueblesOrdenados = listaInmuebles.sortedBy{it.precio}
+        if(orden.ordenSeleccionado.equals(0)){
+            inmueblesOrdenados = inmueblesEnPantalla.sortedBy{it.precio}
         }
-        else if(tipoSeleccionado.equals(1)){
-            inmueblesOrdenados = listaInmuebles.sortedByDescending{it.precio}
+        else if(orden.ordenSeleccionado.equals(1)){
+            inmueblesOrdenados = inmueblesEnPantalla.sortedByDescending{it.precio}
         }
-        else if(tipoSeleccionado.equals(2)){
-            inmueblesOrdenados = listaInmuebles.sortedByDescending{it.fechaSubida}
+        else if(orden.ordenSeleccionado.equals(2)){
+            inmueblesOrdenados = inmueblesEnPantalla.sortedByDescending{it.fechaSubida}
         }
-        else if(tipoSeleccionado.equals(3)){
-            inmueblesOrdenados = listaInmuebles.sortedBy{it.fechaSubida}
+        else if(orden.ordenSeleccionado.equals(3)){
+            inmueblesOrdenados = inmueblesEnPantalla.sortedBy{it.fechaSubida}
         }
         return inmueblesOrdenados.toMutableList() as ArrayList<DataInmueble>
     }
@@ -449,6 +448,11 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
     fun mostrarInmuebles(listaInmuebles : ArrayList<DataInmueble>){
         listaConResultados.adapter = AdaptadorInmuebleBusqueda(listaInmuebles, userFav,this)
         nResultados.text = "${listaInmuebles.size} resultados"
+    }
+
+    fun verficarOrdenacion(){
+        GuardaOrdenacion.guardaOrdenacion.ordenGuardado = orden.ordenSeleccionado
+        ordenarInmuebles()
     }
 
     private fun getFavs(myCallback : (ArrayList<String>) -> Unit){
