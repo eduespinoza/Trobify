@@ -47,10 +47,7 @@ class AdaptadorInmuebleBusqueda(private val fichainmueble : ArrayList<DataInmueb
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
-        var tipo = fichainmueble[position].tipoVivienda
-        if(tipo.equals("Vivienda") || tipo.equals("Edificio"))
-            tipo = fichainmueble[position].tipoInmueble
-
+        var tipo = fichainmueble[position].tipoInmueble
         holder.ftitulo.text = tipo +" en: " + (fichainmueble[position].direccion?.titulo)
         //holder.fimage.setImageResource(fichainmueble[position].photos.first())
         holder.fimage.setImageResource(R.drawable.piso4)

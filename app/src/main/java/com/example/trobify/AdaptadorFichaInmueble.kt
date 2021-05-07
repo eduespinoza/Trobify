@@ -27,6 +27,7 @@ import com.google.firebase.storage.ListResult
 import com.google.firebase.storage.StorageException
 import com.google.firebase.storage.StorageReference
 import com.squareup.picasso.Picasso
+import kotlinx.coroutines.tasks.await
 import java.io.InputStream
 import java.util.stream.Stream
 
@@ -180,11 +181,15 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
         caracteristicas.setTextSize(TypedValue.COMPLEX_UNIT_PX, 40F)
 
         val name = findViewById<TextView>(R.id.textViewPropietarioFicha)
-        name.text = inmueble.propietario?.toString()
-        propietarioMail = name.text.toString()
-        name.setTextColor(Color.BLACK)
-        name.setTextSize(TypedValue.COMPLEX_UNIT_PX, 40F)
-
+        inmueble.propietario?.let {
+            db.collection("users").document(it).get()
+                .addOnSuccessListener { e ->
+                    name.text = e.data?.get("name").toString()
+                    propietarioMail = e.data?.get("email").toString()
+                    name.setTextColor(Color.BLACK)
+                    name.setTextSize(TypedValue.COMPLEX_UNIT_PX, 40F)
+                }
+        }
         isFav(inmueble, userId)
 
 
