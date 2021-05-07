@@ -49,8 +49,8 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
         var inmueble = intent.extras?.get("inmueble") as Inmueble
         desdeMisPisos = intent.extras?.get("desdeMisPisos") as Boolean
 
-        //var path = "imagenesinmueble/" + inmueble.getIdd()
-        var path = "imagenesinmueble/0Fphs"
+        var path = "imagenesinmueble/" + inmueble.getIdd()
+        //var path = "imagenesinmueble/0Fphs"
 
         downloadFotos(path)
 
@@ -61,6 +61,9 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
 
         val buttonAtras = findViewById<Button>(R.id.buttonAtrasFicha)
         buttonAtras.setOnClickListener{
+            val goBack = Intent(this, MainTrobify::class.java)
+            goBack.putExtra("user", userId)
+            startActivity(goBack)
             finish()
         }
 

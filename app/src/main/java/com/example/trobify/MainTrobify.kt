@@ -66,6 +66,7 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
         goFicha.putExtra("desdeMisPisos", false)
         startActivity(goFicha)
     }
+
     override fun onCreate(savedInstanceState: Bundle?)
     {
         super.onCreate(savedInstanceState)

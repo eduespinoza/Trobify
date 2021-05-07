@@ -317,7 +317,7 @@ class GestionarInmueble : AppCompatActivity() {
             trastero,
             inmueble.fechaSubida.toString()
         )
-        val ref = db.collection("inmueblesv3").document(inmueble.getIdd().toString())
+        val ref = db.collection("inmueblesv4").document(inmueble.getIdd().toString())
 
         if(checkFormats()) {
             db.runBatch { batch ->
@@ -348,7 +348,7 @@ class GestionarInmueble : AppCompatActivity() {
 
     private fun delete(inmueble : Inmueble) {
 
-        val ref = db.collection("inmueblesv3").document(inmueble.getIdd().toString())
+        val ref = db.collection("inmueblesv4").document(inmueble.getIdd().toString())
         val refUser = db.collection("users").document(userId)
         db.runBatch { batch ->
             batch.delete(ref)
