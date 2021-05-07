@@ -212,7 +212,7 @@ class Mapa : AppCompatActivity(){
                 return@stop
             }
         }
-        goFicha.putExtra("desdeMapa",true)
+        goFicha.putExtra("desdeMisPisos", false)
         startActivity(goFicha)
     }
     private fun loadMapScene() {

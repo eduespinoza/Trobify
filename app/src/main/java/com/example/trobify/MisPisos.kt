@@ -15,7 +15,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 class  MisPisos : AppCompatActivity() , AdaptadorInmuebleBusqueda.OnItemClickListener {
-
+    val database = Database()
     val db = Firebase.firestore
     lateinit var caja : RecyclerView
     lateinit var userId : String
@@ -28,7 +28,6 @@ class  MisPisos : AppCompatActivity() , AdaptadorInmuebleBusqueda.OnItemClickLis
         val goFicha = Intent(this, AdaptadorFichaInmueble::class.java)
         goFicha.putExtra("user", userId)
         goFicha.putExtra("inmueble", Inmueble().adaptarInmuble(dataInmueble))
-        goFicha.putExtra("desdeMapa",false)
         goFicha.putExtra("desdeMisPisos", true)
         startActivity(goFicha)
 
@@ -79,7 +78,7 @@ class  MisPisos : AppCompatActivity() , AdaptadorInmuebleBusqueda.OnItemClickLis
 
         for (i in 0..listaIdPisos.size - 1) {
             var pisoId = listaIdPisos[i]
-            val sfDocRef = db.collection("inmueblesv3").document(pisoId)
+            val sfDocRef = db.collection("inmueblesv4").document(pisoId)
             sfDocRef.get().addOnSuccessListener { document ->
                 val piso = document.toObject<DataInmueble>()
                 if (piso != null) {

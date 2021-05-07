@@ -82,6 +82,7 @@ class OfertarInmueble : AppCompatActivity() {
     lateinit var buscadorMapa : SearchView
     var sitio : Sitio? = null
     var direccionCorrecta = false
+    val database = Database()
 
 
     object text {
@@ -241,6 +242,8 @@ class OfertarInmueble : AppCompatActivity() {
                         sitio = Sitio(it.title,
                             mutableMapOf("latitud" to it.geoCoordinates!!.latitude,
                               "longitud" to it.geoCoordinates!!.longitude),it.id)
+                        println(sitio)
+                        println("por aqui un sitio bomba")
                     }
                 }
                 direccionCorrecta = true
@@ -489,7 +492,7 @@ class OfertarInmueble : AppCompatActivity() {
             val anuncio = DataInmueble(id,user,numHabitaciones,numBanos,superficie,direccion,tipoVivienda,tipoInmueble,tipoAnuncio,precioDeVenta,fotos,fotosOrd,
                 "",descripcion,estado,parking,ascensor,amueblado,calefaccion,jardin,piscina,terraza,trastero, LocalDateTime.now().toString())
 
-            subirInmuebleBD(anuncio)
+            database.subirInmueble(anuncio)
 
 
             val builder =  AlertDialog.Builder(this)

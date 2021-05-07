@@ -5,12 +5,14 @@ import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.tasks.await
 import java.util.*
 import kotlin.collections.ArrayList
 
 class Database {
     val db = Firebase.firestore
-    var observador = false
     var inmuebles = arrayListOf<DataInmueble>()
     var users = arrayListOf<DataUser>()
 
@@ -61,6 +63,11 @@ class Database {
             }
     }
     // INMUEBLES QUERIES
+    fun subirInmueble(inmueble : DataInmueble){
+        inmueble.id?.let { db.collection("inmueblesv4").document(it).set(inmueble) }
+        inmuebles.add(inmueble)
+        inmueble.propietario?.let { inmueble.id?.let { it1 -> setPisoUser(it, it1) } }
+    }
     fun getInmueblesByIds(ids : ArrayList<String>):ArrayList<DataInmueble>{
         var inmueblesEncontrados = arrayListOf<DataInmueble>()
         for (ident in ids) {
@@ -131,6 +138,19 @@ class Database {
     }
 
     //USER QUERIES
+    private fun setPisoUser(idUser : String, idInmueble : String){
+        var user = getUserById(idUser)
+        user.pisos?.add(idInmueble)
+        db.collection("users").
+        document(idUser).update("pisos",user.pisos)
+    }
+    fun subirUsuario(user : DataUser){
+        user.id?.let { db.collection("users").document(it).set(user)}
+        users.add(user)
+    }
+    fun getUser(id:String):DataUser? = runBlocking{
+        db.collection("users").document(id).get().await().toObject(DataUser::class.java)
+    }
     fun getUserById(id : String) : DataUser {
         var userResult = DataUser()
         users.forEach { user ->
@@ -141,4 +161,37 @@ class Database {
         }
         return userResult
     }
+    fun getPisosUser(userId : String) : ArrayList<DataInmueble>? {
+        var user = getUserById(userId)
+        var pisos = user.pisos
+        return pisos?.let { getInmueblesByIds(it) }
+    }
+    fun getFavsUser(userId : String) : ArrayList<String>? {
+        var user = getUserById(userId)
+        return user.favorites
+    }
+    fun getAllUsersEmails() : MutableList<String>{
+        var result = mutableListOf<String>()
+        users.forEach{ user ->
+            user.email?.let { result.add(it) }
+        }
+        return result
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

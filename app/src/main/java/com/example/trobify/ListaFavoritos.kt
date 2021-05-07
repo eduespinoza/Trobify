@@ -27,7 +27,6 @@ class  ListaFavoritos () : AppCompatActivity() , AdaptadorInmuebleBusqueda.OnIte
         val goFicha = Intent(this, AdaptadorFichaInmueble::class.java)
         goFicha.putExtra("inmueble", Inmueble().adaptarInmuble(dataInmueble))
         goFicha.putExtra("user", userId)
-        goFicha.putExtra("desdeMapa", false)
         goFicha.putExtra("desdeMisPisos", false)
         startActivity(goFicha)
     }

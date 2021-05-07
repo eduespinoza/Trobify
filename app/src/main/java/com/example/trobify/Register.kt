@@ -25,6 +25,7 @@ class Register : AppCompatActivity() {
     var email:String? = null
     var password:String? = null
     var comPassword:String? = null
+    val database = Database()
 
     var db = Firebase.firestore
     private lateinit var auth: FirebaseAuth
@@ -64,23 +65,9 @@ class Register : AppCompatActivity() {
     }
 
     private fun finishCreation(){
-        val user = User(name,surname,email,auth.uid,password)
-        val userDb = hashMapOf(
-            "name" to name,
-            "surname" to surname,
-            "email" to email,
-            "password" to password,
-            "profilePic" to "default",
-            "favorites" to arrayListOf<String>()
-
-        )
-        user.getId()?.let {
-            db.collection("users").document(it)
-                .set(userDb)
-                .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully written!") }
-                .addOnFailureListener { Log.w(TAG, "Error writing document" ) }
-        }
-
+        val user = DataUser(email,
+            arrayListOf(),arrayListOf(),auth.uid,name,password,"default",surname)
+        database.subirUsuario(user)
         finishMessage()
     }
 
@@ -131,25 +118,9 @@ class Register : AppCompatActivity() {
         return true
     }
 
-    private fun getAllEmails() : MutableList<String>{
-        val emailList : MutableList<String> = mutableListOf()
-        val findEmails = db.collection("users").whereEqualTo("email",true)
-        findEmails.get()
-            .addOnSuccessListener { documents ->
-                for (document in documents){
-                    emailList.add(document.toString())
-                }
-            }
-            .addOnFailureListener { exception ->
-                Log.d(TAG, "get failed with ", exception)
-            }
-
-        return emailList
-
-    }
 
     private fun emailExist(email : String?) : Boolean{
-        val emailList = getAllEmails()
+        val emailList = database.getAllUsersEmails()
         return emailList.contains(email)
 
     }

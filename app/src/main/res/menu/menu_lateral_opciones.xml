@@ -5,9 +5,6 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/micuenta"
-            android:title="Mi cuenta" />
-        <item
             android:id="@+id/ofertar"
             android:title="Ofertar inmueble" />
         <item
@@ -19,8 +16,5 @@
         <item
             android:id="@+id/mischats"
             android:title="Mis chats" />
-        <item
-            android:id="@+id/ajustes"
-            android:title="Ajustes" />
     </group>
 </menu>

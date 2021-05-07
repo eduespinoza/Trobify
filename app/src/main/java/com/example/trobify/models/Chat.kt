@@ -1,6 +1,5 @@
 package com.example.trobify.models
 
-import com.example.trobify.AdaptadorFichaInmueble
 
 data class Chat(
     var id: String = "",

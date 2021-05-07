@@ -41,7 +41,8 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
     val db = Firebase.firestore
 
     lateinit var inmueblesEnPantalla : ArrayList<DataInmueble>
-    lateinit var user : String
+    lateinit var userId : String
+    lateinit var user : DataUser
     val nuevaBusqueda = Busqueda()
     var alquilerActivado = false
     var ventaActivado = false
@@ -60,9 +61,8 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
 
     override fun onItemClicked(dataInmueble : DataInmueble) {
         val goFicha = Intent(this, AdaptadorFichaInmueble::class.java)
-        goFicha.putExtra("user", user.toString())
+        goFicha.putExtra("user", userId.toString())
         goFicha.putExtra("inmueble", Inmueble().adaptarInmuble(dataInmueble))
-        goFicha.putExtra("desdeMapa",false)
         goFicha.putExtra("desdeMisPisos", false)
         startActivity(goFicha)
     }
@@ -70,11 +70,13 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
     {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_trobify2)
-        user = (intent.extras!!.get("user") as String?).toString()
+        userId = (intent.extras!!.get("user") as String?).toString()
         filtrosAplicados = intent.extras!!.get("filtros") as FiltrosBusqueda.filtros?
         //Se obtienen resultados de la base de datos
         GlobalScope.launch(IO){
-            getFavs { userFav = it }
+            user = database.getUser(userId)!!
+            //getFavs { userFav = it }
+            userFav = user.favorites!!
             var pisos = database.gimme().await().toObjects(DataInmueble::class.java)
             withContext(Dispatchers.Main){
                 Log.d("itemm", "esto pasa por aqui vd?? " + userFav.toString())
@@ -176,27 +178,27 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
                 R.id.mischats -> {
                     val irAChats =
                         Intent(this@MainTrobify, ListOfChats::class.java)
-                    irAChats.putExtra("user", user.toString())
+                    irAChats.putExtra("user", userId.toString())
                     startActivity(irAChats)
                     menuLateral.closeDrawers()
                 }
                 R.id.misfavoritos-> {
                     val irAMisFavoritos =
                         Intent(this@MainTrobify, ListaFavoritos::class.java)
-                    irAMisFavoritos.putExtra("user", user.toString())
+                    irAMisFavoritos.putExtra("user", userId.toString())
                     startActivity(irAMisFavoritos)
                     menuLateral.closeDrawers()
                 }
                 R.id.ofertar -> {
                     val irAOfertarInmueble =
                         Intent(this@MainTrobify, OfertarInmueble::class.java)
-                    irAOfertarInmueble.putExtra("user", user.toString())
+                    irAOfertarInmueble.putExtra("user", userId.toString())
                     startActivity(irAOfertarInmueble)
                     menuLateral.closeDrawers()
                 }
                 R.id.mispisos -> {
                     val edit = Intent(this, MisPisos::class.java)
-                    edit.putExtra("user",user.toString())
+                    edit.putExtra("user",userId.toString())
                     startActivity(edit)
                 }
 
@@ -212,10 +214,13 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
                 Intent(this@MainTrobify, Login::class.java)
             startActivity(volverALogin)
         }
-        db.collection("users").document(user.toString()).get()
+
+        db.collection("users").document(userId.toString()).get()
             .addOnSuccessListener { e ->
                 nombreUser.text = e.data?.get("name").toString()
             }
+        //nombreUser.text = database.getUser(userId)?.name
+
         //listener abrir menu lateral
         botonLateral.setOnClickListener {
             menuLateral.openDrawer(GravityCompat.START)
@@ -223,13 +228,13 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
 
         filtrar.setOnClickListener {
             val irAFiltrar = Intent(this, FiltrosBusqueda::class.java)
-            irAFiltrar.putExtra("user", user)
+            irAFiltrar.putExtra("user", userId)
             startActivity(irAFiltrar)
         }
         mapa.setOnClickListener {
             //abrir mapa
             val irAMapa = Intent(this, Mapa::class.java)
-            irAMapa.putExtra("user", user)
+            irAMapa.putExtra("user", userId)
             startActivity(irAMapa)
             //getPlaces()
         }
@@ -306,18 +311,7 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
         alquiler.setBackgroundColor(Color.GRAY)
         alquilerOVenta("Vender")
     }
-    fun getInmueblesFromIds(listillo : Set<String>, myCallback : (DataInmueble) -> Unit){
-        for (listo in listillo){
-            db.collection("inmueblesv3").document(listo).get().addOnCompleteListener{ task ->
-                if (task.isSuccessful){
-                    var pis = task.result.toObject(DataInmueble::class.java)
-                    if (pis != null) {
-                        myCallback(pis)
-                    }
-                }
-            }
-        }
-    }
+
     fun intencionActual():String{
         println("$alquilerActivado $ventaActivado")
         if(alquilerActivado)return "Alquiler"
@@ -423,8 +417,8 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
     //fun para generar pisos en bd
     fun generatePisos(sitios : ArrayList<Sitio>) {
         for (venga in sitios){
-            subirInmueblesBD(DataInmueble(generateRandomId(),null,getRandom1a4(),
-                getRandom1a4(),getRandomSuperficie(),venga,getRandomTipoInmueble(),getRandomTipoVivienda(),getRandomIntencion(),
+            database.subirInmueble(DataInmueble(generateRandomId(),null,getRandom1a4(),
+                getRandom1a4(),getRandomSuperficie(),venga,getRandomTipoVivienda(),getRandomTipoInmueble(),getRandomIntencion(),
                 getRandomPrice(), arrayListOf(R.drawable.piso1, R.drawable.piso2, R.drawable.piso3,
                     R.drawable.piso4,R.drawable.piso5),
                 arrayListOf("imagen1","imagen2", "imagen3", "imagen4", "imagen5"),
@@ -433,9 +427,6 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
                 Random.nextBoolean(),Random.nextBoolean(),Random.nextBoolean(),Random.nextBoolean(),
                 getRandomDate()))
         }
-    }
-    private fun subirInmueblesBD(inmueble : DataInmueble){
-        inmueble.id?.let { db.collection("inmueblesv4").document(it).set(inmueble) }
     }
 
     fun ordenarInmuebles(tipoSeleccionado:Int, listaInmuebles : ArrayList<DataInmueble>) : ArrayList<DataInmueble>{
@@ -461,7 +452,7 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
     }
 
     private fun getFavs(myCallback : (ArrayList<String>) -> Unit){
-        val sfDocRef = db.collection("users").document(user)
+        val sfDocRef = db.collection("users").document(userId)
 
         db.runTransaction { transaction ->
             val snapshot = transaction.get(sfDocRef)
