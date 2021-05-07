@@ -1,21 +1,18 @@
-package com.example.trobify
+package com.example.trobify.adapters
 
-import android.provider.ContactsContract
-import android.util.Log
 import android.view.LayoutInflater
-import android.view.OrientationEventListener
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
+import com.example.trobify.DataInmueble
+import com.example.trobify.R
 import java.time.Duration
-import java.time.LocalDate
 import java.time.LocalDateTime
 
 class AdaptadorInmuebleBusqueda(private val fichainmueble : ArrayList<DataInmueble>, private val favs : ArrayList<String>,
-    val itemClickListener : OnItemClickListener)
+                                val itemClickListener : OnItemClickListener
+)
     : RecyclerView.Adapter<AdaptadorInmuebleBusqueda.ViewHolder>() {
 
     class ViewHolder(var view: View) : RecyclerView.ViewHolder(view){

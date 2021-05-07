@@ -1,14 +1,14 @@
 package com.example.trobify
 
 import android.content.ContentValues
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import com.bumptech.glide.Glide
+import com.example.trobify.models.Inmueble
+import com.example.trobify.models.Item
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -18,7 +18,6 @@ import com.google.firebase.storage.StorageReference
 import com.squareup.picasso.Picasso
 import com.synnapps.carouselview.CarouselView
 import kotlinx.android.synthetic.main.activity_gestion.*
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.withContext
@@ -26,7 +25,6 @@ import java.util.*
 import kotlin.collections.ArrayList
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
-import kotlinx.coroutines.tasks.await
 
 class GestionarInmueble : AppCompatActivity() {
 

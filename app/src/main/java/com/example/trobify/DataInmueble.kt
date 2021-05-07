@@ -1,6 +1,6 @@
 package com.example.trobify
 
-import java.time.LocalDateTime
+import com.example.trobify.models.Sitio
 
 data class DataInmueble (var id : String? = null,
                          var propietario : String? = null,

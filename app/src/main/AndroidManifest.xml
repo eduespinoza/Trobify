@@ -39,7 +39,7 @@
             android:name=".Mapa"
             android:theme="@style/Theme.Trobify.NoActionBar" />
         <activity android:name=".FiltrosBusqueda" />
-        <activity android:name=".AdaptadorFichaInmueble" />
+        <activity android:name=".adapters.AdaptadorFichaInmueble" />
         <activity android:name=".ListaFavoritos" />
         <activity android:name=".GestionarInmueble" />
         <activity android:name=".MisPisos" />

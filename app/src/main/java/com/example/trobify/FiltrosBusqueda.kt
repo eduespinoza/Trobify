@@ -1,5 +1,6 @@
 package com.example.trobify
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -11,10 +12,12 @@ import kotlinx.android.synthetic.main.activity_filtros_busqueda.*
 import java.io.Serializable
 
 
+@SuppressLint("StaticFieldLeak")
 open class FiltrosBusqueda : AppCompatActivity() {
 
     object filtros : Serializable {
         var tipoInmueble = GuardaFiltros.filtrosGuardados.tipoInmueble
+        var tipoVivienda = GuardaFiltros.filtrosGuardados.tipoVivienda
         var numHabitaciones = GuardaFiltros.filtrosGuardados.numHabitaciones
         var numBaños:Int = GuardaFiltros.filtrosGuardados.numBaños
         var extras = GuardaFiltros.filtrosGuardados.extras
@@ -23,7 +26,6 @@ open class FiltrosBusqueda : AppCompatActivity() {
         var precioMax:Int = GuardaFiltros.filtrosGuardados.precioMax
         var superficieMin:Int = GuardaFiltros.filtrosGuardados.superficieMin
         var superficieMax:Int = GuardaFiltros.filtrosGuardados.superficieMax
-        var tipoVivienda = GuardaFiltros.filtrosGuardados.tipoVivienda
     }
 
     var elementosSeleccionadosTipoEdif:BooleanArray = GuardaFiltros.guardaSeleccion.elementosSeleccionadosTipoEdif
@@ -34,6 +36,7 @@ open class FiltrosBusqueda : AppCompatActivity() {
     var checkSurfaceBool = true
     lateinit var buttonVivienda:Button
 
+    @SuppressLint("StaticFieldLeak")
     object desplegables{
         lateinit var spinnerInmueble:Spinner
         lateinit var spinnerBaños:Spinner
@@ -335,8 +338,10 @@ open class FiltrosBusqueda : AppCompatActivity() {
 
         buttonVivienda.setOnClickListener{
             if(desplegables.spinnerInmueble.selectedItem.equals("Edificio") || desplegables.spinnerInmueble.selectedItem.equals("Oficina")){
+                if(!(GuardaFiltros.guardaSeleccion.desTipoInmueble.equals(2) || GuardaFiltros.guardaSeleccion.desTipoInmueble.equals(3))){
+                    filtros.tipoVivienda.clear()
+                }
                 val optionsViviendaEdificio = resources.getStringArray(R.array.options_vivienda_edificio)
-                filtros.tipoVivienda.clear()
                 builder.setMultiChoiceItems(optionsViviendaEdificio, elementosSeleccionadosTipoEdif){dialog, which, isChecked ->
                     elementosSeleccionadosTipoEdif[which] = isChecked
                     if(elementosSeleccionadosTipoEdif[which]){
@@ -347,9 +352,11 @@ open class FiltrosBusqueda : AppCompatActivity() {
                     }
                 }
             }
-            else{
+            else if(desplegables.spinnerInmueble.selectedItem.equals("Cualquiera") ||  desplegables.spinnerInmueble.selectedItem.equals("Vivienda")){
+                if(!(GuardaFiltros.guardaSeleccion.desTipoInmueble.equals(0) || GuardaFiltros.guardaSeleccion.desTipoInmueble.equals(1))){
+                    filtros.tipoVivienda.clear()
+                }
                 val optionsViviendaPorDefecto = resources.getStringArray(R.array.options_vivienda_por_defecto)
-                filtros.tipoVivienda.clear()
                 builder.setMultiChoiceItems(optionsViviendaPorDefecto, elementosSeleccionadosTipoPorDefecto){dialog, which, isChecked ->
                     elementosSeleccionadosTipoPorDefecto[which] = isChecked
                     if(elementosSeleccionadosTipoPorDefecto[which]){
@@ -359,6 +366,9 @@ open class FiltrosBusqueda : AppCompatActivity() {
                         filtros.tipoVivienda.remove(optionsViviendaPorDefecto[which].toString())
                     }
                 }
+            }
+            else{
+                filtros.tipoVivienda.clear()
             }
             builder.setPositiveButton("Ok"){dialog, which -> dialog.dismiss()}
             builder.setNeutralButton("Cancel"){dialog, which -> dialog.dismiss()}

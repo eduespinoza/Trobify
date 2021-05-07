@@ -9,7 +9,6 @@ import android.util.Log
 import android.widget.Button
 import android.widget.SearchView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
@@ -17,6 +16,10 @@ import androidx.core.view.size
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.trobify.adapters.AdaptadorFichaInmueble
+import com.example.trobify.adapters.AdaptadorInmuebleBusqueda
+import com.example.trobify.models.Inmueble
+import com.example.trobify.models.Sitio
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth

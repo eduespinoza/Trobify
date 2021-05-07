@@ -8,10 +8,12 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.trobify.adapters.AdaptadorFichaInmueble
+import com.example.trobify.adapters.AdaptadorInmuebleBusqueda
+import com.example.trobify.models.Inmueble
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
-import java.util.*
 import kotlin.collections.ArrayList
 
 class  MisPisos : AppCompatActivity() , AdaptadorInmuebleBusqueda.OnItemClickListener {

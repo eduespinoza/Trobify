@@ -8,10 +8,12 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.trobify.adapters.AdaptadorFichaInmueble
+import com.example.trobify.adapters.AdaptadorInmuebleBusqueda
+import com.example.trobify.models.Inmueble
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
-import java.util.*
 import kotlin.collections.ArrayList
 
 class  ListaFavoritos () : AppCompatActivity() , AdaptadorInmuebleBusqueda.OnItemClickListener {
@@ -19,9 +21,6 @@ class  ListaFavoritos () : AppCompatActivity() , AdaptadorInmuebleBusqueda.OnIte
     val db = Firebase.firestore
     lateinit var caja : RecyclerView
     lateinit var userId : String
-
-
-
 
     override fun onItemClicked(dataInmueble : DataInmueble) {
         val goFicha = Intent(this, AdaptadorFichaInmueble::class.java)
@@ -38,8 +37,6 @@ class  ListaFavoritos () : AppCompatActivity() , AdaptadorInmuebleBusqueda.OnIte
 
         userId = intent.extras!!.get("user") as String
 
-
-
         val buttonAtras = findViewById<Button>(R.id.buttonAtrasFavoritos)
         buttonAtras.setOnClickListener {
             val goMain = Intent(this, MainTrobify::class.java)
@@ -54,12 +51,9 @@ class  ListaFavoritos () : AppCompatActivity() , AdaptadorInmuebleBusqueda.OnIte
         noFav.setTextSize(TypedValue.COMPLEX_UNIT_PX, 40F)
         noFav.text = "No hay favoritos"*/
 
-
     }
 
     fun cargarFavDe(userId : String){
-
-
         val sfDocRef = db.collection("users").document(userId.toString())
 
         db.runTransaction { transaction ->
@@ -72,7 +66,6 @@ class  ListaFavoritos () : AppCompatActivity() , AdaptadorInmuebleBusqueda.OnIte
         }.addOnFailureListener { e ->
             Log.w(ContentValues.TAG, "Transaction failure.", e)
         }
-
     }
 
 
@@ -99,12 +92,6 @@ class  ListaFavoritos () : AppCompatActivity() , AdaptadorInmuebleBusqueda.OnIte
         caja.layoutManager = layoutmanager
         caja.adapter = AdaptadorInmuebleBusqueda(pisosFav, arrayListOf(""),this)
     }
-
-
-
-
-
-
 }
 
 

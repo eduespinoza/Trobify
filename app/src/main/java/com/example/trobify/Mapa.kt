@@ -15,6 +15,8 @@ import android.widget.SearchView
 import android.widget.SimpleCursorAdapter
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import com.example.trobify.adapters.AdaptadorFichaInmueble
+import com.example.trobify.models.Inmueble
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.here.sdk.core.Anchor2D

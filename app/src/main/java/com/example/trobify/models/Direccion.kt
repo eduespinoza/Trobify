@@ -1,4 +1,4 @@
-package com.example.trobify
+package com.example.trobify.models
 data class Direccion (var pais : String? = null,
         var ciudad : String? = null,
         var codigoPostal : String? = null,

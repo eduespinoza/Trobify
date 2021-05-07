@@ -1,11 +1,9 @@
-package com.example.trobify
+package com.example.trobify.adapters
 
-import android.content.ClipData
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
 import android.util.TypedValue
@@ -16,20 +14,20 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import com.example.trobify.GestionarInmueble
+import com.example.trobify.ListOfChats
+import com.example.trobify.MainTrobify
+import com.example.trobify.R
+import com.example.trobify.models.Inmueble
+import com.example.trobify.models.Item
 import com.google.android.gms.tasks.Task
-import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.synnapps.carouselview.CarouselView
-import java.io.File
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ListResult
-import com.google.firebase.storage.StorageException
 import com.google.firebase.storage.StorageReference
 import com.squareup.picasso.Picasso
-import kotlinx.coroutines.tasks.await
-import java.io.InputStream
-import java.util.stream.Stream
 
 class AdaptadorFichaInmueble() : AppCompatActivity() {
 
@@ -209,7 +207,7 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
         alertDialog.show()
     }
 
-    private fun addToFav(inmueble : Inmueble , userId : String ){
+    private fun addToFav(inmueble : Inmueble, userId : String ){
 
         val sfDocRef = db.collection("users").document(userId)
 
@@ -261,7 +259,7 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
 
     }
 
-    private fun eliminarDeFav(inmueble : Inmueble , userId : String ){
+    private fun eliminarDeFav(inmueble : Inmueble, userId : String ){
 
 
         val sfDocRef = db.collection("users").document(userId)

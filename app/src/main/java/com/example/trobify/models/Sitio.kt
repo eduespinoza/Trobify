@@ -1,4 +1,4 @@
-package com.example.trobify
+package com.example.trobify.models
 
 import java.io.Serializable
 

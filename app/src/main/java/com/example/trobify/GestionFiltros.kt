@@ -6,11 +6,11 @@ class GestionFiltros(val database : Database) {
     var filtrosSize = 0
 
     private fun gestionDeFiltros(){
-        if (filtros.tipoInmueble != "Cualquiera"){
-            list.addAll(obtenerIdsTipoInmueble(filtros.tipoInmueble))
+        if (GuardaFiltros.filtrosGuardados.tipoInmueble != "Cualquiera"){
+            list.addAll(obtenerIdsTipoInmueble(GuardaFiltros.filtrosGuardados.tipoInmueble))
         }
-        if (filtros.tipoVivienda.isNotEmpty()){
-            list.addAll(obtenerIdsTipoVivienda(filtros.tipoVivienda))
+        if (GuardaFiltros.filtrosGuardados.tipoVivienda.isNotEmpty()){
+            list.addAll(obtenerIdsTipoVivienda(GuardaFiltros.filtrosGuardados.tipoVivienda))
         }
         if (filtros.precioMax != 0){
             list.addAll(obtenerIdsPrecio(filtros.precioMin,filtros.precioMax))
@@ -30,8 +30,8 @@ class GestionFiltros(val database : Database) {
         }
         return database.getInmueblesByIds(resultIds)
     }
-    fun aplicar(fil : FiltrosBusqueda.filtros):ArrayList<DataInmueble>{
-        filtros = fil
+    fun aplicar(filtrosSeleccionados : FiltrosBusqueda.filtros):ArrayList<DataInmueble>{
+        filtros = filtrosSeleccionados
         gestionDeFiltros()
         return obtenerResultados()
     }

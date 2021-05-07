@@ -1,22 +1,8 @@
-package com.example.trobify
+package com.example.trobify.models
 
-import android.content.ContentValues.TAG
-import android.content.ContextWrapper
-import android.content.Intent
-import android.util.Log
-import android.widget.CheckBox
-import android.widget.Toast
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.database.Exclude
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
-import io.grpc.Context
+import com.example.trobify.DataInmueble
 import java.io.Serializable
-import java.time.LocalDate
 import java.time.LocalDateTime
-import java.util.*
 import kotlin.collections.ArrayList
 
 
@@ -144,7 +130,7 @@ class Inmueble : Serializable{
 
 
     //FUNCION NECESARIA - para poder coger bien los datos de la bd
-    fun adaptarInmuble(dataInmueble : DataInmueble) : Inmueble{
+    fun adaptarInmuble(dataInmueble : DataInmueble) : Inmueble {
         return Inmueble(dataInmueble.id,dataInmueble.propietario.toString(),dataInmueble.numHabitaciones,dataInmueble.numBanos
         ,dataInmueble.superficie,
             dataInmueble.direccion?.titulo,direccionO,dataInmueble.tipoVivienda,dataInmueble.tipoInmueble,dataInmueble.intencion,dataInmueble.precio,dataInmueble.fotos,

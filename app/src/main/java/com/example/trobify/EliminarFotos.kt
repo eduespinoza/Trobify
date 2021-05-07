@@ -31,7 +31,6 @@ class EliminarFotos : AppCompatActivity() {
         val urls = intent.extras?.get("urls") as ArrayList<String>
         showImages(urls , path)
 
-
         val buttonAtras = findViewById<Button>(R.id.buttonAtrasEliminarFoto)
         buttonAtras.setOnClickListener{
 
@@ -44,9 +43,7 @@ class EliminarFotos : AppCompatActivity() {
 
         carouselView.setImageListener{ position, imageView ->
             Picasso.get().load(urls.get(position)).into(imageView)
-
         }
-
 
         carouselView.setImageClickListener{ position ->
             //Toast.makeText(applicationContext, urls.get(position), Toast.LENGTH_SHORT).show()
@@ -64,9 +61,7 @@ class EliminarFotos : AppCompatActivity() {
                 }
             val alert = builder.create()
             alert.show()
-
         }
-
         carouselView.pageCount = urls.size
     }
 
@@ -77,11 +72,5 @@ class EliminarFotos : AppCompatActivity() {
 
         Log.d("dimel" , path.toString())
         path.delete()
-
-
-
-
     }
-
-
 }
