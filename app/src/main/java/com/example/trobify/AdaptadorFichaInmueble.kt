@@ -61,9 +61,6 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
 
         val buttonAtras = findViewById<Button>(R.id.buttonAtrasFicha)
         buttonAtras.setOnClickListener{
-            val goMain = Intent(this, MainTrobify::class.java)
-            goMain.putExtra("user", userId)
-            startActivity(goMain)
             finish()
         }
 
