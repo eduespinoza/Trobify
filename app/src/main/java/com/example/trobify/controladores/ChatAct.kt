@@ -1,4 +1,4 @@
-package com.example.trobify
+package com.example.trobify.controladores
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity

@@ -1,6 +1,4 @@
-package com.example.trobify
-
-import com.example.trobify.models.TipoInmueble
+package com.example.trobify.models
 
 class GestionFiltros(val database : Database) {
     lateinit var filtros : FiltrosBusqueda.filtros

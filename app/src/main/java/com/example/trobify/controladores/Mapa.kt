@@ -1,4 +1,4 @@
-package com.example.trobify
+package com.example.trobify.controladores
 
 import android.Manifest
 import android.app.SearchManager
@@ -15,7 +15,10 @@ import android.widget.SearchView
 import android.widget.SimpleCursorAdapter
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import com.example.trobify.R
 import com.example.trobify.adapters.AdaptadorFichaInmueble
+import com.example.trobify.models.Busqueda
+import com.example.trobify.models.DataInmueble
 import com.example.trobify.models.Inmueble
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -58,7 +61,7 @@ class Mapa : AppCompatActivity(){
         buscadorMapa = findViewById(R.id.buscadorMapa)
         val from = arrayOf(SearchManager.SUGGEST_COLUMN_TEXT_1)
         val to = intArrayOf(R.id.item_label)
-        var adaptadorCursor = SimpleCursorAdapter(this.baseContext,R.layout.sugerencia_item,
+        var adaptadorCursor = SimpleCursorAdapter(this.baseContext, R.layout.sugerencia_item,
             null,from,to, CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER)
         buscadorMapa.suggestionsAdapter = adaptadorCursor
         buscadorMapa.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
@@ -114,7 +117,7 @@ class Mapa : AppCompatActivity(){
         resMarker.coordinates = localCoordinates
     }
     private fun markerDeResultado(coordinates : GeoCoordinates){
-        var mapImage = MapImageFactory.fromResource(this.resources,R.drawable.res_marker)
+        var mapImage = MapImageFactory.fromResource(this.resources, R.drawable.res_marker)
         var markerStyle = MapMarkerImageStyle()
         markerStyle.anchorPoint = Anchor2D(1.0, 1.0)
         resMarker.addImage(mapImage,markerStyle)
@@ -163,7 +166,9 @@ class Mapa : AppCompatActivity(){
                     inmuebles.add(inmueble)
                     println("Inmueble " + inmueble.id)
                     val place = inmueble.direccion
-                    val mapImage = MapImageFactory.fromResource(this.resources,R.drawable.map_marker)
+                    val mapImage = MapImageFactory.fromResource(this.resources,
+                        R.drawable.map_marker
+                    )
                     val mapMarker = place?.coordenadas?.get("latitud")?.let { it1 ->
                         place.coordenadas!!["longitud"]?.let { it2 ->
                             GeoCoordinates(

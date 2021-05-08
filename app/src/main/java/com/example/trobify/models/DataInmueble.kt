@@ -1,4 +1,4 @@
-package com.example.trobify
+package com.example.trobify.models
 
 import com.example.trobify.models.Sitio
 
