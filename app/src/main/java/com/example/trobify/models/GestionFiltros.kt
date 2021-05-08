@@ -1,5 +1,7 @@
 package com.example.trobify.models
 
+import com.example.trobify.controladores.FiltrosBusqueda
+
 class GestionFiltros(val database : Database) {
     lateinit var filtros : FiltrosBusqueda.filtros
     var list = arrayListOf<String>()

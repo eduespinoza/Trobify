@@ -38,7 +38,7 @@
         <activity
             android:name=".controladores.Mapa"
             android:theme="@style/Theme.Trobify.NoActionBar" />
-        <activity android:name=".models.FiltrosBusqueda" />
+        <activity android:name=".controladores.FiltrosBusqueda" />
         <activity android:name=".adapters.AdaptadorFichaInmueble" />
         <activity android:name=".controladores.ListaFavoritos" />
         <activity android:name=".controladores.GestionarInmueble" />

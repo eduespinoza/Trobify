@@ -1,4 +1,4 @@
-package com.example.trobify.models
+package com.example.trobify.controladores
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -7,8 +7,9 @@ import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import com.example.trobify.controladores.MainTrobify
 import com.example.trobify.R
+import com.example.trobify.models.GuardaFiltros
+import com.example.trobify.models.TipoInmueble
 import kotlinx.android.synthetic.*
 import kotlinx.android.synthetic.main.activity_filtros_busqueda.*
 import java.io.Serializable
@@ -161,7 +162,9 @@ open class FiltrosBusqueda : AppCompatActivity() {
                 var tituloTipoVivienda = findViewById<TextView>(R.id.textTipoDeVivienda)
                 var tituloNumeroDeHabitaciones = findViewById<TextView>(R.id.textNumeroDeHabitaciones)
                 var tituloNumeroDeBaños = findViewById<TextView>(R.id.textNumeroDeBaños)
-                if (desplegables.spinnerInmueble.selectedItem.equals(TipoInmueble.Terreno) || desplegables.spinnerInmueble.selectedItem.equals(TipoInmueble.Nave)){
+                if (desplegables.spinnerInmueble.selectedItem.equals(TipoInmueble.Terreno) || desplegables.spinnerInmueble.selectedItem.equals(
+                        TipoInmueble.Nave
+                    )){
                     tituloTipoVivienda.setVisibility(View.GONE)
                     buttonVivienda.setVisibility(View.GONE)
                     tituloNumeroDeHabitaciones.setVisibility(View.GONE)
@@ -183,7 +186,9 @@ open class FiltrosBusqueda : AppCompatActivity() {
                     setFalseExtras()
                     setTrueEstadosVivienda()
                 }
-                else if (desplegables.spinnerInmueble.selectedItem.equals(TipoInmueble.Local) || desplegables.spinnerInmueble.selectedItem.equals(TipoInmueble.Oficina)){
+                else if (desplegables.spinnerInmueble.selectedItem.equals(TipoInmueble.Local) || desplegables.spinnerInmueble.selectedItem.equals(
+                        TipoInmueble.Oficina
+                    )){
                     tituloTipoVivienda.setVisibility(View.GONE)
                     buttonVivienda.setVisibility(View.GONE)
                     tituloNumeroDeHabitaciones.setVisibility(View.GONE)
@@ -341,7 +346,9 @@ open class FiltrosBusqueda : AppCompatActivity() {
         builder.setTitle("Selecciona el tipo de vivienda")
 
         buttonVivienda.setOnClickListener{
-            if(desplegables.spinnerInmueble.selectedItem.equals(TipoInmueble.Edificio) || desplegables.spinnerInmueble.selectedItem.equals(TipoInmueble.Oficina)){
+            if(desplegables.spinnerInmueble.selectedItem.equals(TipoInmueble.Edificio) || desplegables.spinnerInmueble.selectedItem.equals(
+                    TipoInmueble.Oficina
+                )){
                 if(!(GuardaFiltros.guardaSeleccion.desTipoInmueble.equals(2) || GuardaFiltros.guardaSeleccion.desTipoInmueble.equals(3))){
                     filtros.tipoVivienda.clear()
                 }
@@ -356,7 +363,9 @@ open class FiltrosBusqueda : AppCompatActivity() {
                     }
                 }
             }
-            else if(desplegables.spinnerInmueble.selectedItem.equals(TipoInmueble.Cualquiera) ||  desplegables.spinnerInmueble.selectedItem.equals(TipoInmueble.Vivienda)){
+            else if(desplegables.spinnerInmueble.selectedItem.equals(TipoInmueble.Cualquiera) ||  desplegables.spinnerInmueble.selectedItem.equals(
+                    TipoInmueble.Vivienda
+                )){
                 if(!(GuardaFiltros.guardaSeleccion.desTipoInmueble.equals(0) || GuardaFiltros.guardaSeleccion.desTipoInmueble.equals(1))){
                     filtros.tipoVivienda.clear()
                 }
