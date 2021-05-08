@@ -25,7 +25,7 @@ class Register : AppCompatActivity() {
     var email:String? = null
     var password:String? = null
     var comPassword:String? = null
-    val database = Database()
+    //val database = Database()
 
     var db = Firebase.firestore
     private lateinit var auth: FirebaseAuth
@@ -67,7 +67,7 @@ class Register : AppCompatActivity() {
     private fun finishCreation(){
         val user = DataUser(email,
             arrayListOf(),arrayListOf(),auth.uid,name,password,"default",surname)
-        database.subirUsuario(user)
+        Database.subirUsuario(user)
         finishMessage()
     }
 
@@ -120,7 +120,7 @@ class Register : AppCompatActivity() {
 
 
     private fun emailExist(email : String?) : Boolean{
-        val emailList = database.getAllUsersEmails()
+        val emailList = Database.getAllUsersEmails()
         return emailList.contains(email)
 
     }

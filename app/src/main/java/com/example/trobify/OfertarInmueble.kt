@@ -80,7 +80,7 @@ class OfertarInmueble : AppCompatActivity() {
     lateinit var buscadorMapa : SearchView
     var sitio : Sitio? = null
     var direccionCorrecta = false
-    val database = Database()
+    //val database = Database()
 
 
     object text {
@@ -526,7 +526,7 @@ class OfertarInmueble : AppCompatActivity() {
             val anuncio = DataInmueble(id,user,numHabitaciones,numBanos,superficie,direccion,tipoVivienda,tipoInmueble,tipoAnuncio,precioDeVenta,fotos,fotosOrd,
                 "",descripcion,estado,parking,ascensor,amueblado,calefaccion,jardin,piscina,terraza,trastero, LocalDateTime.now().toString())
 
-            database.subirInmueble(anuncio)
+            Database.subirInmueble(anuncio)
 
 
             val builder =  AlertDialog.Builder(this)

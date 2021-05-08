@@ -14,10 +14,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import com.example.trobify.GestionarInmueble
-import com.example.trobify.ListOfChats
-import com.example.trobify.MainTrobify
-import com.example.trobify.R
+import com.example.trobify.*
 import com.example.trobify.models.Inmueble
 import com.example.trobify.models.Item
 import com.google.android.gms.tasks.Task
@@ -51,11 +48,6 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
         //var path = "imagenesinmueble/0Fphs"
 
         downloadFotos(path)
-
-
-
-
-
 
         val buttonAtras = findViewById<Button>(R.id.buttonAtrasFicha)
         buttonAtras.setOnClickListener{
@@ -103,12 +95,14 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
 
         val buttonFav = findViewById<Button>(R.id.buttonFav)
         buttonFav.setOnClickListener {
-            addToFav(inmueble, userId)
+            //inmueble.id?.let { inmid -> Database.setFav2User(userId, inmid) }
+            add2Fav(userId,inmueble)
         }
 
         val elimarDeFav = findViewById<Button>(R.id.buttonFavEliminar)
         elimarDeFav.setOnClickListener {
-            eliminarDeFav(inmueble, userId)
+            //eliminarDeFav(inmueble, userId)
+            removeFav(userId,inmueble)
         }
 
         val edit = findViewById<Button>(R.id.editButtonGestion)
@@ -137,6 +131,26 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
 
 
 
+    }
+    private fun removeFav(id:String,inmueble:Inmueble){
+        inmueble.id?.let { inmid -> Database.removeFav2User(userId, inmid) }
+        val builder =  AlertDialog.Builder(this)
+        builder.setMessage("Inmueble eliminado de favoritos")
+            .setCancelable(false)
+            .setNeutralButton("  Continuar  "){ _, _ -> }
+        val alert= builder.create()
+        alert.show()
+        showEstrella(false)
+    }
+    private fun add2Fav(id:String,inmueble:Inmueble){
+        inmueble.id?.let { inmid -> Database.setFav2User(userId, inmid) }
+        val builder =  AlertDialog.Builder(this)
+        builder.setMessage("Inmueble añadido a favoritos")
+            .setCancelable(false)
+            .setNeutralButton("  Continuar  "){ _, _ -> }
+        val alert= builder.create()
+        alert.show()
+        showEstrella(true)
     }
 
     private fun rellenar(inmueble : Inmueble) {

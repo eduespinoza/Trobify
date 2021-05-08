@@ -1,72 +1,59 @@
 package com.example.trobify
 
-import android.provider.ContactsContract
-import com.google.android.gms.tasks.Task
-import com.google.firebase.firestore.QuerySnapshot
+
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.*
-import kotlinx.coroutines.Dispatchers.IO
-import kotlinx.coroutines.tasks.await
-import java.util.*
 import kotlin.collections.ArrayList
-
-class Database {
+//patrón singleton -> solo instancia una sola vez, luego se puede usar
+//en cualquier parte del proyecto, será la misma instancia
+object Database {
     val db = Firebase.firestore
     var inmuebles = arrayListOf<DataInmueble>()
     var users = arrayListOf<DataUser>()
-
-    init {
-        getAllInmuebles(callback = object : FirebaseCallback {
-            override fun <E> onCallback(cal : ArrayList<E>) {
-                inmuebles = cal as ArrayList<DataInmueble>
+    init{
+        runBlocking {
+            val queryInmuebles = async {
+                db.collection("inmueblesv4").get()
             }
-        })
-        getAllUsers(callback = object : FirebaseCallback {
-            override fun <E> onCallback(cal : ArrayList<E>) {
-                users = cal as ArrayList<DataUser>
+            val queryUsers = async {
+                db.collection("users").get()
             }
-        })
-
+            delay(3000)
+            inmuebles = queryInmuebles.getCompleted().result.toObjects(DataInmueble::class.java) as ArrayList<DataInmueble>
+            users = queryUsers.getCompleted().result.toObjects(DataUser::class.java) as ArrayList<DataUser>
+        }
     }
 
-    fun gimme() : Task<QuerySnapshot> {
-        return db.collection("inmueblesv4").get()
+
+    fun getAllInmuebles():ArrayList<DataInmueble>{
+        return inmuebles
     }
 
-    interface FirebaseCallback{
-        fun <E> onCallback(cal : ArrayList<E>)
-    }
-
-    private fun getAllInmuebles(callback : FirebaseCallback){
-        db.collection("inmueblesv4")
-            .get().addOnCompleteListener{ task ->
-                if(task.isSuccessful){
-                    for(inmueble in task.result){
-                        var pisito = inmueble.toObject(DataInmueble::class.java)
-                        inmuebles.add(pisito)
-                    }
-                    callback.onCallback(inmuebles)
-                }
-            }
-    }
-    private fun getAllUsers(callback : FirebaseCallback){
-        db.collection("users")
-            .get().addOnCompleteListener{ task ->
-                if(task.isSuccessful){
-                    for(user in task.result){
-                        var usr = user.toObject(DataUser::class.java)
-                        users.add(usr)
-                    }
-                    callback.onCallback(users)
-                }
-            }
-    }
     // INMUEBLES QUERIES
     fun subirInmueble(inmueble : DataInmueble){
         inmueble.id?.let { db.collection("inmueblesv4").document(it).set(inmueble) }
         inmuebles.add(inmueble)
         inmueble.propietario?.let { inmueble.id?.let { it1 -> setPisoUser(it, it1) } }
+    }
+    fun getInmueblesBusqueda(query : String, intencion :String?):ArrayList<DataInmueble>{
+        println("dentro de buscador")
+        println(inmuebles.size)
+        var resultado = arrayListOf<DataInmueble>()
+        if(intencion != null){
+            inmuebles.forEach {
+                if(it.direccion?.titulo?.toUpperCase()?.contains(query)!!
+                    && it.intencion.equals(intencion))resultado.add(it)
+            }
+        }
+        else{
+            inmuebles.forEach {
+                if(it.direccion?.titulo?.toUpperCase()?.contains(query)!!)
+                    resultado.add(it)
+            }
+        }
+        println("ya tengo resultado maaaaanin")
+        return resultado
     }
     fun getInmueblesByIds(ids : ArrayList<String>):ArrayList<DataInmueble>{
         var inmueblesEncontrados = arrayListOf<DataInmueble>()
@@ -80,7 +67,7 @@ class Database {
         return inmueblesEncontrados
     }
     fun getInmueblesIntencion(opcion:String):ArrayList<DataInmueble> {
-        var inmueblesEncontrados = arrayListOf<DataInmueble>()
+        var inmueblesEncontrados = arrayListOf<DataInmueble>( )
         inmuebles.forEach { inmueble ->
             if (inmueble.intencion.equals(opcion))
                 inmueblesEncontrados.add(inmueble)
@@ -144,14 +131,34 @@ class Database {
         db.collection("users").
         document(idUser).update("pisos",user.pisos)
     }
+    fun setFav2User(idUser : String, idInmueble : String):Boolean{
+        var user = getUserById(idUser)
+        if(!user.favorites?.contains(idInmueble)!!){
+            user.favorites?.add(idInmueble)
+            db.collection("users").
+            document(idUser).update("favorites",user.favorites)
+            return true
+        }
+        return false
+    }
+    fun removeFav2User(idUser:String, idInmueble : String):Boolean{
+        var user = getUserById(idUser)
+        if(user.favorites?.contains(idInmueble)!!){
+            user.favorites?.remove(idInmueble)
+            db.collection("users").
+            document(idUser).update("favorites",user.favorites)
+            return true
+        }
+        return false
+    }
     fun subirUsuario(user : DataUser){
         user.id?.let { db.collection("users").document(it).set(user)}
         users.add(user)
     }
-    fun getUser(id:String):DataUser? = runBlocking{
-        db.collection("users").document(id).get().await().toObject(DataUser::class.java)
+    fun getUser(id:String):DataUser {
+        return  getUserById(id)
     }
-    fun getUserById(id : String) : DataUser {
+    private fun getUserById(id : String) : DataUser {
         var userResult = DataUser()
         users.forEach { user ->
             if(user.id.equals(id)){
@@ -166,9 +173,9 @@ class Database {
         var pisos = user.pisos
         return pisos?.let { getInmueblesByIds(it) }
     }
-    fun getFavsUser(userId : String) : ArrayList<String>? {
-        var user = getUserById(userId)
-        return user.favorites
+    fun getFavsUser(userId : String) : ArrayList<DataInmueble>? {
+        val user = getUserById(userId)
+        return user.favorites?.let { getInmueblesByIds(it) }
     }
     fun getAllUsersEmails() : MutableList<String>{
         var result = mutableListOf<String>()

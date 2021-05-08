@@ -3,6 +3,7 @@ package com.example.trobify
 import android.content.ContentValues
 import android.content.Intent
 import android.os.Bundle
+import android.provider.ContactsContract
 import android.util.Log
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
@@ -17,7 +18,7 @@ import com.google.firebase.ktx.Firebase
 import kotlin.collections.ArrayList
 
 class  MisPisos : AppCompatActivity() , AdaptadorInmuebleBusqueda.OnItemClickListener {
-    val database = Database()
+    //lateinit var database : Database
     val db = Firebase.firestore
     lateinit var caja : RecyclerView
     lateinit var userId : String
@@ -49,7 +50,8 @@ class  MisPisos : AppCompatActivity() , AdaptadorInmuebleBusqueda.OnItemClickLis
         buttonAtras.setOnClickListener {
             finish()
         }
-        cargarPisosDe(userId)
+        Database.getPisosUser(userId)?.let { mostrar(it) }
+        //cargarPisosDe(userId)
 
 
 

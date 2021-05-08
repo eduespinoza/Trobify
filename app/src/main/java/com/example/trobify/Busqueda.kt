@@ -13,8 +13,7 @@ class Busqueda {
     //val inmuebles = Database().inmuebles
     var db = Firebase.firestore
     var query : String = ""
-    lateinit var database : Database
-    lateinit var inmuebles : ArrayList<DataInmueble>
+    //lateinit var inmuebles : ArrayList<DataInmueble>
     lateinit var motorDeBusqueda : SearchEngine
     lateinit var opcionesDeBusqueda : SearchOptions
     //var sugerencias = mutableMapOf<String,GeoCoordinates>()
@@ -23,28 +22,14 @@ class Busqueda {
         prepararBuscadorHere()
     }
     fun buscar(busqueda : String) : ArrayList<DataInmueble>{
-        this.query = busqueda
-        println("wachooooo")
-        println(inmuebles.size)
-        var resultado = arrayListOf<DataInmueble>()
-        inmuebles.forEach {
-            if(it.direccion?.titulo?.toUpperCase()?.contains(busqueda)!!)
-                resultado.add(it)
-        }
-        return resultado
+        println("vale ahora busco manin")
+        var result = Database.getInmueblesBusqueda(busqueda,null)
+        println(result)
+        return result
     }
     //ESTO LO HACE FIREBASE
     fun buscarConIntencion(busqueda : String, intencion : String) : ArrayList<DataInmueble>{
-        println("Con intencion wachooooo")
-        println(intencion)
-        println(inmuebles.size)
-        this.query = busqueda
-        var resultado = arrayListOf<DataInmueble>()
-        inmuebles.forEach {
-            if(it.direccion?.titulo?.toUpperCase()?.contains(busqueda)!!
-                && it.intencion.equals(intencion))resultado.add(it)
-        }
-        return resultado
+        return Database.getInmueblesBusqueda(busqueda,intencion)
     }
     private val searchCallback =
         SearchCallback { searchError, mutableList ->
@@ -106,8 +91,8 @@ class Busqueda {
         }
         var numMaxSugerencias = 6
         opcionesDeBusqueda = SearchOptions(LanguageCode.ES_ES,numMaxSugerencias)
-        database = Database()
-        inmuebles = database.inmuebles
+        //database = Database()
+        //inmuebles = Database.inmuebles
         /*
         //BAD SMELL
         var t = db.collection("inmueblesv3").get()
@@ -137,12 +122,5 @@ class Busqueda {
                      resultado(inmueblesEncontrados)
                  }
             }*/
-    }
-    fun getInmueblesIntencion(intencion : String) : ArrayList<DataInmueble> {
-        var resultado = arrayListOf<DataInmueble>()
-        inmuebles.forEach {
-            if(it.intencion?.equals(intencion)!!)resultado.add(it)
-        }
-        return resultado
     }
 }

@@ -45,33 +45,26 @@ class  ListaFavoritos () : AppCompatActivity() , AdaptadorInmuebleBusqueda.OnIte
 
             finish()
         }
-        cargarFavDe(userId)
-
+        Database.getFavsUser(userId)?.let { mostrar(it) }
+        //cargarFavDe(userId)
         /*val noFav = findViewById<TextView>(R.id.noFavText)
         noFav.setTextSize(TypedValue.COMPLEX_UNIT_PX, 40F)
         noFav.text = "No hay favoritos"*/
-
     }
-
     fun cargarFavDe(userId : String){
         val sfDocRef = db.collection("users").document(userId.toString())
-
         db.runTransaction { transaction ->
             val snapshot = transaction.get(sfDocRef)
             var favoritosStringArray = snapshot.get("favorites")
             cargarInmuebles(favoritosStringArray as ArrayList<String>)
-
         }.addOnSuccessListener { result ->
             Log.d(ContentValues.TAG, "Transaction success: $result")
         }.addOnFailureListener { e ->
             Log.w(ContentValues.TAG, "Transaction failure.", e)
         }
     }
-
-
     fun cargarInmuebles(listaIdFavoritos : ArrayList<String>) {
         var arrayDePisos  = arrayListOf<DataInmueble>()
-
         for (i in 0..listaIdFavoritos.size - 1) {
             var pisoId = listaIdFavoritos[i]
             val sfDocRef = db.collection("inmueblesv4").document(pisoId)
@@ -85,7 +78,6 @@ class  ListaFavoritos () : AppCompatActivity() , AdaptadorInmuebleBusqueda.OnIte
             }
         }
     }
-
     private fun mostrar(pisosFav : ArrayList<DataInmueble>){
         caja.setHasFixedSize(true)
         val layoutmanager = LinearLayoutManager(baseContext)
