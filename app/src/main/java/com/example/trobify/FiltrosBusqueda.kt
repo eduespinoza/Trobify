@@ -7,6 +7,7 @@ import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import com.example.trobify.models.TipoInmueble
 import kotlinx.android.synthetic.*
 import kotlinx.android.synthetic.main.activity_filtros_busqueda.*
 import java.io.Serializable
@@ -157,7 +158,7 @@ open class FiltrosBusqueda : AppCompatActivity() {
                 var tituloTipoVivienda = findViewById<TextView>(R.id.textTipoDeVivienda)
                 var tituloNumeroDeHabitaciones = findViewById<TextView>(R.id.textNumeroDeHabitaciones)
                 var tituloNumeroDeBaños = findViewById<TextView>(R.id.textNumeroDeBaños)
-                if (desplegables.spinnerInmueble.selectedItem.equals("Terreno") || desplegables.spinnerInmueble.selectedItem.equals("Nave")){
+                if (desplegables.spinnerInmueble.selectedItem.equals(TipoInmueble.Terreno) || desplegables.spinnerInmueble.selectedItem.equals(TipoInmueble.Nave)){
                     tituloTipoVivienda.setVisibility(View.GONE)
                     buttonVivienda.setVisibility(View.GONE)
                     tituloNumeroDeHabitaciones.setVisibility(View.GONE)
@@ -168,7 +169,7 @@ open class FiltrosBusqueda : AppCompatActivity() {
                     setFalseEstadosVivienda()
                     setFalseExtras()
                 }
-                else if (desplegables.spinnerInmueble.selectedItem.equals("Garaje")){
+                else if (desplegables.spinnerInmueble.selectedItem.equals(TipoInmueble.Garaje)){
                     tituloTipoVivienda.setVisibility(View.GONE)
                     buttonVivienda.setVisibility(View.GONE)
                     tituloNumeroDeHabitaciones.setVisibility(View.GONE)
@@ -179,7 +180,7 @@ open class FiltrosBusqueda : AppCompatActivity() {
                     setFalseExtras()
                     setTrueEstadosVivienda()
                 }
-                else if (desplegables.spinnerInmueble.selectedItem.equals("Local") || desplegables.spinnerInmueble.selectedItem.equals("Oficina")){
+                else if (desplegables.spinnerInmueble.selectedItem.equals(TipoInmueble.Local) || desplegables.spinnerInmueble.selectedItem.equals(TipoInmueble.Oficina)){
                     tituloTipoVivienda.setVisibility(View.GONE)
                     buttonVivienda.setVisibility(View.GONE)
                     tituloNumeroDeHabitaciones.setVisibility(View.GONE)
@@ -337,7 +338,7 @@ open class FiltrosBusqueda : AppCompatActivity() {
         builder.setTitle("Selecciona el tipo de vivienda")
 
         buttonVivienda.setOnClickListener{
-            if(desplegables.spinnerInmueble.selectedItem.equals("Edificio") || desplegables.spinnerInmueble.selectedItem.equals("Oficina")){
+            if(desplegables.spinnerInmueble.selectedItem.equals(TipoInmueble.Edificio) || desplegables.spinnerInmueble.selectedItem.equals(TipoInmueble.Oficina)){
                 if(!(GuardaFiltros.guardaSeleccion.desTipoInmueble.equals(2) || GuardaFiltros.guardaSeleccion.desTipoInmueble.equals(3))){
                     filtros.tipoVivienda.clear()
                 }
@@ -352,7 +353,7 @@ open class FiltrosBusqueda : AppCompatActivity() {
                     }
                 }
             }
-            else if(desplegables.spinnerInmueble.selectedItem.equals("Cualquiera") ||  desplegables.spinnerInmueble.selectedItem.equals("Vivienda")){
+            else if(desplegables.spinnerInmueble.selectedItem.equals(TipoInmueble.Cualquiera) ||  desplegables.spinnerInmueble.selectedItem.equals(TipoInmueble.Vivienda)){
                 if(!(GuardaFiltros.guardaSeleccion.desTipoInmueble.equals(0) || GuardaFiltros.guardaSeleccion.desTipoInmueble.equals(1))){
                     filtros.tipoVivienda.clear()
                 }
@@ -413,10 +414,10 @@ open class FiltrosBusqueda : AppCompatActivity() {
     private fun addOptionsInmueble(){
         // El array se encuentra en res -> values -> strings.xml
         // Se ha hecho esto para en caso de traducir la aplicación que estos elemntos también lo hagan
-        val options_inmueble = resources.getStringArray(R.array.options_inmueble)
+        val options_inmueble = TipoInmueble.values()
 
         /* AÑADIR LAS OPCIONES A LOS DESPLEGABLES */
-        val adapter = ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, options_inmueble)
+        val adapter = ArrayAdapter<TipoInmueble>(this, android.R.layout.simple_spinner_item, options_inmueble)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         desplegables.spinnerInmueble.adapter = adapter
 
@@ -425,10 +426,10 @@ open class FiltrosBusqueda : AppCompatActivity() {
     }
 
     private fun addOptionsPrice(){
-        if(desplegables.spinnerInmueble.selectedItem.equals("Garaje")){
+        if(desplegables.spinnerInmueble.selectedItem.equals(TipoInmueble.Garaje)){
             options_price = listOf<Int>(0, 5000, 7500, 10000, 12500, 15000, 20000, 30000, 40000, 50000, 70000)
         }
-        else if(desplegables.spinnerInmueble.selectedItem.equals("Local")){
+        else if(desplegables.spinnerInmueble.selectedItem.equals(TipoInmueble.Local)){
             options_price = listOf<Int>(0, 10000, 15000, 20000, 25000, 30000, 40000, 50000, 80000, 90000, 100000)
         }
         else{
@@ -485,7 +486,7 @@ open class FiltrosBusqueda : AppCompatActivity() {
     }
 
     private fun checkPrice(){
-        if(compareValues(desplegables.spinnerPrecioMin.selectedItem.toString().toInt(), desplegables.spinnerPrecioMax.selectedItem.toString().toInt()) > 0 && (desplegables.spinnerPrecioMax.selectedItem.toString().toInt() != 0)){
+        if(compareValues(filtros.precioMin, filtros.precioMax) > 0 && (filtros.precioMax != 0)){
             AlertDialog.Builder(this@FiltrosBusqueda).apply {
                 checkPriceBool = false
                 setTitle("Error")
@@ -499,7 +500,7 @@ open class FiltrosBusqueda : AppCompatActivity() {
     }
 
     private fun checkSurface(){
-        if(compareValues(desplegables.spinnerSuperficieMin.selectedItem.toString().toInt(), desplegables.spinnerSuperficieMax.selectedItem.toString().toInt()) > 0 && (desplegables.spinnerSuperficieMax.selectedItem.toString().toInt() != 0)){
+        if(compareValues(filtros.superficieMin, filtros.superficieMax) > 0 && (filtros.precioMax != 0)){
             AlertDialog.Builder(this@FiltrosBusqueda).apply {
                 checkSurfaceBool = false
                 setTitle("Error")
@@ -632,7 +633,7 @@ open class FiltrosBusqueda : AppCompatActivity() {
     }
 
     private fun limpiarFiltros(){
-        filtros.tipoInmueble = ""
+        filtros.tipoInmueble = TipoInmueble.Cualquiera.toString()
         filtros.numHabitaciones = 0
         filtros.numBaños = 0
         filtros.extras = mutableMapOf<String, Boolean>()

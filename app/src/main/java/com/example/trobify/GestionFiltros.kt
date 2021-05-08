@@ -1,13 +1,15 @@
 package com.example.trobify
 
+import com.example.trobify.models.TipoInmueble
+
 class GestionFiltros(val database : Database) {
     lateinit var filtros : FiltrosBusqueda.filtros
     var list = arrayListOf<String>()
     var filtrosSize = 0
 
     private fun gestionDeFiltros(){
-        if (GuardaFiltros.filtrosGuardados.tipoInmueble != "Cualquiera"){
-            list.addAll(obtenerIdsTipoInmueble(GuardaFiltros.filtrosGuardados.tipoInmueble))
+        if (!GuardaFiltros.filtrosGuardados.tipoInmueble?.equals(TipoInmueble.Cualquiera)!!){
+            list.addAll(obtenerIdsTipoInmueble(GuardaFiltros.filtrosGuardados.tipoInmueble.toString()))
         }
         if (GuardaFiltros.filtrosGuardados.tipoVivienda.isNotEmpty()){
             list.addAll(obtenerIdsTipoVivienda(GuardaFiltros.filtrosGuardados.tipoVivienda))

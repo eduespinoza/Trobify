@@ -1,10 +1,11 @@
 package com.example.trobify
 
 import android.widget.Spinner
+import com.example.trobify.models.TipoInmueble
 
 open class GuardaFiltros : FiltrosBusqueda() {
     object filtrosGuardados{
-        var tipoInmueble:String = ""
+        var tipoInmueble:String? = TipoInmueble.Cualquiera.toString()
         var numHabitaciones:Int = 0
         var numBaños:Int = 0
         var extras = mutableMapOf<String, Boolean>()
