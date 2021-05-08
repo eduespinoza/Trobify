@@ -5,7 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
-import com.example.trobify.DataInmueble
+import com.example.trobify.models.DataInmueble
 import com.example.trobify.R
 import java.time.Duration
 import java.time.LocalDateTime

@@ -1,4 +1,4 @@
-package com.example.trobify
+package com.example.trobify.controladores
 
 import android.annotation.SuppressLint
 import android.app.SearchManager
@@ -11,9 +11,8 @@ import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
-import com.example.trobify.models.Direccion
-import com.example.trobify.models.Sitio
-import com.example.trobify.models.TipoInmueble
+import com.example.trobify.R
+import com.example.trobify.models.*
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
@@ -207,7 +206,7 @@ class OfertarInmueble : AppCompatActivity() {
         buscadorMapa = findViewById(R.id.buscadorDirecciones)
         val from = arrayOf(SearchManager.SUGGEST_COLUMN_TEXT_1)
         val to = intArrayOf(R.id.item_label)
-        var adaptadorCursor = SimpleCursorAdapter(this.baseContext,R.layout.sugerencia_item,
+        var adaptadorCursor = SimpleCursorAdapter(this.baseContext, R.layout.sugerencia_item,
             null,from,to, CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER)
         buscadorMapa.suggestionsAdapter = adaptadorCursor
         buscadorMapa.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
@@ -504,7 +503,7 @@ class OfertarInmueble : AppCompatActivity() {
             messageAnuNull()
         }else if( (text.inPrecio.text.toString()   == null )|| (text.inPrecio.text.toString().toInt()  <= 0)){
             messagePreInc()
-        }else if(text.inSuperficie.text.toString() == null ||text.inSuperficie.text.toString().toInt()!! <= 0){
+        }else if(text.inSuperficie.text.toString() == null || text.inSuperficie.text.toString().toInt()!! <= 0){
             messageSupInc()
         }else if(text.inDireccion.text == "" || !direccionCorrecta){
             messageDirNull()
@@ -515,9 +514,11 @@ class OfertarInmueble : AppCompatActivity() {
             if(sitio != null) direccion = sitio
             if(text.inDescripcion.text != null){ descripcion = text.inDescripcion.text.toString() }
             else{descripcion = ""}
-            if(text.inBaños.text != null && text.inBaños.text.toString() != ""){ numBanos = Integer.parseInt(text.inBaños.text.toString())}
+            if(text.inBaños.text != null && text.inBaños.text.toString() != ""){ numBanos = Integer.parseInt(
+                text.inBaños.text.toString())}
             else{numBanos = 0}
-            if(text.inHabitaciones.text != null && text.inHabitaciones.text.toString() != ""){ numHabitaciones = Integer.parseInt(text.inHabitaciones.text.toString())}
+            if(text.inHabitaciones.text != null && text.inHabitaciones.text.toString() != ""){ numHabitaciones = Integer.parseInt(
+                text.inHabitaciones.text.toString())}
             else{numHabitaciones = 0}
 
             //Fotos esta vacia, y en fotosord estan las ids de las fotos subidas a firebase y direccion contiene el string de la direccion mientras que direccion0 esta vacio

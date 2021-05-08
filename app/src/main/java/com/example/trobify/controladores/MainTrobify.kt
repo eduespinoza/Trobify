@@ -1,4 +1,4 @@
-package com.example.trobify
+package com.example.trobify.controladores
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -12,24 +12,20 @@ import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
-import androidx.core.view.size
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.trobify.R
 import com.example.trobify.adapters.AdaptadorFichaInmueble
 import com.example.trobify.adapters.AdaptadorInmuebleBusqueda
-import com.example.trobify.models.Inmueble
-import com.example.trobify.models.Sitio
+import com.example.trobify.controladores.*
+import com.example.trobify.models.*
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.*
-import java.time.LocalDateTime
-import kotlin.random.Random
-import kotlinx.coroutines.Dispatchers.IO
-import kotlinx.coroutines.tasks.await
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -159,7 +155,7 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
                     startActivity(irAChats)
                     menuLateral.closeDrawers()
                 }
-                R.id.misfavoritos-> {
+                R.id.misfavoritos -> {
                     val irAMisFavoritos =
                         Intent(this@MainTrobify, ListaFavoritos::class.java)
                     irAMisFavoritos.putExtra("user", userId.toString())

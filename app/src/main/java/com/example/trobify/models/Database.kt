@@ -1,4 +1,4 @@
-package com.example.trobify
+package com.example.trobify.models
 
 
 import com.google.firebase.firestore.ktx.firestore
@@ -57,7 +57,7 @@ object Database {
     fun getInmueblesByIds(ids : ArrayList<String>):ArrayList<DataInmueble>{
         var inmueblesEncontrados = arrayListOf<DataInmueble>()
         for (ident in ids) {
-            inmuebles.forEach ok@{inmueble->
+            inmuebles.forEach ok@{ inmueble->
                 if (inmueble.id.equals(ident))
                     inmueblesEncontrados.add(inmueble)
                 return@ok
@@ -154,7 +154,7 @@ object Database {
         user.id?.let { db.collection("users").document(it).set(user)}
         users.add(user)
     }
-    fun getUser(id:String):DataUser {
+    fun getUser(id:String): DataUser {
         return  getUserById(id)
     }
     private fun getUserById(id : String) : DataUser {

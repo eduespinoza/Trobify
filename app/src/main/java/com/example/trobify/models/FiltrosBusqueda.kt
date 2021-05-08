@@ -1,4 +1,4 @@
-package com.example.trobify
+package com.example.trobify.models
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -10,6 +10,8 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.trobify.models.TipoInmueble
 import com.example.trobify.models.TipoVivienda
 import com.example.trobify.models.TipoViviendaEdificio
+import com.example.trobify.controladores.MainTrobify
+import com.example.trobify.R
 import kotlinx.android.synthetic.*
 import kotlinx.android.synthetic.main.activity_filtros_busqueda.*
 import java.io.Serializable
@@ -31,8 +33,10 @@ open class FiltrosBusqueda : AppCompatActivity() {
         var superficieMax:Int = GuardaFiltros.filtrosGuardados.superficieMax
     }
 
-    var elementosSeleccionadosTipoEdif:BooleanArray = GuardaFiltros.guardaSeleccion.elementosSeleccionadosTipoEdif
-    var elementosSeleccionadosTipoPorDefecto:BooleanArray = GuardaFiltros.guardaSeleccion.elementosSeleccionadosTipoPorDefecto
+    var elementosSeleccionadosTipoEdif:BooleanArray =
+        GuardaFiltros.guardaSeleccion.elementosSeleccionadosTipoEdif
+    var elementosSeleccionadosTipoPorDefecto:BooleanArray =
+        GuardaFiltros.guardaSeleccion.elementosSeleccionadosTipoPorDefecto
     lateinit var options_price:List<Int>
 
     var checkPriceBool = true
@@ -388,7 +392,7 @@ open class FiltrosBusqueda : AppCompatActivity() {
                 saveSeleccionFiltros()
                 val goSearch = Intent(this, MainTrobify::class.java)
                 goSearch.putExtra("user", userId.toString())
-                goSearch.putExtra("filtros",filtros)
+                goSearch.putExtra("filtros", filtros)
                 startActivity(goSearch)
             }
         }

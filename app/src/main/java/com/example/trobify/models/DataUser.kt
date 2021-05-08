@@ -1,4 +1,4 @@
-package com.example.trobify
+package com.example.trobify.models
 
 data class DataUser(var email :String? = null,
                     var pisos : ArrayList<String>? = null,
