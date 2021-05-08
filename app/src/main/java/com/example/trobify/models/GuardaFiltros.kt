@@ -1,6 +1,6 @@
-package com.example.trobify
+package com.example.trobify.models
 
-import android.widget.Spinner
+import com.example.trobify.models.FiltrosBusqueda
 import com.example.trobify.models.TipoInmueble
 
 open class GuardaFiltros : FiltrosBusqueda() {

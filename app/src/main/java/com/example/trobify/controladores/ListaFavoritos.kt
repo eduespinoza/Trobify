@@ -1,4 +1,4 @@
-package com.example.trobify
+package com.example.trobify.controladores
 
 import android.content.ContentValues
 import android.content.Intent
@@ -8,8 +8,11 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.trobify.R
 import com.example.trobify.adapters.AdaptadorFichaInmueble
 import com.example.trobify.adapters.AdaptadorInmuebleBusqueda
+import com.example.trobify.models.DataInmueble
+import com.example.trobify.models.Database
 import com.example.trobify.models.Inmueble
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject

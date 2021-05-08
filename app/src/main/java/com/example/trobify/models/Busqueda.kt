@@ -1,4 +1,4 @@
-package com.example.trobify
+package com.example.trobify.models
 
 import android.util.Log
 import com.google.firebase.firestore.ktx.firestore
@@ -23,13 +23,13 @@ class Busqueda {
     }
     fun buscar(busqueda : String) : ArrayList<DataInmueble>{
         println("vale ahora busco manin")
-        var result = Database.getInmueblesBusqueda(busqueda,null)
+        var result = Database.getInmueblesBusqueda(busqueda, null)
         println(result)
         return result
     }
     //ESTO LO HACE FIREBASE
     fun buscarConIntencion(busqueda : String, intencion : String) : ArrayList<DataInmueble>{
-        return Database.getInmueblesBusqueda(busqueda,intencion)
+        return Database.getInmueblesBusqueda(busqueda, intencion)
     }
     private val searchCallback =
         SearchCallback { searchError, mutableList ->

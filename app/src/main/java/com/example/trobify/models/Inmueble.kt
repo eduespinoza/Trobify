@@ -1,6 +1,5 @@
 package com.example.trobify.models
 
-import com.example.trobify.DataInmueble
 import java.io.Serializable
 import java.time.LocalDateTime
 import kotlin.collections.ArrayList

@@ -14,6 +14,10 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.example.trobify.*
+import com.example.trobify.controladores.GestionarInmueble
+import com.example.trobify.controladores.ListOfChats
+import com.example.trobify.controladores.MainTrobify
+import com.example.trobify.models.Database
 import com.example.trobify.models.Inmueble
 import com.example.trobify.models.Item
 import com.google.android.gms.tasks.Task

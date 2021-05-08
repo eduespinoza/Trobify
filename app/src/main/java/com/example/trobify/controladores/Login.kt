@@ -1,6 +1,5 @@
-package com.example.trobify
+package com.example.trobify.controladores
 
-import android.content.ContentValues
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -9,13 +8,11 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import android.content.ContentValues.TAG
 import androidx.appcompat.app.AlertDialog
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.firestore.ktx.toObject
+import com.example.trobify.R
 
 class Login : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
@@ -40,7 +37,9 @@ class Login : AppCompatActivity() {
 
         val buttonAcceder = findViewById<Button>(R.id.buttonAcces)
         buttonAcceder.setOnClickListener{
-            if(findViewById<EditText>(R.id.editTextLoginEmail).text.isNullOrEmpty() || findViewById<EditText>(R.id.editTextLoginPassword).text.isNullOrEmpty()){
+            if(findViewById<EditText>(R.id.editTextLoginEmail).text.isNullOrEmpty() || findViewById<EditText>(
+                    R.id.editTextLoginPassword
+                ).text.isNullOrEmpty()){
                 errorMessage()
             }else{ login() }
         }

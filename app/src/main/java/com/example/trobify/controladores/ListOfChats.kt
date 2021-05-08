@@ -1,11 +1,11 @@
-package com.example.trobify
+package com.example.trobify.controladores
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.content.Intent
 import android.widget.Button
-import android.widget.ImageButton
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.trobify.R
 import com.example.trobify.models.Chat
 import com.example.trobify.adapters.ChatAdapter
 import com.google.firebase.firestore.ktx.firestore

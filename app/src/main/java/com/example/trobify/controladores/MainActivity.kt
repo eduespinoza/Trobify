@@ -1,12 +1,12 @@
-package com.example.trobify
+package com.example.trobify.controladores
 
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import com.example.trobify.R
 import com.google.firebase.firestore.FirebaseFirestore
-import java.time.LocalDateTime
 
 class MainActivity : AppCompatActivity() {
 

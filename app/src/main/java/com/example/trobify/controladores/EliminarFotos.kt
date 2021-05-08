@@ -1,19 +1,12 @@
-package com.example.trobify
+package com.example.trobify.controladores
 
-import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import com.google.android.gms.tasks.Task
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
+import com.example.trobify.R
 import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.ListResult
-import com.google.firebase.storage.StorageReference
 import com.squareup.picasso.Picasso
 import com.synnapps.carouselview.CarouselView
 

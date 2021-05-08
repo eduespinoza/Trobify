@@ -1,4 +1,4 @@
-package com.example.trobify
+package com.example.trobify.controladores
 
 import android.content.ContentValues
 import android.content.Intent
@@ -7,6 +7,8 @@ import android.util.Log
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import com.example.trobify.R
+import com.example.trobify.models.DataInmueble
 import com.example.trobify.models.Inmueble
 import com.example.trobify.models.Item
 import com.google.android.gms.tasks.Task
