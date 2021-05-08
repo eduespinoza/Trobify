@@ -25,7 +25,6 @@ object Database {
         }
     }
 
-
     fun getAllInmuebles():ArrayList<DataInmueble>{
         return inmuebles
     }
@@ -185,20 +184,3 @@ object Database {
         return result
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

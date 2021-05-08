@@ -8,6 +8,8 @@ import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.example.trobify.models.TipoInmueble
+import com.example.trobify.models.TipoVivienda
+import com.example.trobify.models.TipoViviendaEdificio
 import kotlinx.android.synthetic.*
 import kotlinx.android.synthetic.main.activity_filtros_busqueda.*
 import java.io.Serializable
@@ -389,7 +391,6 @@ open class FiltrosBusqueda : AppCompatActivity() {
                 goSearch.putExtra("filtros",filtros)
                 startActivity(goSearch)
             }
-            else{}
         }
 
         val buttonBorrarFiltros = findViewById<Button>(R.id.buttonBorrarFiltros)
