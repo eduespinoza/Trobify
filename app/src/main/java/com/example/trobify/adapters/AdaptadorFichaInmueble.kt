@@ -123,12 +123,9 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
             edit.isClickable = true
         }
         else{
-
             edit.visibility = View.INVISIBLE
             edit.isClickable = false
         }
-
-
 
 
         rellenar(inmueble)
@@ -160,8 +157,9 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
     private fun rellenar(inmueble : Inmueble) {
 
         val direccion =  findViewById<TextView>(R.id.textViewCalleFicha)
-        direccion.text = inmueble.direccion
-        if(inmueble.direccion.equals("")){}else{direccion.text = inmueble.direccion}
+        direccion.text = inmueble.direccionSitio?.titulo
+        if(inmueble.direccion.equals("")){}
+        else{direccion.text = inmueble.direccion}
 
         direccion.setTextColor(Color.BLACK)
         direccion.setTextSize(TypedValue.COMPLEX_UNIT_PX, 40F)
@@ -172,14 +170,25 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
         precio.setTextSize(TypedValue.COMPLEX_UNIT_PX, 40F)
 
         val numHabitaciones =  findViewById<TextView>(R.id.textViewHabitacionesFicha)
-        numHabitaciones.text = inmueble.numHabitaciones.toString() + " habitaciones"
-        numHabitaciones.setTextColor(Color.BLACK)
-        numHabitaciones.setTextSize(TypedValue.COMPLEX_UNIT_PX, 40F)
+        if(inmueble.numHabitaciones == 0){
+            numHabitaciones.text = ""
+        }
+        else{
+            numHabitaciones.text = inmueble.numHabitaciones.toString() + " habitaciones"
+            numHabitaciones.setTextColor(Color.BLACK)
+            numHabitaciones.setTextSize(TypedValue.COMPLEX_UNIT_PX, 40F)
+        }
+
 
         val numBanos = findViewById<TextView>(R.id.textViewBanosFicha)
-        numBanos.text = inmueble.numBanos.toString() + " baños"
-        numBanos.setTextColor(Color.BLACK)
-        numBanos.setTextSize(TypedValue.COMPLEX_UNIT_PX, 40F)
+        if(inmueble.numBanos == 0){
+            numBanos.text = ""
+        }
+        else{
+            numBanos.text = inmueble.numBanos.toString() + " baños"
+            numBanos.setTextColor(Color.BLACK)
+            numBanos.setTextSize(TypedValue.COMPLEX_UNIT_PX, 40F)
+        }
 
         val superficie = findViewById<TextView>(R.id.textViewSuperficieFicha)
         superficie.text = inmueble.superficie.toString() + "m2"
@@ -206,6 +215,8 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
                     name.setTextSize(TypedValue.COMPLEX_UNIT_PX, 40F)
                 }
         }
+
+
         isFav(inmueble, userId)
 
 
