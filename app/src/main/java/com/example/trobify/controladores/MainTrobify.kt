@@ -71,7 +71,7 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
     override fun onCreate(savedInstanceState: Bundle?)
     {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.main_trobify2)
+        setContentView(R.layout.desplegable)
         listaConResultados = findViewById(R.id.recycler)
         cabecera = findViewById(R.id.cabecera)
         nResultados = findViewById(R.id.nResultados)
