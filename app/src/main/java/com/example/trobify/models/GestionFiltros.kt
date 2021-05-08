@@ -8,7 +8,7 @@ class GestionFiltros(val database : Database) {
     var filtrosSize = 0
 
     private fun gestionDeFiltros(){
-        if (!GuardaFiltros.filtrosGuardados.tipoInmueble?.equals(TipoInmueble.Cualquiera)!!){
+        if (!GuardaFiltros.filtrosGuardados.tipoInmueble?.equals(TipoInmueble.Cualquiera.toString())!!){
             list.addAll(obtenerIdsTipoInmueble(GuardaFiltros.filtrosGuardados.tipoInmueble.toString()))
         }
         if (GuardaFiltros.filtrosGuardados.tipoVivienda.isNotEmpty()){
@@ -22,7 +22,9 @@ class GestionFiltros(val database : Database) {
         }
     }
     private fun obtenerResultados():ArrayList<DataInmueble>{
-        if(filtrosSize == 1){return database.getInmueblesByIds(list)}
+        if(filtrosSize == 1){
+            return database.getInmueblesByIds(list)
+        }
         var resultIds = arrayListOf<String>()
         try {
             resultIds = list.groupingBy{it}.eachCount().filter{it.value == filtrosSize}.keys.toList() as ArrayList<String>

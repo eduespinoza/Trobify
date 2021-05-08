@@ -68,6 +68,7 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
         userFav = user.favorites!!
         mostrarInmuebles(inmuebles)
     }
+
     override fun onCreate(savedInstanceState: Bundle?)
     {
         super.onCreate(savedInstanceState)
@@ -104,19 +105,17 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
         if(!inmueblesEnPantalla.isNullOrEmpty()) {verficarOrdenacion()}
     }
     @SuppressLint("SetTextI18n")
-    private fun mostrarResultadosFiltros(inmuebles : ArrayList<DataInmueble>){
-        inmueblesEnPantalla = inmuebles
+    private fun mostrarResultadosFiltros(listaDeInmuebles : ArrayList<DataInmueble>){
+        inmueblesEnPantalla = listaDeInmuebles
         cabecera.text = "Inmuebles con filtros aplicados"
         mostrarInmuebles(inmuebles)
     }
 
     @SuppressLint("SetTextI18n")
-    private fun prepararPrimerosResultados(inm : ArrayList<DataInmueble>){
-        println("llega aqui")
-        inmuebles = inm
+    private fun prepararPrimerosResultados(listaDeInmuebles : ArrayList<DataInmueble>){
+        inmuebles = listaDeInmuebles
         cabecera.text = "Inmuebles añadidos recientemente"
         mostrarInmuebles(inmuebles)
-        println("esto tambn lo hace")
     }
 
     private fun prepararBuscador(){

@@ -1,7 +1,6 @@
 package com.example.trobify.adapters
 
 import android.content.ContentValues
-import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
@@ -30,25 +29,25 @@ import com.google.firebase.storage.ListResult
 import com.google.firebase.storage.StorageReference
 import com.squareup.picasso.Picasso
 
-class AdaptadorFichaInmueble() : AppCompatActivity() {
+class AdaptadorFichaInmueble : AppCompatActivity() {
 
     private val db = Firebase.firestore
     var oferta : Int = 0
-    var propietarioMail : String = ""
-    var propietarioId : String = ""
+    private var propietarioMail : String = ""
+    private var propietarioId : String = ""
 
     lateinit var userId:String
-    var desdeMisPisos = false
+    private var desdeMisPisos = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_ficha_inmueble)
 
         userId = intent.extras?.get("user") as String
-        var inmueble = intent.extras?.get("inmueble") as Inmueble
+        val inmueble = intent.extras?.get("inmueble") as Inmueble
         desdeMisPisos = intent.extras?.get("desdeMisPisos") as Boolean
 
-        var path = "imagenesinmueble/" + inmueble.getIdd()
+        val path = "imagenesinmueble/" + inmueble.getIdd()
         //var path = "imagenesinmueble/0Fphs"
 
         downloadFotos(path)
@@ -72,16 +71,16 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
             builder.setTitle("Elige una opción: ")
             builder.setItems(R.array.contactOptions) { _, which ->
                 if(which.equals(0)) {
-                    db.collection("users").whereEqualTo("email",propietarioMail.toString()).get()
+                    db.collection("users").whereEqualTo("email", propietarioMail).get()
                         .addOnCompleteListener { task->
                             if(task.isSuccessful){
                                 for(u in task.result) {
-                                    propietarioId = u.id.toString()
+                                    propietarioId = u.id
                                 }
 
                                 val goCreateChat = Intent(this, ListOfChats::class.java)
-                                goCreateChat.putExtra("user",userId.toString())
-                                goCreateChat.putExtra("otherUserId",propietarioId.toString())
+                                goCreateChat.putExtra("user", userId)
+                                goCreateChat.putExtra("otherUserId", propietarioId)
                                 goCreateChat.putExtra("inmueble",inmueble.direccion.toString())
                                 startActivity(goCreateChat)
                             }
@@ -134,7 +133,7 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
 
     }
     private fun removeFav(id:String,inmueble:Inmueble){
-        inmueble.id?.let { inmid -> Database.removeFav2User(userId, inmid) }
+        inmueble.id?.let { inmid -> Database.removeFav2User(id, inmid) }
         val builder =  AlertDialog.Builder(this)
         builder.setMessage("Inmueble eliminado de favoritos")
             .setCancelable(false)
@@ -144,7 +143,7 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
         showEstrella(false)
     }
     private fun add2Fav(id:String,inmueble:Inmueble){
-        inmueble.id?.let { inmid -> Database.setFav2User(userId, inmid) }
+        inmueble.id?.let { inmid -> Database.setFav2User(id, inmid) }
         val builder =  AlertDialog.Builder(this)
         builder.setMessage("Inmueble añadido a favoritos")
             .setCancelable(false)
@@ -158,8 +157,8 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
 
         val direccion =  findViewById<TextView>(R.id.textViewCalleFicha)
         direccion.text = inmueble.direccionSitio?.titulo
-        if(inmueble.direccion.equals("")){}
-        else{direccion.text = inmueble.direccion}
+        /*if(inmueble.direccion.equals("")){}
+        else{direccion.text = inmueble.direccion}*/
 
         direccion.setTextColor(Color.BLACK)
         direccion.setTextSize(TypedValue.COMPLEX_UNIT_PX, 40F)
@@ -242,7 +241,7 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
 
         db.runTransaction { transaction ->
             val snapshot = transaction.get(sfDocRef)
-            var favoritos = snapshot.get("favorites")!! as ArrayList<String>
+            val favoritos = snapshot.get("favorites")!! as ArrayList<String>
             if (favoritos.contains(inmueble.id.toString())){
 
                /* val builder =  AlertDialog.Builder(this)
@@ -254,7 +253,7 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
 
             }
             else{
-                if(favoritos.size == 1 && favoritos.get(0).equals("NoFav")){
+                if(favoritos.size == 1 && favoritos [0].equals("NoFav")){
                     favoritos.remove("NoFav")
                     favoritos.add(inmueble.id.toString())
                 }
@@ -288,7 +287,7 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
 
     }
 
-    private fun eliminarDeFav(inmueble : Inmueble, userId : String ){
+    private fun     eliminarDeFav(inmueble : Inmueble, userId : String ){
 
 
         val sfDocRef = db.collection("users").document(userId)
@@ -317,16 +316,6 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
                 }
 
             }
-            else{
-
-               /* val builder =  AlertDialog.Builder(this)
-                builder.setMessage("Inmueble no en favoritos")
-                    .setCancelable(false)
-                    .setNeutralButton("  Continuar  "){ _, _ -> }
-                val alert= builder.create()
-                alert.show()*/
-
-            }
         }.addOnSuccessListener { result ->
             Log.d(ContentValues.TAG, "Transaction success: $result")
         }.addOnFailureListener { e ->
@@ -338,7 +327,7 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
 
 
     private fun isFav(inmueble : Inmueble, userId : String){
-        val sfDocRef = db.collection("users").document(userId.toString())
+        val sfDocRef = db.collection("users").document(userId)
 
         db.runTransaction { transaction ->
             val snapshot = transaction.get(sfDocRef)
@@ -361,7 +350,7 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
 
     private fun downloadFotos(path : String ) {
         val storage = FirebaseStorage.getInstance().reference
-        var ref = storage.child(path)
+        val ref = storage.child(path)
         val imageList : ArrayList<String> = ArrayList()
 
         val listAllTask: Task<ListResult> = ref.listAll()
@@ -374,13 +363,13 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
 
 
                     }.addOnCompleteListener{
-                        showImages(imageList,this)
+                        showImages(imageList)
                     }
             }
         }
     }
 
-    private fun showImages(urls : ArrayList<String> , context : Context){
+    private fun showImages(urls : ArrayList<String> ){
         val carouselView = findViewById<CarouselView>(R.id.carouselView)
 
         carouselView.setImageListener{ position, imageView ->
@@ -404,7 +393,7 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
                 if (priceIntroduced.toString().toInt().compareTo(inmueble.precio.toString().toInt()) > 0) {
                     val builderAviso = AlertDialog.Builder(this@AdaptadorFichaInmueble)
                     val message =
-                        "Oferta : " + inmueble.direccion?.toString() + '\n' + " Cantidad ofrecida : " + priceIntroduced
+                        "Oferta : " + inmueble.direccion + '\n' + " Cantidad ofrecida : " + priceIntroduced
                     with(builderAviso) {
 
                         setTitle("El precio es superior al del inmueble, quiere enviar la oferta?")
@@ -412,12 +401,12 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
                         setPositiveButton("Sí") { _, _ ->
                             val goCreateChat =
                                 Intent(this@AdaptadorFichaInmueble, ListOfChats::class.java)
-                            db.collection("users").whereEqualTo("email", propietarioMail.toString())
+                            db.collection("users").whereEqualTo("email", propietarioMail)
                                 .get()
                                 .addOnCompleteListener { task ->
                                     if (task.isSuccessful) {
                                         for (u in task.result) {
-                                            propietarioId = u.id.toString()
+                                            propietarioId = u.id
                                         }
                                         goCreateChat.putExtra("user", userId)
                                         goCreateChat.putExtra("otherUserId", propietarioId)
@@ -435,15 +424,15 @@ class AdaptadorFichaInmueble() : AppCompatActivity() {
                 }
                 else {
                     val message =
-                        "Oferta : " + inmueble.direccion?.toString() + '\n' + " Cantidad ofrecida : " + priceIntroduced
+                        "Oferta : " + inmueble.direccion + '\n' + " Cantidad ofrecida : " + priceIntroduced
                     val goCreateChat =
                         Intent(this@AdaptadorFichaInmueble, ListOfChats::class.java)
-                    db.collection("users").whereEqualTo("email", propietarioMail.toString())
+                    db.collection("users").whereEqualTo("email", propietarioMail)
                         .get()
                         .addOnCompleteListener { task ->
                             if (task.isSuccessful) {
                                 for (u in task.result) {
-                                    propietarioId = u.id.toString()
+                                    propietarioId = u.id
                                 }
                                 goCreateChat.putExtra("user", userId)
                                 goCreateChat.putExtra("otherUserId", propietarioId)

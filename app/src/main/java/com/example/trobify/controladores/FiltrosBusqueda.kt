@@ -7,6 +7,7 @@ import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import com.example.trobify.controladores.MainTrobify
 import com.example.trobify.R
 import com.example.trobify.models.GuardaFiltros
 import com.example.trobify.models.TipoInmueble
