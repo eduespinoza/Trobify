@@ -25,21 +25,21 @@
                 android:layout_height="48dp"
                 android:layout_marginStart="8dp"
 
-                android:foreground="@drawable/flecha_atras"
-                android:gravity="center_horizontal|center_vertical"
-                card_view:iconTint="#000000"
                 android:backgroundTint="#1E150909"
-                android:icon="@drawable/flecha_atras"
+                android:foreground="@drawable/abc_vector_test"
+                android:gravity="center_horizontal|center_vertical"
+                android:icon="@drawable/abc_vector_test"
                 android:iconTint="#000000"
-                />
+                card_view:iconTint="#000000" />
 
             <TextView
                 android:id="@+id/textView9"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="60dp"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="Mis Pisos"
+                android:text="Mis inmuebles"
                 android:textColor="#000000"
                 android:textSize="30sp" />
         </LinearLayout>

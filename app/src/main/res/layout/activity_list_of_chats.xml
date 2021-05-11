@@ -14,7 +14,7 @@
         android:layout_marginEnd="338dp"
         android:gravity="center_horizontal|center_vertical"
         app:backgroundTint="#1E150909"
-        app:icon="@drawable/flecha_atras"
+        app:icon="@drawable/abc_vector_test"
         app:iconSize="25dp"
         app:iconTint="#000000"
         app:layout_constraintEnd_toEndOf="parent"

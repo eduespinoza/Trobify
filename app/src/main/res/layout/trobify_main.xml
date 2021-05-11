@@ -52,7 +52,9 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:text="TROBIFY"
-                    android:textSize="30sp" />
+                    android:textColor="#00BCD4"
+                    android:textSize="30sp"
+                    android:textStyle="bold" />
 
                 <SearchView
                     android:id="@+id/buscarView"
@@ -112,6 +114,7 @@
                     android:clickable="false"
                     android:drawableLeft="@drawable/ic_vermapa"
                     android:text="Mapa"
+                    android:textColor="#000000"
                     android:textSize="24sp" />
 
                 <TextView
@@ -121,6 +124,7 @@
                     android:layout_weight="1"
                     android:drawableLeft="@drawable/ic_ordenarpor"
                     android:text="Ordenar"
+                    android:textColor="#000000"
                     android:textSize="24sp" />
 
                 <TextView
@@ -130,6 +134,7 @@
                     android:layout_weight="1"
                     android:drawableLeft="@drawable/ic_filtrar"
                     android:text="Filtrar"
+                    android:textColor="#000000"
                     android:textSize="24sp" />
 
             </LinearLayout>
@@ -154,6 +159,7 @@
                     android:layout_weight="1"
                     android:text="Alquiler"
                     android:textAlignment="center"
+                    android:textColor="#000000"
                     android:textSize="24sp" />
 
                 <TextView
@@ -163,6 +169,7 @@
                     android:layout_weight="1"
                     android:text="Comprar"
                     android:textAlignment="center"
+                    android:textColor="#000000"
                     android:textSize="24sp" />
 
             </LinearLayout>
@@ -185,7 +192,7 @@
                     android:layout_marginStart="5dp"
                     android:layout_marginTop="5dp"
                     android:text="Inmuebles añadidos recientemente"
-                    android:textSize="25sp"
+                    android:textSize="20sp"
                     android:textStyle="bold" />
 
                 <TextView

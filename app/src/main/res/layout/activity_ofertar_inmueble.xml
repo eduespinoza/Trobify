@@ -17,7 +17,7 @@
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="620dp">
+            android:layout_height="match_parent">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -32,7 +32,7 @@
 
                     <Button
                         android:id="@+id/buttonBackOfertar"
-                        android:layout_width="57dp"
+                        android:layout_width="56dp"
                         android:layout_height="match_parent"
                         android:layout_marginStart="8dp"
                         android:gravity="center_horizontal|center_vertical"
@@ -43,16 +43,17 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintVertical_bias="0.47" />
+                        app:layout_constraintVertical_bias="1" />
 
                     <TextView
                         android:id="@+id/ofertarTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="      Pon tu anuncio"
+                        android:text="Datos del inmueble"
+                        android:textAlignment="center"
                         android:textColor="#000000"
-                        android:textSize="24sp" />
+                        android:textSize="30sp" />
 
                 </LinearLayout>
 
@@ -65,13 +66,13 @@
                         android:id="@+id/carouselPhotosOfertar"
                         android:layout_width="match_parent"
                         android:layout_height="265dp"
+                        app:autoPlay="false"
                         app:fillColor="#FFFFFFFF"
                         app:pageColor="#00000000"
                         app:radius="6dp"
                         app:slideInterval="3000"
                         app:strokeColor="#FF777777"
-                        app:strokeWidth="1dp"
-                        app:autoPlay = "false">
+                        app:strokeWidth="1dp">
 
                         <ImageView
                             android:id="@+id/imageView"
@@ -85,6 +86,9 @@
                         android:id="@+id/buttonAddPhoto"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="100dp"
+                        android:layout_marginEnd="100dp"
+                        android:backgroundTint="#3F51B5"
                         android:text="Añadir foto" />
                 </LinearLayout>
 
@@ -93,6 +97,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="8dp"
+                    android:layout_marginTop="10dp"
                     android:layout_marginRight="8dp"
                     android:background="@drawable/border"
                     android:foregroundTint="#FFFFFF"
@@ -118,6 +123,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:backgroundTint="#00FFFFFF"
+                            android:tint="#3F51B5"
                             app:srcCompat="@android:drawable/ic_media_play" />
 
                     </LinearLayout>
@@ -145,6 +151,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="8dp"
+                    android:layout_marginTop="10dp"
                     android:layout_marginRight="8dp"
                     android:background="@drawable/border"
                     android:orientation="vertical">
@@ -169,6 +176,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:backgroundTint="#00FFFFFF"
+                            android:tint="#3F51B5"
                             app:srcCompat="@android:drawable/ic_media_play" />
 
                     </LinearLayout>
@@ -194,6 +202,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="8dp"
+                    android:layout_marginTop="10dp"
                     android:layout_marginRight="8dp"
                     android:background="@drawable/border"
                     android:orientation="vertical">
@@ -218,6 +227,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:backgroundTint="#00FFFFFF"
+                            android:tint="#3F51B5"
                             app:srcCompat="@android:drawable/ic_media_play" />
                     </LinearLayout>
 
@@ -242,14 +252,15 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="8dp"
+                    android:layout_marginTop="10dp"
                     android:layout_marginRight="8dp"
                     android:background="@drawable/border"
                     android:orientation="vertical">
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="39dp"
-                        android:orientation="horizontal">
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
 
                         <TextView
                             android:id="@+id/textViewPreciodeVenta"
@@ -260,21 +271,15 @@
                             android:textColor="#000000"
                             android:textSize="18sp" />
 
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:orientation="horizontal">
-
                         <EditText
                             android:id="@+id/inPrecio"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:ems="10"
-                            android:inputType="number" />
+                            android:inputType="number"
+                            android:textSize="14sp" />
+
                     </LinearLayout>
 
                 </LinearLayout>
@@ -283,14 +288,15 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="8dp"
+                    android:layout_marginTop="10dp"
                     android:layout_marginRight="8dp"
                     android:background="@drawable/border"
                     android:orientation="vertical">
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="39dp"
-                        android:orientation="horizontal">
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
 
                         <TextView
                             android:id="@+id/textViewSuperficie"
@@ -301,21 +307,15 @@
                             android:textColor="#000000"
                             android:textSize="18sp" />
 
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:orientation="horizontal">
-
                         <EditText
                             android:id="@+id/inSuperficie"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:ems="10"
-                            android:inputType="number" />
+                            android:inputType="number"
+                            android:textSize="14sp" />
+
                     </LinearLayout>
 
                 </LinearLayout>
@@ -324,14 +324,15 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="8dp"
+                    android:layout_marginTop="10dp"
                     android:layout_marginRight="8dp"
                     android:background="@drawable/border"
                     android:orientation="vertical">
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="39dp"
-                        android:orientation="horizontal">
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
 
                         <TextView
                             android:id="@+id/textViewCalle"
@@ -341,27 +342,27 @@
                             android:text="Calle, número y población"
                             android:textColor="#000000"
                             android:textSize="18sp" />
-                    </LinearLayout>
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="horizontal">
-
-                        <SearchView
-                            android:id="@+id/buscadorDirecciones"
-                            android:layout_width="wrap_content"
+                        <LinearLayout
+                            android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:clickable="true"
-                            android:queryHint="Elige una sugerencia" />
+                            android:orientation="horizontal">
 
-                        <TextView
-                            android:id="@+id/inDireccion"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:gravity="center|start"
-                            android:textSize="18sp" />
+                            <TextView
+                                android:id="@+id/inDireccion"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:gravity="center|start"
+                                android:textSize="14sp" />
+
+                            <SearchView
+                                android:id="@+id/buscadorDirecciones"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:clickable="true"
+                                android:queryHint="Elige una sugerencia" />
+                        </LinearLayout>
 
                     </LinearLayout>
 
@@ -372,6 +373,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="8dp"
+                    android:layout_marginTop="10dp"
                     android:layout_marginRight="8dp"
                     android:background="@drawable/border"
                     android:orientation="vertical">
@@ -379,7 +381,7 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:orientation="horizontal">
+                        android:orientation="vertical">
 
                         <TextView
                             android:id="@+id/textViewHab"
@@ -389,12 +391,6 @@
                             android:text="Habitaciones"
                             android:textColor="#000000"
                             android:textSize="18sp" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="39dp"
-                        android:orientation="horizontal">
 
                         <EditText
                             android:id="@+id/inHabitaciones"
@@ -402,7 +398,8 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:ems="10"
-                            android:inputType="number" />
+                            android:inputType="number"
+                            android:textSize="14sp" />
                     </LinearLayout>
 
                 </LinearLayout>
@@ -412,6 +409,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="8dp"
+                    android:layout_marginTop="10dp"
                     android:layout_marginRight="8dp"
                     android:background="@drawable/border"
                     android:orientation="vertical">
@@ -419,7 +417,7 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:orientation="horizontal">
+                        android:orientation="vertical">
 
                         <TextView
                             android:id="@+id/textViewBaños"
@@ -429,12 +427,6 @@
                             android:text="Baños"
                             android:textColor="#000000"
                             android:textSize="18sp" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="39dp"
-                        android:orientation="horizontal">
 
                         <EditText
                             android:id="@+id/inBaños"
@@ -442,7 +434,8 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:ems="10"
-                            android:inputType="number" />
+                            android:inputType="number"
+                            android:textSize="14sp" />
                     </LinearLayout>
 
                 </LinearLayout>
@@ -451,39 +444,34 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="8dp"
+                    android:layout_marginTop="10dp"
                     android:layout_marginRight="8dp"
                     android:background="@drawable/border"
                     android:orientation="vertical">
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="39dp"
-                        android:orientation="horizontal">
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
 
                         <TextView
                             android:id="@+id/textViewDescripción"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="Descripción"
+                            android:text="Descripción  (opcional)"
                             android:textColor="#000000"
                             android:textSize="18sp" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:orientation="horizontal">
 
                         <EditText
                             android:id="@+id/inDescripcion"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:ems="10"
                             android:gravity="start|top"
-                            android:inputType="textMultiLine" />
+                            android:inputType="textMultiLine"
+                            android:textSize="14sp" />
                     </LinearLayout>
 
                 </LinearLayout>
@@ -492,6 +480,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="8dp"
+                    android:layout_marginTop="10dp"
                     android:layout_marginRight="8dp"
                     android:background="@drawable/border"
                     android:orientation="vertical">
@@ -515,6 +504,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
+                            android:backgroundTint="#3F51B5"
                             android:text="Seleccionar" />
                     </LinearLayout>
 
@@ -524,6 +514,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="8dp"
+                    android:layout_marginTop="10dp"
                     android:layout_marginRight="8dp"
                     android:background="@drawable/border"
                     android:orientation="vertical">
@@ -547,17 +538,30 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
+                            android:backgroundTint="#3F51B5"
                             android:text="Seleccionar" />
                     </LinearLayout>
 
                 </LinearLayout>
 
-                <Button
-                    android:id="@+id/buttonPublicar"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Publicar"
-                    android:visibility="visible" />
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="70dp"
+                    android:layout_marginTop="25dp"
+                    android:layout_marginEnd="70dp"
+                    android:layout_marginBottom="20dp"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/buttonPublicar"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:backgroundTint="#2196F3"
+                        android:text="Publicar inmueble"
+                        android:visibility="visible" />
+                </LinearLayout>
 
             </LinearLayout>
         </ScrollView>

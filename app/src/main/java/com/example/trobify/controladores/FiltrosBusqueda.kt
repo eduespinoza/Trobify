@@ -417,7 +417,7 @@ open class FiltrosBusqueda : AppCompatActivity() {
             options.show()
         }
 
-        val buttonBack = findViewById<ImageButton>(R.id.buttonBack)
+        val buttonBack = findViewById<Button>(R.id.buttonBack)
         buttonBack.setOnClickListener{
             finish()
         }
@@ -425,8 +425,6 @@ open class FiltrosBusqueda : AppCompatActivity() {
     }
 
     private fun addOptionsInmueble(){
-        // El array se encuentra en res -> values -> strings.xml
-        // Se ha hecho esto para en caso de traducir la aplicación que estos elemntos también lo hagan
         val options_inmueble = TipoInmueble.values()
 
         /* AÑADIR LAS OPCIONES A LOS DESPLEGABLES */

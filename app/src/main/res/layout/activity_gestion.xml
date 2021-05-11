@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -30,11 +29,11 @@
 
                 <Button
                     android:id="@+id/buttonAtrasGestion"
-                    android:layout_width="80dp"
+                    android:layout_width="70dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:backgroundTint="#00000000"
-                    app:icon="@drawable/flecha_atras"
+                    app:icon="@drawable/abc_vector_test"
                     app:iconSize="35dp"
                     app:iconTint="#000000" />
 
@@ -44,14 +43,13 @@
                 android:id="@+id/carouselGestion"
                 android:layout_width="match_parent"
                 android:layout_height="265dp"
+                app:autoPlay="false"
                 app:fillColor="#FFFFFFFF"
                 app:pageColor="#00000000"
                 app:radius="6dp"
                 app:slideInterval="3000"
                 app:strokeColor="#FF777777"
-                app:strokeWidth="1dp"
-                app:autoPlay = "false">
-            </com.synnapps.carouselview.CarouselView>
+                app:strokeWidth="1dp"></com.synnapps.carouselview.CarouselView>
 
 
             <LinearLayout
@@ -70,17 +68,14 @@
 
 
                 <Button
-                    android:layout_marginLeft="70dp"
                     android:id="@+id/buttonEliminarFotos"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_marginLeft="70dp"
                     android:text="Eliminar Fotos" />
 
 
-
             </LinearLayout>
-
-
 
 
             <TextView
@@ -128,8 +123,7 @@
                 android:layout_height="wrap_content"
                 android:text="Precio"
                 android:textColor="#000000"
-                android:textSize="22sp"
-                />
+                android:textSize="22sp" />
 
             <EditText
                 android:id="@+id/precioBox"
@@ -170,6 +164,7 @@
                 android:ems="10"
                 android:inputType="number"
                 android:textSize="17sp" />
+
             <TextView
                 android:id="@+id/textView8"
                 android:layout_width="match_parent"
@@ -185,6 +180,7 @@
                 android:ems="10"
                 android:inputType="number"
                 android:textSize="17sp" />
+
             <TextView
                 android:id="@+id/textView14"
                 android:layout_width="match_parent"
@@ -200,6 +196,7 @@
                 android:ems="10"
                 android:inputType="textPersonName"
                 android:textSize="17sp" />
+
             <TextView
                 android:id="@+id/textView9"
                 android:layout_width="match_parent"
@@ -290,6 +287,7 @@
                         android:layout_height="wrap_content"
                         android:text="Piscina" />
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
