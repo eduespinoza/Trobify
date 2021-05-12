@@ -9,7 +9,7 @@
             android:title="Ofertar inmueble" />
         <item
             android:id="@+id/mispisos"
-            android:title="Mis pisos" />
+            android:title="Mis inmuebles" />
         <item
             android:id="@+id/misfavoritos"
             android:title="Mis favoritos" />
