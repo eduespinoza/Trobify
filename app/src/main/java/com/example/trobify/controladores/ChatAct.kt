@@ -3,6 +3,8 @@ package com.example.trobify.controladores
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.WindowManager
+import android.widget.Button
 import android.widget.ImageButton
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.trobify.adapters.MessageAdapter
@@ -23,6 +25,7 @@ class ChatAct : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat)
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN) //Para que se mueva el chat hacia arriba cuando despliegas el teclado
 
         intent.getStringExtra("chatId")?.let { chatId = it }
         intent.getStringExtra("user")?.let { user = it }
@@ -39,7 +42,7 @@ class ChatAct : AppCompatActivity() {
         messagesRecylerView.layoutManager = LinearLayoutManager(this)
         messagesRecylerView.adapter = MessageAdapter(user)
 
-        val bBack = findViewById<ImageButton>(R.id.buttonGoBack)
+        val bBack = findViewById<Button>(R.id.buttonGoBack)
         bBack.setOnClickListener {
             val goBack = Intent(this, ListOfChats::class.java)
             goBack.putExtra("user",user)

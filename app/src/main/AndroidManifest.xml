@@ -22,7 +22,8 @@
         <activity
             android:name=".controladores.ChatAct"
             android:label="@string/title_activity_chat"
-            android:theme="@style/Theme.Trobify.NoActionBar" />
+            android:theme="@style/Theme.Trobify.NoActionBar"
+            android:windowSoftInputMode="adjustPan|adjustResize" />
 
         <meta-data
             android:name="com.here.sdk.access_key_id"

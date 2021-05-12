@@ -21,32 +21,37 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="5dp"
+            android:layout_marginStart="3dp"
+            android:layout_marginTop="3dp"
             android:layout_marginEnd="5dp"
+            android:backgroundTint="#FFFFFF"
             android:isScrollContainer="false"
             android:orientation="horizontal">
 
+            <Button
+                android:id="@+id/buttonBack"
+                android:layout_width="56dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="3dp"
+                android:gravity="center_horizontal|center_vertical"
+                app:backgroundTint="#1E150909"
+                app:icon="@drawable/abc_vector_test"
+                app:iconSize="25dp"
+                app:iconTint="#000000"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
             <TextView
                 android:id="@+id/titulo_ventana_filtros"
-                android:layout_width="334dp"
-                android:layout_height="match_parent"
-                android:background="#FFFFFF"
-                android:backgroundTint="#FFFFFF"
+                android:layout_width="299dp"
+                android:layout_height="wrap_content"
                 android:text="Elegir filtros"
                 android:textAlignment="center"
                 android:textAllCaps="false"
                 android:textColor="#3F51B5"
                 android:textSize="30sp"
                 android:textStyle="bold" />
-
-            <Button
-                android:id="@+id/buttonBack"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:backgroundTint="#F44336"
-                app:icon="@drawable/btn_clear" />
 
         </LinearLayout>
 
