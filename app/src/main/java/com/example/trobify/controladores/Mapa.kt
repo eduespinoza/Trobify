@@ -15,20 +15,24 @@ import android.widget.SearchView
 import android.widget.SimpleCursorAdapter
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.fragment.app.FragmentActivity
 import com.example.trobify.R
 import com.example.trobify.adapters.AdaptadorFichaInmueble
-import com.example.trobify.models.Busqueda
-import com.example.trobify.models.DataInmueble
-import com.example.trobify.models.Inmueble
+import com.example.trobify.models.*
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.here.sdk.core.Anchor2D
 import com.here.sdk.core.GeoCoordinates
 import com.here.sdk.core.Metadata
 import com.here.sdk.core.Point2D
+import com.here.sdk.gestures.GestureState
+import com.here.sdk.gestures.GestureType
+import com.here.sdk.gestures.LongPressListener
 import com.here.sdk.gestures.TapListener
 import com.here.sdk.mapviewlite.*
 import com.here.sdk.mapviewlite.MapScene.LoadSceneCallback
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
 
 
 class Mapa : AppCompatActivity(){
@@ -42,7 +46,7 @@ class Mapa : AppCompatActivity(){
     var esPrimera = true
     var resMarker = MapMarker(GeoCoordinates(latitudDefault,longitudDefault))
     private val db = Firebase.firestore
-    var inmuebles = arrayListOf<DataInmueble>()
+    var inmuebles = arrayListOf<DataInmueble2>()
 
     override fun onCreate(savedInstanceState: Bundle?){
         super.onCreate(savedInstanceState)
@@ -53,10 +57,22 @@ class Mapa : AppCompatActivity(){
         prepararBuscador()
         getCoordenadas()
         loadMapScene()
-        loadMarkers()
+        loadMarks()
+        mapa.gestures.disableDefaultAction(GestureType.DOUBLE_TAP)
         setTapGestureHandler()
+        //con doble tap se añade direcciones, util para poblar base de datos
+        //setLongPressGestureHandler()
 
     }
+    private fun setLongPressGestureHandler() {
+        mapa.gestures.setDoubleTapListener {
+            point2D ->
+            var aqui = mapa.camera.viewToGeoCoordinates(point2D)
+            println("q me cuentas")
+            buscador.direccionFromCoord(aqui)
+        }
+    }
+
     private fun prepararBuscador(){
         buscadorMapa = findViewById(R.id.buscadorMapa)
         val from = arrayOf(SearchManager.SUGGEST_COLUMN_TEXT_1)
@@ -157,40 +173,35 @@ class Mapa : AppCompatActivity(){
             coordenadas = GeoCoordinates(latitudDefault,longitudDefault)
         }
     }
-
-    private fun loadMarkers(){
-        db.collection("inmueblesv4").get().addOnCompleteListener {
-            if(it.isSuccessful){
-                for(result in it.result){
-                    val inmueble = result.toObject(DataInmueble::class.java)
-                    inmuebles.add(inmueble)
-                    println("Inmueble " + inmueble.id)
-                    val place = inmueble.direccion
-                    val mapImage = MapImageFactory.fromResource(this.resources,
-                        R.drawable.map_marker
-                    )
-                    val mapMarker = place?.coordenadas?.get("latitud")?.let { it1 ->
-                        place.coordenadas!!["longitud"]?.let { it2 ->
-                            GeoCoordinates(
-                                it1,
-                                it2
-                            )
-                        }
-                    }?.let { it2 -> MapMarker(it2) }
-                    val markerStyle = MapMarkerImageStyle()
-                        markerStyle.anchorPoint = Anchor2D(.5, .5)
-                    mapMarker?.addImage(mapImage,markerStyle)
-                    val metadata = Metadata()
-                    inmueble.id?.let { it1 -> metadata.setString("id", it1) }
-                    if (mapMarker != null) {
-                        mapMarker.metadata = metadata
-                        println("${mapMarker.metadata!!.getString("id")}")
-                        mapa.mapScene.addMapMarker(mapMarker)
-                    }
-                }
+    private fun loadMarks(){
+        inmuebles = Database.getAllInmuebles()
+        for (inmueble in inmuebles) {
+        val place = inmueble.direccion
+        val mapImage = MapImageFactory.fromResource(this.resources,
+            R.drawable.map_marker
+        )
+        val mapMarker = place?.coordenadas?.get("latitud")?.let { it1 ->
+            place.coordenadas!!["longitud"]?.let { it2 ->
+                GeoCoordinates(
+                    it1,
+                    it2
+                )
             }
+        }?.let { it2 -> MapMarker(it2) }
+        val markerStyle = MapMarkerImageStyle()
+        markerStyle.anchorPoint = Anchor2D(.5, .5)
+        mapMarker?.addImage(mapImage,markerStyle)
+        val metadata = Metadata()
+        inmueble.id?.let { it1 -> metadata.setString("id", it1) }
+        if (mapMarker != null) {
+            mapMarker.metadata = metadata
+            println("${mapMarker.metadata!!.getString("id")}")
+            mapa.mapScene.addMapMarker(mapMarker)
         }
     }
+    }
+
+
     private fun setTapGestureHandler() {
         mapa.gestures.tapListener = object : TapListener {
             override fun onTap(touchPoint : Point2D) {
@@ -215,7 +226,7 @@ class Mapa : AppCompatActivity(){
         goFicha.putExtra("user", user)
         inmuebles.forEach stop@{
             if(it.id == id){
-                goFicha.putExtra("inmueble", Inmueble().adaptarInmuble(it))
+                goFicha.putExtra("inmueble", Inmueble().adaptadorInm(it))
                 return@stop
             }
         }

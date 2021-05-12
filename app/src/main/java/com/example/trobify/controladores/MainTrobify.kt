@@ -26,8 +26,10 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.*
+import java.time.LocalDateTime
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.random.Random.Default.nextBoolean
 
 
 open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemClickListener {
@@ -36,9 +38,9 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
     var listaIDS = arrayListOf<String>()
     lateinit var listaConResultados : RecyclerView
     lateinit var auth : FirebaseAuth
-    lateinit var inmuebles : ArrayList<DataInmueble>
+    lateinit var inmuebles : ArrayList<DataInmueble2>
     val db = Firebase.firestore
-    var inmueblesEnPantalla : ArrayList<DataInmueble> = arrayListOf()
+    var inmueblesEnPantalla : ArrayList<DataInmueble2> = arrayListOf()
     lateinit var userId : String
     lateinit var user : DataUser
     lateinit var nuevaBusqueda : Busqueda
@@ -54,19 +56,21 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
         var ordenSeleccionado : Int = 2
     }
 
-    override fun onItemClicked(dataInmueble : DataInmueble) {
+    override fun onItemClicked(dataInmueble : DataInmueble2) {
         val goFicha = Intent(this, AdaptadorFichaInmueble::class.java)
         goFicha.putExtra("user", userId.toString())
-        goFicha.putExtra("inmueble", Inmueble().adaptarInmuble(dataInmueble))
+        goFicha.putExtra("inmueble", Inmueble().adaptadorInm(dataInmueble))
         goFicha.putExtra("desdeMisPisos", false)
         startActivity(goFicha)
     }
 
     override fun onResume() {
         super.onResume()
+        if(filtrosAplicados == null){
         user = Database.getUser(userId)
         userFav = user.favorites!!
         mostrarInmuebles(inmuebles)
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?)
@@ -82,7 +86,18 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
         userFav = user.favorites!!
         inmuebles = Database.getAllInmuebles()
         if(filtrosAplicados != null){
-            val result = GestionFiltros(Database).aplicar(filtrosAplicados!!)
+            println(filtrosAplicados!!.tipoInmueble +"tipo1")
+            println(filtrosAplicados!!.tipoVivienda +"tipo2")
+            println(filtrosAplicados!!.numBaños.toString() + "tipo3")
+            println(filtrosAplicados!!.numHabitaciones.toString() + "tipo4")
+            println(filtrosAplicados!!.precioMin.toString() + "tipo5")
+            println(filtrosAplicados!!.precioMax.toString() + "tipo6")
+            println(filtrosAplicados!!.superficieMin.toString() + "tipo7")
+            println(filtrosAplicados!!.superficieMax.toString() + "tipo8")
+            println(filtrosAplicados!!.estado.toString() + "tipo9")
+            println(filtrosAplicados!!.extras.toString() + "tipo10")
+
+            val result = GestionFiltros().aplicar(filtrosAplicados!!)
             if(result.size != 0)
                 mostrarResultadosFiltros(result)
             else {
@@ -105,14 +120,13 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
         if(!inmueblesEnPantalla.isNullOrEmpty()) {verficarOrdenacion()}
     }
     @SuppressLint("SetTextI18n")
-    private fun mostrarResultadosFiltros(listaDeInmuebles : ArrayList<DataInmueble>){
-        inmueblesEnPantalla = listaDeInmuebles
+    private fun mostrarResultadosFiltros(listaDeInmuebles : ArrayList<DataInmueble2>){
         cabecera.text = "Inmuebles con filtros aplicados"
-        mostrarInmuebles(inmuebles)
+        mostrarInmuebles(listaDeInmuebles)
     }
 
     @SuppressLint("SetTextI18n")
-    private fun prepararPrimerosResultados(listaDeInmuebles : ArrayList<DataInmueble>){
+    private fun prepararPrimerosResultados(listaDeInmuebles : ArrayList<DataInmueble2>){
         inmuebles = listaDeInmuebles
         cabecera.text = "Inmuebles añadidos recientemente"
         mostrarInmuebles(inmuebles)
@@ -311,7 +325,7 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
 
     //fun para generar id's de inmuebles aleatorios *** se podria meter en clase inmueble
     // no se comprueba que el id se repita con otro ya puesto
-    /*fun generateRandomId() : String {
+    fun generateRandomId() : String {
         val charPool : List<Char> = ('a'..'z') + ('A'..'Z') + ('0'..'9')
         val pathId = (1..5)
             .map { i -> kotlin.random.Random.nextInt(0, charPool.size) }
@@ -329,12 +343,51 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
         return arrayListOf("Apartamento","Ático","Dúplex","Loft",
             "Planta baja","Estudio","Casa","Chalet","Adosado","Finca rústica")[kotlin.random.Random.nextInt(0,10)]
     }
+    fun getRandomExtras():ArrayList<String>{
+        var cuanto = kotlin.random.Random.nextInt(1,4)
+        var res = arrayListOf<String>()
+        for(i in 1..cuanto){
+            var otro = getRandomCertificado()
+            if(!res.contains(otro)){res.add(otro)}
+        }
+        return res
+    }
+    fun getRandomTipos(ey : DataInmueble2):DataInmueble2{
+        var res = getRandomTipoInmueble()
+        ey.id = generateRandomId()
+        ey.propietario = null
+        ey.tipoInmueble = res
+        ey.fotos = arrayListOf(R.drawable.piso1, R.drawable.piso2, R.drawable.piso3,
+            R.drawable.piso4,R.drawable.piso5)
+        ey.superficie = getRandomSuperficie()
+        ey.precio = getRandomPrice()
+        ey.intencion = getRandomIntencion()
+        ey.descripcion = "Bueno, bonito y barato"
+        ey.fechaSubida = getRandomDate()
+        if(res.equals("Vivienda") || res.equals("Edificio")){
+            ey.tipoVivienda = getRandomTipoVivienda()
+            ey.numHabitaciones = getRandom1a4()
+            ey.numBanos = getRandom1a4()
+            ey.estado = getRandomEstado()
+            ey.extras = getRandomExtras()
+        }
+        if (res.equals("Oficina")|| res.equals("Local")){
+            ey.numBanos = getRandom1a4()
+            ey.estado = getRandomEstado()
+            ey.extras = getRandomExtras()
+        }
+        if (res.equals("Garaje")){
+            ey.estado = getRandomEstado()
+        }
+        return ey
+    }
     fun getRandomTipoInmueble() : String{
         return arrayListOf("Vivienda","Edificio","Oficina","Garaje",
             "Local","Terreno","Nave")[kotlin.random.Random.nextInt(0,7)]
     }
     fun getRandomCertificado() : String {
-        return arrayListOf("A","B","C","D","E","F","G")[kotlin.random.Random.nextInt(0,6)]
+        return arrayListOf("Parking","Ascensor","Amueblado","Calefacción",
+            "Jardín","Piscina","Terraza","Trastero")[kotlin.random.Random.nextInt(0,8)]
     }
     fun getRandomPrice() : Int {
         return arrayListOf<Int>(50000, 75000, 100000, 125000, 150000, 200000,
@@ -347,9 +400,7 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
     fun getRandomDate() : String {
         return LocalDateTime.now().minusDays(kotlin.random.Random.nextInt(0,20).toLong()).toString()
     }
-    fun getRandomDireccion(): String {
-        return calles[kotlin.random.Random.nextInt(0,calles.size)]
-    }
+
     fun getPlaces(){
         var sitios = arrayListOf<Sitio>()
         runBlocking(Dispatchers.Default) {
@@ -359,30 +410,29 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
                         var place = result.toObject(Sitio::class.java)
                         sitios.add(place)
                     }
-                    //generatePisos(sitios)
+                    generatePisos(sitios)
                 }
             }}
     }
     fun getRandomIntencion():String{
         return arrayListOf("Alquiler","Vender")[kotlin.random.Random.nextInt(0,2)]
     }
+    private fun getInmuebleMano():DataInmueble2{
+        var aux = DataInmueble2()
+        var inmueble = getRandomTipos(aux)
+        return inmueble
+    }
     //fun para generar pisos en bd
     fun generatePisos(sitios : ArrayList<Sitio>) {
         for (venga in sitios){
-            Database.subirInmueble(DataInmueble(generateRandomId(),null,getRandom1a4(),
-                getRandom1a4(),getRandomSuperficie(),venga,getRandomTipoVivienda(),getRandomTipoInmueble(),getRandomIntencion(),
-                getRandomPrice(), arrayListOf(R.drawable.piso1, R.drawable.piso2, R.drawable.piso3,
-                    R.drawable.piso4,R.drawable.piso5),
-                arrayListOf("imagen1","imagen2", "imagen3", "imagen4", "imagen5"),
-                getRandomCertificado(),"Bueno bonito y barato",getRandomEstado(), Random.nextBoolean(),Random.nextBoolean(),
-                Random.nextBoolean(),Random.nextBoolean(),
-                Random.nextBoolean(),Random.nextBoolean(),Random.nextBoolean(),Random.nextBoolean(),
-                getRandomDate()))
+            var inmueble = getInmuebleMano()
+            inmueble.direccion = venga
+            inmueble.id?.let { Database.db.collection("inmueblesv5").document(it).set(inmueble) }
         }
-    }*/
+    }
 
-    private fun ordenarInmuebles() : ArrayList<DataInmueble>{
-        lateinit var inmueblesOrdenados :List<DataInmueble>
+    private fun ordenarInmuebles() : ArrayList<DataInmueble2>{
+        lateinit var inmueblesOrdenados :List<DataInmueble2>
         val tipoDeOrden = orden.ordenSeleccionado
         if(tipoDeOrden == 0){
             inmueblesOrdenados = inmueblesEnPantalla.sortedBy{it.precio}
@@ -396,12 +446,12 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
         else if(tipoDeOrden == 3){
             inmueblesOrdenados = inmueblesEnPantalla.sortedBy{it.fechaSubida}
         }
-        return inmueblesOrdenados.toMutableList() as ArrayList<DataInmueble>
+        return inmueblesOrdenados.toMutableList() as ArrayList<DataInmueble2>
     }
 
     @SuppressLint("SetTextI18n")
-    fun mostrarInmuebles(listaInmuebles : ArrayList<DataInmueble>){
-        inmueblesEnPantalla = inmuebles
+    fun mostrarInmuebles(listaInmuebles : ArrayList<DataInmueble2>){
+        inmueblesEnPantalla = listaInmuebles
         val layoutmanager = LinearLayoutManager(baseContext)
         listaConResultados.layoutManager = layoutmanager
         listaConResultados.setHasFixedSize(true)
@@ -414,18 +464,4 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
         ordenarInmuebles()
     }
 
-    /*private fun getFavs(myCallback : (ArrayList<String>) -> Unit){
-        val sfDocRef = db.collection("users").document(userId)
-
-        db.runTransaction { transaction ->
-            val snapshot = transaction.get(sfDocRef)
-            var favoritosStringArray = snapshot.get("favorites")
-            myCallback(favoritosStringArray as ArrayList<String>)
-
-        }.addOnSuccessListener { result ->
-            Log.d(ContentValues.TAG, "Transaction success: $result")
-        }.addOnFailureListener { e ->
-            Log.w(ContentValues.TAG, "Transaction failure.", e)
-        }
-    }*/
 }

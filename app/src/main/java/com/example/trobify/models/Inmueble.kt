@@ -137,7 +137,22 @@ class Inmueble : Serializable{
         ,dataInmueble.ascensor,dataInmueble.amueblado,dataInmueble.calefaccion,dataInmueble.jardin,dataInmueble.piscina,dataInmueble.terraza,
             dataInmueble.trastero,LocalDateTime.parse(dataInmueble.fechaSubida), dataInmueble.direccion)
     }
-
+    fun adaptadorInm(data : DataInmueble2) : Inmueble{
+        var inmueble = Inmueble()
+        inmueble.id = data.id
+        inmueble.propietario = data.propietario
+        inmueble.descripcion = data.descripcion
+        inmueble.tipoInmueble = data.tipoInmueble
+        inmueble.tipoVivienda = data.tipoVivienda
+        inmueble.numBanos = data.numBanos
+        inmueble.numHabitaciones = data.numHabitaciones
+        inmueble.precio = data.precio
+        inmueble.superficie = data.superficie
+        inmueble.intencion = data.intencion
+        inmueble.fotos = data.fotos
+        inmueble.estado = data.estado
+        return inmueble
+    }
 
 
 

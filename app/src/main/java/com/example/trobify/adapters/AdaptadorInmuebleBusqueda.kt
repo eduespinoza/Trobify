@@ -7,10 +7,11 @@ import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
 import com.example.trobify.models.DataInmueble
 import com.example.trobify.R
+import com.example.trobify.models.DataInmueble2
 import java.time.Duration
 import java.time.LocalDateTime
 
-class AdaptadorInmuebleBusqueda(private val fichainmueble : ArrayList<DataInmueble>, private val favs : ArrayList<String>,
+class AdaptadorInmuebleBusqueda(private val fichainmueble : ArrayList<DataInmueble2>, private val favs : ArrayList<String>,
                                 val itemClickListener : OnItemClickListener
 )
     : RecyclerView.Adapter<AdaptadorInmuebleBusqueda.ViewHolder>() {
@@ -24,7 +25,7 @@ class AdaptadorInmuebleBusqueda(private val fichainmueble : ArrayList<DataInmueb
         var fdescripcion = view.findViewById<TextView>(R.id.descripcion)
         var ftiempo = view.findViewById<TextView>(R.id.tiempo)
         var estrella = view.findViewById<Button>(R.id.estrellita_tarjetita)
-        fun bind(inmueble : DataInmueble, clickListener : OnItemClickListener){
+        fun bind(inmueble : DataInmueble2, clickListener : OnItemClickListener){
             view.setOnClickListener {
                 clickListener.onItemClicked(inmueble)
             }
@@ -45,6 +46,7 @@ class AdaptadorInmuebleBusqueda(private val fichainmueble : ArrayList<DataInmueb
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
         var tipo = fichainmueble[position].tipoInmueble
+        if(tipo.equals("Vivienda") || tipo.equals("Edificio")){tipo = fichainmueble[position].tipoVivienda}
         holder.ftitulo.text = tipo +" en: " + (fichainmueble[position].direccion?.titulo)
         //holder.fimage.setImageResource(fichainmueble[position].photos.first())
         holder.fimage.setImageResource(R.drawable.piso4)
@@ -63,7 +65,7 @@ class AdaptadorInmuebleBusqueda(private val fichainmueble : ArrayList<DataInmueb
 
     }
     interface OnItemClickListener{
-        fun onItemClicked(dataInmueble : DataInmueble)
+        fun onItemClicked(dataInmueble : DataInmueble2)
     }
     private fun getTiempoToString(fecha : String?):String{
         var date = LocalDateTime.parse(fecha)

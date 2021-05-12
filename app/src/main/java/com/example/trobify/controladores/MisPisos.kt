@@ -12,6 +12,7 @@ import com.example.trobify.R
 import com.example.trobify.adapters.AdaptadorFichaInmueble
 import com.example.trobify.adapters.AdaptadorInmuebleBusqueda
 import com.example.trobify.models.DataInmueble
+import com.example.trobify.models.DataInmueble2
 import com.example.trobify.models.Database
 import com.example.trobify.models.Inmueble
 import com.google.firebase.firestore.ktx.firestore
@@ -28,11 +29,11 @@ class  MisPisos : AppCompatActivity() , AdaptadorInmuebleBusqueda.OnItemClickLis
 
 
 
-    override fun onItemClicked(dataInmueble : DataInmueble) {
+    override fun onItemClicked(dataInmueble : DataInmueble2) {
 
         val goFicha = Intent(this, AdaptadorFichaInmueble::class.java)
         goFicha.putExtra("user", userId)
-        goFicha.putExtra("inmueble", Inmueble().adaptarInmuble(dataInmueble))
+        goFicha.putExtra("inmueble", Inmueble().adaptadorInm(dataInmueble))
         goFicha.putExtra("desdeMisPisos", true)
         startActivity(goFicha)
 
@@ -60,43 +61,7 @@ class  MisPisos : AppCompatActivity() , AdaptadorInmuebleBusqueda.OnItemClickLis
 
     }
 
-    fun cargarPisosDe(userId : String){
-
-
-        val sfDocRef = db.collection("users").document(userId.toString())
-
-        db.runTransaction { transaction ->
-            val snapshot = transaction.get(sfDocRef)
-            var pisosStringArray = snapshot.get("pisos")
-            cargarInmuebles(pisosStringArray as ArrayList<String>)
-
-        }.addOnSuccessListener { result ->
-            Log.d(ContentValues.TAG, "Transaction success: $result")
-        }.addOnFailureListener { e ->
-            Log.w(ContentValues.TAG, "Transaction failure.", e)
-        }
-
-    }
-
-
-    fun cargarInmuebles(listaIdPisos : ArrayList<String>) {
-        var arrayDePisos  = arrayListOf<DataInmueble>()
-
-        for (i in 0..listaIdPisos.size - 1) {
-            var pisoId = listaIdPisos[i]
-            val sfDocRef = db.collection("inmueblesv4").document(pisoId)
-            sfDocRef.get().addOnSuccessListener { document ->
-                val piso = document.toObject<DataInmueble>()
-                if (piso != null) {
-                    arrayDePisos.add(piso)
-                }
-            }.addOnSuccessListener {
-                mostrar(arrayDePisos)
-            }
-        }
-    }
-
-    private fun mostrar(pisosFav : ArrayList<DataInmueble>){
+    private fun mostrar(pisosFav : ArrayList<DataInmueble2>){
         caja.setHasFixedSize(true)
         val layoutmanager = LinearLayoutManager(baseContext)
         caja.layoutManager = layoutmanager

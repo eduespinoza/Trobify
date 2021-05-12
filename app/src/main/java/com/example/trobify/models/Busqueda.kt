@@ -8,27 +8,32 @@ import com.here.sdk.core.GeoCoordinates
 import com.here.sdk.core.LanguageCode
 import com.here.sdk.core.errors.InstantiationErrorException
 import com.here.sdk.search.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 class Busqueda {
     //val inmuebles = Database().inmuebles
     var db = Firebase.firestore
     var query : String = ""
-    //lateinit var inmuebles : ArrayList<DataInmueble>
+    //lateinit var inmuebles : ArrayList<DataInmueble2>
     lateinit var motorDeBusqueda : SearchEngine
     lateinit var opcionesDeBusqueda : SearchOptions
     //var sugerencias = mutableMapOf<String,GeoCoordinates>()
     var sugerencias = arrayListOf<Place>()
+    var sitio : Place? = null
     init {
         prepararBuscadorHere()
     }
-    fun buscar(busqueda : String) : ArrayList<DataInmueble>{
+    fun buscar(busqueda : String) : ArrayList<DataInmueble2>{
         println("vale ahora busco manin")
         var result = Database.getInmueblesBusqueda(busqueda, null)
         println(result)
         return result
     }
     //ESTO LO HACE FIREBASE
-    fun buscarConIntencion(busqueda : String, intencion : String) : ArrayList<DataInmueble>{
+    fun buscarConIntencion(busqueda : String, intencion : String) : ArrayList<DataInmueble2>{
         return Database.getInmueblesBusqueda(busqueda, intencion)
     }
     private val searchCallback =
@@ -54,6 +59,29 @@ class Busqueda {
         println("${query} con espacion")
         motorDeBusqueda.search(TextQuery("${query} ",geoCoordinates),opcionesDeBusqueda,searchCallback)
     }
+    val direc =
+        SearchCallback { searchError, mutableList ->
+            if (searchError != null) {
+                return@SearchCallback
+            }
+            for (geocodingResult in mutableList!!) {
+                sitio = geocodingResult
+                var place = Sitio(geocodingResult.title,
+                    mutableMapOf("latitud" to (geocodingResult.geoCoordinates?.latitude!!)
+                        ,"longitud" to (geocodingResult.geoCoordinates?.longitude!!)
+                    ),geocodingResult.id)
+                place.id?.let { db.collection("testingPlacesv2").document(it).set(place) }
+                println("${geocodingResult.title} este resultado manin")
+            }
+
+        }
+    fun direccionFromCoord(coord:GeoCoordinates){
+            var result = "aqui so yo"
+            var searchOptions = SearchOptions(LanguageCode.ES_ES,1)
+            motorDeBusqueda.search(coord,searchOptions,direc)
+
+    }
+
     fun obtenerSugerencias(query : String){
         //coordenadas de valencia por defecto, esto es para que tenga un rango
         //de busqueda definido
@@ -98,7 +126,7 @@ class Busqueda {
         var t = db.collection("inmueblesv3").get()
         t.addOnCompleteListener {
             for (res in it.result){
-                var inmueble = res.toObject(DataInmueble::class.java)
+                var inmueble = res.toObject(DataInmueble2::class.java)
                 inmuebles.add(inmueble)
             }
         }
@@ -106,16 +134,16 @@ class Busqueda {
 
          */
     }
-    fun obtenerResultados(resultado : (ArrayList<DataInmueble>) -> Unit){
-        var inmueblesEncontrados = arrayListOf<DataInmueble>()
+    fun obtenerResultados(resultado : (ArrayList<DataInmueble2>) -> Unit){
+        var inmueblesEncontrados = arrayListOf<DataInmueble2>()
 
-        /*var inmueblesEncontrados = arrayListOf<DataInmueble>()
+        /*var inmueblesEncontrados = arrayListOf<DataInmueble2>()
         db.collection("inmueblesv3").
         whereEqualTo("direccion",this.query).get()
             .addOnCompleteListener{ task->
                  if(task.isSuccessful){
                      for(resultadoBusqueda in task.result){
-                         var inmueble = resultadoBusqueda.toObject(DataInmueble::class.java)
+                         var inmueble = resultadoBusqueda.toObject(DataInmueble2::class.java)
                          inmueblesEncontrados.add(inmueble)
                      }
                      Log.d("QUERY","$inmueblesEncontrados")
