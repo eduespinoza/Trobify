@@ -16,29 +16,33 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
             <Button
                 android:id="@+id/buttonAtrasFavoritos"
-                android:layout_width="50dp"
-                android:layout_height="40dp"
+                android:layout_width="56dp"
+                android:layout_height="match_parent"
                 android:layout_marginStart="8dp"
-                android:background="#FAFAFA"
-                android:backgroundTint="#1E150909"
-                android:foreground="@drawable/flecha_atras"
                 android:gravity="center_horizontal|center_vertical"
-                android:iconTint="#000000"
-                card_view:iconSize="15dp"
-                card_view:iconTint="#000000" />
+                card_view:backgroundTint="#1E150909"
+                card_view:icon="@drawable/abc_vector_test"
+                card_view:iconSize="25dp"
+                card_view:iconTint="#000000"
+                card_view:layout_constraintBottom_toBottomOf="parent"
+                card_view:layout_constraintStart_toStartOf="parent"
+                card_view:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/textView9"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="60dp"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="Favoritos"
+                android:textAllCaps="false"
                 android:textColor="#000000"
                 android:textSize="30sp" />
         </LinearLayout>
@@ -47,6 +51,7 @@
             android:id="@+id/noFavText"
             android:layout_width="339dp"
             android:layout_height="19dp"
+            android:layout_marginTop="5dp"
             android:gravity="center"
             android:text="Estos son los resultados" />
 

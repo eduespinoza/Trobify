@@ -6,29 +6,65 @@
     android:layout_height="match_parent"
     tools:context=".controladores.ListOfChats">
 
-    <Button
-        android:id="@+id/buttonAtras"
-        android:layout_width="57dp"
-        android:layout_height="48dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="338dp"
-        android:gravity="center_horizontal|center_vertical"
-        app:backgroundTint="#1E150909"
-        app:icon="@drawable/abc_vector_test"
-        app:iconSize="25dp"
-        app:iconTint="#000000"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/listChatsRecyclerView"
-        android:layout_width="409dp"
-        android:layout_height="556dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonAtras"
-        tools:listitem="@layout/message_chat" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="3dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/buttonAtras"
+                android:layout_width="56dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="8dp"
+                android:gravity="center_horizontal|center_vertical"
+                app:backgroundTint="#1E150909"
+                app:icon="@drawable/abc_vector_test"
+                app:iconSize="25dp"
+                app:iconTint="#000000" />
+
+            <TextView
+                android:id="@+id/titulo_Chats"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="60dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="Mensajes"
+                android:textAlignment="center"
+                android:textColor="#000000"
+                android:textSize="30sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" >
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/listChatsRecyclerView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        tools:listitem="@layout/message_chat" />
+                </LinearLayout>
+            </ScrollView>
+
+        </LinearLayout>
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

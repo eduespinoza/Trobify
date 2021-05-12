@@ -28,6 +28,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_marginTop="3dp"
                     android:orientation="horizontal">
 
                     <Button
@@ -37,18 +38,18 @@
                         android:layout_marginStart="8dp"
                         android:gravity="center_horizontal|center_vertical"
                         app:backgroundTint="#1E150909"
-                        app:icon="@drawable/flecha_atras"
+                        app:icon="@drawable/abc_vector_test"
                         app:iconSize="25dp"
                         app:iconTint="#000000"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintVertical_bias="1" />
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
                         android:id="@+id/ofertarTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginEnd="10dp"
                         android:layout_weight="1"
                         android:text="Datos del inmueble"
                         android:textAlignment="center"
