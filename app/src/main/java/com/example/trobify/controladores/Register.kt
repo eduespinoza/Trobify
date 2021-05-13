@@ -15,6 +15,7 @@ import com.example.trobify.models.DataUser
 import com.example.trobify.R
 import com.example.trobify.models.Database
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.actionCodeSettings
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -71,7 +72,15 @@ class Register : AppCompatActivity() {
         val user = DataUser(email,
             arrayListOf(),arrayListOf(),auth.uid,name,password,"default",surname)
         Database.subirUsuario(user)
+        sendEmail()
         finishMessage()
+    }
+
+    private fun sendEmail(){
+        var us = Firebase.auth.currentUser
+        us.sendEmailVerification().addOnSuccessListener {
+            println("------------------------------Email Sended---------------------------------------")
+        }
     }
 
     //Checks
@@ -198,7 +207,8 @@ class Register : AppCompatActivity() {
     private fun finishMessage(){
         val builder =  AlertDialog.Builder(this)
         builder.setTitle("Bienvenido: " + name)
-        builder.setMessage(" Su usuario se ha registrado correctamente. ")
+        builder.setMessage(" Su usuario se ha registrado correctamente. " + '\n' + '\n' +
+                "Ahora podrá ver los inmuebles publicados, pero para poder publicar sus propios inmuebles o contactar con otros clientes debe confirmar el correo electronico mediante el mensaje que le hemos enviado.")
         builder.setIcon(android.R.drawable.ic_dialog_email)
         builder.setPositiveButton("  Continue  ", DialogInterface.OnClickListener{ _, _ -> finish() })
         val alertDialog: AlertDialog = builder.create()
@@ -216,4 +226,5 @@ class Register : AppCompatActivity() {
         alertDialog.setCancelable(false)
         alertDialog.show()
     }
+
 }

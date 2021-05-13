@@ -166,11 +166,27 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
                     menuLateral.closeDrawers()
                 }
                 R.id.ofertar -> {
-                    val irAOfertarInmueble =
-                        Intent(this@MainTrobify, OfertarInmueble::class.java)
-                    irAOfertarInmueble.putExtra("user", userId.toString())
-                    startActivity(irAOfertarInmueble)
-                    menuLateral.closeDrawers()
+                    val user = Firebase.auth.currentUser
+                        if (user != null) {
+                            if (user.isEmailVerified) {
+                                val irAOfertarInmueble =
+                                    Intent(this@MainTrobify, OfertarInmueble::class.java)
+                                irAOfertarInmueble.putExtra("user", userId.toString())
+                                startActivity(irAOfertarInmueble)
+                                menuLateral.closeDrawers()
+                            } else {
+                                val builder = AlertDialog.Builder(this)
+                                builder.setTitle("Esta funcion requiere una cuenta verificada")
+                                builder.setMessage(" Para poder contactar con el propietario es necesario tener la cuenta verificada." + '\n' +
+                                        "¿Necesita que le volvamos a enviar el correo de verificación?  ")
+                                builder.setIcon(android.R.drawable.ic_dialog_alert)
+                                builder.setNeutralButton("  Continuar  ") { _, _ -> }
+                                builder.setPositiveButton("  Enviar correo  ")  { _, _ -> user.sendEmailVerification() }
+                                val alertDialog : AlertDialog = builder.create()
+                                alertDialog.setCancelable(false)
+                                alertDialog.show()
+                            }
+                        }
                 }
                 R.id.mispisos -> {
                     val irAMisPisos = Intent(this, MisPisos::class.java)

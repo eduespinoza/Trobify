@@ -21,6 +21,7 @@ import com.example.trobify.models.Database
 import com.example.trobify.models.Inmueble
 import com.example.trobify.models.Item
 import com.google.android.gms.tasks.Task
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.synnapps.carouselview.CarouselView
@@ -68,32 +69,50 @@ class AdaptadorFichaInmueble : AppCompatActivity() {
         val buttonContactar = findViewById<Button>(R.id.buttonContactarFicha)
         val builder = AlertDialog.Builder(this@AdaptadorFichaInmueble)
         buttonContactar.setOnClickListener {
-            builder.setTitle("Elige una opción: ")
-            builder.setItems(R.array.contactOptions) { _, which ->
-                if(which.equals(0)) {
-                    db.collection("users").whereEqualTo("email", propietarioMail).get()
-                        .addOnCompleteListener { task->
-                            if(task.isSuccessful){
-                                for(u in task.result) {
-                                    propietarioId = u.id
-                                }
+            val user = Firebase.auth.currentUser
+            if (user != null) {
+                if (user.isEmailVerified) {
+                    builder.setTitle("Elige una opción: ")
+                    builder.setItems(R.array.contactOptions) { _, which ->
+                        if (which.equals(0)) {
+                            db.collection("users").whereEqualTo("email", propietarioMail).get()
+                                .addOnCompleteListener { task ->
+                                    if (task.isSuccessful) {
+                                        for (u in task.result) {
+                                            propietarioId = u.id
+                                        }
 
-                                val goCreateChat = Intent(this, ListOfChats::class.java)
-                                goCreateChat.putExtra("user", userId)
-                                goCreateChat.putExtra("otherUserId", propietarioId)
-                                goCreateChat.putExtra("inmueble",inmueble.direccion.toString())
-                                startActivity(goCreateChat)
-                            }
+                                        val goCreateChat = Intent(this, ListOfChats::class.java)
+                                        goCreateChat.putExtra("user", userId)
+                                        goCreateChat.putExtra("otherUserId", propietarioId)
+                                        goCreateChat.putExtra(
+                                            "inmueble",
+                                            inmueble.direccion.toString()
+                                        )
+                                        startActivity(goCreateChat)
+                                    }
+                                }
+                        } else {
+                            introduceQuantityOferta(inmueble)
                         }
-                }
-                else {
-                    introduceQuantityOferta(inmueble)
+                    }
+
+                    builder.setNegativeButton("Cancelar") { _, _ -> }
+                    val dialog = builder.create()
+                    dialog.show()
+                } else {
+                    val builder = AlertDialog.Builder(this)
+                    builder.setTitle("Esta funcion requiere una cuenta verificada")
+                    builder.setMessage(" Para poder contactar con el propietario es necesario tener la cuenta verificada." + '\n' +
+                            "¿Necesita que le volvamos a enviar el correo de verificación?  ")
+                    builder.setIcon(android.R.drawable.ic_dialog_alert)
+                    builder.setNeutralButton("  Continuar  ") { _, _ -> }
+                    builder.setPositiveButton("  Enviar correo  ")  { _, _ -> user.sendEmailVerification() }
+                    val alertDialog : AlertDialog = builder.create()
+                    alertDialog.setCancelable(false)
+                    alertDialog.show()
                 }
             }
-
-            builder.setNegativeButton("Cancelar") { _, _ -> }
-            val dialog = builder.create()
-            dialog.show()
         }
 
         val buttonFav = findViewById<Button>(R.id.buttonFav)
