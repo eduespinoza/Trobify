@@ -58,9 +58,10 @@ class Mapa : AppCompatActivity(){
         getCoordenadas()
         loadMapScene()
         loadMarks()
-        mapa.gestures.disableDefaultAction(GestureType.DOUBLE_TAP)
+
         setTapGestureHandler()
         //con doble tap se añade direcciones, util para poblar base de datos
+        //mapa.gestures.disableDefaultAction(GestureType.DOUBLE_TAP)
         //setLongPressGestureHandler()
 
     }

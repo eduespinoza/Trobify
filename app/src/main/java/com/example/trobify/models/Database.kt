@@ -133,7 +133,7 @@ object Database {
     fun getInmueblesByHabs(habs:Int):ArrayList<String>{
         var inmueblesEncontrados = arrayListOf<String>()
         inmuebles.forEach { inmueble ->
-            if (inmueble.numBanos == habs)
+            if (inmueble.numHabitaciones == habs)
                 inmueble.id?.let { inmueblesEncontrados.add(it) }
         }
         return inmueblesEncontrados
@@ -143,6 +143,17 @@ object Database {
         inmuebles.forEach { inmueble ->
             if(estados.contains(inmueble.estado)){
                 inmueble.id?.let { inmueblesEncontrados.add(it) }
+            }
+        }
+        return inmueblesEncontrados
+    }
+    fun getInmueblesByExtras(extras:ArrayList<String>):ArrayList<String>{
+        var inmueblesEncontrados = arrayListOf<String>()
+        extras.forEach { extra ->
+            inmuebles.forEach { inmueble ->
+                if(inmueble.extras.contains(extra)){
+                    inmueble.id?.let { inmueblesEncontrados.add(it) }
+                }
             }
         }
         return inmueblesEncontrados

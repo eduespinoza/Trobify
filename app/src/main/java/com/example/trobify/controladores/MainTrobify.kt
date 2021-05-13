@@ -86,17 +86,6 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
         userFav = user.favorites!!
         inmuebles = Database.getAllInmuebles()
         if(filtrosAplicados != null){
-            println(filtrosAplicados!!.tipoInmueble +"tipo1")
-            println(filtrosAplicados!!.tipoVivienda +"tipo2")
-            println(filtrosAplicados!!.numBaños.toString() + "tipo3")
-            println(filtrosAplicados!!.numHabitaciones.toString() + "tipo4")
-            println(filtrosAplicados!!.precioMin.toString() + "tipo5")
-            println(filtrosAplicados!!.precioMax.toString() + "tipo6")
-            println(filtrosAplicados!!.superficieMin.toString() + "tipo7")
-            println(filtrosAplicados!!.superficieMax.toString() + "tipo8")
-            println(filtrosAplicados!!.estado.toString() + "tipo9")
-            println(filtrosAplicados!!.extras.toString() + "tipo10")
-
             val result = GestionFiltros().aplicar(filtrosAplicados!!)
             if(result.size != 0)
                 mostrarResultadosFiltros(result)

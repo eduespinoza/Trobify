@@ -20,18 +20,31 @@ class GestionFiltros {
         if (filtros.superficieMax != 0){
             list.addAll(obtenerIdsSuperficie(filtros.superficieMin,filtros.superficieMax))
         }
+        if (filtros.numBaños != 0){
+            list.addAll(obtenerIdsNumBaños(filtros.numBaños))
+        }
+        if (filtros.numHabitaciones != 0){
+            list.addAll(obtenerIdsNumHabs(filtros.numHabitaciones))
+        }
+        if (filtros.estado.isNotEmpty()){
+            list.addAll(obtenerIdsEstado(filtros.estado))
+        }
+        if (getExtras(filtros.extras).isNotEmpty()){
+            list.addAll(obtenerIdsExtras(getExtras(filtros.extras)))
+        }
+    }
+    private fun getExtras(map : MutableMap<String,Boolean>):ArrayList<String>{
+        var result = arrayListOf<String>()
+        map.forEach {key,value ->
+            if (value == true)result.add(key)
+        }
+        return result
     }
     private fun obtenerResultados():ArrayList<DataInmueble2>{
-        if(filtrosSize == 1){
-            println("results : $list")
-            return Database.getInmueblesByIds(list)
-        }
         var resultIds = arrayListOf<String>()
-        try {
-            resultIds = list.groupingBy{it}.eachCount().filter{it.value == filtrosSize}.keys.toList() as ArrayList<String>
-            println(resultIds)
-        }catch (exception : Exception){
-            return arrayListOf()
+        list.groupBy{it}.forEach{mapa ->
+            if(mapa.value.size == filtrosSize)
+                resultIds.add(mapa.key)
         }
         return Database.getInmueblesByIds(resultIds)
     }
@@ -47,8 +60,12 @@ class GestionFiltros {
         var result = arrayListOf<String>()
         result.addAll(idsMin)
         result.addAll(idsMax)
-        result = result.groupingBy{it}.eachCount().filter{it.value == 2}.keys.toList() as ArrayList<String>
-        return result
+        idsMax.clear()
+        result.groupBy{it}.forEach{mapa ->
+            if(mapa.value.size == filtrosSize)
+                idsMax.add(mapa.key)
+        }
+        return idsMax
     }
     private fun obtenerIdsSuperficie(min : Int, max : Int): ArrayList<String>{
         filtrosSize++
@@ -57,8 +74,12 @@ class GestionFiltros {
         var result = arrayListOf<String>()
         result.addAll(idsMin)
         result.addAll(idsMax)
-        result = result.groupingBy{it}.eachCount().filter{it.value == 2}.keys.toList() as ArrayList<String>
-        return result
+        idsMax.clear()
+        result.groupBy{it}.forEach{mapa ->
+            if(mapa.value.size == filtrosSize)
+                idsMax.add(mapa.key)
+        }
+        return idsMax
     }
     private fun obtenerIdsTipoInmueble(opcion : String) : ArrayList<String>{
         filtrosSize++
@@ -71,6 +92,26 @@ class GestionFiltros {
         for (op in opciones){
             result.addAll(Database.getInmueblesByTipoVivienda(op))
         }
+        return result
+    }
+    private fun obtenerIdsNumBaños(banos : Int) : ArrayList<String>{
+        filtrosSize++
+        var result = Database.getInmueblesByBaños(banos)
+        return result
+    }
+    private fun obtenerIdsNumHabs(habs : Int) : ArrayList<String>{
+        filtrosSize++
+        var result = Database.getInmueblesByHabs(habs)
+        return result
+    }
+    private fun obtenerIdsEstado(estados : ArrayList<String>) : ArrayList<String>{
+        filtrosSize++
+        var result = Database.getInmueblesByEstado(estados)
+        return result
+    }
+    private fun obtenerIdsExtras(extras : ArrayList<String>) : ArrayList<String>{
+        filtrosSize++
+        var result = Database.getInmueblesByExtras(extras)
         return result
     }
 }
