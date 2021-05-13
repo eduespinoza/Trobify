@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="200dp"
-    android:background="#4D000000"
+    android:background="#75BCB9B9"
     android:gravity="bottom|right|fill"
     android:orientation="horizontal"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
@@ -30,7 +30,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="0"
-        android:background="#57E6E1E1"
+        android:background="#6B776D6D"
         android:gravity="center|right"
         android:orientation="vertical"
         android:paddingLeft="16dp"

@@ -40,7 +40,7 @@ class Register : AppCompatActivity() {
 
         auth = Firebase.auth
 
-        val bBack = findViewById<ImageButton>(R.id.buttonGoBack)
+        val bBack = findViewById<Button>(R.id.buttonGoBack)
         bBack.setOnClickListener { finish() }
 
         val bRegister = findViewById<Button>(R.id.buttonNext)

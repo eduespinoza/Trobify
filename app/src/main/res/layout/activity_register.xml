@@ -16,25 +16,25 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
             android:orientation="horizontal">
 
-            <ImageButton
+            <Button
                 android:id="@+id/buttonGoBack"
                 android:layout_width="56dp"
-                android:layout_height="38dp"
-                android:layout_marginStart="5dp"
-                android:contentDescription="@string/volver"
-                android:tint="#000000"
-                app:srcCompat="@drawable/abc_vector_test"
-                tools:srcCompat="?attr/actionModeCloseDrawable" />
+                android:layout_height="40dp"
+                android:layout_marginStart="8dp"
+                android:gravity="center_horizontal|center_vertical"
+                app:backgroundTint="#1E150909"
+                app:icon="@drawable/abc_vector_test"
+                app:iconSize="25dp"
+                app:iconTint="#000000" />
 
             <TextView
                 android:id="@+id/titulo_register"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
                 android:layout_marginEnd="20dp"
-                android:layout_weight="1"
                 android:fontFamily="sans-serif"
                 android:text="Datos de registro"
                 android:textAlignment="center"
