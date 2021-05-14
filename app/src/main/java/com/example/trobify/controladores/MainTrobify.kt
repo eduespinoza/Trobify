@@ -25,6 +25,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import kotlinx.android.synthetic.main.trobify_main.*
 import kotlinx.coroutines.*
 import java.time.LocalDateTime
 import java.util.*
@@ -50,6 +51,7 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
     lateinit var nResultados : TextView
     lateinit var colorDefaultText : ColorStateList
     var filtrosAplicados : FiltrosBusqueda.filtros? = null
+    var opcionesDeInicio : ArrayList<String>? = null
     lateinit var userFav : ArrayList<String>
 
     object orden{
@@ -66,11 +68,13 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
 
     override fun onResume() {
         super.onResume()
-        if(filtrosAplicados == null){
+        println("jaja pues si")
+        /*if(filtrosAplicados == null || opcionesDeInicio == null){
         user = Database.getUser(userId)
         userFav = user.favorites!!
+            println("poraquinnopasasverdad hijodeputa")
         mostrarInmuebles(inmuebles)
-        }
+        }*/
     }
 
     override fun onCreate(savedInstanceState: Bundle?)
@@ -81,16 +85,20 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
         cabecera = findViewById(R.id.cabecera)
         nResultados = findViewById(R.id.nResultados)
         userId = (intent.extras!!.get("user") as String?).toString()
+        opcionesDeInicio = intent.extras!!.get("opciones") as ArrayList<String>?
         filtrosAplicados = intent.extras!!.get("filtros") as FiltrosBusqueda.filtros?
         user = Database.getUser(userId)
         userFav = user.favorites!!
         inmuebles = Database.getAllInmuebles()
-        if(filtrosAplicados != null){
+        if(opcionesDeInicio != null){
+            println(opcionesDeInicio)
+            mostrarResultadosInicio(opcionesDeInicio!!)
+        }
+        else if(filtrosAplicados != null){
             val result = GestionFiltros().aplicar(filtrosAplicados!!)
             if(result.size != 0)
                 mostrarResultadosFiltros(result)
             else {
-                println("no results")
                 prepararPrimerosResultados(inmuebles)
                 AlertDialog.Builder(this@MainTrobify).apply {
                     setTitle("Información")
@@ -118,7 +126,16 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
     private fun prepararPrimerosResultados(listaDeInmuebles : ArrayList<DataInmueble2>){
         inmuebles = listaDeInmuebles
         cabecera.text = "Inmuebles añadidos recientemente"
+        println("prepararprimerosresultadosqcojones")
         mostrarInmuebles(inmuebles)
+    }
+
+    private fun mostrarResultadosInicio(opciones : ArrayList<String>){
+        cabecera.text = "Primeros resultados"
+        var inm = Database.getInmueblesByIds(opciones)
+        println(inm.size)
+        println("resultadosiniciojoderqcojones")
+        mostrarInmuebles(inm)
     }
 
     private fun prepararBuscador(){

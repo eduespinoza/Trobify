@@ -76,7 +76,7 @@
             <Spinner
                 android:id="@+id/spinner_tipoInmueble_inicio"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:background="@drawable/border2"
                 android:spinnerMode="dropdown" />
         </LinearLayout>
@@ -98,16 +98,14 @@
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp">
 
-                <EditText
-                    android:id="@+id/editText_direccion_inicio"
+                <TextView
+                    android:id="@+id/direccionText"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:ems="10"
-                    android:inputType="textPersonName"
-                    android:text="Introduce una dirección, códido postal ..."
-                    android:textColor="#888484"
-                    android:textSize="14sp" />
+                    android:gravity="center|start"
+                    android:text="TextView"
+                    android:textSize="18sp" />
 
                 <SearchView
                     android:id="@+id/buscadorDirecciones"

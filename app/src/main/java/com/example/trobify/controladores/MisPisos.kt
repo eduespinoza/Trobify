@@ -53,7 +53,13 @@ class  MisPisos : AppCompatActivity() , AdaptadorInmuebleBusqueda.OnItemClickLis
         buttonAtras.setOnClickListener {
             finish()
         }
-        Database.getPisosUser(userId)?.let { mostrar(it) }
+        println("EYY ESTOY COGIENDO MIS PISOS")
+        var pisos = Database.getPisosUser(userId)
+        println(pisos)
+        if (pisos != null) {
+            mostrar(pisos)
+        }
+        //Database.getPisosUser(userId)?.let { mostrar(it) }
         //cargarPisosDe(userId)
 
 

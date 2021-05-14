@@ -4,6 +4,7 @@ import android.util.Log
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.here.sdk.core.CountryCode
+import com.here.sdk.core.GeoCircle
 import com.here.sdk.core.GeoCoordinates
 import com.here.sdk.core.LanguageCode
 import com.here.sdk.core.errors.InstantiationErrorException
@@ -57,7 +58,7 @@ class Busqueda {
         }
     fun obtenerSugerencias(query : String, geoCoordinates : GeoCoordinates){
         println("${query} con espacion")
-        motorDeBusqueda.search(TextQuery("${query} ",geoCoordinates),opcionesDeBusqueda,searchCallback)
+        motorDeBusqueda.search(TextQuery(query,geoCoordinates),opcionesDeBusqueda,searchCallback)
     }
     val direc =
         SearchCallback { searchError, mutableList ->
@@ -86,6 +87,7 @@ class Busqueda {
         //coordenadas de valencia por defecto, esto es para que tenga un rango
         //de busqueda definido
         var coordenadas = GeoCoordinates(39.46895, -0.37686)
+
         //var address = AddressQuery(query,coordenadas, arrayListOf(CountryCode.ESP))
 
         motorDeBusqueda.suggest(TextQuery(query,coordenadas,

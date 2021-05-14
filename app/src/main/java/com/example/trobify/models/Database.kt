@@ -3,6 +3,7 @@ package com.example.trobify.models
 
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.here.sdk.core.GeoCoordinates
 import kotlinx.coroutines.*
 import kotlin.collections.ArrayList
 //patrón singleton -> solo instancia una sola vez, luego se puede usar
@@ -70,6 +71,14 @@ object Database {
         inmuebles.forEach { inmueble ->
             if (inmueble.intencion.equals(opcion))
                 inmueblesEncontrados.add(inmueble)
+        }
+        return inmueblesEncontrados
+    }
+    private fun getInmueblesByIntecion(op:String):ArrayList<String>{
+        var inmueblesEncontrados = arrayListOf<String>()
+        inmuebles.forEach { inmueble ->
+            if (inmueble.intencion.equals(op))
+                inmueble.id?.let { inmueblesEncontrados.add(it) }
         }
         return inmueblesEncontrados
     }
@@ -156,6 +165,43 @@ object Database {
                 }
             }
         }
+        return inmueblesEncontrados
+    }
+    fun getInmueblesByOpciones(opciones:ArrayList<String>):ArrayList<String>{
+        var size = 1
+        var list = arrayListOf<String>()
+        var result = arrayListOf<String>()
+        var coord = GeoCoordinates(opciones[2].toDouble(),opciones[3].toDouble())
+        list.addAll(getInmueblesByIntecion(opciones[0]))
+        if(!opciones[1].equals("Cualquiera")){
+            size++
+            list.addAll(getInmueblesByTipoInmueble(opciones[1]))
+        }
+        var cercanos = getInmueblesCercanos(coord)
+        if(cercanos.isNotEmpty()){
+            println("hay cercanos ni de coña maninininin")
+            size++
+            list.addAll(cercanos)
+        }
+        list.groupBy{it}.forEach{mapa ->
+            if(mapa.value.size == size)
+                result.add(mapa.key)
+        }
+        if(result.isNotEmpty()){return result}
+        return arrayListOf()
+    }
+    fun getInmueblesCercanos(geoCoordinates : GeoCoordinates):ArrayList<String>{
+        var inmueblesEncontrados = arrayListOf<String>()
+        inmuebles.forEach { inmueble ->
+            var lat = inmueble.direccion?.coordenadas?.get("latitud")
+            var long = inmueble.direccion?.coordenadas?.get("longitud")
+            var coord = GeoCoordinates(lat!!,long!!)
+            if(geoCoordinates.distanceTo(coord) <= 500.0){
+                println("${geoCoordinates.distanceTo(coord)} DISTAAAANCIA")
+                inmueblesEncontrados.add(inmueble.id!!)
+            }
+        }
+        println("cercanos maninn $inmueblesEncontrados")
         return inmueblesEncontrados
     }
     //USER QUERIES

@@ -34,6 +34,9 @@
 
         <activity android:name=".controladores.Register" />
         <activity
+            android:name=".controladores.pantalla_inicial"
+            android:theme="@style/Theme.Trobify.NoActionBar" />
+        <activity
             android:name=".controladores.MainTrobify"
             android:theme="@style/Theme.Trobify.NoActionBar" />
         <activity
