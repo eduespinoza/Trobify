@@ -16,6 +16,8 @@ class pantalla_inicial : AppCompatActivity() {
     var alquilerActivado = false
     var ventaActivado = false
     lateinit var colorDefaultText : ColorStateList
+
+    var opcionesElegidas = arrayListOf<String>("","","")
     
     @SuppressLint("StaticFieldLeak")
     object busquedaInicial{
@@ -40,20 +42,24 @@ class pantalla_inicial : AppCompatActivity() {
         }
 
         busquedaInicial.desplegableTipoInmueble = findViewById<Spinner>(R.id.spinner_tipoInmueble_inicio)
+        addOptionsInmueble()
+        busquedaInicial.desplegableTipoInmueble.setOnClickListener {
+            var tipoEscogido = busquedaInicial.desplegableTipoInmueble.selectedItem.toString()
+            opcionesElegidas[1] = tipoEscogido
+        }
         var botonBuscar = findViewById<Button>(R.id.buttonBusquedaInicial)
         botonBuscar.setOnClickListener {
-            busquedaInicial()
+            opcionesElegidas
         }
     }
-    private fun busquedaInicial(){
 
-    }
     private fun addOptionsInmueble(){
         val options_inmueble = TipoInmueble.values()
         val adapter = ArrayAdapter<TipoInmueble>(this, android.R.layout.simple_spinner_item, options_inmueble)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         busquedaInicial.desplegableTipoInmueble.adapter = adapter
     }
+
     private fun desactivarIntenciones(alquiler : TextView, venta : TextView){
         alquilerActivado = false
         ventaActivado = false
@@ -70,6 +76,7 @@ class pantalla_inicial : AppCompatActivity() {
         alquiler.setTextColor(Color.WHITE)
         venta.setTextColor(Color.BLACK)
         venta.setBackgroundColor(Color.GRAY)
+        opcionesElegidas[0] = "Alquiler"
         //alquilerOVenta("Alquiler")
     }
     private fun activarVenta(alquiler : TextView, venta : TextView){
@@ -79,6 +86,7 @@ class pantalla_inicial : AppCompatActivity() {
         venta.setTextColor(Color.WHITE)
         alquiler.setTextColor(Color.BLACK)
         alquiler.setBackgroundColor(Color.GRAY)
+        opcionesElegidas[0] = "Vender"
         //alquilerOVenta("Vender")
     }
 }
