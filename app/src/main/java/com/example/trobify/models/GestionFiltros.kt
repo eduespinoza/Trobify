@@ -62,7 +62,7 @@ class GestionFiltros {
         result.addAll(idsMax)
         idsMax.clear()
         result.groupBy{it}.forEach{mapa ->
-            if(mapa.value.size == filtrosSize)
+            if(mapa.value.size == 2)
                 idsMax.add(mapa.key)
         }
         return idsMax
@@ -76,7 +76,7 @@ class GestionFiltros {
         result.addAll(idsMax)
         idsMax.clear()
         result.groupBy{it}.forEach{mapa ->
-            if(mapa.value.size == filtrosSize)
+            if(mapa.value.size == 2)
                 idsMax.add(mapa.key)
         }
         return idsMax

@@ -386,8 +386,15 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
         ey.intencion = getRandomIntencion()
         ey.descripcion = "Bueno, bonito y barato"
         ey.fechaSubida = getRandomDate()
-        if(res.equals("Vivienda") || res.equals("Edificio")){
+        if(res.equals("Vivienda")){
             ey.tipoVivienda = getRandomTipoVivienda()
+            ey.numHabitaciones = getRandom1a4()
+            ey.numBanos = getRandom1a4()
+            ey.estado = getRandomEstado()
+            ey.extras = getRandomExtras()
+        }
+        if(res.equals("Edificio")){
+            ey.tipoVivienda = getRandomTipoViviendaEdificio()
             ey.numHabitaciones = getRandom1a4()
             ey.numBanos = getRandom1a4()
             ey.estado = getRandomEstado()
@@ -406,6 +413,10 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
     fun getRandomTipoInmueble() : String{
         return arrayListOf("Vivienda","Edificio","Oficina","Garaje",
             "Local","Terreno","Nave")[kotlin.random.Random.nextInt(0,7)]
+    }
+    fun getRandomTipoViviendaEdificio() : String {
+        return arrayListOf("Apartamento","Ático","Dúplex","Loft",
+            "Planta baja","Estudio")[kotlin.random.Random.nextInt(0,6)]
     }
     fun getRandomCertificado() : String {
         return arrayListOf("Parking","Ascensor","Amueblado","Calefacción",

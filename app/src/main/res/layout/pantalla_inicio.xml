@@ -104,7 +104,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="center|start"
-                    android:text="TextView"
+                    android:text="Elige una sugerencia"
                     android:textSize="18sp" />
 
                 <SearchView

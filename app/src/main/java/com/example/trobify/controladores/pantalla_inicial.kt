@@ -88,10 +88,6 @@ class pantalla_inicial : AppCompatActivity() {
         }*/
         var botonBuscar = findViewById<Button>(R.id.buttonBusquedaInicial)
         botonBuscar.setOnClickListener {
-            if(sitio != null){
-                opcionesElegidas[2] = sitio?.coordenadas?.get("latitud").toString()
-                opcionesElegidas[3] = sitio?.coordenadas?.get("longitud").toString()
-            }
             println(opcionesElegidas)
             var fstRes = Database.getInmueblesByOpciones(opcionesElegidas)
             println(fstRes.size)
@@ -141,17 +137,13 @@ class pantalla_inicial : AppCompatActivity() {
                 buscadorMapa.isIconified = true
                 inDireccion.visibility = View.VISIBLE
                 inDireccion.text = selection
-                buscador.sugerencias.forEach{
-                    if(it.title.equals(selection)){
-                        sitio = Sitio(it.title,
-                            mutableMapOf("latitud" to it.geoCoordinates!!.latitude,
-                                "longitud" to it.geoCoordinates!!.longitude),it.id)
-                        println(sitio)
-                        println("por aqui un sitio bomba")
+                buscador.suggeries.forEach{
+                    if(it.titulo.equals(selection)){
+                        sitio = it
+                        opcionesElegidas[2] = sitio?.coordenadas?.get("latitud").toString()
+                        opcionesElegidas[3] = sitio?.coordenadas?.get("longitud").toString()
                     }
                 }
-
-                //OfertarInmueble.text.inHabitaciones.requestFocus()
                 return true
             }
         })

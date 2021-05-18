@@ -21,8 +21,10 @@ class Busqueda {
     //lateinit var inmuebles : ArrayList<DataInmueble2>
     lateinit var motorDeBusqueda : SearchEngine
     lateinit var opcionesDeBusqueda : SearchOptions
+    var esPrimera = true
     //var sugerencias = mutableMapOf<String,GeoCoordinates>()
     var sugerencias = arrayListOf<Place>()
+    var suggeries = arrayListOf<Sitio>()
     var sitio : Place? = null
     init {
         prepararBuscadorHere()
@@ -44,9 +46,12 @@ class Busqueda {
             }
             var res = ""
             sugerencias.clear()
-            for (geocodingResult in mutableList!!) {
-                println(geocodingResult.title)
-                sugerencias.add(geocodingResult)
+            for (geo in mutableList!!) {
+                println(geo.title)
+                sugerencias.add(geo)
+                suggeries.add(Sitio(titulo = geo.title, id = geo.id,
+                    coordenadas = mutableMapOf("latitud" to geo.geoCoordinates?.latitude!!,
+                        "longitud" to geo.geoCoordinates?.longitude!!)))
                 //val address = geocodingResult.title
                 //val geoCoordinates = geocodingResult.place?.geoCoordinates
                 //if (geoCoordinates != null) {
