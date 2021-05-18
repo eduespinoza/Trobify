@@ -19,18 +19,37 @@ import com.example.trobify.models.Sitio
 import com.example.trobify.models.TipoInmueble
 import com.here.sdk.core.GeoCoordinates
 import kotlinx.android.synthetic.main.trobify_main.*
+import kotlin.properties.Delegates
+import kotlin.properties.ReadWriteProperty
 
 class pantalla_inicial : AppCompatActivity() {
     lateinit var userId : String
-    var alquilerActivado = false
-    var ventaActivado = false
+    lateinit var botonBuscar : Button
+    var todoOk : ArrayList<Boolean> by Delegates.observable(arrayListOf(false,false), onChange = {
+        property, oldValue, new ->
+        botonBuscar.isEnabled = new[0] && new[1]
+    })
+
+    var alquilerActivado : Boolean by Delegates.observable(false){
+            p,old,new ->
+            if(new){todoOk = arrayListOf(true,todoOk[1])}
+            if(!new && !ventaActivado) todoOk = arrayListOf(false,todoOk[1])
+    }
+    var ventaActivado : Boolean by Delegates.observable(false){
+            p,old,new ->
+            if(new){todoOk = arrayListOf(true,todoOk[1])}
+            if(!new && !alquilerActivado) todoOk = arrayListOf(false,todoOk[1])
+    }
     lateinit var colorDefaultText : ColorStateList
     var buscador = Busqueda()
     lateinit var buscadorMapa : SearchView
     var opcionesElegidas = arrayListOf("","","","")
-    var sitio : Sitio? = null
+    var sitio : Sitio by Delegates.observable(Sitio()){
+        p,old,new-> println("tengo calle AMANOS")
+        todoOk = arrayListOf(todoOk[0],true)
+    }
     lateinit var inDireccion : TextView
-    
+
     @SuppressLint("StaticFieldLeak")
     object busquedaInicial{
         lateinit var desplegableTipoInmueble:Spinner
@@ -41,6 +60,8 @@ class pantalla_inicial : AppCompatActivity() {
         Database
         setContentView(R.layout.pantalla_inicio)
         super.onCreate(savedInstanceState)
+        botonBuscar = findViewById(R.id.buttonBusquedaInicial)
+        botonBuscar.isEnabled = false
         userId = (intent.extras!!.get("user") as String?).toString()
         busquedaInicial.alquiler = findViewById(
             R.id.text_opcion_alquilar
@@ -86,7 +107,7 @@ class pantalla_inicial : AppCompatActivity() {
             var tipoEscogido = busquedaInicial.desplegableTipoInmueble.selectedItem.toString()
             opcionesElegidas[1] = tipoEscogido
         }*/
-        var botonBuscar = findViewById<Button>(R.id.buttonBusquedaInicial)
+
         botonBuscar.setOnClickListener {
             println(opcionesElegidas)
             var fstRes = Database.getInmueblesByOpciones(opcionesElegidas)
@@ -140,8 +161,8 @@ class pantalla_inicial : AppCompatActivity() {
                 buscador.suggeries.forEach{
                     if(it.titulo.equals(selection)){
                         sitio = it
-                        opcionesElegidas[2] = sitio?.coordenadas?.get("latitud").toString()
-                        opcionesElegidas[3] = sitio?.coordenadas?.get("longitud").toString()
+                        opcionesElegidas[2] = sitio.coordenadas?.get("latitud").toString()
+                        opcionesElegidas[3] = sitio.coordenadas?.get("longitud").toString()
                     }
                 }
                 return true
@@ -189,3 +210,4 @@ class pantalla_inicial : AppCompatActivity() {
         //alquilerOVenta("Vender")
     }
 }
+
