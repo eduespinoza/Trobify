@@ -16,7 +16,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
@@ -25,7 +25,6 @@
                 android:layout_width="56dp"
                 android:layout_height="40dp"
                 android:layout_marginStart="8dp"
-                android:layout_weight="1"
                 android:gravity="center_horizontal|center_vertical"
                 app:backgroundTint="#1E150909"
                 app:icon="@drawable/abc_vector_test"
@@ -33,30 +32,17 @@
                 app:iconTint="#000000" />
 
             <Button
-                android:id="@+id/editButtonGestion"
-                style="@style/FiamUI.Card.ActionBar.Button"
-                android:layout_width="75dp"
-                android:layout_height="50dp"
-                android:layout_marginLeft="140dp"
-                android:layout_weight="1"
-                android:backgroundTint="#00FFFFFF"
-                app:icon="@android:drawable/ic_menu_edit"
-                app:iconSize="50dp"
-                app:iconTint="#000000"
-                app:strokeColor="#00FFFFFF" />
-
-            <Button
                 android:id="@+id/estrellita_ficha"
                 style="@style/FiamUI.Card.ActionBar.Button"
-                android:layout_width="75dp"
+                android:layout_width="66dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
+                android:layout_marginStart="280dp"
                 android:backgroundTint="#00FFFFFF"
                 android:clickable="false"
                 android:focusable="false"
                 app:icon="@android:drawable/btn_star_big_on"
-                app:iconSize="50dp"
-                app:iconTint="#EAB349"
+                app:iconSize="35dp"
+                app:iconTint="#FFC107"
                 app:strokeColor="#00FFFFFF" />
 
         </LinearLayout>
@@ -86,13 +72,27 @@
                         app:radius="6dp"
                         app:slideInterval="3000"
                         app:strokeColor="#FF777777"
-                        app:strokeWidth="1dp" />
+                        app:strokeWidth="1dp" >
 
+                    </com.synnapps.carouselview.CarouselView>
+
+
+                    <Button
+                        android:id="@+id/editButtonGestion"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:backgroundTint="#3F51B5"
+                        android:text="Modificar datos del inmueble"
+                        app:icon="@android:drawable/ic_menu_edit"
+                        app:iconGravity="textEnd"
+                        app:iconSize="25dp" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginLeft="15dp"
+                        android:layout_marginTop="10dp"
                         android:layout_marginRight="15dp"
                         android:orientation="vertical">
 
@@ -216,35 +216,29 @@
 
                     </LinearLayout>
 
-                    <androidx.constraintlayout.widget.ConstraintLayout
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_marginTop="10dp">
+                        android:orientation="horizontal"
+                        android:paddingStart="35dp"
+                        android:paddingTop="10dp"
+                        android:paddingBottom="15dp">
 
                         <Button
                             android:id="@+id/buttonFav"
-                            android:layout_width="180dp"
+                            android:layout_width="160dp"
                             android:layout_height="40dp"
-                            android:layout_marginStart="10dp"
-                            android:layout_marginEnd="11dp"
-                            android:text="Añadir a Fav"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toStartOf="@+id/buttonFavEliminar"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            android:layout_marginEnd="20dp"
+                            android:backgroundTint="#3F51B5"
+                            android:text="Añadir a Fav" />
 
                         <Button
                             android:id="@+id/buttonFavEliminar"
-                            android:layout_width="180dp"
-                            android:layout_height="37dp"
-                            android:layout_marginStart="11dp"
-                            android:layout_marginEnd="30dp"
-                            android:text="Elimiar de Fav"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toEndOf="@+id/buttonFav"
-                            app:layout_constraintTop_toTopOf="parent" />
-                    </androidx.constraintlayout.widget.ConstraintLayout>
+                            android:layout_width="160dp"
+                            android:layout_height="40dp"
+                            android:backgroundTint="#3F51B5"
+                            android:text="Elimiar de Fav" />
+                    </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"

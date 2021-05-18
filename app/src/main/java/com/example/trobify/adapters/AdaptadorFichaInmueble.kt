@@ -141,7 +141,7 @@ class AdaptadorFichaInmueble : AppCompatActivity() {
             edit.isClickable = true
         }
         else{
-            edit.visibility = View.INVISIBLE
+            edit.visibility = View.GONE
             edit.isClickable = false
         }
 
@@ -363,7 +363,7 @@ class AdaptadorFichaInmueble : AppCompatActivity() {
     private fun showEstrella(visible : Boolean){
         val estrella = findViewById<Button>(R.id.estrellita_ficha)
         if(visible){estrella.visibility = View.VISIBLE}
-        else{estrella.visibility = View.INVISIBLE}
+        else{estrella.visibility = View.GONE}
 
     }
 
@@ -373,7 +373,7 @@ class AdaptadorFichaInmueble : AppCompatActivity() {
         val imageList : ArrayList<String> = ArrayList()
 
         val listAllTask: Task<ListResult> = ref.listAll()
-        listAllTask.addOnCompleteListener {result ->
+        listAllTask.addOnCompleteListener { result ->
             val items : List<StorageReference> = result.result!!.items
             items.forEachIndexed { _ , item ->
                     item.downloadUrl.addOnSuccessListener {
