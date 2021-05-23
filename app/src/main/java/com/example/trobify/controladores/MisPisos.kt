@@ -33,7 +33,7 @@ class  MisPisos : AppCompatActivity() , AdaptadorInmuebleBusqueda.OnItemClickLis
 
         val goFicha = Intent(this, AdaptadorFichaInmueble::class.java)
         goFicha.putExtra("user", userId)
-        goFicha.putExtra("inmueble", Inmueble().adaptadorInm(dataInmueble))
+        goFicha.putExtra("inmueble", Inmueble.Builder().build().adaptadorInm(dataInmueble))
         goFicha.putExtra("desdeMisPisos", true)
         startActivity(goFicha)
 

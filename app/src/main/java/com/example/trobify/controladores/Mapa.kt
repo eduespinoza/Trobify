@@ -227,7 +227,7 @@ class Mapa : AppCompatActivity(){
         goFicha.putExtra("user", user)
         inmuebles.forEach stop@{
             if(it.id == id){
-                goFicha.putExtra("inmueble", Inmueble().adaptadorInm(it))
+                goFicha.putExtra("inmueble", Inmueble.Builder().build().adaptadorInm(it))
                 return@stop
             }
         }

@@ -28,7 +28,7 @@ class  ListaFavoritos () : AppCompatActivity() , AdaptadorInmuebleBusqueda.OnIte
 
     override fun onItemClicked(dataInmueble : DataInmueble2) {
         val goFicha = Intent(this, AdaptadorFichaInmueble::class.java)
-        goFicha.putExtra("inmueble", Inmueble().adaptadorInm(dataInmueble))
+        goFicha.putExtra("inmueble", Inmueble.Builder().build().adaptadorInm(dataInmueble))
         goFicha.putExtra("user", userId)
         goFicha.putExtra("desdeMisPisos", false)
         startActivity(goFicha)

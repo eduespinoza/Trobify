@@ -543,7 +543,7 @@ class OfertarInmueble : AppCompatActivity() {
     private fun subirInmuebleBD(inmueble : DataInmueble){
         val db = Firebase.firestore
 
-        inmueble.id?.let { db.collection("inmueblesv4").document(it).set(inmueble) }
+        inmueble.id?.let { db.collection("inmueblesv5").document(it).set(inmueble) }
     }
 
     private fun messageInmNull(){

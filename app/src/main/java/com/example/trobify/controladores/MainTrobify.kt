@@ -61,7 +61,7 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
     override fun onItemClicked(dataInmueble : DataInmueble2) {
         val goFicha = Intent(this, AdaptadorFichaInmueble::class.java)
         goFicha.putExtra("user", userId.toString())
-        goFicha.putExtra("inmueble", Inmueble().adaptadorInm(dataInmueble))
+        goFicha.putExtra("inmueble", Inmueble.Builder().build().adaptadorInm(dataInmueble))
         goFicha.putExtra("desdeMisPisos", false)
         startActivity(goFicha)
     }

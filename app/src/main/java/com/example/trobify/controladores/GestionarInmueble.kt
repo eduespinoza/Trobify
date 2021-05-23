@@ -235,30 +235,38 @@ class GestionarInmueble : AppCompatActivity() {
         estado.setSelection(dataEstado.indexOf(inmueble.estado))
 
         //si no funciona esto de as Booleand hacer if de inmuble.pking por ejemplo
-        // y depende si es true o flase pones isChekced= true
+        // y depende si es true o flase pones isChekced= true  --NO SE
+
+        //jajjjaja pues no funciona luego lo cambio xd --Ilias
+
+
         parking = findViewById(R.id.checkBoxParking)
-        parking.isChecked = inmueble.parking as Boolean
+        parking.isChecked = inmueble.parking == true
 
         ascensor = findViewById(R.id.checkBoxAscensor)
-        ascensor.isChecked = inmueble.ascensor as Boolean
+        ascensor.isChecked = inmueble.ascensor == true
 
         amueblado = findViewById(R.id.checkBoxAmueblado)
-        amueblado.isChecked = inmueble.amueblado as Boolean
+        amueblado.isChecked = inmueble.amueblado == true
 
         calefaccion = findViewById(R.id.checkBoxCalefaccion)
-        calefaccion.isChecked = inmueble.calefaccion as Boolean
+        calefaccion.isChecked = inmueble.calefaccion == true
+
 
         jardin = findViewById(R.id.checkBoxJardin)
-        jardin.isChecked = inmueble.jardin as Boolean
+        jardin.isChecked = inmueble.jardin == true
+
 
         piscina = findViewById(R.id.checkBoxPiscina)
-        piscina.isChecked = inmueble.piscina as Boolean
+        piscina.isChecked = inmueble.piscina == true
+
 
         terraza = findViewById(R.id.checkBoxTerraza)
-        terraza.isChecked = inmueble.terraza as Boolean
+        terraza.isChecked = inmueble.terraza == true
+
 
         trastero = findViewById(R.id.checkBoxTrastero)
-        trastero.isChecked = inmueble.trastero as Boolean
+        trastero.isChecked = inmueble.trastero == true
 
     }
 
