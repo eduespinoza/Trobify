@@ -84,6 +84,7 @@ class Login : AppCompatActivity() {
         val alertDialog: AlertDialog = builder.create()
         alertDialog.setCancelable(false)
         alertDialog.show()
+
         email = null
         password = null
     }

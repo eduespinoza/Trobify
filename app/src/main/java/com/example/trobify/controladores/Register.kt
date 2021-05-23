@@ -1,21 +1,18 @@
 package com.example.trobify.controladores
 
 import android.content.ContentValues.TAG
-import android.content.DialogInterface
 import android.os.Bundle
 import android.util.Log
 import android.util.Patterns
 import android.widget.Button
 import android.widget.EditText
-import android.widget.ImageButton
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.example.trobify.models.DataUser
 import com.example.trobify.R
 import com.example.trobify.models.Database
+import com.example.trobify.models.Messages
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.ktx.actionCodeSettings
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -24,14 +21,15 @@ import java.util.regex.Pattern
 
 
 class Register : AppCompatActivity() {
-    var name:String? = null
-    var surname:String? = null
-    var email:String? = null
-    var password:String? = null
-    var comPassword:String? = null
-    //val database = Database()
+    private var name:String? = null
+    private var surname:String? = null
+    private var email:String? = null
+    private var password:String? = null
+    private var comPassword:String? = null
+    private var messageCreator = Messages()
+    private var result : Boolean = false
 
-    var db = Firebase.firestore
+    private var db = Firebase.firestore
     private lateinit var auth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -73,13 +71,13 @@ class Register : AppCompatActivity() {
             arrayListOf(),arrayListOf(),auth.uid,name,password,"default",surname)
         Database.subirUsuario(user)
         sendEmail()
-        finishMessage()
+        messageCreator.finishMessage(this,name!!)
     }
 
     private fun sendEmail(){
         var us = Firebase.auth.currentUser
         us.sendEmailVerification().addOnSuccessListener {
-            println("------------------------------Email Sended---------------------------------------")
+            println("------------------------------ Email Sended ---------------------------------------")
         }
     }
 
@@ -87,11 +85,11 @@ class Register : AppCompatActivity() {
     private fun checkName() : Boolean{
         name  = findViewById<EditText>(R.id.editTextName).text.toString()
         val pattern : Pattern = Pattern.compile("[ 0-9A-Za-zñÑáéíóúÁÉÍÓÚ]{1,50}")
-        if(name!!.isEmpty()){println(3);  emptyMessage(); return false}
+        if(name!!.isEmpty()){println(3);  messageCreator.emptyMessage(this); return false}
         for (element in name!!) {
             val matcher : Matcher = pattern.matcher(element.toString())
             if (!(matcher.matches()|| element == ' ')) {
-                incorrectNameMessage()
+                messageCreator.incorrectNameMessage(this)
                 return false
             }
         }
@@ -101,11 +99,11 @@ class Register : AppCompatActivity() {
     private fun checkSurname() : Boolean{
         surname  = findViewById<EditText>(R.id.editTextSurname).text.toString()
         val pattern : Pattern = Pattern.compile("[ 0-9A-Za-zñÑáéíóúÁÉÍÓÚ]{1,50}")
-        if(surname!!.isEmpty()){ emptyMessage(); return false}
+        if(surname!!.isEmpty()){ messageCreator.emptyMessage(this); return false}
         for (element in surname!!) {
             val matcher : Matcher = pattern.matcher(element.toString())
             if (!(matcher.matches()|| element == ' ')) {
-                incorrectSurnameMessage()
+                messageCreator.incorrectSurnameMessage(this)
                 return false
             }
         }
@@ -114,117 +112,20 @@ class Register : AppCompatActivity() {
 
     private fun checkEmail() : Boolean{
         email  = findViewById<EditText>(R.id.editTextEmail).text.toString()
-        if(email!!.isEmpty()){ emptyMessage(); return false}
+        if(email!!.isEmpty()){ messageCreator.emptyMessage(this); return false}
         val emailPattern = Patterns.EMAIL_ADDRESS
-        if(!emailPattern.matcher(email).matches()){ incorrectEmailMessage(); return false}
-        if( emailExist(email) ){ emailAlreadyInUseMessage(); return false}
+        if(!emailPattern.matcher(email).matches()){ messageCreator.incorrectEmailMessage(this); return false}
+        val emailList = Database.getAllUsersEmails()
+        if(emailList.contains(email!!)){ messageCreator.emailAlreadyInUseMessage(this); return false}
         return true
     }
 
     private fun checkPassWord() : Boolean{
         password  = findViewById<EditText>(R.id.editTextPassword).text.toString()
         comPassword = findViewById<EditText>(R.id.editTextPassword2).text.toString()
-        if(password!!.isEmpty() || comPassword!!.isEmpty()){ emptyMessage(); return false}
-        if(password!!.length < 7){ shortPasswordMessage(); return false}
-        if(!password.equals(comPassword)){ PasswordNotEqualMessage(); return false;}
+        if(password!!.isEmpty() || comPassword!!.isEmpty()){ messageCreator.emptyMessage(this); return false}
+        if(password!!.length < 7){ messageCreator.shortPasswordMessage(this); return false}
+        if(!password.equals(comPassword)){ messageCreator.PasswordNotEqualMessage(this); return false;}
         return true
     }
-
-
-    private fun emailExist(email : String?) : Boolean{
-        val emailList = Database.getAllUsersEmails()
-        return emailList.contains(email)
-
-    }
-
-    //Messages
-    private fun emptyMessage() {
-        val builder = AlertDialog.Builder(this)
-        builder.setTitle("Error: Rellene todos los campos")
-        builder.setMessage(" Debe rellenar todos los campos. ")
-        builder.setIcon(android.R.drawable.ic_dialog_alert)
-        builder.setNeutralButton("  Continue  "){ _, _ -> }
-        val alertDialog: AlertDialog = builder.create()
-        alertDialog.setCancelable(false)
-        alertDialog.show()
-    }
-
-    private fun incorrectNameMessage() {
-        val builder = AlertDialog.Builder(this)
-        builder.setTitle("Error: Nombre incorrecto")
-        builder.setMessage(" Asegúrese de escribir bien el nombre. ")
-        builder.setIcon(android.R.drawable.ic_dialog_alert)
-        builder.setNeutralButton("  Continue  "){ _, _ -> }
-        val alertDialog: AlertDialog = builder.create()
-        alertDialog.setCancelable(false)
-        alertDialog.show()
-    }
-
-    private fun incorrectSurnameMessage() {
-        val builder = AlertDialog.Builder(this)
-        builder.setTitle("Error: Apellido incorrecto")
-        builder.setMessage(" Asegúrese de escribir bien el apellido. ")
-        builder.setIcon(android.R.drawable.ic_dialog_alert)
-        builder.setNeutralButton("  Continue  "){ _, _ -> }
-        val alertDialog: AlertDialog = builder.create()
-        alertDialog.setCancelable(false)
-        alertDialog.show()
-    }
-
-    private fun incorrectEmailMessage() {
-        val builder = AlertDialog.Builder(this)
-        builder.setTitle("Error: Email no valido")
-        builder.setMessage(" Asegúrese de escribir bien el email. ")
-        builder.setIcon(android.R.drawable.ic_dialog_alert)
-        builder.setNeutralButton("  Continue  "){ _, _ -> }
-        val alertDialog: AlertDialog = builder.create()
-        alertDialog.setCancelable(false)
-        alertDialog.show()
-    }
-
-    private fun shortPasswordMessage() {
-        val builder = AlertDialog.Builder(this)
-        builder.setTitle("Error:Contraseña demasiado corta")
-        builder.setMessage(" Por razones de seguridad, prueba a escribir una contraseña más larga. ")
-        builder.setIcon(android.R.drawable.ic_dialog_alert)
-        builder.setNeutralButton("  Continue  "){ _, _ -> }
-        val alertDialog: AlertDialog = builder.create()
-        alertDialog.setCancelable(false)
-        alertDialog.show()
-    }
-
-    private fun PasswordNotEqualMessage() {
-        val builder = AlertDialog.Builder(this)
-        builder.setTitle("Error:Contraseñas no coinciden")
-        builder.setMessage(" Revise las contraseñas, deben coincidir ")
-        builder.setIcon(android.R.drawable.ic_dialog_alert)
-        builder.setNeutralButton("  Continue  "){ _, _ -> }
-        val alertDialog: AlertDialog = builder.create()
-        alertDialog.setCancelable(false)
-        alertDialog.show()
-    }
-
-    private fun finishMessage(){
-        val builder =  AlertDialog.Builder(this)
-        builder.setTitle("Bienvenido: " + name)
-        builder.setMessage(" Su usuario se ha registrado correctamente. " + '\n' + '\n' +
-                "Ahora podrá ver los inmuebles publicados, pero para poder publicar sus propios inmuebles o contactar con otros clientes debe confirmar el correo electronico mediante el mensaje que le hemos enviado.")
-        builder.setIcon(android.R.drawable.ic_dialog_email)
-        builder.setPositiveButton("  Continue  ", DialogInterface.OnClickListener{ _, _ -> finish() })
-        val alertDialog: AlertDialog = builder.create()
-        alertDialog.setCancelable(false)
-        alertDialog.show()
-    }
-
-    private fun emailAlreadyInUseMessage(){
-        val builder =  AlertDialog.Builder(this)
-        builder.setTitle("Error: Correo ya registrado")
-        builder.setMessage(" El correo ya esta asignado a otra cuenta ")
-        builder.setIcon(android.R.drawable.ic_dialog_alert)
-        builder.setPositiveButton("  Continue  ", DialogInterface.OnClickListener{ _, _ -> finish() })
-        val alertDialog: AlertDialog = builder.create()
-        alertDialog.setCancelable(false)
-        alertDialog.show()
-    }
-
 }
