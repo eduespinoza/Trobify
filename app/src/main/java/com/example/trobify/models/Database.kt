@@ -1,6 +1,7 @@
 package com.example.trobify.models
 
 
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.here.sdk.core.GeoCoordinates
@@ -16,7 +17,7 @@ object Database {
     init{
         runBlocking {
             val queryNoPost = async {
-                db.collection("inmueblesNoPost").get()
+                db.collection("inmueblesNoPost").orderBy("fechaSubida",Query.Direction.DESCENDING).get()
             }
             val queryInmuebles = async {
                 db.collection("inmueblesv5").get()

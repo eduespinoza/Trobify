@@ -69,12 +69,12 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
     override fun onResume() {
         super.onResume()
         println("jaja pues si")
-        /*if(filtrosAplicados == null || opcionesDeInicio == null){
+        if(filtrosAplicados == null && opcionesDeInicio == null){
         user = Database.getUser(userId)
         userFav = user.favorites!!
             println("poraquinnopasasverdad hijodeputa")
         mostrarInmuebles(inmuebles)
-        }*/
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?)

@@ -28,6 +28,7 @@ class  MisPisos : AppCompatActivity() , AdaptadorInmuebleBusqueda.OnItemClickLis
     lateinit var userId : String
     lateinit var publicados : TextView
     lateinit var noPublicados : TextView
+    var bPublicados = false
 
 
 
@@ -40,6 +41,12 @@ class  MisPisos : AppCompatActivity() , AdaptadorInmuebleBusqueda.OnItemClickLis
         startActivity(goFicha)
 
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if(bPublicados)mostrarPublicados(publicados,noPublicados)
+        else mostrarNoPublicados(publicados,noPublicados)
     }
 
     override fun onCreate(savedInstanceState : Bundle?) {
@@ -64,6 +71,7 @@ class  MisPisos : AppCompatActivity() , AdaptadorInmuebleBusqueda.OnItemClickLis
         mostrarPublicados(publicados,noPublicados)
     }
     private fun mostrarNoPublicados(publicados : TextView, noPublicados : TextView){
+        bPublicados = false
         noPublicados.setBackgroundColor(Color.BLUE)
         noPublicados.setTextColor(Color.WHITE)
         publicados.setTextColor(Color.BLACK)
@@ -74,6 +82,7 @@ class  MisPisos : AppCompatActivity() , AdaptadorInmuebleBusqueda.OnItemClickLis
         }else mostrar(arrayListOf())
     }
     private fun mostrarPublicados(publicados : TextView, noPublicados : TextView){
+        bPublicados = true
         publicados.setBackgroundColor(Color.BLUE)
         publicados.setTextColor(Color.WHITE)
         noPublicados.setTextColor(Color.BLACK)
