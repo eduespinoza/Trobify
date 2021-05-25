@@ -40,8 +40,6 @@ class ListOfChats : AppCompatActivity() {
         intent.getStringExtra("message")?.let { message = it }
         intent.getStringExtra("inmueble")?.let { inmueble = it }
 
-        println("---------------------------------------------- User: " + user + " OtherUser: " + otherUser + " Message: " + message + " Inmueble: " + inmueble  )
-
         if( message != "" || otherUser != "") { getData() }
         else { initViews() }
     }
@@ -83,7 +81,6 @@ class ListOfChats : AppCompatActivity() {
     }
 
     private fun getData(){
-        println("--------------------------------- GETING DATA ---------------------")
         db.collection("users").document(user.toString()).get()
             .addOnCompleteListener() { u ->
                 userName =
@@ -94,10 +91,6 @@ class ListOfChats : AppCompatActivity() {
                     .addOnCompleteListener() { o ->
                         otherUserName = o.result.data?.get("name")
                             .toString() + " " + o.result.data?.get("surname").toString()
-
-                        println("--------------------------------- GETING DATA COMPLETE ---------------------")
-                        println("---------------------------------------------- User: " + userName + " OtherUser: " + otherUserName + " Message: " + message + " Inmueble: " + inmueble )
-
                         tryNewChat()
                     }
             }
@@ -106,11 +99,8 @@ class ListOfChats : AppCompatActivity() {
     private fun tryNewChat(){
         val chatName : String = inmueble + " con " + otherUserName + " y " + userName
 
-        println("--------------------------------- SEARCHING EXISTING CHAT --------------------- chatName: " + chatName.toString())
-
         db.collection("chats").whereEqualTo("name" , chatName.toString()).get()
             .addOnSuccessListener { documents ->
-                println("--------------------------------- SEARCHING DATA COMPLETE ---------------------")
                 if(!documents.isEmpty){
                     for(document in documents){
                         chatId = document.id.toString()
@@ -122,7 +112,6 @@ class ListOfChats : AppCompatActivity() {
                     }
                 }
                 else{
-                    println("--------------------------------- NO EXISTING CHAT, CREATING A NEW CHAT ---------------------")
                     newChat()
                 }
             }
@@ -130,7 +119,6 @@ class ListOfChats : AppCompatActivity() {
 
     private fun newChat() {
         chatId = UUID.randomUUID().toString()
-        println("--------------------------------- CREATING A NEW CHAT --------------------- CHAT ID: " + chatId.toString())
         val users = listOf(user, otherUser)
         val chat = Chat(
             id = chatId,
