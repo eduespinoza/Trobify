@@ -1,16 +1,16 @@
 package com.example.trobify.controladores
 
 import android.content.ContentValues
+import android.content.DialogInterface
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.example.trobify.R
-import com.example.trobify.models.DataInmueble
-import com.example.trobify.models.Inmueble
-import com.example.trobify.models.Item
+import com.example.trobify.models.*
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -36,7 +36,7 @@ class GestionarInmueble : AppCompatActivity() {
     lateinit var inmuebleId : String
     lateinit var urls : ArrayList<String>
     lateinit var path : String
-
+    lateinit var buttonPost : Button
     lateinit var tipoAnuncio : Spinner
     lateinit var tipoVivienda : Spinner
     lateinit var tipoInmueble : Spinner
@@ -100,6 +100,43 @@ class GestionarInmueble : AppCompatActivity() {
             startActivityForResult(intent, SELECT_FILE)
         }
 
+        val realizarAccion = { dialog: DialogInterface, which: Int ->
+            when(which) {
+                DialogInterface.BUTTON_POSITIVE -> {
+                    if(buttonPost.text.equals("Publicar")){
+                        Database.toPublicado(DataInmueble2(id = inmueble.id, propietario = inmueble.propietario, numHabitaciones = inmueble.numHabitaciones,
+                            numBanos = inmueble.numBanos, superficie = inmueble.superficie, direccion = inmueble.direccionSitio,
+                            tipoVivienda = inmueble.tipoVivienda, tipoInmueble = inmueble.tipoInmueble, intencion = inmueble.intencion,
+                            precio = inmueble.precio, fotos = inmueble.fotos, descripcion = inmueble.descripcion,  extras = inmueble.booleans2extras(),
+                            estado = inmueble.estado, fechaSubida = inmueble.fechaSubida.toString()))
+                        postOrNotPost(buttonPost)
+                    }
+                    else {
+                        Database.toNoPublicado(DataInmueble2(id = inmueble.id, propietario = inmueble.propietario, numHabitaciones = inmueble.numHabitaciones,
+                            numBanos = inmueble.numBanos, superficie = inmueble.superficie, direccion = inmueble.direccionSitio,
+                            tipoVivienda = inmueble.tipoVivienda, tipoInmueble = inmueble.tipoInmueble, intencion = inmueble.intencion,
+                            precio = inmueble.precio, fotos = inmueble.fotos, descripcion = inmueble.descripcion, extras = inmueble.booleans2extras(),
+                            estado = inmueble.estado, fechaSubida = inmueble.fechaSubida.toString()))
+                        postOrNotPost(buttonPost)
+                    }
+                }
+            }
+        }
+        buttonPost = findViewById<Button>(R.id.postNopost)
+        postOrNotPost(buttonPost)
+        buttonPost.setOnClickListener {
+            val builder = AlertDialog.Builder(this)
+            var texto = buttonPost.text
+            builder.setMessage("¿Seguro que quieres $texto el inmueble?")
+                .setCancelable(false)
+                .setPositiveButton("Yes", DialogInterface.OnClickListener(function = realizarAccion))
+                .setNegativeButton("No") { dialog, id ->
+                    // Dismiss the dialog
+                    dialog.dismiss()
+                }
+            val alert = builder.create()
+            alert.show()
+        }
         val buttonSave = findViewById<Button>(R.id.buttonSaveGestion)
         buttonSave.setOnClickListener {
 
@@ -158,7 +195,15 @@ class GestionarInmueble : AppCompatActivity() {
         }
         downloadFotos(path, "mostrar")
     }
-
+    private fun postOrNotPost(button : Button){
+        if (Database.isInmueblePost(inmuebleId)){
+            button.setText("Despublicar")
+            button.setBackgroundColor(Color.RED)
+        }else {
+            button.setText("Publicar")
+            button.setBackgroundColor(Color.BLUE)
+        }
+    }
     private fun rellenarData(inmueble : Inmueble) {
         val dataTipoAnuncio = arrayListOf("Alquiler", "Venta")
         tipoAnuncio = findViewById(R.id.spinnerTipoAnuncio)

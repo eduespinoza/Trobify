@@ -71,7 +71,7 @@ class Messages {
         alertDialog.show()
     }
 
-    fun finishMessage(context : Context, name : String) : Boolean{
+    fun finishMessage(context : Context, name : String){
         val builder =  AlertDialog.Builder(context)
         builder.setTitle("Bienvenido: " + name)
         builder.setMessage(" Su usuario se ha registrado correctamente. " + '\n' + '\n' +

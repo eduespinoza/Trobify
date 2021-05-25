@@ -2,6 +2,7 @@ package com.example.trobify.controladores
 
 import android.content.ContentValues
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.widget.*
@@ -25,7 +26,8 @@ class  MisPisos : AppCompatActivity() , AdaptadorInmuebleBusqueda.OnItemClickLis
     val db = Firebase.firestore
     lateinit var caja : RecyclerView
     lateinit var userId : String
-
+    lateinit var publicados : TextView
+    lateinit var noPublicados : TextView
 
 
 
@@ -44,27 +46,42 @@ class  MisPisos : AppCompatActivity() , AdaptadorInmuebleBusqueda.OnItemClickLis
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_mis_pisos)
         caja = findViewById(R.id.recyclerMisPisos)
+        publicados = findViewById(R.id.publicados)
+        noPublicados = findViewById(R.id.nopublicados)
 
         userId = intent.extras!!.get("user") as String
-
-
 
         val buttonAtras = findViewById<Button>(R.id.buttonAtrasMisPisos)
         buttonAtras.setOnClickListener {
             finish()
         }
-        println("EYY ESTOY COGIENDO MIS PISOS")
-        var pisos = Database.getPisosUser(userId)
-        println(pisos)
-        if (pisos != null) {
-            mostrar(pisos)
+        publicados.setOnClickListener {
+            mostrarPublicados(publicados,noPublicados)
         }
-        //Database.getPisosUser(userId)?.let { mostrar(it) }
-        //cargarPisosDe(userId)
-
-
-
-
+        noPublicados.setOnClickListener {
+            mostrarNoPublicados(publicados,noPublicados)
+        }
+        mostrarPublicados(publicados,noPublicados)
+    }
+    private fun mostrarNoPublicados(publicados : TextView, noPublicados : TextView){
+        noPublicados.setBackgroundColor(Color.BLUE)
+        noPublicados.setTextColor(Color.WHITE)
+        publicados.setTextColor(Color.BLACK)
+        publicados.setBackgroundColor(Color.GRAY)
+        var pisos = Database.getPisosNoPostUser(userId)
+        if (pisos != null && pisos.isNotEmpty()) {
+            mostrar(pisos)
+        }else mostrar(arrayListOf())
+    }
+    private fun mostrarPublicados(publicados : TextView, noPublicados : TextView){
+        publicados.setBackgroundColor(Color.BLUE)
+        publicados.setTextColor(Color.WHITE)
+        noPublicados.setTextColor(Color.BLACK)
+        noPublicados.setBackgroundColor(Color.GRAY)
+        var pisos = Database.getPisosUser(userId)
+        if (pisos != null && pisos.isNotEmpty()) {
+            mostrar(pisos)
+        }else mostrar(arrayListOf())
     }
 
     private fun mostrar(pisosFav : ArrayList<DataInmueble2>){

@@ -176,6 +176,18 @@ class Inmueble (
 
         return res
     }
+    fun booleans2extras() : ArrayList<String> {
+        var res = arrayListOf<String>()
+        if(parking == true){ res.add("Parking")}
+        if(ascensor == true){ res.add("Ascensor") }
+        if(amueblado == true){ res.add("Amueblado") }
+        if(calefaccion == true){ res.add("Calefacción")}
+        if(jardin == true){ res.add("Jardín") }
+        if(piscina == true){res.add("Piscina") }
+        if(terraza == true){ res.add("Terraza")}
+        if(trastero == true){ res.add("Trastero") }
+        return res
+    }
 
     fun getIdd() : String?{
         return id
@@ -227,6 +239,9 @@ class Inmueble (
         inmueble.intencion = data.intencion
         inmueble.fotos = data.fotos
         inmueble.estado = data.estado
+        inmueble.direccionSitio = data.direccion
+        inmueble.fechaSubida = LocalDateTime.parse(data.fechaSubida)
+
         return inmueble
     }
 

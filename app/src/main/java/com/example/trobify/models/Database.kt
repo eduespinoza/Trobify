@@ -10,20 +10,52 @@ import kotlin.collections.ArrayList
 //en cualquier parte del proyecto, será la misma instancia
 object Database {
     val db = Firebase.firestore
+    var inmueblesNoPost = arrayListOf<DataInmueble2>()
     var inmuebles = arrayListOf<DataInmueble2>()
     var users = arrayListOf<DataUser>()
     init{
         runBlocking {
+            val queryNoPost = async {
+                db.collection("inmueblesNoPost").get()
+            }
             val queryInmuebles = async {
                 db.collection("inmueblesv5").get()
             }
             val queryUsers = async {
                 db.collection("users").get()
             }
-            delay(7000)
+            delay(11000)
+            inmueblesNoPost = queryNoPost.getCompleted().result.toObjects(DataInmueble2::class.java) as ArrayList<DataInmueble2>
             inmuebles = queryInmuebles.getCompleted().result.toObjects(DataInmueble2::class.java) as ArrayList<DataInmueble2>
             users = queryUsers.getCompleted().result.toObjects(DataUser::class.java) as ArrayList<DataUser>
         }
+    }
+
+    fun toNoPublicado(inmueble : DataInmueble2){
+        inmueble.id?.let { db.collection("inmueblesNoPost").document(it).set(inmueble) }
+        inmueblesNoPost.add(inmueble)
+        inmuebles.remove(inmueble)
+        db.collection("inmueblesv5").document(inmueble.id!!).delete()
+        var user = getUserById(inmueble.propietario!!)
+        user.pisosNoPost?.add(inmueble.id!!)
+        db.collection("users").
+        document(user.id!!).update("pisosNoPost",user.pisosNoPost)
+        user.pisos?.remove(inmueble.id!!)
+        db.collection("users").
+        document(user.id!!).update("pisos",user.pisos)
+    }
+    fun toPublicado(inmueble : DataInmueble2){
+        inmueble.id?.let { db.collection("inmueblesv5").document(it).set(inmueble) }
+        inmueblesNoPost.remove(inmueble)
+        inmuebles.add(inmueble)
+        db.collection("inmueblesNoPost").document(inmueble.id!!).delete()
+        var user = getUserById(inmueble.propietario!!)
+        user.pisosNoPost?.remove(inmueble.id!!)
+        db.collection("users").
+        document(user.id!!).update("pisosNoPost",user.pisosNoPost)
+        user.pisos?.add(inmueble.id!!)
+        db.collection("users").
+        document(user.id!!).update("pisos",user.pisos)
     }
 
     fun getAllInmuebles():ArrayList<DataInmueble2>{
@@ -31,10 +63,23 @@ object Database {
     }
 
     // INMUEBLES QUERIES
-    fun subirInmueble(inmueble : DataInmueble2){
-        inmueble.id?.let { db.collection("inmueblesv5").document(it).set(inmueble) }
-        inmuebles.add(inmueble)
-        inmueble.propietario?.let { inmueble.id?.let { it1 -> setPisoUser(it, it1) } }
+    fun subirInmueble(inmueble : DataInmueble2, post: Boolean){
+        if(post){
+            inmueble.id?.let { db.collection("inmueblesv5").document(it).set(inmueble) }
+            inmuebles.add(inmueble)
+            inmueble.propietario?.let { inmueble.id?.let { it1 -> setPisoUser(it, it1) } }
+        }else{
+            inmueble.id?.let { db.collection("inmueblesNoPost").document(it).set(inmueble) }
+            inmueblesNoPost.add(inmueble)
+            inmueble.propietario?.let { inmueble.id?.let { it1 -> setPisoNoPostUser(it, it1) } }
+        }
+
+    }
+    fun isInmueblePost(id:String):Boolean{
+        inmuebles.forEach { inmueble ->
+            if (inmueble.id.equals(id)) return true
+        }
+        return false
     }
     fun getInmueblesBusqueda(query : String, intencion :String?):ArrayList<DataInmueble2>{
         println("dentro de buscador")
@@ -55,10 +100,22 @@ object Database {
         println("ya tengo resultado maaaaanin")
         return resultado
     }
+
     fun getInmueblesByIds(ids : ArrayList<String>):ArrayList<DataInmueble2>{
         var inmueblesEncontrados = arrayListOf<DataInmueble2>()
         for (ident in ids) {
             inmuebles.forEach ok@{ inmueble->
+                if (inmueble.id.equals(ident))
+                    inmueblesEncontrados.add(inmueble)
+                return@ok
+            }
+        }
+        return inmueblesEncontrados
+    }
+    fun getInmueblesByIdsNoPost(ids : ArrayList<String>):ArrayList<DataInmueble2>{
+        var inmueblesEncontrados = arrayListOf<DataInmueble2>()
+        for (ident in ids) {
+            inmueblesNoPost.forEach ok@{ inmueble->
                 if (inmueble.id.equals(ident))
                     inmueblesEncontrados.add(inmueble)
                 return@ok
@@ -211,6 +268,12 @@ object Database {
         db.collection("users").
         document(idUser).update("pisos",user.pisos)
     }
+    private fun setPisoNoPostUser(idUser : String, idInmueble : String){
+        var user = getUserById(idUser)
+        user.pisosNoPost?.add(idInmueble)
+        db.collection("users").
+        document(idUser).update("pisosNoPost",user.pisosNoPost)
+    }
     fun setFav2User(idUser : String, idInmueble : String):Boolean{
         var user = getUserById(idUser)
         if(!user.favorites?.contains(idInmueble)!!){
@@ -247,6 +310,11 @@ object Database {
             }
         }
         return userResult
+    }
+    fun getPisosNoPostUser(userId : String) : ArrayList<DataInmueble2>?{
+        var user = getUserById(userId)
+        var pisos = user.pisosNoPost
+        return pisos?.let { getInmueblesByIdsNoPost(it) }
     }
     fun getPisosUser(userId : String) : ArrayList<DataInmueble2>? {
         var user = getUserById(userId)

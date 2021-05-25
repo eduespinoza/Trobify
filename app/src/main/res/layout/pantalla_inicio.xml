@@ -34,7 +34,7 @@
             android:paddingRight="40dp">
 
             <TextView
-                android:id="@+id/text_opcion_alquilar"
+                android:id="@+id/text_opcion_alquiler"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="5dp"

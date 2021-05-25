@@ -391,30 +391,38 @@
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:gravity="center"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:padding="4dp">
+
+                <Button
+                    android:id="@+id/postNopost"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="#0277BD"
+                    android:text="Publlicar"
+                    android:textSize="10dp" />
 
                 <Button
                     android:id="@+id/buttonDeleteGestion"
-                    android:layout_width="100dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="50dp"
-                    android:layout_marginLeft="170dp"
                     android:layout_weight="1"
                     android:backgroundTint="#E63F3F"
-                    android:text="Delete"
+                    android:text="Borrar"
                     android:textSize="10dp" />
 
                 <Button
                     android:id="@+id/buttonSaveGestion"
-                    android:layout_width="100dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="50dp"
-                    android:layout_marginLeft="10dp"
                     android:layout_weight="1"
                     android:backgroundTint="#5252D6"
-                    android:text="Save"
+                    android:text="Guardar"
                     android:textSize="10sp" />
             </LinearLayout>
 

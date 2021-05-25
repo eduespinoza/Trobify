@@ -16,11 +16,9 @@ import com.example.trobify.R
 import com.example.trobify.models.Busqueda
 import com.example.trobify.models.Database
 import com.example.trobify.models.Sitio
-import com.example.trobify.models.TipoInmueble
 import com.here.sdk.core.GeoCoordinates
 import kotlinx.android.synthetic.main.trobify_main.*
 import kotlin.properties.Delegates
-import kotlin.properties.ReadWriteProperty
 
 class pantalla_inicial : AppCompatActivity() {
     lateinit var userId : String
@@ -57,14 +55,13 @@ class pantalla_inicial : AppCompatActivity() {
         lateinit var venta:TextView
     }
     override fun onCreate(savedInstanceState: Bundle?) {
-        Database
         setContentView(R.layout.pantalla_inicio)
         super.onCreate(savedInstanceState)
         botonBuscar = findViewById(R.id.buttonBusquedaInicial)
         botonBuscar.isEnabled = false
         userId = (intent.extras!!.get("user") as String?).toString()
         busquedaInicial.alquiler = findViewById(
-            R.id.text_opcion_alquilar
+            R.id.text_opcion_alquiler
         )
         busquedaInicial.venta = findViewById(
             R.id.text_opcion_comprar

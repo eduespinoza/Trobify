@@ -149,8 +149,10 @@ class OfertarInmueble : AppCompatActivity() {
         bChooseAnunucio.setOnClickListener { chooseAnuncio() }
 
         val bPost = findViewById<Button>(R.id.buttonPublicar)
-        bPost.setOnClickListener { post() }
+        bPost.setOnClickListener { post(true) }
 
+        val bSubir = findViewById<Button>(R.id.buttonSubir)
+        bSubir.setOnClickListener { post(false) }
 
         val bPhoto = findViewById<Button>(R.id.buttonAddPhoto)
         bPhoto.setOnClickListener{
@@ -493,8 +495,19 @@ class OfertarInmueble : AppCompatActivity() {
         val options = builder.create()
         options.show()
     }
-
-    private fun post(){
+    fun booleans2extras() : ArrayList<String> {
+        var res = arrayListOf<String>()
+        if(parking == true){ res.add("Parking")}
+        if(ascensor == true){ res.add("Ascensor") }
+        if(amueblado == true){ res.add("Amueblado") }
+        if(calefaccion == true){ res.add("Calefacción")}
+        if(jardin == true){ res.add("Jardín") }
+        if(piscina == true){res.add("Piscina") }
+        if(terraza == true){ res.add("Terraza")}
+        if(trastero == true){ res.add("Trastero") }
+        return res
+    }
+    private fun post(post : Boolean){
         if(tipoInmueble == null){
             messageInmNull()
         }else if(tipoVivienda == null && text.layoutVivienda.visibility != View.GONE){
@@ -523,15 +536,18 @@ class OfertarInmueble : AppCompatActivity() {
 
             //Fotos esta vacia, y en fotosord estan las ids de las fotos subidas a firebase y direccion contiene el string de la direccion mientras que direccion0 esta vacio
 
-
-            val anuncio = DataInmueble(id,user,numHabitaciones,numBanos,superficie,direccion,tipoVivienda,tipoInmueble,tipoAnuncio,precioDeVenta,fotos,fotosOrd,
-                "",descripcion,estado,parking,ascensor,amueblado,calefaccion,jardin,piscina,terraza,trastero, LocalDateTime.now().toString())
+            val subelo = DataInmueble2(id,user,numHabitaciones, numBanos, superficie, direccion, tipoVivienda,
+                tipoInmueble,tipoAnuncio,precioDeVenta,fotos,descripcion,booleans2extras(),estado,LocalDateTime.now().toString())
+            Database.subirInmueble(subelo,post)
+            /*val anuncio = DataInmueble(id,user,numHabitaciones,numBanos,superficie,direccion,tipoVivienda,tipoInmueble,tipoAnuncio,precioDeVenta,fotos,fotosOrd,
+                "",descripcion,estado,parking,ascensor,amueblado,calefaccion,jardin,piscina,terraza,trastero, LocalDateTime.now().toString())*/
 
             //Database.subirInmueble(anuncio)
 
-
+            var texto = "subido"
+            if(post)texto = "$texto y publicado"
             val builder =  AlertDialog.Builder(this)
-            builder.setTitle(" Se ha publicado el piso correctamente " )
+            builder.setTitle(" Se ha $texto el piso correctamente " )
             builder.setIcon(android.R.drawable.ic_dialog_info)
             builder.setNeutralButton("  Continue  "){ _, _ -> }
             val alertDialog: AlertDialog = builder.create()
@@ -540,11 +556,6 @@ class OfertarInmueble : AppCompatActivity() {
         }
     }
 
-    private fun subirInmuebleBD(inmueble : DataInmueble){
-        val db = Firebase.firestore
-
-        inmueble.id?.let { db.collection("inmueblesv5").document(it).set(inmueble) }
-    }
 
     private fun messageInmNull(){
         val builder =  AlertDialog.Builder(this)

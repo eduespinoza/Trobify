@@ -68,7 +68,7 @@ class Register : AppCompatActivity() {
 
     private fun finishCreation(){
         val user = DataUser(email,
-            arrayListOf(),arrayListOf(),auth.uid,name,password,"default",surname)
+            arrayListOf(),arrayListOf(), arrayListOf(),auth.uid,name,password,"default",surname)
         Database.subirUsuario(user)
         sendEmail()
         messageCreator.finishMessage(this,name!!)
