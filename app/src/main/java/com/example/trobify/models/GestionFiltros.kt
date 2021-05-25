@@ -8,7 +8,7 @@ class GestionFiltros {
     var filtrosSize = 0
 
     private fun gestionDeFiltros(){
-        if (!filtros.tipoInmueble?.equals("Cualquiera")!!){
+        if (!filtros.tipoInmueble.equals("Cualquiera")){
             list.addAll(obtenerIdsTipoInmueble(filtros.tipoInmueble!!))
         }
         if (filtros.tipoVivienda.isNotEmpty()){

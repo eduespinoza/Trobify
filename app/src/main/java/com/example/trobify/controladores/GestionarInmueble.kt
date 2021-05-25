@@ -217,10 +217,7 @@ class GestionarInmueble : AppCompatActivity() {
         tipoAnuncio.setSelection(dataTipoAnuncio.indexOf(inmueble.intencion))
 
 
-        val dataTipoInmueble = arrayListOf(
-            "Vivienda", "Edificio", "Oficina", "Garaje",
-            "Local", "Terreno", "Nave"
-        )
+        val dataTipoInmueble = resources.getStringArray(R.array.options_inmueble)
         tipoInmueble = findViewById(R.id.spinnerTipoInmueble)
         if (tipoInmueble != null) {
             val adapter = ArrayAdapter<String>(
@@ -232,10 +229,7 @@ class GestionarInmueble : AppCompatActivity() {
         tipoInmueble.setSelection(dataTipoInmueble.indexOf(inmueble.tipoInmueble))
 
 
-        val dataTipoVivienda = arrayListOf(
-            "Apartamento", "Ático", "Dúplex", "Loft",
-            "Planta baja", "Estudio", "Casa", "Chalet", "Adosado", "Finca rústica"
-        )
+        val dataTipoVivienda = resources.getStringArray(R.array.options_vivienda_por_defecto)
         tipoVivienda = findViewById(R.id.spinnerTipoVivienda)
         if (tipoVivienda != null) {
             val adapter = ArrayAdapter<String>(
@@ -316,8 +310,6 @@ class GestionarInmueble : AppCompatActivity() {
     }
 
     private fun setData(inmueble : Inmueble) {
-
-
 
         val anuncioTipo = tipoAnuncio.selectedItem.toString()
         val inmuebleTipo = tipoInmueble.selectedItem.toString()
