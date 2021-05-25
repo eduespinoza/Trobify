@@ -116,7 +116,7 @@
                             android:layout_weight="1"
                             android:text="Tipo de inmueble"
                             android:textColor="#000000"
-                            android:textSize="22sp" />
+                            android:textSize="20sp" />
 
                         <ImageButton
                             android:id="@+id/imageButtonTipoInmueble"
@@ -169,7 +169,7 @@
                             android:layout_weight="1"
                             android:text="Tipo de vivienda"
                             android:textColor="#000000"
-                            android:textSize="22sp" />
+                            android:textSize="20sp" />
 
                         <ImageButton
                             android:id="@+id/imageButtonTipoVivienda"
@@ -221,7 +221,7 @@
                             android:layout_weight="1"
                             android:text="Tipo de anuncio"
                             android:textColor="#000000"
-                            android:textSize="22sp" />
+                            android:textSize="20sp" />
 
                         <ImageButton
                             android:id="@+id/imageButtonTipoAnuncio"
@@ -272,7 +272,7 @@
                             android:layout_weight="1"
                             android:text="Precio de venta"
                             android:textColor="#000000"
-                            android:textSize="22sp" />
+                            android:textSize="20sp" />
 
                         <EditText
                             android:id="@+id/inPrecio"
@@ -308,7 +308,7 @@
                             android:layout_weight="1"
                             android:text="Superficie"
                             android:textColor="#000000"
-                            android:textSize="22sp" />
+                            android:textSize="20sp" />
 
                         <EditText
                             android:id="@+id/inSuperficie"
@@ -344,7 +344,7 @@
                             android:layout_weight="1"
                             android:text="Calle, número y población"
                             android:textColor="#000000"
-                            android:textSize="22sp" />
+                            android:textSize="20sp" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -391,9 +391,9 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="Habitaciones"
+                            android:text="Numero de habitaciones"
                             android:textColor="#000000"
-                            android:textSize="22sp" />
+                            android:textSize="20sp" />
 
                         <EditText
                             android:id="@+id/inHabitaciones"
@@ -427,9 +427,9 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="Baños"
+                            android:text="Numero de baños"
                             android:textColor="#000000"
-                            android:textSize="22sp" />
+                            android:textSize="20sp" />
 
                         <EditText
                             android:id="@+id/inBaños"
@@ -464,7 +464,7 @@
                             android:layout_weight="1"
                             android:text="Descripción  (opcional)"
                             android:textColor="#000000"
-                            android:textSize="22sp" />
+                            android:textSize="20sp" />
 
                         <EditText
                             android:id="@+id/inDescripcion"
@@ -500,7 +500,7 @@
                             android:layout_weight="1"
                             android:text="Extras                          "
                             android:textColor="#000000"
-                            android:textSize="22sp" />
+                            android:textSize="20sp" />
 
                         <Button
                             android:id="@+id/buttonExtras"
@@ -534,7 +534,7 @@
                             android:layout_weight="1"
                             android:text="Estado de la vivienda"
                             android:textColor="#000000"
-                            android:textSize="22sp" />
+                            android:textSize="20sp" />
 
                         <Button
                             android:id="@+id/buttonEstado"
@@ -559,7 +559,8 @@
                         android:id="@+id/buttonSubir"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="9dp"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginRight="0dp"
                         android:layout_weight="1"
                         android:backgroundTint="#054171"
                         android:text="Subir"
@@ -569,6 +570,8 @@
                         android:id="@+id/buttonPublicar"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginLeft="40dp"
+                        android:layout_marginRight="15dp"
                         android:layout_weight="1"
                         android:backgroundTint="#2196F3"
                         android:text="Subir y publicar"

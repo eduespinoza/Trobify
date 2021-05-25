@@ -9,19 +9,21 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:layout_editor_absoluteX="161dp"
-        tools:layout_editor_absoluteY="105dp">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingStart="12dp"
-            android:paddingEnd="12dp">
+            android:orientation="vertical">
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:layout_marginBottom="5dp"
                 android:gravity="clip_horizontal"
                 android:orientation="horizontal"
                 android:paddingStart="0dp"
@@ -29,13 +31,28 @@
 
                 <Button
                     android:id="@+id/buttonAtrasGestion"
-                    android:layout_width="70dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:backgroundTint="#00000000"
+                    android:layout_width="56dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="8dp"
+                    android:gravity="center_horizontal|center_vertical"
+                    app:backgroundTint="#1E150909"
                     app:icon="@drawable/abc_vector_test"
-                    app:iconSize="35dp"
-                    app:iconTint="#000000" />
+                    app:iconSize="25dp"
+                    app:iconTint="#000000"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/ofertarTitle2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="10dp"
+                    android:layout_weight="1"
+                    android:text="Modificar inmueble"
+                    android:textAlignment="center"
+                    android:textColor="#000000"
+                    android:textSize="30sp" />
 
             </LinearLayout>
 
@@ -43,19 +60,23 @@
                 android:id="@+id/carouselGestion"
                 android:layout_width="match_parent"
                 android:layout_height="265dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:background="@drawable/border"
                 app:autoPlay="false"
                 app:fillColor="#FFFFFFFF"
                 app:pageColor="#00000000"
                 app:radius="6dp"
                 app:slideInterval="3000"
                 app:strokeColor="#FF777777"
-                android:background="@drawable/border"
                 app:strokeWidth="1dp"></com.synnapps.carouselview.CarouselView>
 
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="8sp"
+                android:layout_marginTop="5dp"
                 android:gravity="center_horizontal"
                 android:orientation="horizontal"
                 android:paddingStart="10dp"
@@ -84,56 +105,19 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:background="@drawable/border">
-
-                <TextView
-                    android:id="@+id/textView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Tipo Anuncio"
-                    android:textColor="#000000"
-                    android:textSize="22sp" />
-
-                <Spinner
-                    android:id="@+id/spinnerTipoAnuncio"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:background="@drawable/border">
-
-                <TextView
-                    android:id="@+id/textView3"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Tipo Inmueble"
-                    android:textColor="#000000"
-                    android:textSize="22sp" />
-
-                <Spinner
-                    android:id="@+id/spinnerTipoInmueble"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:background="@drawable/border">
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="8dp"
+                android:background="@drawable/border"
+                android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/textView4"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Tipo Vivienda"
+                    android:text="Tipo de vivienda"
                     android:textColor="#000000"
-                    android:textSize="22sp" />
+                    android:textSize="20sp" />
 
                 <Spinner
                     android:id="@+id/spinnerTipoVivienda"
@@ -144,8 +128,11 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:background="@drawable/border">
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="8dp"
+                android:background="@drawable/border"
+                android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/textView5"
@@ -153,23 +140,26 @@
                     android:layout_height="wrap_content"
                     android:text="Precio"
                     android:textColor="#000000"
-                    android:textSize="22sp" />
+                    android:textSize="20sp" />
 
                 <EditText
                     android:id="@+id/precioBox"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:ems="10"
                     android:inputType="number"
-                    android:textSize="17sp" />
+                    android:textSize="18sp" />
 
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:background="@drawable/border">
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="8dp"
+                android:background="@drawable/border"
+                android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/textView6"
@@ -177,22 +167,25 @@
                     android:layout_height="wrap_content"
                     android:text="Numero de Habitaciones"
                     android:textColor="#000000"
-                    android:textSize="22sp" />
+                    android:textSize="20sp" />
 
                 <EditText
                     android:id="@+id/habitacionesBox"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:ems="10"
                     android:inputType="number"
-                    android:textSize="17sp" />
+                    android:textSize="18sp" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:background="@drawable/border">
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="8dp"
+                android:background="@drawable/border"
+                android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/textView7"
@@ -200,22 +193,25 @@
                     android:layout_height="wrap_content"
                     android:text="Numero de baños"
                     android:textColor="#000000"
-                    android:textSize="22sp" />
+                    android:textSize="20sp" />
 
                 <EditText
                     android:id="@+id/banosBox"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:ems="10"
                     android:inputType="number"
-                    android:textSize="17sp" />
+                    android:textSize="18sp" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:background="@drawable/border">
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="8dp"
+                android:background="@drawable/border"
+                android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/textView8"
@@ -223,45 +219,25 @@
                     android:layout_height="wrap_content"
                     android:text="Superficie"
                     android:textColor="#000000"
-                    android:textSize="22sp" />
+                    android:textSize="20sp" />
 
                 <EditText
                     android:id="@+id/superficieBox"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:ems="10"
                     android:inputType="number"
-                    android:textSize="17sp" />
+                    android:textSize="18sp" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:background="@drawable/border">
-
-                <TextView
-                    android:id="@+id/textView14"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Certificado Energetico"
-                    android:textColor="#000000"
-                    android:textSize="22sp" />
-
-                <EditText
-                    android:id="@+id/certificadoBox"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:inputType="textPersonName"
-                    android:textSize="17sp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:background="@drawable/border">
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="8dp"
+                android:background="@drawable/border"
+                android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/textView9"
@@ -269,7 +245,7 @@
                     android:layout_height="wrap_content"
                     android:text="Descripcion"
                     android:textColor="#000000"
-                    android:textSize="22sp" />
+                    android:textSize="20sp" />
 
                 <EditText
                     android:id="@+id/descripcionBox"
@@ -283,16 +259,19 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:background="@drawable/border">
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="8dp"
+                android:background="@drawable/border"
+                android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/textView12"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Estado Viviena"
+                    android:text="Estado de la vivienda"
                     android:textColor="#000000"
-                    android:textSize="22sp" />
+                    android:textSize="20sp" />
 
                 <Spinner
                     android:id="@+id/spinnerEstado"
@@ -303,8 +282,11 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:background="@drawable/border">
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="8dp"
+                android:background="@drawable/border"
+                android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/textView10"
