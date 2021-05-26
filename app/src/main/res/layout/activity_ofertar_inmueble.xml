@@ -53,15 +53,17 @@
                         android:layout_weight="1"
                         android:text="Datos del inmueble"
                         android:textAlignment="center"
-                        android:textColor="#000000"
-                        android:textSize="30sp" />
+                        android:textColor="#3F51B5"
+                        android:textSize="30sp"
+                        android:textStyle="bold" />
 
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:paddingTop="10dp">
 
                     <com.synnapps.carouselview.CarouselView
                         android:id="@+id/carouselPhotosOfertar"
@@ -116,7 +118,7 @@
                             android:layout_weight="1"
                             android:text="Tipo de inmueble"
                             android:textColor="#000000"
-                            android:textSize="20sp" />
+                            android:textSize="18sp" />
 
                         <ImageButton
                             android:id="@+id/imageButtonTipoInmueble"
@@ -141,7 +143,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="Seleccione"
-                            android:textSize="18sp" />
+                            android:textSize="16sp" />
 
                     </LinearLayout>
 
@@ -169,7 +171,7 @@
                             android:layout_weight="1"
                             android:text="Tipo de vivienda"
                             android:textColor="#000000"
-                            android:textSize="20sp" />
+                            android:textSize="18sp" />
 
                         <ImageButton
                             android:id="@+id/imageButtonTipoVivienda"
@@ -194,7 +196,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="Seleccione"
-                            android:textSize="18sp"/>
+                            android:textSize="16sp" />
 
                     </LinearLayout>
 
@@ -221,7 +223,7 @@
                             android:layout_weight="1"
                             android:text="Tipo de anuncio"
                             android:textColor="#000000"
-                            android:textSize="20sp" />
+                            android:textSize="18sp" />
 
                         <ImageButton
                             android:id="@+id/imageButtonTipoAnuncio"
@@ -244,8 +246,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:textSize="18sp"
-                            android:text="Seleccione" />
+                            android:text="Seleccione"
+                            android:textSize="16sp" />
 
                     </LinearLayout>
 
@@ -272,7 +274,7 @@
                             android:layout_weight="1"
                             android:text="Precio de venta"
                             android:textColor="#000000"
-                            android:textSize="20sp" />
+                            android:textSize="18sp" />
 
                         <EditText
                             android:id="@+id/inPrecio"
@@ -281,7 +283,7 @@
                             android:layout_weight="1"
                             android:ems="10"
                             android:inputType="number"
-                            android:textSize="18sp" />
+                            android:textSize="16sp" />
 
                     </LinearLayout>
 
@@ -308,7 +310,7 @@
                             android:layout_weight="1"
                             android:text="Superficie"
                             android:textColor="#000000"
-                            android:textSize="20sp" />
+                            android:textSize="18sp" />
 
                         <EditText
                             android:id="@+id/inSuperficie"
@@ -317,7 +319,7 @@
                             android:layout_weight="1"
                             android:ems="10"
                             android:inputType="number"
-                            android:textSize="18sp" />
+                            android:textSize="16sp" />
 
                     </LinearLayout>
 
@@ -344,7 +346,7 @@
                             android:layout_weight="1"
                             android:text="Calle, número y población"
                             android:textColor="#000000"
-                            android:textSize="20sp" />
+                            android:textSize="18sp" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -357,7 +359,7 @@
                                 android:layout_height="match_parent"
                                 android:layout_weight="1"
                                 android:gravity="center|start"
-                                android:textSize="18sp"/>
+                                android:textSize="16sp" />
 
                             <SearchView
                                 android:id="@+id/buscadorDirecciones"
@@ -391,9 +393,9 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="Numero de habitaciones"
+                            android:text="Número de habitaciones"
                             android:textColor="#000000"
-                            android:textSize="20sp" />
+                            android:textSize="18sp" />
 
                         <EditText
                             android:id="@+id/inHabitaciones"
@@ -402,7 +404,7 @@
                             android:layout_weight="1"
                             android:ems="10"
                             android:inputType="number"
-                            android:textSize="18sp" />
+                            android:textSize="16sp" />
                     </LinearLayout>
 
                 </LinearLayout>
@@ -427,9 +429,9 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="Numero de baños"
+                            android:text="Número de baños"
                             android:textColor="#000000"
-                            android:textSize="20sp" />
+                            android:textSize="18sp" />
 
                         <EditText
                             android:id="@+id/inBaños"
@@ -438,7 +440,7 @@
                             android:layout_weight="1"
                             android:ems="10"
                             android:inputType="number"
-                            android:textSize="18sp" />
+                            android:textSize="16sp" />
                     </LinearLayout>
 
                 </LinearLayout>
@@ -464,7 +466,7 @@
                             android:layout_weight="1"
                             android:text="Descripción  (opcional)"
                             android:textColor="#000000"
-                            android:textSize="20sp" />
+                            android:textSize="18sp" />
 
                         <EditText
                             android:id="@+id/inDescripcion"
@@ -474,7 +476,7 @@
                             android:ems="10"
                             android:gravity="start|top"
                             android:inputType="textMultiLine"
-                            android:textSize="18sp" />
+                            android:textSize="16sp" />
                     </LinearLayout>
 
                 </LinearLayout>
@@ -500,7 +502,7 @@
                             android:layout_weight="1"
                             android:text="Extras                          "
                             android:textColor="#000000"
-                            android:textSize="20sp" />
+                            android:textSize="18sp" />
 
                         <Button
                             android:id="@+id/buttonExtras"
@@ -534,7 +536,7 @@
                             android:layout_weight="1"
                             android:text="Estado de la vivienda"
                             android:textColor="#000000"
-                            android:textSize="20sp" />
+                            android:textSize="18sp" />
 
                         <Button
                             android:id="@+id/buttonEstado"

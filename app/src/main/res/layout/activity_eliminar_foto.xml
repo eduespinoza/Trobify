@@ -10,15 +10,15 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:layout_editor_absoluteX="161dp"
-        tools:layout_editor_absoluteY="105dp">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingStart="15dp"
-            android:paddingEnd="10dp">
+            android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -42,27 +42,38 @@
 
             </LinearLayout>
 
-            <com.synnapps.carouselview.CarouselView
-                android:id="@+id/carouselEliminarFoto"
-                android:layout_width="match_parent"
-                android:layout_height="265dp"
-                app:fillColor="#FFFFFFFF"
-                app:pageColor="#00000000"
-                app:radius="6dp"
-                app:slideInterval="3000"
-                app:strokeColor="#FF777777"
-                app:strokeWidth="1dp"
-                app:autoPlay = "false">
-            </com.synnapps.carouselview.CarouselView>
 
-
-            <TextView
-                android:id="@+id/textView"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Pulsa en la imagen que quieras eliminar"
-                android:textColor="#000000"
-                android:textSize="20sp" />
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:paddingLeft="20dp"
+                android:paddingTop="5dp"
+                android:paddingRight="20dp">
+
+                <com.synnapps.carouselview.CarouselView
+                    android:id="@+id/carouselEliminarFoto"
+                    android:layout_width="match_parent"
+                    android:layout_height="265dp"
+                    app:autoPlay="false"
+                    app:fillColor="#FFFFFFFF"
+                    app:pageColor="#00000000"
+                    app:radius="6dp"
+                    app:slideInterval="3000"
+                    app:strokeColor="#FF777777"
+                    app:strokeWidth="1dp">
+
+                </com.synnapps.carouselview.CarouselView>
+
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="Pulsa en la imagen que quieras eliminar"
+                    android:textColor="#000000"
+                    android:textSize="20sp" />
+            </LinearLayout>
 
         </LinearLayout>
     </ScrollView>

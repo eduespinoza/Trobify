@@ -46,6 +46,8 @@
                 android:id="@+id/titulo_ventana_filtros"
                 android:layout_width="299dp"
                 android:layout_height="wrap_content"
+                android:background="#FFFFFF"
+                android:backgroundTint="#FFFFFF"
                 android:text="Elegir filtros"
                 android:textAlignment="center"
                 android:textAllCaps="false"
@@ -58,7 +60,7 @@
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="15dp">
+            android:layout_marginTop="13dp">
 
             <LinearLayout
                 android:id="@+id/contenedorDentroScrollView"
