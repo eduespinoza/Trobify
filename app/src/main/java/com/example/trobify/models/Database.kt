@@ -64,6 +64,19 @@ object Database {
     }
 
     // INMUEBLES QUERIES
+
+    fun borrarInmueble(inmueble : DataInmueble2, post : Boolean){
+        if(post){
+            inmueble.id?.let { db.collection("inmueblesv5").document(it).delete() }
+            inmuebles.remove(inmueble)
+            inmueble.propietario?.let { inmueble.id?.let { it1 -> removePisoUser(it, it1) } }
+        }else{
+            inmueble.id?.let { db.collection("inmueblesNoPost").document(it).delete() }
+            inmueblesNoPost.remove(inmueble)
+            inmueble.propietario?.let { inmueble.id?.let { it1 -> removePisoNoPostUser(it, it1) } }
+        }
+    }
+
     fun subirInmueble(inmueble : DataInmueble2, post: Boolean){
         if(post){
             inmueble.id?.let { db.collection("inmueblesv5").document(it).set(inmueble) }
@@ -266,6 +279,18 @@ object Database {
         return inmueblesEncontrados
     }
     //USER QUERIES
+    private fun removePisoNoPostUser(idUser : String, idInmueble : String){
+        var user = getUserById(idUser)
+        user.pisos?.remove(idInmueble)
+        db.collection("users").
+        document(idUser).update("pisos",user.pisos)
+    }
+    private fun removePisoUser(idUser : String, idInmueble : String){
+        var user = getUserById(idUser)
+        user.pisosNoPost?.remove(idInmueble)
+        db.collection("users").
+        document(idUser).update("pisos",user.pisosNoPost)
+    }
     private fun setPisoUser(idUser : String, idInmueble : String){
         var user = getUserById(idUser)
         user.pisos?.add(idInmueble)
