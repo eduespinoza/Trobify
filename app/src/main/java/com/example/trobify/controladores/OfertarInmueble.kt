@@ -473,20 +473,39 @@ class OfertarInmueble : AppCompatActivity() {
 
     private fun selectCondition(){
         val builder = AlertDialog.Builder(this@OfertarInmueble)
-        val estadoInmuebleArray = arrayOf("Obra nueva","Casi nuevo","Muy bien","Bien","Reformado","A reformar")
-        estadoInmueble = arrayListOf<String>()
-        builder.setMultiChoiceItems(estadoInmuebleArray, elementosEstados){ dialog, which, isChecked ->
-            elementosEstados[which] = isChecked
-            if(elementosEstados[which]){
-                estadoInmueble.add(estadoInmuebleArray[which].toString())
-            }
-            else{
-                estadoInmueble.remove(estadoInmuebleArray[which].toString())
+        val estado = resources.getStringArray(R.array.estado_inmueble)
+        builder.setItems(estado) { _, which ->
+            when {
+                which.equals(0)
+                -> {
+                    estadoInmueble = "Obra nueva"
+                }
+                which.equals(1)
+                -> {
+                    estadoInmueble = "Casi nuevo"
+                }
+                which.equals(2)
+                -> {
+                    estadoInmueble = "Muy bien"
+                }
+                which.equals(3)
+                -> {
+                    estadoInmueble = "Bien"
+                }
+                which.equals(4)
+                -> {
+                    estadoInmueble = "Reformado"
+                }
+                which.equals(5)
+                -> {
+                    estadoInmueble = "A reformar"
+                }
             }
         }
-        builder.setNegativeButton("Ok"){_, _ -> }
+        builder.setNegativeButton("Cancelar"){_, _ -> }
         val options = builder.create()
         options.show()
+
     }
 
     fun booleans2extras() : ArrayList<String> {
