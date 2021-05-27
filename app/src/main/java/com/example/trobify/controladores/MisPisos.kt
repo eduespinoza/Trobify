@@ -70,6 +70,8 @@ class  MisPisos : AppCompatActivity() , AdaptadorInmuebleBusqueda.OnItemClickLis
         }
         mostrarPublicados(publicados,noPublicados)
     }
+
+
     private fun mostrarNoPublicados(publicados : TextView, noPublicados : TextView){
         bPublicados = false
         noPublicados.setBackgroundColor(Color.BLUE)

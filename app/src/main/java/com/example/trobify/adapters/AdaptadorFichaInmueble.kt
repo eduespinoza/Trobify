@@ -37,15 +37,16 @@ class AdaptadorFichaInmueble : AppCompatActivity() {
     private var propietarioMail : String = ""
     private var propietarioId : String = ""
 
-    lateinit var userId:String
+    lateinit var userId : String
     private var desdeMisPisos = false
+    lateinit var inmueble : Inmueble
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_ficha_inmueble)
 
         userId = intent.extras?.get("user") as String
-        val inmueble = intent.extras?.get("inmueble") as Inmueble
+        inmueble = intent.extras?.get("inmueble") as Inmueble
         desdeMisPisos = intent.extras?.get("desdeMisPisos") as Boolean
 
         val path = "imagenesinmueble/" + inmueble.getIdd()
@@ -55,9 +56,9 @@ class AdaptadorFichaInmueble : AppCompatActivity() {
 
         val buttonAtras = findViewById<Button>(R.id.buttonAtrasFicha)
         buttonAtras.setOnClickListener{
-            val goBack = Intent(this, MainTrobify::class.java)
+           /* val goBack = Intent(this, MainTrobify::class.java)
             goBack.putExtra("user", userId)
-            startActivity(goBack)
+            startActivity(goBack)*/
             finish()
         }
 
@@ -144,12 +145,13 @@ class AdaptadorFichaInmueble : AppCompatActivity() {
             edit.visibility = View.GONE
             edit.isClickable = false
         }
-
-
         rellenar(inmueble)
 
+    }
 
-
+    override fun onResume() {
+        super.onResume()
+        rellenar(inmueble)
     }
     private fun removeFav(id:String,inmueble:Inmueble){
         inmueble.id?.let { inmid -> Database.removeFav2User(id, inmid) }

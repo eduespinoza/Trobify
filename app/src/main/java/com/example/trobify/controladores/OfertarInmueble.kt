@@ -130,7 +130,9 @@ class OfertarInmueble : AppCompatActivity() {
         prepararBuscador()
 
         val bBack = findViewById<Button>(R.id.buttonBackOfertar)
-        bBack.setOnClickListener { goBack() }
+        bBack.setOnClickListener {
+            finish()
+        }
         
         val bExtra = findViewById<Button>(R.id.buttonExtras)
         bExtra.setOnClickListener { selectExtras()}
@@ -191,12 +193,6 @@ class OfertarInmueble : AppCompatActivity() {
     var imageListener =
         ImageListener { position, imageView -> imageView.setImageResource(sampleImages[position]) }
 
-
-    private fun goBack(){
-        val goBack = Intent(this, MainTrobify::class.java)
-        goBack.putExtra("user", user)
-        startActivity(goBack)
-    }
 
     private fun compare(){
         val builder =  AlertDialog.Builder(this)

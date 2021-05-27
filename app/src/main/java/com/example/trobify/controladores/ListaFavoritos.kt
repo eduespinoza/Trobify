@@ -43,9 +43,6 @@ class  ListaFavoritos () : AppCompatActivity() , AdaptadorInmuebleBusqueda.OnIte
 
         val buttonAtras = findViewById<Button>(R.id.buttonAtrasFavoritos)
         buttonAtras.setOnClickListener {
-            val goMain = Intent(this, MainTrobify::class.java)
-            goMain.putExtra("user", userId)
-            startActivity(goMain)
 
             finish()
         }
