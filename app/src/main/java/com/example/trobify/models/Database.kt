@@ -108,7 +108,7 @@ object Database {
     }
     fun subirInmueble(inmueble : DataInmueble2, post: Boolean){
         if(post){
-            inmueble.id?.let { db.collection("inmueblesv5").document(it).set(inmueble) }
+            inmueble.id?.let { db.collection("inmueblesFinal").document(it).set(inmueble) }
             inmuebles.add(inmueble)
             inmueble.propietario?.let { inmueble.id?.let { it1 -> setPisoUser(it, it1) } }
         }else{
@@ -139,7 +139,6 @@ object Database {
                     resultado.add(it)
             }
         }
-        println("ya tengo resultado maaaaanin")
         return resultado
     }
 
