@@ -163,9 +163,9 @@ class GestionarInmueble : AppCompatActivity() {
             builder.setMessage("¿Seguro que quieres eliminar este inmueble?")
                 .setCancelable(false)
                 .setPositiveButton("Yes") { dialog, id ->
-
-                    Database.borrarInmueble(inmuebleId, Database.isInmueblePost(inmuebleId))
-
+                    var quecojones = Database.isInmueblePost(inmuebleId)
+                    println("$quecojones PERO QUE ESTA PASANDO")
+                    Database.borrarInmueble(inmuebleId, quecojones)
                     finish()
                 }
                 .setNegativeButton("No") { dialog, id ->

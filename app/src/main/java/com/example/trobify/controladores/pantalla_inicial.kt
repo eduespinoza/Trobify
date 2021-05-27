@@ -47,6 +47,7 @@ class pantalla_inicial : AppCompatActivity() {
         todoOk = arrayListOf(todoOk[0],true)
     }
     lateinit var inDireccion : TextView
+    lateinit var trobify : TextView
 
     @SuppressLint("StaticFieldLeak")
     object busquedaInicial{
@@ -57,6 +58,7 @@ class pantalla_inicial : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         setContentView(R.layout.pantalla_inicio)
         super.onCreate(savedInstanceState)
+        trobify = findViewById(R.id.titulo_pantalla_inicio)
         botonBuscar = findViewById(R.id.buttonBusquedaInicial)
         botonBuscar.isEnabled = false
         userId = (intent.extras!!.get("user") as String?).toString()
@@ -88,7 +90,11 @@ class pantalla_inicial : AppCompatActivity() {
                 busquedaInicial.venta
             )
         }
-
+        trobify.setOnClickListener {
+            val goTrobify = Intent(this, MainTrobify::class.java)
+            goTrobify.putExtra("user", userId)
+            startActivity(goTrobify)
+        }
         busquedaInicial.desplegableTipoInmueble = findViewById(R.id.spinner_tipoInmueble_inicio)
         addOptionsInmueble()
         prepararBuscador()

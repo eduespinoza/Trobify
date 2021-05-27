@@ -300,17 +300,17 @@ object Database {
         return inmueblesEncontrados
     }
     //USER QUERIES
-    private fun removePisoNoPostUser(idUser : String, idInmueble : String){
+    private fun removePisoUser(idUser : String, idInmueble : String){
         var user = getUserById(idUser)
         user.pisos?.remove(idInmueble)
         db.collection("users").
         document(idUser).update("pisos",user.pisos)
     }
-    private fun removePisoUser(idUser : String, idInmueble : String){
+    private fun removePisoNoPostUser(idUser : String, idInmueble : String){
         var user = getUserById(idUser)
         user.pisosNoPost?.remove(idInmueble)
         db.collection("users").
-        document(idUser).update("pisos",user.pisosNoPost)
+        document(idUser).update("pisosNoPost",user.pisosNoPost)
     }
     private fun setPisoUser(idUser : String, idInmueble : String){
         var user = getUserById(idUser)
