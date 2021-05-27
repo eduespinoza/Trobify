@@ -148,10 +148,15 @@ class OfertarInmueble : AppCompatActivity() {
         bChooseAnunucio.setOnClickListener { chooseAnuncio() }
 
         val bPost = findViewById<Button>(R.id.buttonPublicar)
-        bPost.setOnClickListener { post(true) }
+        bPost.setOnClickListener { post(true)
+        finish()
+        }
 
         val bSubir = findViewById<Button>(R.id.buttonSubir)
-        bSubir.setOnClickListener { post(false) }
+        bSubir.setOnClickListener { post(false)
+
+        finish()
+        }
 
         val bPhoto = findViewById<Button>(R.id.buttonAddPhoto)
         bPhoto.setOnClickListener{

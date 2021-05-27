@@ -147,6 +147,7 @@ class GestionarInmueble : AppCompatActivity() {
                     setData(inmueble)
 
 
+
                 }
                 .setNegativeButton("No") { dialog, id ->
                     // Dismiss the dialog
@@ -162,11 +163,6 @@ class GestionarInmueble : AppCompatActivity() {
             builder.setMessage("¿Seguro que quieres eliminar este inmueble?")
                 .setCancelable(false)
                 .setPositiveButton("Yes") { dialog, id ->
-                    delete(inmueble)
-
-                    val intent = Intent(this, MainTrobify::class.java)
-                    intent.putExtra("user", userId)
-                    startActivity(intent)
 
                     finish()
                 }
@@ -307,10 +303,11 @@ class GestionarInmueble : AppCompatActivity() {
 
     }
 
+
+
     private fun setData(inmueble : Inmueble) {
 
-        val anuncioTipo = tipoAnuncio.selectedItem.toString()
-        val inmuebleTipo = tipoInmueble.selectedItem.toString()
+
         val vivendaTipo = tipoVivienda.selectedItem.toString()
 
         val precio = Integer.parseInt(precioBox.text.toString())
@@ -331,10 +328,21 @@ class GestionarInmueble : AppCompatActivity() {
         val terraza = terraza.isChecked
         val trastero = trastero.isChecked
 
-        val certificado = certificado.text.toString()
+        var res = arrayListOf<String>()
+        if(parking == true){ res.add("Parking")}
+        if(ascensor == true){ res.add("Ascensor") }
+        if(amueblado == true){ res.add("Amueblado") }
+        if(calefaccion == true){ res.add("Calefacción")}
+        if(jardin == true){ res.add("Jardín") }
+        if(piscina == true){res.add("Piscina") }
+        if(terraza == true){ res.add("Terraza")}
+        if(trastero == true){ res.add("Trastero") }
 
 
-        val updatedInmueble = DataInmueble(
+
+
+
+        val updatedInmueble = DataInmueble2(
             inmueble.getIdd(),
             inmueble.propietario,
             habitaciones,
@@ -342,37 +350,21 @@ class GestionarInmueble : AppCompatActivity() {
             superficie,
             inmueble.direccionSitio,
             vivendaTipo,
-            inmuebleTipo,
-            anuncioTipo,
+            inmueble.tipoInmueble,
+            inmueble.intencion,
             precio,
             inmueble.fotos,
-            inmueble.fotosOrd,
-            certificado,
             descripcion,
+            res,
             estado,
-            parking,
-            ascensor,
-            amueblado,
-            calefaccion,
-            jardin,
-            piscina,
-            terraza,
-            trastero,
             inmueble.fechaSubida.toString()
+
         )
-        val ref = db.collection("inmueblesv4").document(inmueble.getIdd().toString())
+
 
         if(checkFormats()) {
-            db.runBatch { batch ->
-                batch.set(ref, updatedInmueble)
-            }.addOnCompleteListener {
-                val intent = Intent(this, MainTrobify::class.java)
-                intent.putExtra("user", userId)
-                startActivity(intent)
-
-                finish()
-
-            }
+            Database.subirInmueble(updatedInmueble,Database.isInmueblePost(inmuebleId))
+            finish()
         }
         else{
             val builder = AlertDialog.Builder(this)
@@ -389,42 +381,13 @@ class GestionarInmueble : AppCompatActivity() {
         }
     }
 
-    private fun delete(inmueble : Inmueble) {
-
-        val ref = db.collection("inmueblesv4").document(inmueble.getIdd().toString())
-        val refUser = db.collection("users").document(userId)
-        db.runBatch { batch ->
-            batch.delete(ref)
-        }.addOnCompleteListener {}
-
-        db.runTransaction { transaction ->
-            val snapshot = transaction.get(refUser)
-            var pisos = snapshot.get("pisos")!! as ArrayList<String>
-            pisos.remove(inmueble.getIdd())
-
-            userId.let {
-                db.collection("users").document(it)
-                    .update("pisos", pisos)
-                    .addOnSuccessListener {
-                        Log.d(
-                            ContentValues.TAG,
-                            "DocumentSnapshot successfully written!"
-                        )
-                    }
-                    .addOnFailureListener { Log.w(ContentValues.TAG, "Error writing document") }
-            }
-        }
-    }
 
     private fun checkFormats() : Boolean{
-
 
         if(precioBox.text.toString().matches("-?\\d+(\\.\\d+)?".toRegex()) &&
             habitacionesBox.text.toString().matches("-?\\d+(\\.\\d+)?".toRegex()) &&
             banosBox.text.toString().matches("-?\\d+(\\.\\d+)?".toRegex()) &&
-            superficieBox.text.toString().matches("-?\\d+(\\.\\d+)?".toRegex())
-            //certificadoBox.text.toString().trim().length == 1)
-            )
+            superficieBox.text.toString().matches("-?\\d+(\\.\\d+)?".toRegex())            )
             {
             return true
         }
