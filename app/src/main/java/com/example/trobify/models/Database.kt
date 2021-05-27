@@ -97,7 +97,15 @@ object Database {
             inmueble.propietario?.let { inmueble.id?.let { it1 -> removePisoNoPostUser(it, it1) } }
         }
     }
-
+    fun modificarInmueble(inmueble : DataInmueble2, post: Boolean){
+        if(post){
+            inmueble.id?.let { db.collection("inmueblesv5").document(it).set(inmueble) }
+            inmuebles.add(inmueble)
+        }else{
+            inmueble.id?.let { db.collection("inmueblesNoPost").document(it).set(inmueble) }
+            inmueblesNoPost.add(inmueble)
+        }
+    }
     fun subirInmueble(inmueble : DataInmueble2, post: Boolean){
         if(post){
             inmueble.id?.let { db.collection("inmueblesv5").document(it).set(inmueble) }
@@ -108,7 +116,6 @@ object Database {
             inmueblesNoPost.add(inmueble)
             inmueble.propietario?.let { inmueble.id?.let { it1 -> setPisoNoPostUser(it, it1) } }
         }
-
     }
     fun isInmueblePost(id:String):Boolean{
         inmuebles.forEach { inmueble ->

@@ -365,7 +365,7 @@ class GestionarInmueble : AppCompatActivity() {
 
 
         if(checkFormats()) {
-            Database.subirInmueble(updatedInmueble,Database.isInmueblePost(inmuebleId))
+            Database.modificarInmueble(updatedInmueble,Database.isInmueblePost(inmuebleId))
             finish()
         }
         else{
