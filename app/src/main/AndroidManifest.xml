@@ -17,8 +17,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Trobify">
-        <activity android:name=".controladores.OfertarInmueble"></activity>
-        <activity android:name=".controladores.ListOfChats" />
+        <activity android:name=".controladores.OfertarInmueble"
+            android:theme="@style/Theme.Trobify.NoActionBar" />
+        <activity android:name=".controladores.ListOfChats"
+            android:theme="@style/Theme.Trobify.NoActionBar" />
         <activity
             android:name=".controladores.ChatAct"
             android:label="@string/title_activity_chat"
@@ -32,7 +34,8 @@
             android:name="com.here.sdk.access_key_secret"
             android:value="KWuRO85k2HN54edM9rQzV2yNr1BAISz5DQtbxHFVN-7WQyiwbHFN0--JbDc_KZTPlCKUSoGAIEJowimD9Yhhyw" />
 
-        <activity android:name=".controladores.Register" />
+        <activity android:name=".controladores.Register"
+            android:theme="@style/Theme.Trobify.NoActionBar" />
         <activity
             android:name=".controladores.pantalla_inicial"
             android:theme="@style/Theme.Trobify.NoActionBar" />
@@ -42,13 +45,20 @@
         <activity
             android:name=".controladores.Mapa"
             android:theme="@style/Theme.Trobify.NoActionBar" />
-        <activity android:name=".controladores.FiltrosBusqueda" />
-        <activity android:name=".adapters.AdaptadorFichaInmueble" />
-        <activity android:name=".controladores.ListaFavoritos" />
-        <activity android:name=".controladores.GestionarInmueble" />
-        <activity android:name=".controladores.MisPisos" />
-        <activity android:name=".controladores.Login" />
-        <activity android:name=".controladores.EliminarFotos" />
+        <activity android:name=".controladores.FiltrosBusqueda"
+            android:theme="@style/Theme.Trobify.NoActionBar" />
+        <activity android:name=".adapters.AdaptadorFichaInmueble"
+            android:theme="@style/Theme.Trobify.NoActionBar" />
+        <activity android:name=".controladores.ListaFavoritos"
+            android:theme="@style/Theme.Trobify.NoActionBar" />
+        <activity android:name=".controladores.GestionarInmueble"
+            android:theme="@style/Theme.Trobify.NoActionBar" />
+        <activity android:name=".controladores.MisPisos"
+            android:theme="@style/Theme.Trobify.NoActionBar" />
+        <activity android:name=".controladores.Login"
+            android:theme="@style/Theme.Trobify.NoActionBar" />
+        <activity android:name=".controladores.EliminarFotos"
+            android:theme="@style/Theme.Trobify.NoActionBar" />
         <activity
             android:name=".controladores.MainActivity"
             android:label="@string/app_name"
