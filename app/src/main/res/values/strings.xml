@@ -75,6 +75,15 @@
         <item>Finca rústica</item>
     </string-array>
 
+    <string-array name="estado_inmueble">
+        <item>Obra nueva</item>
+        <item>Casi nuevo</item>
+        <item>Muy bien</item>
+        <item>Bien</item>
+        <item>Reformado</item>
+        <item>A reformar</item>
+    </string-array>
+
     <string-array name="options_anuncio">
         <item>Vender</item>
         <item>Alquilar</item>

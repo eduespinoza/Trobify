@@ -256,9 +256,6 @@ class GestionarInmueble : AppCompatActivity() {
         descripcion = findViewById(R.id.descripcionBox)
         descripcion.setText(inmueble.descripcion)
 
-        certificado = findViewById(R.id.certificadoBox)
-        certificado.setText(inmueble.certificadoEnergetico)
-
         val dataEstado = arrayListOf(
             "Obra nueva", "Casi nuevo", "Muy bien",
             "Bien", "Reformado", "A reformar"

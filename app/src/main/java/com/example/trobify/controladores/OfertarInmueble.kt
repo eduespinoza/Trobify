@@ -44,7 +44,6 @@ class OfertarInmueble : AppCompatActivity() {
     private var direccionO : Direccion? = null
     private var numHabitaciones : Int = 0
     private var numBanos : Int = 0
-    private var certificadoEnergetico : String? = null  //Desde la A hasta la G, hay que hacer que solo deje poner las letras posibles
     private var descripcion : String? = null
     private var fechaSubida : LocalDateTime? = null
     private var estado : String? = null
@@ -62,7 +61,7 @@ class OfertarInmueble : AppCompatActivity() {
     private lateinit var carimages : CarouselView
 
     private lateinit var extrasInmueble : ArrayList<String>
-    private lateinit var estadoInmueble : ArrayList<String>
+    private lateinit var estadoInmueble : String
 
     private var caracteristicas : String? = null
 
@@ -283,20 +282,13 @@ class OfertarInmueble : AppCompatActivity() {
 
     private fun chooseInmueble() {
         val builder = AlertDialog.Builder(this@OfertarInmueble)
-        builder.setTitle("Selecciona el tipo de inmueble")
-        val tiposInmuebleMenosCualquiera = TipoInmueble.values().drop(1)
-        val optionsInmueble = Array<String>(tiposInmuebleMenosCualquiera.size){""}
-        var pos = 0
-        for(tipo in tiposInmuebleMenosCualquiera){
-            optionsInmueble[pos] = tipo.name
-            pos++
-        }
+        val optionsInmueble = resources.getStringArray(R.array.options_inmueble)
         builder.setItems(optionsInmueble) { _, which ->
             when {
                 which.equals(0)
                 -> {
                     text.tipoInmuebleElegidoText.text = optionsInmueble[0]
-                    tipoInmueble = TipoInmueble.Vivienda.toString()
+                    tipoInmueble = optionsInmueble[0].toString()
                     text.layoutHabitaciones.setVisibility(View.VISIBLE)
                     text.layoutBaños.setVisibility(View.VISIBLE)
                     text.layoutVivienda.setVisibility(View.VISIBLE)
@@ -304,7 +296,7 @@ class OfertarInmueble : AppCompatActivity() {
                 which.equals(1)
                 -> {
                     text.tipoInmuebleElegidoText.text = optionsInmueble[1]
-                    tipoInmueble = TipoInmueble.Edificio.toString()
+                    tipoInmueble = optionsInmueble[1].toString()
                     text.layoutHabitaciones.setVisibility(View.VISIBLE)
                     text.layoutBaños.setVisibility(View.VISIBLE)
                     text.layoutVivienda.setVisibility(View.VISIBLE)
@@ -312,7 +304,7 @@ class OfertarInmueble : AppCompatActivity() {
                 which.equals(2)
                 -> {
                     text.tipoInmuebleElegidoText.text = optionsInmueble[2]
-                    tipoInmueble = TipoInmueble.Oficina.toString()
+                    tipoInmueble = optionsInmueble[2].toString()
                     text.layoutHabitaciones.setVisibility(View.GONE)
                     text.layoutBaños.setVisibility(View.VISIBLE)
                     text.layoutVivienda.setVisibility(View.GONE)
@@ -320,7 +312,7 @@ class OfertarInmueble : AppCompatActivity() {
                 which.equals(3)
                 -> {
                     text.tipoInmuebleElegidoText.text = optionsInmueble[3]
-                    tipoInmueble = TipoInmueble.Garaje.toString()
+                    tipoInmueble = optionsInmueble[3].toString()
                     text.layoutHabitaciones.setVisibility(View.GONE)
                     text.layoutBaños.setVisibility(View.GONE)
                     text.layoutVivienda.setVisibility(View.GONE)
@@ -328,14 +320,14 @@ class OfertarInmueble : AppCompatActivity() {
                 which.equals(4)
                 -> {
                     text.tipoInmuebleElegidoText.text = optionsInmueble[4]
-                    tipoInmueble = TipoInmueble.Local.toString()
+                    tipoInmueble = optionsInmueble[4].toString()
                     text.layoutHabitaciones.setVisibility(View.GONE)
                     text.layoutVivienda.setVisibility(View.GONE)
                 }
                 which.equals(5)
                 -> {
                     text.tipoInmuebleElegidoText.text = optionsInmueble[5]
-                    tipoInmueble = TipoInmueble.Terreno.toString()
+                    tipoInmueble = optionsInmueble[5].toString()
                     text.layoutHabitaciones.setVisibility(View.GONE)
                     text.layoutBaños.setVisibility(View.GONE)
                     text.layoutVivienda.setVisibility(View.GONE)
@@ -343,7 +335,7 @@ class OfertarInmueble : AppCompatActivity() {
                 which.equals(6)
                 -> {
                     text.tipoInmuebleElegidoText.text = optionsInmueble[6]
-                    tipoInmueble = TipoInmueble.Nave.toString()
+                    tipoInmueble = optionsInmueble[6].toString()
                     text.layoutHabitaciones.setVisibility(View.GONE)
                     text.layoutBaños.setVisibility(View.GONE)
                     text.layoutVivienda.setVisibility(View.GONE)
@@ -359,7 +351,7 @@ class OfertarInmueble : AppCompatActivity() {
     private fun chooseVivienda(){
         val builder = AlertDialog.Builder(this@OfertarInmueble)
         builder.setTitle("Selecciona el tipo de vivienda")
-        if(text.tipoInmuebleElegidoText.text.equals(TipoInmueble.Edificio) || text.tipoInmuebleElegidoText.text.equals(TipoInmueble.Oficina)){
+        if(text.tipoInmuebleElegidoText.text.equals("Edificio") || text.tipoInmuebleElegidoText.text.equals("Oficina")){
             val optionsViviendaEdificio = resources.getStringArray(R.array.options_vivienda_edificio)
             builder.setItems(optionsViviendaEdificio) { _, which ->
                 when {
@@ -478,23 +470,44 @@ class OfertarInmueble : AppCompatActivity() {
         val options = builder.create()
         options.show()
     }
+
     private fun selectCondition(){
         val builder = AlertDialog.Builder(this@OfertarInmueble)
-        val estadoInmuebleArray = arrayOf("Obra nueva","Casi nuevo","Muy bien","Bien","Reformado","A reformar")
-        estadoInmueble = arrayListOf<String>()
-        builder.setMultiChoiceItems(estadoInmuebleArray, elementosEstados){ dialog, which, isChecked ->
-            elementosEstados[which] = isChecked
-            if(elementosEstados[which]){
-                estadoInmueble.add(estadoInmuebleArray[which].toString())
-            }
-            else{
-                estadoInmueble.remove(estadoInmuebleArray[which].toString())
+        val estado = resources.getStringArray(R.array.estado_inmueble)
+        builder.setItems(estado) { _, which ->
+            when {
+                which.equals(0)
+                -> {
+                    estadoInmueble = "Obra nueva"
+                }
+                which.equals(1)
+                -> {
+                    estadoInmueble = "Casi nuevo"
+                }
+                which.equals(2)
+                -> {
+                    estadoInmueble = "Muy bien"
+                }
+                which.equals(3)
+                -> {
+                    estadoInmueble = "Bien"
+                }
+                which.equals(4)
+                -> {
+                    estadoInmueble = "Reformado"
+                }
+                which.equals(5)
+                -> {
+                    estadoInmueble = "A reformar"
+                }
             }
         }
-        builder.setNegativeButton("Ok"){_, _ -> }
+        builder.setNegativeButton("Cancelar"){_, _ -> }
         val options = builder.create()
         options.show()
+
     }
+
     fun booleans2extras() : ArrayList<String> {
         var res = arrayListOf<String>()
         if(parking == true){ res.add("Parking")}
@@ -507,6 +520,7 @@ class OfertarInmueble : AppCompatActivity() {
         if(trastero == true){ res.add("Trastero") }
         return res
     }
+
     private fun post(post : Boolean){
         if(tipoInmueble == null){
             messageInmNull()

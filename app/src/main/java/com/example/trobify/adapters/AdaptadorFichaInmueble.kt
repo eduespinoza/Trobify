@@ -87,7 +87,7 @@ class AdaptadorFichaInmueble : AppCompatActivity() {
                                         goCreateChat.putExtra("otherUserId", propietarioId)
                                         goCreateChat.putExtra(
                                             "inmueble",
-                                            inmueble.direccion.toString()
+                                            inmueble.direccionSitio?.titulo.toString()
                                         )
                                         startActivity(goCreateChat)
                                     }
