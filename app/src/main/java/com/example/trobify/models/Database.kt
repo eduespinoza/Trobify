@@ -64,8 +64,29 @@ object Database {
     }
 
     // INMUEBLES QUERIES
+    private fun getInmuebleById(id : String,post : Boolean):DataInmueble2{
+        var inmuebleEncontrado = DataInmueble2()
+        if(post){
+            inmuebles.forEach lit@{ inmueble ->
+                if(inmueble.id.equals(id)) {
+                    inmuebleEncontrado = inmueble
+                    return@lit
+                }
 
-    fun borrarInmueble(inmueble : DataInmueble2, post : Boolean){
+            }
+        }
+        else{
+            inmueblesNoPost.forEach lit@{ inmueble ->
+                if(inmueble.id.equals(id)){
+                    inmuebleEncontrado = inmueble
+                    return@lit
+                }
+            }
+        }
+        return inmuebleEncontrado
+    }
+    fun borrarInmueble(idInmueble : String, post : Boolean){
+        var inmueble = getInmuebleById(idInmueble,post)
         if(post){
             inmueble.id?.let { db.collection("inmueblesv5").document(it).delete() }
             inmuebles.remove(inmueble)
