@@ -205,7 +205,7 @@ class GestionarInmueble : AppCompatActivity() {
         }
     }
     private fun rellenarData(inmueble : Inmueble) {
-        val dataTipoAnuncio = arrayListOf("Alquiler", "Venta")
+        /*val dataTipoAnuncio = arrayListOf("Alquiler", "Venta")
         tipoAnuncio = findViewById(R.id.spinnerTipoAnuncio)
         if (tipoAnuncio != null) {
             val adapter = ArrayAdapter<String>(
@@ -214,10 +214,11 @@ class GestionarInmueble : AppCompatActivity() {
             )
             tipoAnuncio.adapter = adapter
         }
-        tipoAnuncio.setSelection(dataTipoAnuncio.indexOf(inmueble.intencion))
+        tipoAnuncio.setSelection(dataTipoAnuncio.indexOf(inmueble.intencion))*/
 
 
-        val dataTipoInmueble = resources.getStringArray(R.array.options_inmueble)
+
+        /*val dataTipoInmueble = resources.getStringArray(R.array.options_inmueble)
         tipoInmueble = findViewById(R.id.spinnerTipoInmueble)
         if (tipoInmueble != null) {
             val adapter = ArrayAdapter<String>(
@@ -226,7 +227,7 @@ class GestionarInmueble : AppCompatActivity() {
             )
             tipoInmueble.adapter = adapter
         }
-        tipoInmueble.setSelection(dataTipoInmueble.indexOf(inmueble.tipoInmueble))
+        tipoInmueble.setSelection(dataTipoInmueble.indexOf(inmueble.tipoInmueble))*/
 
 
         val dataTipoVivienda = resources.getStringArray(R.array.options_vivienda_por_defecto)
@@ -421,8 +422,9 @@ class GestionarInmueble : AppCompatActivity() {
         if(precioBox.text.toString().matches("-?\\d+(\\.\\d+)?".toRegex()) &&
             habitacionesBox.text.toString().matches("-?\\d+(\\.\\d+)?".toRegex()) &&
             banosBox.text.toString().matches("-?\\d+(\\.\\d+)?".toRegex()) &&
-            superficieBox.text.toString().matches("-?\\d+(\\.\\d+)?".toRegex()) &&
-            certificadoBox.text.toString().trim().length == 1)
+            superficieBox.text.toString().matches("-?\\d+(\\.\\d+)?".toRegex())
+            //certificadoBox.text.toString().trim().length == 1)
+            )
             {
             return true
         }
