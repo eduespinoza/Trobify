@@ -164,6 +164,8 @@ class GestionarInmueble : AppCompatActivity() {
                 .setCancelable(false)
                 .setPositiveButton("Yes") { dialog, id ->
 
+                    Database.borrarInmueble(inmuebleId, Database.isInmueblePost(inmuebleId))
+
                     finish()
                 }
                 .setNegativeButton("No") { dialog, id ->
