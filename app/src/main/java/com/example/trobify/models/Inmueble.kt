@@ -239,6 +239,7 @@ class Inmueble (
         inmueble.intencion = data.intencion
         inmueble.fotos = data.fotos
         inmueble.estado = data.estado
+        inmueble.caracteristicas = data.extras.toString()
         inmueble.direccionSitio = data.direccion
         inmueble.fechaSubida = LocalDateTime.parse(data.fechaSubida)
 

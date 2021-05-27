@@ -235,13 +235,9 @@ class OfertarInmueble : AppCompatActivity() {
                 buscadorMapa.isIconified = true
                 text.inDireccion.visibility = View.VISIBLE
                 text.inDireccion.text = selection
-                buscador.sugerencias.forEach{
-                    if(it.title.equals(selection)){
-                        sitio = Sitio(it.title,
-                            mutableMapOf("latitud" to it.geoCoordinates!!.latitude,
-                              "longitud" to it.geoCoordinates!!.longitude),it.id)
-                        println(sitio)
-                        println("por aqui un sitio bomba")
+                buscador.suggeries.forEach{
+                    if(it.titulo.equals(selection)){
+                        sitio = it
                     }
                 }
                 direccionCorrecta = true

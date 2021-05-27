@@ -20,7 +20,7 @@ object Database {
                 db.collection("inmueblesNoPost").orderBy("fechaSubida",Query.Direction.DESCENDING).get()
             }
             val queryInmuebles = async {
-                db.collection("inmueblesv5").get()
+                db.collection("inmueblesv5").orderBy("fechaSubida",Query.Direction.DESCENDING).get()
             }
             val queryUsers = async {
                 db.collection("users").get()
@@ -241,6 +241,7 @@ object Database {
             size++
             list.addAll(cercanos)
         }
+        else {return arrayListOf()}
         list.groupBy{it}.forEach{mapa ->
             if(mapa.value.size == size)
                 result.add(mapa.key)
@@ -260,6 +261,8 @@ object Database {
             }
         }
         println("cercanos maninn $inmueblesEncontrados")
+        println(inmueblesEncontrados.isEmpty())
+        println(inmueblesEncontrados.isNotEmpty())
         return inmueblesEncontrados
     }
     //USER QUERIES
