@@ -100,10 +100,10 @@ object Database {
     fun modificarInmueble(inmueble : DataInmueble2, post: Boolean){
         if(post){
             inmueble.id?.let { db.collection("inmueblesv5").document(it).set(inmueble) }
-            inmuebles.add(inmueble)
+
         }else{
             inmueble.id?.let { db.collection("inmueblesNoPost").document(it).set(inmueble) }
-            inmueblesNoPost.add(inmueble)
+
         }
     }
     fun subirInmueble(inmueble : DataInmueble2, post: Boolean){
