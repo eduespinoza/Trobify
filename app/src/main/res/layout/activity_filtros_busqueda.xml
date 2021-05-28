@@ -28,22 +28,9 @@
             android:isScrollContainer="false"
             android:orientation="horizontal">
 
-            <Button
-                android:id="@+id/buttonBack"
-                android:layout_width="56dp"
-                android:layout_height="match_parent"
-                android:layout_marginStart="3dp"
-                android:gravity="center_horizontal|center_vertical"
-                app:backgroundTint="#1E150909"
-                app:icon="@drawable/abc_vector_test"
-                app:iconTint="#000000"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
             <TextView
                 android:id="@+id/titulo_ventana_filtros"
-                android:layout_width="299dp"
+                android:layout_width="351dp"
                 android:layout_height="wrap_content"
                 android:background="#FFFFFF"
                 android:backgroundTint="#FFFFFF"
@@ -53,6 +40,22 @@
                 android:textColor="#3F51B5"
                 android:textSize="30sp"
                 android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/buttonBack"
+                android:layout_width="46dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="3dp"
+                android:gravity="center_horizontal|center_vertical"
+                android:text="X"
+                android:textColor="#F80808"
+                android:textSize="15dp"
+                android:textStyle="bold"
+                app:backgroundTint="#1E150909"
+                app:iconTint="#000000"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
         </LinearLayout>
 

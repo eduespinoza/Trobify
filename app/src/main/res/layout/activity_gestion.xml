@@ -300,13 +300,13 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="120dp"
+                    android:layout_height="wrap_content"
                     android:gravity="clip_horizontal"
                     android:orientation="horizontal">
 
                     <LinearLayout
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:orientation="vertical">
 
                         <CheckBox
@@ -326,6 +326,7 @@
                             android:layout_width="120dp"
                             android:layout_height="wrap_content"
                             android:text="Amueblado" />
+
                     </LinearLayout>
 
                     <LinearLayout
@@ -376,38 +377,51 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_height="match_parent"
                 android:gravity="center"
-                android:orientation="horizontal"
-                android:padding="4dp">
+                android:orientation="vertical"
+                android:paddingTop="15dp"
+                android:paddingBottom="10dp">
 
                 <Button
                     android:id="@+id/postNopost"
-                    android:layout_width="wrap_content"
+                    android:layout_width="200dp"
                     android:layout_height="50dp"
                     android:layout_weight="1"
                     android:backgroundTint="#0277BD"
-                    android:text="Publlicar"
-                    android:textSize="10dp" />
+                    android:text="Publicar"
+                    android:textSize="14dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:padding="8dp">
 
                 <Button
                     android:id="@+id/buttonDeleteGestion"
                     android:layout_width="wrap_content"
                     android:layout_height="50dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
                     android:layout_weight="1"
                     android:backgroundTint="#E63F3F"
                     android:text="Borrar"
-                    android:textSize="10dp" />
+                    android:textSize="14dp" />
 
                 <Button
                     android:id="@+id/buttonSaveGestion"
                     android:layout_width="wrap_content"
                     android:layout_height="50dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
                     android:layout_weight="1"
                     android:backgroundTint="#5252D6"
                     android:text="Guardar"
-                    android:textSize="10sp" />
+                    android:textSize="14sp" />
             </LinearLayout>
 
         </LinearLayout>
