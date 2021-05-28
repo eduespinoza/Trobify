@@ -12,6 +12,7 @@ import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.example.trobify.R
 import com.example.trobify.models.Busqueda
 import com.example.trobify.models.Database
@@ -186,11 +187,10 @@ class pantalla_inicial : AppCompatActivity() {
     private fun desactivarIntenciones(alquiler : TextView, venta : TextView){
         alquilerActivado = false
         ventaActivado = false
-        alquiler.setBackgroundColor(Color.WHITE)
+        alquiler.background = ContextCompat.getDrawable(this, R.drawable.border2)
         alquiler.setTextColor(colorDefaultText)
         venta.setTextColor(colorDefaultText)
-        venta.setBackgroundColor(Color.WHITE)
-        //mostrarInmuebles(inmuebles)
+        venta.background = ContextCompat.getDrawable(this, R.drawable.border2)
     }
     private fun activalAlquiler(alquiler : TextView, venta : TextView){
         alquilerActivado = true
@@ -200,7 +200,6 @@ class pantalla_inicial : AppCompatActivity() {
         venta.setTextColor(Color.BLACK)
         venta.setBackgroundColor(Color.GRAY)
         opcionesElegidas[0] = "Alquiler"
-        //alquilerOVenta("Alquiler")
     }
     private fun activarVenta(alquiler : TextView, venta : TextView){
         alquilerActivado = false
@@ -210,7 +209,6 @@ class pantalla_inicial : AppCompatActivity() {
         alquiler.setTextColor(Color.BLACK)
         alquiler.setBackgroundColor(Color.GRAY)
         opcionesElegidas[0] = "Vender"
-        //alquilerOVenta("Vender")
     }
 }
 

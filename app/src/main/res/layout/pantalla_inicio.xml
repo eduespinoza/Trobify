@@ -28,10 +28,11 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:orientation="horizontal"
-            android:paddingLeft="40dp"
+            android:paddingLeft="55dp"
             android:paddingTop="60dp"
-            android:paddingRight="40dp">
+            android:paddingRight="55dp">
 
             <TextView
                 android:id="@+id/text_opcion_alquiler"
@@ -56,11 +57,13 @@
                 android:text="COMPRAR"
                 android:textColor="#000000"
                 android:textSize="18sp" />
+
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:orientation="vertical"
             android:paddingStart="40dp"
             android:paddingTop="40dp"
@@ -68,14 +71,14 @@
 
             <TextView
                 android:id="@+id/textView_seleccion_inmueble_inicio"
-                android:layout_width="match_parent"
+                android:layout_width="297dp"
                 android:layout_height="wrap_content"
                 android:text="Selecciona un tipo de inmueble:"
                 android:textColor="#7E7979" />
 
             <Spinner
                 android:id="@+id/spinner_tipoInmueble_inicio"
-                android:layout_width="match_parent"
+                android:layout_width="296dp"
                 android:layout_height="40dp"
                 android:background="@drawable/border2"
                 android:spinnerMode="dropdown" />
@@ -84,15 +87,15 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:orientation="horizontal"
             android:paddingStart="40dp"
             android:paddingTop="40dp"
             android:paddingEnd="40dp">
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="299dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
                 android:background="@drawable/border3"
                 android:orientation="horizontal"
                 android:paddingLeft="5dp"
@@ -100,12 +103,11 @@
 
                 <TextView
                     android:id="@+id/direccionText"
-                    android:layout_width="match_parent"
+                    android:layout_width="231dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
                     android:gravity="center|start"
                     android:text="Elige una sugerencia"
-                    android:textSize="18sp" />
+                    android:textSize="15sp" />
 
                 <SearchView
                     android:id="@+id/buscadorDirecciones"
