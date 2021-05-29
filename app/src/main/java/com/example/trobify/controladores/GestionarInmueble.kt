@@ -107,7 +107,7 @@ class GestionarInmueble : AppCompatActivity() {
                         Database.toPublicado(DataInmueble2(id = inmueble.id, propietario = inmueble.propietario, numHabitaciones = inmueble.numHabitaciones,
                             numBanos = inmueble.numBanos, superficie = inmueble.superficie, direccion = inmueble.direccionSitio,
                             tipoVivienda = inmueble.tipoVivienda, tipoInmueble = inmueble.tipoInmueble, intencion = inmueble.intencion,
-                            precio = inmueble.precio, fotos = inmueble.fotos, descripcion = inmueble.descripcion,  extras = inmueble.booleans2extras(),
+                            precio = inmueble.precio, fotos = inmueble.fotosOrd, descripcion = inmueble.descripcion,  extras = inmueble.booleans2extras(),
                             estado = inmueble.estado, fechaSubida = inmueble.fechaSubida.toString()))
                         postOrNotPost(buttonPost)
                     }
@@ -115,7 +115,7 @@ class GestionarInmueble : AppCompatActivity() {
                         Database.toNoPublicado(DataInmueble2(id = inmueble.id, propietario = inmueble.propietario, numHabitaciones = inmueble.numHabitaciones,
                             numBanos = inmueble.numBanos, superficie = inmueble.superficie, direccion = inmueble.direccionSitio,
                             tipoVivienda = inmueble.tipoVivienda, tipoInmueble = inmueble.tipoInmueble, intencion = inmueble.intencion,
-                            precio = inmueble.precio, fotos = inmueble.fotos, descripcion = inmueble.descripcion, extras = inmueble.booleans2extras(),
+                            precio = inmueble.precio, fotos = inmueble.fotosOrd, descripcion = inmueble.descripcion, extras = inmueble.booleans2extras(),
                             estado = inmueble.estado, fechaSubida = inmueble.fechaSubida.toString()))
                         postOrNotPost(buttonPost)
                     }
@@ -355,7 +355,7 @@ class GestionarInmueble : AppCompatActivity() {
             inmueble.tipoInmueble,
             inmueble.intencion,
             precio,
-            inmueble.fotos,
+            inmueble.fotosOrd,
             descripcion,
             res,
             estado,

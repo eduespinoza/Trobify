@@ -20,7 +20,7 @@ object Database {
                 db.collection("inmueblesNoPost").orderBy("fechaSubida",Query.Direction.DESCENDING).get()
             }
             val queryInmuebles = async {
-                db.collection("inmueblesv5").orderBy("fechaSubida",Query.Direction.DESCENDING).get()
+                db.collection("inmueblesFinal").orderBy("fechaSubida",Query.Direction.DESCENDING).get()
             }
             val queryUsers = async {
                 db.collection("users").get()
@@ -36,7 +36,7 @@ object Database {
         inmueble.id?.let { db.collection("inmueblesNoPost").document(it).set(inmueble) }
         inmueblesNoPost.add(inmueble)
         inmuebles.remove(inmueble)
-        db.collection("inmueblesv5").document(inmueble.id!!).delete()
+        db.collection("inmueblesFinal").document(inmueble.id!!).delete()
         var user = getUserById(inmueble.propietario!!)
         user.pisosNoPost?.add(inmueble.id!!)
         db.collection("users").
@@ -46,7 +46,7 @@ object Database {
         document(user.id!!).update("pisos",user.pisos)
     }
     fun toPublicado(inmueble : DataInmueble2){
-        inmueble.id?.let { db.collection("inmueblesv5").document(it).set(inmueble) }
+        inmueble.id?.let { db.collection("inmueblesFinal").document(it).set(inmueble) }
         inmueblesNoPost.remove(inmueble)
         inmuebles.add(inmueble)
         db.collection("inmueblesNoPost").document(inmueble.id!!).delete()
@@ -88,7 +88,7 @@ object Database {
     fun borrarInmueble(idInmueble : String, post : Boolean){
         var inmueble = getInmuebleById(idInmueble,post)
         if(post){
-            inmueble.id?.let { db.collection("inmueblesv5").document(it).delete() }
+            inmueble.id?.let { db.collection("inmueblesFinal").document(it).delete() }
             inmuebles.remove(inmueble)
             inmueble.propietario?.let { inmueble.id?.let { it1 -> removePisoUser(it, it1) } }
         }else{
@@ -99,7 +99,7 @@ object Database {
     }
     fun modificarInmueble(inmueble : DataInmueble2, post: Boolean){
         if(post){
-            inmueble.id?.let { db.collection("inmueblesv5").document(it).set(inmueble) }
+            inmueble.id?.let { db.collection("inmueblesFinal").document(it).set(inmueble) }
 
         }else{
             inmueble.id?.let { db.collection("inmueblesNoPost").document(it).set(inmueble) }

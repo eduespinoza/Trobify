@@ -1,5 +1,8 @@
 package com.example.trobify.adapters
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,6 +11,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.trobify.models.DataInmueble
 import com.example.trobify.R
 import com.example.trobify.models.DataInmueble2
+import com.example.trobify.models.Item
+import com.google.android.gms.tasks.Task
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.ListResult
+import com.google.firebase.storage.StorageReference
 import java.time.Duration
 import java.time.LocalDateTime
 
@@ -48,11 +56,29 @@ class AdaptadorInmuebleBusqueda(private val fichainmueble : ArrayList<DataInmueb
         var tipo = fichainmueble[position].tipoInmueble
         if(tipo.equals("Vivienda") || tipo.equals("Edificio")){tipo = fichainmueble[position].tipoVivienda}
         holder.ftitulo.text = tipo +" en: " + (fichainmueble[position].direccion?.titulo)
-        //holder.fimage.setImageResource(fichainmueble[position].photos.first())
-        holder.fimage.setImageResource(R.drawable.piso4)
-        holder.fdescripcion.text = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
+
+        //------------------------
+        //FOTO DEL INMUEBLE EN MAIN
+        val path = "imagenesinmueble/" + fichainmueble[position].id
+        val storage = FirebaseStorage.getInstance().reference
+        val ref = storage.child(path)
+        val task : Task<ListResult> = ref.list(1)
+        val one_mega = 1024*1024
+        task.addOnCompleteListener {res->
+            val items : List<StorageReference> = res.result!!.items
+            items[0].getBytes(one_mega.toLong()).addOnCompleteListener {
+                var bitmap = BitmapFactory.decodeByteArray(it.result,0,it.result.size)
+                holder.fimage.setImageBitmap(bitmap)
+            }
+        }
+        //FOTO DEL INMUEBLE EN MAIN
+        //------------------------
+
+        holder.fdescripcion.text = fichainmueble[position].descripcion
         holder.fprecio.text = fichainmueble[position].precio.toString() + "€"
-        holder.fhabitaciones.text = fichainmueble[position].numHabitaciones.toString()
+        if(fichainmueble[position].numHabitaciones == 0){
+            holder.fhabitaciones.visibility = View.GONE
+        }else {holder.fhabitaciones.text = fichainmueble[position].numHabitaciones.toString()}
         holder.fsuperficie.text = fichainmueble[position].superficie.toString()
         holder.ftiempo.text = getTiempoToString(fichainmueble[position].fechaSubida)
         holder.bind(fichainmueble[position],itemClickListener)

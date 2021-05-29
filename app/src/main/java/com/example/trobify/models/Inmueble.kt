@@ -237,7 +237,7 @@ class Inmueble (
         inmueble.precio = data.precio
         inmueble.superficie = data.superficie
         inmueble.intencion = data.intencion
-        inmueble.fotos = data.fotos
+        inmueble.fotosOrd = data.fotos
         inmueble.estado = data.estado
         inmueble.caracteristicas = data.extras.toString()
         inmueble.direccionSitio = data.direccion

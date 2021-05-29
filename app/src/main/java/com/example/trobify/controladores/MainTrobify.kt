@@ -379,8 +379,7 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
         ey.id = generateRandomId()
         ey.propietario = null
         ey.tipoInmueble = res
-        ey.fotos = arrayListOf(R.drawable.piso1, R.drawable.piso2, R.drawable.piso3,
-            R.drawable.piso4,R.drawable.piso5)
+        ey.fotos = arrayListOf()
         ey.superficie = getRandomSuperficie()
         ey.precio = getRandomPrice()
         ey.intencion = getRandomIntencion()

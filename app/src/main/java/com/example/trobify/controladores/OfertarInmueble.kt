@@ -261,7 +261,7 @@ class OfertarInmueble : AppCompatActivity() {
                 which.equals(0)
                 -> {
                     text.tipoAnuncioText.text = optionsAnuncio[0]
-                    tipoAnuncio = "Venta"
+                    tipoAnuncio = "Vender"
                     text.textViewPreciodeVenta.setText("Precio de venta")
                 }
                 which.equals(1)
@@ -548,7 +548,7 @@ class OfertarInmueble : AppCompatActivity() {
             //Fotos esta vacia, y en fotosord estan las ids de las fotos subidas a firebase y direccion contiene el string de la direccion mientras que direccion0 esta vacio
 
             val subelo = DataInmueble2(id,user,numHabitaciones, numBanos, superficie, direccion, tipoVivienda,
-                tipoInmueble,tipoAnuncio,precioDeVenta,fotos,descripcion,booleans2extras(),estado,LocalDateTime.now().toString())
+                tipoInmueble,tipoAnuncio,precioDeVenta,fotosOrd,descripcion,extrasInmueble,estado,LocalDateTime.now().toString())
             Database.subirInmueble(subelo,post)
             /*val anuncio = DataInmueble(id,user,numHabitaciones,numBanos,superficie,direccion,tipoVivienda,tipoInmueble,tipoAnuncio,precioDeVenta,fotos,fotosOrd,
                 "",descripcion,estado,parking,ascensor,amueblado,calefaccion,jardin,piscina,terraza,trastero, LocalDateTime.now().toString())*/
