@@ -48,7 +48,7 @@ object Database {
     fun toPublicado(inmueble : DataInmueble2){
         inmueble.id?.let { db.collection("inmueblesFinal").document(it).set(inmueble) }
         inmueblesNoPost.remove(inmueble)
-        inmuebles.add(inmueble)
+        inmuebles.add(0,inmueble)
         db.collection("inmueblesNoPost").document(inmueble.id!!).delete()
         var user = getUserById(inmueble.propietario!!)
         user.pisosNoPost?.remove(inmueble.id!!)
@@ -109,7 +109,7 @@ object Database {
     fun subirInmueble(inmueble : DataInmueble2, post: Boolean){
         if(post){
             inmueble.id?.let { db.collection("inmueblesFinal").document(it).set(inmueble) }
-            inmuebles.add(inmueble)
+            inmuebles.add(0,inmueble)
             inmueble.propietario?.let { inmueble.id?.let { it1 -> setPisoUser(it, it1) } }
         }else{
             inmueble.id?.let { db.collection("inmueblesNoPost").document(it).set(inmueble) }

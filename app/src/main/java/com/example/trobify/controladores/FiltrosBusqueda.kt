@@ -408,6 +408,9 @@ open class FiltrosBusqueda : AppCompatActivity() {
             builder.setMessage("¿ Estas seguro de querer borrar los filtros seleccionados ?")
             builder.setPositiveButton("Sí"){_, _ ->
                 limpiarFiltros()
+                val goSearch = Intent(this, MainTrobify::class.java)
+                goSearch.putExtra("user", userId)
+                startActivity(goSearch)
             }
             builder.setNegativeButton("No"){_, _ ->}
             val options = builder.create()
