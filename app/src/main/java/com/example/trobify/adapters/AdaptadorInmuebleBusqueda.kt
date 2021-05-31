@@ -59,17 +59,13 @@ class AdaptadorInmuebleBusqueda(private val fichainmueble : ArrayList<DataInmueb
 
         //------------------------
         //FOTO DEL INMUEBLE EN MAIN
-        val path = "imagenesinmueble/" + fichainmueble[position].id
+        val path = fichainmueble[position].fotos[0].substring(31)
         val storage = FirebaseStorage.getInstance().reference
-        val ref = storage.child(path)
-        val task : Task<ListResult> = ref.list(1)
         val one_mega = 1024*1024
-        task.addOnCompleteListener {res->
-            val items : List<StorageReference> = res.result!!.items
-            items[0].getBytes(one_mega.toLong()).addOnCompleteListener {
-                var bitmap = BitmapFactory.decodeByteArray(it.result,0,it.result.size)
-                holder.fimage.setImageBitmap(bitmap)
-            }
+        val ref = storage.child(path)
+        ref.getBytes(one_mega.toLong()).addOnCompleteListener {
+            var bitmap = BitmapFactory.decodeByteArray(it.result,0,it.result.size)
+            holder.fimage.setImageBitmap(bitmap)
         }
         //FOTO DEL INMUEBLE EN MAIN
         //------------------------

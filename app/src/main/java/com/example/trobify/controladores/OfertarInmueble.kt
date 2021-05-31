@@ -302,9 +302,9 @@ class OfertarInmueble : AppCompatActivity() {
                 -> {
                     text.tipoInmuebleElegidoText.text = optionsInmueble[2]
                     tipoInmueble = optionsInmueble[2].toString()
-                    text.layoutHabitaciones.setVisibility(View.GONE)
+                    text.layoutHabitaciones.setVisibility(View.VISIBLE)
                     text.layoutBaños.setVisibility(View.VISIBLE)
-                    text.layoutVivienda.setVisibility(View.GONE)
+                    text.layoutVivienda.setVisibility(View.VISIBLE)
                 }
                 which.equals(3)
                 -> {
@@ -333,6 +333,14 @@ class OfertarInmueble : AppCompatActivity() {
                 -> {
                     text.tipoInmuebleElegidoText.text = optionsInmueble[6]
                     tipoInmueble = optionsInmueble[6].toString()
+                    text.layoutHabitaciones.setVisibility(View.GONE)
+                    text.layoutBaños.setVisibility(View.GONE)
+                    text.layoutVivienda.setVisibility(View.GONE)
+                }
+                which.equals(7)
+                -> {
+                    text.tipoInmuebleElegidoText.text = optionsInmueble[7]
+                    tipoInmueble = optionsInmueble[7].toString()
                     text.layoutHabitaciones.setVisibility(View.GONE)
                     text.layoutBaños.setVisibility(View.GONE)
                     text.layoutVivienda.setVisibility(View.GONE)
@@ -548,7 +556,7 @@ class OfertarInmueble : AppCompatActivity() {
             //Fotos esta vacia, y en fotosord estan las ids de las fotos subidas a firebase y direccion contiene el string de la direccion mientras que direccion0 esta vacio
 
             val subelo = DataInmueble2(id,user,numHabitaciones, numBanos, superficie, direccion, tipoVivienda,
-                tipoInmueble,tipoAnuncio,precioDeVenta,fotosOrd,descripcion,extrasInmueble,estado,LocalDateTime.now().toString())
+                tipoInmueble,tipoAnuncio,precioDeVenta,fotosOrd,descripcion,extrasInmueble,estadoInmueble,LocalDateTime.now().toString())
             Database.subirInmueble(subelo,post)
             /*val anuncio = DataInmueble(id,user,numHabitaciones,numBanos,superficie,direccion,tipoVivienda,tipoInmueble,tipoAnuncio,precioDeVenta,fotos,fotosOrd,
                 "",descripcion,estado,parking,ascensor,amueblado,calefaccion,jardin,piscina,terraza,trastero, LocalDateTime.now().toString())*/

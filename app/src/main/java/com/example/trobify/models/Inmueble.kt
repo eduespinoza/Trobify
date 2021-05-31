@@ -25,7 +25,7 @@ class Inmueble (
 
     var fechaSubida : LocalDateTime?,
     var estado : String?,
-
+    var extras : ArrayList<String>?,
     var parking : Boolean?,
     var ascensor : Boolean?,
     var amueblado : Boolean?,
@@ -44,7 +44,7 @@ class Inmueble (
         builder.id, builder.propietario, builder.numHabitaciones, builder.numBanos, builder.superficie,
         builder.direccion, builder.direccionO, builder.tipoVivienda, builder.tipoInmueble,
         builder.intencion, builder.precio, builder.fotos, builder.fotosOrd, builder.certificadoEnergetico,
-        builder.descripcion, builder.fechaSubida, builder.estado, builder.parking,
+        builder.descripcion, builder.fechaSubida, builder.estado,builder.extras, builder.parking,
         builder.ascensor, builder.amueblado, builder.calefaccion, builder.jardin, builder.piscina,
         builder.terraza, builder.trastero, builder.caracteristicas, builder.direccionSitio
     )
@@ -117,6 +117,10 @@ class Inmueble (
         var estado : String? = null
             private set
         fun estado(estado : String?) = apply { this.estado = estado }
+
+        var extras : ArrayList<String>? = null
+            private set
+        fun extras(extras : ArrayList<String>?) = apply { this.extras = extras }
 
         var parking : Boolean? = null
             private set
@@ -239,7 +243,7 @@ class Inmueble (
         inmueble.intencion = data.intencion
         inmueble.fotosOrd = data.fotos
         inmueble.estado = data.estado
-        inmueble.caracteristicas = data.extras.toString()
+        inmueble.extras = data.extras
         inmueble.direccionSitio = data.direccion
         inmueble.fechaSubida = LocalDateTime.parse(data.fechaSubida)
 

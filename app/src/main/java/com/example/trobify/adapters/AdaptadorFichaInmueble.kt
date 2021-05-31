@@ -221,7 +221,7 @@ class AdaptadorFichaInmueble : AppCompatActivity() {
         descripcion.setTextSize(TypedValue.COMPLEX_UNIT_PX, 40F)
 
         val caracteristicas = findViewById<TextView>(R.id.textViewCaracteristicasFicha)
-        caracteristicas.text = inmueble.caracteristicas
+        caracteristicas.text = inmueble.extras.toString()
         caracteristicas.setTextColor(Color.BLACK)
         caracteristicas.setTextSize(TypedValue.COMPLEX_UNIT_PX, 40F)
 

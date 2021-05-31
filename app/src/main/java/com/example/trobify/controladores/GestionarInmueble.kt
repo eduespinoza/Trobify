@@ -34,6 +34,7 @@ class GestionarInmueble : AppCompatActivity() {
     val storage = FirebaseStorage.getInstance().reference
     lateinit var userId : String
     lateinit var inmuebleId : String
+    lateinit var inmueble : Inmueble
     lateinit var urls : ArrayList<String>
     lateinit var path : String
     lateinit var buttonPost : Button
@@ -65,7 +66,7 @@ class GestionarInmueble : AppCompatActivity() {
         setContentView(R.layout.activity_gestion)
 
         userId = intent.extras?.get("user") as String
-        var inmueble = intent.extras?.get("inmueble") as Inmueble
+        inmueble = intent.extras?.get("inmueble") as Inmueble
         inmuebleId = inmueble.id as String
 
 
@@ -104,19 +105,17 @@ class GestionarInmueble : AppCompatActivity() {
             when(which) {
                 DialogInterface.BUTTON_POSITIVE -> {
                     if(buttonPost.text.equals("Publicar")){
-                        Database.toPublicado(DataInmueble2(id = inmueble.id, propietario = inmueble.propietario, numHabitaciones = inmueble.numHabitaciones,
-                            numBanos = inmueble.numBanos, superficie = inmueble.superficie, direccion = inmueble.direccionSitio,
-                            tipoVivienda = inmueble.tipoVivienda, tipoInmueble = inmueble.tipoInmueble, intencion = inmueble.intencion,
-                            precio = inmueble.precio, fotos = inmueble.fotosOrd, descripcion = inmueble.descripcion,  extras = inmueble.booleans2extras(),
-                            estado = inmueble.estado, fechaSubida = inmueble.fechaSubida.toString()))
+                        Database.toPublicado(inmuebleToData())
+                        if (Database.inmuebles.contains(inmuebleToData())){
+                            println("LO TIENE INMUEBLES")}
+                        else {
+                            if (Database.inmueblesNoPost.contains(inmuebleToData()))
+                                println("LO TIENE EL OTROOOOOO MANIIIIIINI")
+                        }
                         postOrNotPost(buttonPost)
                     }
                     else {
-                        Database.toNoPublicado(DataInmueble2(id = inmueble.id, propietario = inmueble.propietario, numHabitaciones = inmueble.numHabitaciones,
-                            numBanos = inmueble.numBanos, superficie = inmueble.superficie, direccion = inmueble.direccionSitio,
-                            tipoVivienda = inmueble.tipoVivienda, tipoInmueble = inmueble.tipoInmueble, intencion = inmueble.intencion,
-                            precio = inmueble.precio, fotos = inmueble.fotosOrd, descripcion = inmueble.descripcion, extras = inmueble.booleans2extras(),
-                            estado = inmueble.estado, fechaSubida = inmueble.fechaSubida.toString()))
+                        Database.toNoPublicado(inmuebleToData())
                         postOrNotPost(buttonPost)
                     }
                 }
@@ -192,6 +191,13 @@ class GestionarInmueble : AppCompatActivity() {
             }
         }
         downloadFotos(path, "mostrar")
+    }
+    private fun inmuebleToData():DataInmueble2{
+        return DataInmueble2(id = inmueble.id, propietario = inmueble.propietario, numHabitaciones = inmueble.numHabitaciones,
+            numBanos = inmueble.numBanos, superficie = inmueble.superficie, direccion = inmueble.direccionSitio,
+            tipoVivienda = inmueble.tipoVivienda, tipoInmueble = inmueble.tipoInmueble, intencion = inmueble.intencion,
+            precio = inmueble.precio, fotos = inmueble.fotosOrd, descripcion = inmueble.descripcion,  extras = inmueble.extras!!,
+            estado = inmueble.estado, fechaSubida = inmueble.fechaSubida.toString())
     }
     private fun postOrNotPost(button : Button){
         if (Database.isInmueblePost(inmuebleId)){
@@ -273,35 +279,37 @@ class GestionarInmueble : AppCompatActivity() {
         // y depende si es true o flase pones isChekced= true  --NO SE
 
         //jajjjaja pues no funciona luego lo cambio xd --Ilias
+        // ahhahaa me cago en la puta sigue sin funcionar xDddddddd -- Edu
+        // ahora quien lo va a arreglar???? mhhhhhh -- Edu
 
 
         parking = findViewById(R.id.checkBoxParking)
-        parking.isChecked = inmueble.parking == true
+        parking.isChecked = inmueble.extras!!.contains("Parking")
 
         ascensor = findViewById(R.id.checkBoxAscensor)
-        ascensor.isChecked = inmueble.ascensor == true
+        ascensor.isChecked = inmueble.extras!!.contains("Ascensor")
 
         amueblado = findViewById(R.id.checkBoxAmueblado)
-        amueblado.isChecked = inmueble.amueblado == true
+        amueblado.isChecked = inmueble.extras!!.contains("Amueblado")
 
         calefaccion = findViewById(R.id.checkBoxCalefaccion)
-        calefaccion.isChecked = inmueble.calefaccion == true
+        calefaccion.isChecked = inmueble.extras!!.contains("Calefacción")
 
 
         jardin = findViewById(R.id.checkBoxJardin)
-        jardin.isChecked = inmueble.jardin == true
+        jardin.isChecked = inmueble.extras!!.contains("Jardin")
 
 
         piscina = findViewById(R.id.checkBoxPiscina)
-        piscina.isChecked = inmueble.piscina == true
+        piscina.isChecked = inmueble.extras!!.contains("Piscina")
 
 
         terraza = findViewById(R.id.checkBoxTerraza)
-        terraza.isChecked = inmueble.terraza == true
+        terraza.isChecked = inmueble.extras!!.contains("Terraza")
 
 
         trastero = findViewById(R.id.checkBoxTrastero)
-        trastero.isChecked = inmueble.trastero == true
+        trastero.isChecked = inmueble.extras!!.contains("Trastero")
 
     }
 
