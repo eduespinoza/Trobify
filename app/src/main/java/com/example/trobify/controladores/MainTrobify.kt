@@ -224,14 +224,7 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
             startActivity(volverALogin)
         }
 
-        /*db.collection("users").document(userId.toString()).get()
-            .addOnSuccessListener { e ->
-                nombreUser.text = e.data?.get("name").toString()
-            }*/
-
         nombreUser.text = user.name
-
-        //nombreUser.text = database.getUser(userId)?.name
 
         //listener abrir menu lateral
         botonLateral.setOnClickListener {
@@ -248,7 +241,6 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
             val irAMapa = Intent(this, Mapa::class.java)
             irAMapa.putExtra("user", userId)
             startActivity(irAMapa)
-            //getPlaces()
         }
         alquiler.setOnClickListener {
             if(alquilerActivado)desactivarIntenciones(alquiler,venta)
@@ -339,9 +331,6 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
     }
     private fun alquilerOVenta(opcion : String){
         inmueblesEnPantalla = Database.getInmueblesIntencion(opcion)
-
-        //inmueblesEnPantalla = nuevaBusqueda.getInmueblesIntencion(opcion)
-
         mostrarInmuebles(inmueblesEnPantalla)
     }
 

@@ -10,7 +10,6 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.trobify.R
 import com.example.trobify.models.GuardaVistaFiltros
 import com.example.trobify.models.SnapshotFiltros
-import com.example.trobify.models.TipoInmueble
 import kotlinx.android.synthetic.*
 import kotlinx.android.synthetic.main.activity_filtros_busqueda.*
 import java.io.Serializable
@@ -23,7 +22,7 @@ open class FiltrosBusqueda : AppCompatActivity() {
     var guardaFiltros = SnapshotFiltros.foto.fotoFiltros
 
     object filtros : Serializable {
-        var tipoInmueble:String? = TipoInmueble.Cualquiera.toString()
+        var tipoInmueble:String = "Cualquiera"
         var numHabitaciones:Int = 0
         var numBaños:Int = 0
         var extras = mutableMapOf<String, Boolean>()
@@ -437,10 +436,10 @@ open class FiltrosBusqueda : AppCompatActivity() {
     }
 
     private fun addOptionsPrice(){
-        if(desplegables.spinnerInmueble.selectedItem.equals(TipoInmueble.Garaje)){
+        if(desplegables.spinnerInmueble.selectedItem.equals("Garaje")){
             options_price = listOf<Int>(0, 5000, 7500, 10000, 12500, 15000, 20000, 30000, 40000, 50000, 70000)
         }
-        else if(desplegables.spinnerInmueble.selectedItem.equals(TipoInmueble.Local)){
+        else if(desplegables.spinnerInmueble.selectedItem.equals("Local")){
             options_price = listOf<Int>(0, 10000, 15000, 20000, 25000, 30000, 40000, 50000, 80000, 90000, 100000)
         }
         else{
@@ -636,7 +635,7 @@ open class FiltrosBusqueda : AppCompatActivity() {
     }
 
     private fun limpiarFiltros(){
-        filtros.tipoInmueble = TipoInmueble.Cualquiera.toString()
+        filtros.tipoInmueble = "Cualquiera"
         filtros.numHabitaciones = 0
         filtros.numBaños = 0
         filtros.extras = mutableMapOf<String, Boolean>()

@@ -39,8 +39,6 @@ class  MisPisos : AppCompatActivity() , AdaptadorInmuebleBusqueda.OnItemClickLis
         goFicha.putExtra("inmueble", Inmueble.Builder().build().adaptadorInm(dataInmueble))
         goFicha.putExtra("desdeMisPisos", true)
         startActivity(goFicha)
-
-
     }
 
     override fun onResume() {
@@ -101,10 +99,5 @@ class  MisPisos : AppCompatActivity() , AdaptadorInmuebleBusqueda.OnItemClickLis
         caja.layoutManager = layoutmanager
         caja.adapter = AdaptadorInmuebleBusqueda(pisosFav, arrayListOf(""),this)
     }
-
-
-
-
-
 
 }

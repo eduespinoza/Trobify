@@ -1,7 +1,6 @@
 package com.example.trobify.models
 
 import com.example.trobify.controladores.FiltrosBusqueda
-import com.example.trobify.models.TipoInmueble
 
 open class GuardaVistaFiltros : FiltrosBusqueda() {
     object vistaGuardada{
