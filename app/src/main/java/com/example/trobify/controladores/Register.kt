@@ -3,21 +3,16 @@ package com.example.trobify.controladores
 import android.content.ContentValues.TAG
 import android.os.Bundle
 import android.util.Log
-import android.util.Patterns
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.example.trobify.models.DataUser
 import com.example.trobify.R
-import com.example.trobify.models.Database
-import com.example.trobify.models.Messages
+import com.example.trobify.models.*
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import java.util.regex.Matcher
-import java.util.regex.Pattern
 
 
 class Register : AppCompatActivity() {
@@ -27,9 +22,7 @@ class Register : AppCompatActivity() {
     private var password:String? = null
     private var comPassword:String? = null
     private var messageCreator = Messages()
-    private var result : Boolean = false
-
-    private var db = Firebase.firestore
+    private lateinit var checker : Chek
     private lateinit var auth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,9 +39,14 @@ class Register : AppCompatActivity() {
     }
 
     private fun check() {
-        if(checkName()){ if(checkSurname()){ if(checkEmail()){ if (checkPassWord()){
-            createNewUser(email.toString(), password.toString())
-        } } } }
+        name  = findViewById<EditText>(R.id.editTextName).text.toString()
+        surname  = findViewById<EditText>(R.id.editTextSurname).text.toString()
+        email  = findViewById<EditText>(R.id.editTextEmail).text.toString()
+        password  = findViewById<EditText>(R.id.editTextPassword).text.toString()
+        comPassword = findViewById<EditText>(R.id.editTextPassword2).text.toString()
+
+        checker = Chek(name!!, surname!!, email!!, password!!, comPassword!!, messageCreator)
+        if(checker.isCorrect(this)){createNewUser(email.toString(), password.toString())}
     }
 
     private  fun createNewUser(uEmail :String, uPassword :String){
@@ -79,53 +77,5 @@ class Register : AppCompatActivity() {
         us.sendEmailVerification().addOnSuccessListener {
             println("------------------------------ Email Sended ---------------------------------------")
         }
-    }
-
-    //Checks
-    private fun checkName() : Boolean{
-        name  = findViewById<EditText>(R.id.editTextName).text.toString()
-        val pattern : Pattern = Pattern.compile("[ 0-9A-Za-zñÑáéíóúÁÉÍÓÚ]{1,50}")
-        if(name!!.isEmpty()){println(3);  messageCreator.emptyMessage(this); return false}
-        for (element in name!!) {
-            val matcher : Matcher = pattern.matcher(element.toString())
-            if (!(matcher.matches()|| element == ' ')) {
-                messageCreator.incorrectNameMessage(this)
-                return false
-            }
-        }
-        return true
-    }
-
-    private fun checkSurname() : Boolean{
-        surname  = findViewById<EditText>(R.id.editTextSurname).text.toString()
-        val pattern : Pattern = Pattern.compile("[ 0-9A-Za-zñÑáéíóúÁÉÍÓÚ]{1,50}")
-        if(surname!!.isEmpty()){ messageCreator.emptyMessage(this); return false}
-        for (element in surname!!) {
-            val matcher : Matcher = pattern.matcher(element.toString())
-            if (!(matcher.matches()|| element == ' ')) {
-                messageCreator.incorrectSurnameMessage(this)
-                return false
-            }
-        }
-        return true
-    }
-
-    private fun checkEmail() : Boolean{
-        email  = findViewById<EditText>(R.id.editTextEmail).text.toString()
-        if(email!!.isEmpty()){ messageCreator.emptyMessage(this); return false}
-        val emailPattern = Patterns.EMAIL_ADDRESS
-        if(!emailPattern.matcher(email).matches()){ messageCreator.incorrectEmailMessage(this); return false}
-        val emailList = Database.getAllUsersEmails()
-        if(emailList.contains(email!!)){ messageCreator.emailAlreadyInUseMessage(this); return false}
-        return true
-    }
-
-    private fun checkPassWord() : Boolean{
-        password  = findViewById<EditText>(R.id.editTextPassword).text.toString()
-        comPassword = findViewById<EditText>(R.id.editTextPassword2).text.toString()
-        if(password!!.isEmpty() || comPassword!!.isEmpty()){ messageCreator.emptyMessage(this); return false}
-        if(password!!.length < 7){ messageCreator.shortPasswordMessage(this); return false}
-        if(!password.equals(comPassword)){ messageCreator.PasswordNotEqualMessage(this); return false;}
-        return true
     }
 }
