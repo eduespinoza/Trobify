@@ -1,21 +1,14 @@
 package com.example.trobify.adapters
 
-import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
-import com.example.trobify.models.DataInmueble
 import com.example.trobify.R
 import com.example.trobify.models.DataInmueble2
-import com.example.trobify.models.Item
-import com.google.android.gms.tasks.Task
 import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.ListResult
-import com.google.firebase.storage.StorageReference
 import java.time.Duration
 import java.time.LocalDateTime
 

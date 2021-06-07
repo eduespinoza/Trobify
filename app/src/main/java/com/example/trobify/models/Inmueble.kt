@@ -198,37 +198,7 @@ class Inmueble (
     }
 
     //FUNCION NECESARIA - para poder coger bien los datos de la bd
-    fun adaptarInmuble(dataInmueble : DataInmueble) : Inmueble {
-        return Inmueble.Builder()
-            .id(dataInmueble.id)
-            .propietario(dataInmueble.propietario.toString())
-            .numHabitaciones(dataInmueble.numHabitaciones)
-            .numBanos(dataInmueble.numBanos)
-            .superficie(dataInmueble.superficie)
-            .direccion(dataInmueble.direccion?.titulo)
-            .direccionO(direccionO)
-            .tipoVivienda(dataInmueble.tipoVivienda)
-            .tipoInmueble(dataInmueble.tipoInmueble)
-            .intencion(dataInmueble.intencion)
-            .precio(dataInmueble.precio)
-            .fotos(dataInmueble.fotos)
-            .fotosOrd(dataInmueble.fotosOrd)
-            .certificadoEnergetico(dataInmueble.certificadoEnergetico)
-            .descripcion(dataInmueble.descripcion)
-            .estado(dataInmueble.estado)
-            .parking(dataInmueble.parking)
-            .ascensor(dataInmueble.ascensor)
-            .amueblado(dataInmueble.amueblado)
-            .calefaccion(dataInmueble.calefaccion)
-            .jardin(dataInmueble.jardin)
-            .piscina(dataInmueble.piscina)
-            .terraza(dataInmueble.terraza)
-            .trastero(dataInmueble.terraza)
-            .fechaSubida(LocalDateTime.parse(dataInmueble.fechaSubida))
-            .direccionSitio(dataInmueble.direccion)
-            .build()
 
-    }
     fun adaptadorInm(data : DataInmueble2) : Inmueble{
         var inmueble = Inmueble.Builder().build()
         inmueble.id = data.id
