@@ -67,7 +67,7 @@ class Login : AppCompatActivity() {
     private fun checkUser(){
         val currentUser = auth.currentUser
         if(currentUser != null){
-            val intent = Intent(this, pantalla_inicial::class.java)
+            val intent = Intent(this, PantallaInicial::class.java)
             intent.putExtra("user", currentUser.uid)
             startActivity(intent)
 

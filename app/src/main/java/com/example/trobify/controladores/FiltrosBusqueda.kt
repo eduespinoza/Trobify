@@ -18,7 +18,6 @@ import java.io.Serializable
 @SuppressLint("StaticFieldLeak")
 open class FiltrosBusqueda : AppCompatActivity() {
 
-    // PATRON MEMENTO
     var guardaFiltros = SnapshotFiltros.foto.fotoFiltros
 
     object filtros : Serializable {
@@ -80,7 +79,6 @@ open class FiltrosBusqueda : AppCompatActivity() {
 
         setContentView(R.layout.activity_filtros_busqueda)
 
-        // PATRON MEMENTO
         guardaFiltros.restoreData()
 
         desplegables.spinnerInmueble = findViewById<Spinner>(R.id.desplegableTipoInmueble)
@@ -114,7 +112,6 @@ open class FiltrosBusqueda : AppCompatActivity() {
         addOptionsBaños()
         addOptionsSuperficie()
 
-        // RESTABLECER SELECCION DE EXTRAS Y ESTADO DE LA VIVIENDA
         reestrablecerVistaFiltrosExtras()
         reestablecerVistaFiltrosEstado()
 
@@ -216,8 +213,6 @@ open class FiltrosBusqueda : AppCompatActivity() {
             }
         }
 
-        // ESTADO DE LA VIVIENDA ////////////////////////////
-
         estadosVivienda.obraNueva.setOnClickListener {
             if(estadosVivienda.obraNueva.isChecked){
                 filtros.estado.add("Obra nueva")
@@ -267,7 +262,6 @@ open class FiltrosBusqueda : AppCompatActivity() {
             }
         }
 
-        // EXTRAS /////////////////////////
         filtros.extras = mutableMapOf("Parking" to false,
             "Ascensor" to false,
             "Amueblado" to false,
@@ -341,7 +335,6 @@ open class FiltrosBusqueda : AppCompatActivity() {
                 filtros.extras.put("Jardin", false)
             }
         }
-        //////////////////////////////////////////////////////////////////////////
 
         val builder = AlertDialog.Builder(this@FiltrosBusqueda)
         builder.setTitle("Selecciona el tipo de vivienda")
@@ -426,12 +419,10 @@ open class FiltrosBusqueda : AppCompatActivity() {
     private fun addOptionsInmueble(){
         val options_inmueble = resources.getStringArray(R.array.options_inmueble)
 
-        /* AÑADIR LAS OPCIONES A LOS DESPLEGABLES */
         val adapter = ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, options_inmueble)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         desplegables.spinnerInmueble.adapter = adapter
 
-        // Reestablecer la eleccion
         desplegables.spinnerInmueble.setSelection(GuardaVistaFiltros.vistaGuardada.desTipoInmueble)
     }
 
@@ -446,13 +437,11 @@ open class FiltrosBusqueda : AppCompatActivity() {
             options_price = listOf<Int>(0, 50000, 75000, 100000, 125000, 150000, 200000, 300000, 400000, 500000, 700000)
         }
 
-        /* AÑADIR LAS OPCIONES A LOS DESPLEGABLES */
         val adapter = ArrayAdapter<Int>(this, android.R.layout.simple_spinner_item, options_price)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         desplegables.spinnerPrecioMin.adapter = adapter
         desplegables.spinnerPrecioMax.adapter = adapter
 
-        // Reestablecer la eleccion
         desplegables.spinnerPrecioMin.setSelection(GuardaVistaFiltros.vistaGuardada.desPrecioMin)
         desplegables.spinnerPrecioMax.setSelection(GuardaVistaFiltros.vistaGuardada.desPrecioMax)
     }
@@ -460,37 +449,31 @@ open class FiltrosBusqueda : AppCompatActivity() {
     private fun addOptionsHabitaciones(){
         val options_habitaciones = listOf<Int>(0, 1, 2, 3 ,4 ,5)
 
-        /* AÑADIR LAS OPCIONES A LOS DESPLEGABLES */
         val adapter = ArrayAdapter<Int>(this, android.R.layout.simple_spinner_item, options_habitaciones)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         desplegables.spinnerHabitaciones.adapter = adapter
 
-        // Reestablecer la eleccion
         desplegables.spinnerHabitaciones.setSelection(GuardaVistaFiltros.vistaGuardada.desNumHabitaciones)
     }
 
     private fun addOptionsBaños(){
         val options_baños = listOf<Int>(0, 1, 2, 3)
 
-        /* AÑADIR LAS OPCIONES A LOS DESPLEGABLES */
         val adapter = ArrayAdapter<Int>(this, android.R.layout.simple_spinner_item, options_baños)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         desplegables.spinnerBaños.adapter = adapter
 
-        // Reestablecer la eleccion
         desplegables.spinnerBaños.setSelection(GuardaVistaFiltros.vistaGuardada.desNumBaños)
     }
 
     private fun addOptionsSuperficie(){
         val options_superficie = listOf<Int>(0, 60, 80, 100, 120, 140, 160, 180, 200, 220, 240, 260, 280, 300)
 
-        /* AÑADIR LAS OPCIONES A LOS DESPLEGABLES */
         val adapter = ArrayAdapter<Int>(this, android.R.layout.simple_spinner_item, options_superficie)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         desplegables.spinnerSuperficieMin.adapter = adapter
         desplegables.spinnerSuperficieMax.adapter = adapter
 
-        // Reestablecer la eleccion
         desplegables.spinnerSuperficieMin.setSelection(GuardaVistaFiltros.vistaGuardada.desSurfaceMin)
         desplegables.spinnerSuperficieMax.setSelection(GuardaVistaFiltros.vistaGuardada.desSurfaceMax)
     }
@@ -523,9 +506,8 @@ open class FiltrosBusqueda : AppCompatActivity() {
         }
     }
 
-    // PATRON MEMENTO
     private fun createSnapshot(): SnapshotFiltros {
-        guardaFiltros = SnapshotFiltros(filtros.tipoInmueble.toString(), filtros.numHabitaciones, filtros.numBaños, filtros.extras, filtros.estado, filtros.precioMin, filtros.precioMax,
+        guardaFiltros = SnapshotFiltros(filtros.tipoInmueble, filtros.numHabitaciones, filtros.numBaños, filtros.extras, filtros.estado, filtros.precioMin, filtros.precioMax,
                                         filtros.superficieMin, filtros.superficieMax, filtros.tipoVivienda, filtros.elementosSeleccionadosTipoEdif, filtros.elementosSeleccionadosTipoPorDefecto)
         SnapshotFiltros.foto.fotoFiltros = guardaFiltros
         return guardaFiltros
@@ -586,7 +568,6 @@ open class FiltrosBusqueda : AppCompatActivity() {
     }
 
     private fun reestrablecerVistaFiltrosExtras(){
-        ///// EXTRAS DEL INMUEBLE //////
         if(GuardaVistaFiltros.vistaGuardada.boxParking == true){
             extrasVivienda.parking.isChecked = true
         }

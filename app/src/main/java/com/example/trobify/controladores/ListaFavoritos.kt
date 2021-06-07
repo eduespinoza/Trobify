@@ -43,10 +43,6 @@ class  ListaFavoritos () : AppCompatActivity() , AdaptadorInmuebleBusqueda.OnIte
             finish()
         }
         Database.getFavsUser(userId)?.let { mostrar(it) }
-        //cargarFavDe(userId)
-        /*val noFav = findViewById<TextView>(R.id.noFavText)
-        noFav.setTextSize(TypedValue.COMPLEX_UNIT_PX, 40F)
-        noFav.text = "No hay favoritos"*/
     }
 
     private fun mostrar(pisosFav : ArrayList<DataInmueble2>){

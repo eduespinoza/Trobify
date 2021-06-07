@@ -49,6 +49,14 @@ class Inmueble (
         builder.terraza, builder.trastero, builder.caracteristicas, builder.direccionSitio
     )
 
+    fun convertToDataInmueble() : DataInmueble2{
+        return DataInmueble2(id = id, propietario = propietario, numHabitaciones = numHabitaciones,
+            numBanos = numBanos, superficie = superficie, direccion = direccionSitio,
+            tipoVivienda = tipoVivienda, tipoInmueble = tipoInmueble, intencion = intencion,
+            precio = precio, fotos = fotosOrd, descripcion = descripcion,  extras = extras!!,
+            estado = estado, fechaSubida = fechaSubida.toString())
+    }
+
     class Builder{
         var id : String? = null
             private set
@@ -219,13 +227,6 @@ class Inmueble (
 
         return inmueble
     }
-     fun getDataInmueble(inmueble : Inmueble) : DataInmueble2{
-         return DataInmueble2(id = inmueble.id, propietario = inmueble.propietario, numHabitaciones = inmueble.numHabitaciones,
-             numBanos = inmueble.numBanos, superficie = inmueble.superficie, direccion = inmueble.direccionSitio,
-             tipoVivienda = inmueble.tipoVivienda, tipoInmueble = inmueble.tipoInmueble, intencion = inmueble.intencion,
-             precio = inmueble.precio, fotos = inmueble.fotosOrd, descripcion = inmueble.descripcion,  extras = inmueble.extras!!,
-             estado = inmueble.estado, fechaSubida = inmueble.fechaSubida.toString())
-     }
 
 }
 

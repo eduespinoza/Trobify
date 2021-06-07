@@ -2,7 +2,7 @@ package com.example.trobify.models
 
 import com.example.trobify.controladores.FiltrosBusqueda
 
-open class SnapshotFiltros {
+class SnapshotFiltros {
     object foto{
         var fotoFiltros = SnapshotFiltros()
     }

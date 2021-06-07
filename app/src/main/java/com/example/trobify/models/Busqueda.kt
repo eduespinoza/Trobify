@@ -15,14 +15,9 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
 class Busqueda {
-    //val inmuebles = Database().inmuebles
     var db = Firebase.firestore
-    var query : String = ""
-    //lateinit var inmuebles : ArrayList<DataInmueble2>
     lateinit var motorDeBusqueda : SearchEngine
     lateinit var opcionesDeBusqueda : SearchOptions
-    var esPrimera = true
-    //var sugerencias = mutableMapOf<String,GeoCoordinates>()
     var sugerencias = arrayListOf<Place>()
     var suggeries = arrayListOf<Sitio>()
     var sitio : Place? = null
@@ -35,7 +30,6 @@ class Busqueda {
         println(result)
         return result
     }
-    //ESTO LO HACE FIREBASE
     fun buscarConIntencion(busqueda : String, intencion : String) : ArrayList<DataInmueble2>{
         return Database.getInmueblesBusqueda(busqueda, intencion)
     }

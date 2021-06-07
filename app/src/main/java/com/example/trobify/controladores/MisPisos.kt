@@ -18,7 +18,6 @@ import com.google.firebase.ktx.Firebase
 import kotlin.collections.ArrayList
 
 class  MisPisos : AppCompatActivity() , AdaptadorInmuebleBusqueda.OnItemClickListener {
-    //lateinit var database : Database
     val db = Firebase.firestore
     lateinit var caja : RecyclerView
     lateinit var userId : String

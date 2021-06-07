@@ -39,7 +39,6 @@ class EliminarFotos : AppCompatActivity() {
         }
 
         carouselView.setImageClickListener{ position ->
-            //Toast.makeText(applicationContext, urls.get(position), Toast.LENGTH_SHORT).show()
             val builder = AlertDialog.Builder(this)
             builder.setMessage("¿Seguro que quieres eliminar esta imagen?")
                 .setCancelable(false)
@@ -49,7 +48,6 @@ class EliminarFotos : AppCompatActivity() {
                     showImages(urls,path)
                 }
                 .setNegativeButton("No") { dialog, id ->
-                    // Dismiss the dialog
                     dialog.dismiss()
                 }
             val alert = builder.create()

@@ -78,7 +78,6 @@ class OfertarInmueble : AppCompatActivity() {
     lateinit var buscadorMapa : SearchView
     var sitio : Sitio? = null
     var direccionCorrecta = false
-    //val database = Database()
 
 
     object text {
@@ -181,7 +180,6 @@ class OfertarInmueble : AppCompatActivity() {
                filePath?.putFile(uri)?.addOnSuccessListener(this) { taskSnapshot ->
 
                    filePath.downloadUrl.addOnSuccessListener { url ->
-                       //Glide.with(this).load(url).into(image)
                        Glide.with(this).load(url).into(image)
                    }
                }

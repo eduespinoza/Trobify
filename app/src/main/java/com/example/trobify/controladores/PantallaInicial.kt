@@ -21,7 +21,7 @@ import com.here.sdk.core.GeoCoordinates
 import kotlinx.android.synthetic.main.trobify_main.*
 import kotlin.properties.Delegates
 
-class pantalla_inicial : AppCompatActivity() {
+class PantallaInicial : AppCompatActivity() {
     lateinit var userId : String
     lateinit var botonBuscar : Button
     var todoOk : ArrayList<Boolean> by Delegates.observable(arrayListOf(false,false), onChange = {
