@@ -219,6 +219,13 @@ class Inmueble (
 
         return inmueble
     }
+     fun getDataInmueble(inmueble : Inmueble) : DataInmueble2{
+         return DataInmueble2(id = inmueble.id, propietario = inmueble.propietario, numHabitaciones = inmueble.numHabitaciones,
+             numBanos = inmueble.numBanos, superficie = inmueble.superficie, direccion = inmueble.direccionSitio,
+             tipoVivienda = inmueble.tipoVivienda, tipoInmueble = inmueble.tipoInmueble, intencion = inmueble.intencion,
+             precio = inmueble.precio, fotos = inmueble.fotosOrd, descripcion = inmueble.descripcion,  extras = inmueble.extras!!,
+             estado = inmueble.estado, fechaSubida = inmueble.fechaSubida.toString())
+     }
 
 }
 
