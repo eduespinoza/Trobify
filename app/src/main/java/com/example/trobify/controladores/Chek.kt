@@ -1,9 +1,9 @@
-package com.example.trobify.models
+package com.example.trobify.controladores
 
 import android.content.Context
 import android.util.Patterns
-import android.widget.EditText
-import com.example.trobify.R
+import com.example.trobify.adapters.Messages
+import com.example.trobify.models.Database
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 

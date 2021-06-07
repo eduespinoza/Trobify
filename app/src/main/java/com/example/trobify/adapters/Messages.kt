@@ -1,4 +1,4 @@
-package com.example.trobify.models
+package com.example.trobify.adapters
 
 import android.content.Context
 import androidx.appcompat.app.AlertDialog
