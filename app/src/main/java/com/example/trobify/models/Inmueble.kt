@@ -109,7 +109,6 @@ class Inmueble (
             private set
         fun fotosOrd(fotosOrd : ArrayList<String>) = apply { this.fotosOrd = fotosOrd }
 
-
         var descripcion : String? = null
             private set
         fun descripcion(descripcion : String?) = apply { this.descripcion = descripcion }
@@ -184,6 +183,7 @@ class Inmueble (
 
         return res
     }
+
     fun booleans2extras() : ArrayList<String> {
         var res = arrayListOf<String>()
         if(parking == true){ res.add("Parking")}
@@ -200,8 +200,6 @@ class Inmueble (
     fun getIdd() : String?{
         return id
     }
-
-    //FUNCION NECESARIA - para poder coger bien los datos de la bd
 
     fun adaptadorInm(data : DataInmueble2) : Inmueble{
         var inmueble = Inmueble.Builder().build()

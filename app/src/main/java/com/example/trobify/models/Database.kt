@@ -1,11 +1,6 @@
 package com.example.trobify.models
 
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.liveData
-import com.google.firebase.firestore.EventListener
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -70,7 +65,6 @@ object Database {
         return inmuebles
     }
 
-    // INMUEBLES QUERIES
     private fun getInmuebleById(id : String,post : Boolean):DataInmueble2{
         var inmuebleEncontrado = DataInmueble2()
         if(post){
@@ -268,13 +262,6 @@ object Database {
                 inmueble.id?.let { inmueblesEncontrados.add(it)
             }
         }
-        /*extras.forEach { extra ->
-            inmuebles.forEach { inmueble ->
-                if(inmueble.extras.contains(extra)){
-                    inmueble.id?.let { inmueblesEncontrados.add(it) }
-                }
-            }
-        }*/
         }
         return inmueblesEncontrados
     }

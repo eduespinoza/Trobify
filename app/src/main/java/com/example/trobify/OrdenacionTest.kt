@@ -64,7 +64,7 @@ class OrdenacionTest {
     }
 
     private fun ordenarPorFechaMasAntiguos(){
-        MainTrobify.orden.ordenSeleccionado = 2
+        MainTrobify.orden.ordenSeleccionado = 3
         inmueblesOrdenados = MainTrobify().ordenarInmuebles(inmuebles)
         println("-----------------------------------------------------------------------------------------------------------------------")
         inmueblesOrdenados.forEach{println(it.id.toString() + " " + it.fechaSubida.toString())}
@@ -72,7 +72,7 @@ class OrdenacionTest {
     }
 
     private fun ordenarPorFechaMasRecientes(){
-        MainTrobify.orden.ordenSeleccionado = 3
+        MainTrobify.orden.ordenSeleccionado = 2
         inmueblesOrdenados = MainTrobify().ordenarInmuebles(inmuebles)
         println("-----------------------------------------------------------------------------------------------------------------------")
         inmueblesOrdenados.forEach{println(it.id.toString() + " " + it.fechaSubida.toString())}
