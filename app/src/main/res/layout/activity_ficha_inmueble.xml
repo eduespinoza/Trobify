@@ -43,7 +43,7 @@
                 app:icon="@android:drawable/btn_star_big_on"
                 app:iconSize="35dp"
                 app:iconTint="#FFC107"
-                app:strokeColor="#00FFFFFF" />
+                android:strokeColor="#00FFFFFF" />
 
         </LinearLayout>
 
@@ -261,7 +261,8 @@
                             android:layout_width="160dp"
                             android:layout_height="40dp"
                             android:backgroundTint="#3F51B5"
-                            android:text="Elimiar de Fav" />
+                            android:text="Eliminar de Fav"
+                            android:textSize="12sp" />
                     </LinearLayout>
 
                     <LinearLayout

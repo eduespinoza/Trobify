@@ -5,6 +5,7 @@ import android.os.Build
 import android.os.Bundle
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import com.example.trobify.GestionFiltrosTest
 import com.example.trobify.OrdenacionTest
 import com.example.trobify.R
 import com.example.trobify.models.Database
@@ -23,7 +24,8 @@ class MainActivity : AppCompatActivity() {
         val goLogin = Intent(this, Login::class.java)
         startActivity(goLogin)
 
-        OrdenacionTest().pruebas()
+        //OrdenacionTest().pruebas()
+        GestionFiltrosTest().tests()
     }
 }
 

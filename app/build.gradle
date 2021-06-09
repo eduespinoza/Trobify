@@ -10,6 +10,9 @@ android {
     defaultConfig {
         multiDexEnabled true
     }
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
 }
 android {
     compileSdkVersion 30

@@ -65,12 +65,10 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
 
     override fun onResume() {
         super.onResume()
-        println("jaja pues si")
         if(filtrosAplicados == null && opcionesDeInicio == null){
         user = Database.getUser(userId)
         userFav = user.favorites!!
-            println("poraquinnopasasverdad hijodeputa")
-        mostrarInmuebles(inmuebles)
+        mostrarInmuebles(inmueblesEnPantalla)
         }
     }
 
@@ -87,6 +85,7 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
         user = Database.getUser(userId)
         userFav = user.favorites!!
         inmuebles = Database.getAllInmuebles()
+
         if(opcionesDeInicio != null){
             println(opcionesDeInicio)
             mostrarResultadosInicio(opcionesDeInicio!!)
@@ -122,7 +121,6 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
     private fun prepararPrimerosResultados(listaDeInmuebles : ArrayList<DataInmueble2>){
         inmuebles = listaDeInmuebles
         cabecera.text = "Inmuebles añadidos recientemente"
-        println("prepararprimerosresultadosqcojones")
         mostrarInmuebles(inmuebles)
     }
 
@@ -317,7 +315,7 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
     }
     @SuppressLint("SetTextI18n")
     fun resultadosConNuevaBusqueda(busqueda : String){
-        if(alquilerActivado || ventaActivado) inmueblesEnPantalla = //firebase.getInmueblesIntecion()
+        if(alquilerActivado || ventaActivado) inmueblesEnPantalla =
             nuevaBusqueda.buscarConIntencion(busqueda.toUpperCase(Locale.ROOT), intencionActual())
         else inmueblesEnPantalla = nuevaBusqueda.buscar(busqueda.toUpperCase(Locale.ROOT))
         mostrarInmuebles(inmueblesEnPantalla)

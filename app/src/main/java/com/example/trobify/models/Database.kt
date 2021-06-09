@@ -1,11 +1,17 @@
 package com.example.trobify.models
 
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.liveData
+import com.google.firebase.firestore.EventListener
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.here.sdk.core.GeoCoordinates
 import kotlinx.coroutines.*
+import kotlinx.coroutines.tasks.await
 import kotlin.collections.ArrayList
 //patrón singleton -> solo instancia una sola vez, luego se puede usar
 //en cualquier parte del proyecto, será la misma instancia
@@ -25,6 +31,7 @@ object Database {
             val queryUsers = async {
                 db.collection("users").get()
             }
+            //tiempo para que llegue la respuesta a la consulta asíncrona
             delay(11000)
             inmueblesNoPost = queryNoPost.getCompleted().result.toObjects(DataInmueble2::class.java) as ArrayList<DataInmueble2>
             inmuebles = queryInmuebles.getCompleted().result.toObjects(DataInmueble2::class.java) as ArrayList<DataInmueble2>
@@ -256,12 +263,18 @@ object Database {
     }
     fun getInmueblesByExtras(extras:ArrayList<String>):ArrayList<String>{
         var inmueblesEncontrados = arrayListOf<String>()
-        extras.forEach { extra ->
+        inmuebles.forEach { inmueble ->
+            if(inmueble.extras.containsAll(extras)){
+                inmueble.id?.let { inmueblesEncontrados.add(it)
+            }
+        }
+        /*extras.forEach { extra ->
             inmuebles.forEach { inmueble ->
                 if(inmueble.extras.contains(extra)){
                     inmueble.id?.let { inmueblesEncontrados.add(it) }
                 }
             }
+        }*/
         }
         return inmueblesEncontrados
     }

@@ -50,7 +50,7 @@ class SnapshotFiltros {
         FiltrosBusqueda.filtros.precioMin = this.precioMin
         FiltrosBusqueda.filtros.precioMax = this.precioMax
         FiltrosBusqueda.filtros.superficieMin = this.superficieMin
-        FiltrosBusqueda.filtros.superficieMax = this.superficieMin
+        FiltrosBusqueda.filtros.superficieMax = this.superficieMax
         FiltrosBusqueda.filtros.tipoVivienda = this.tipoVivienda
 
         FiltrosBusqueda.filtros.elementosSeleccionadosTipoEdif = this.elementosSeleccionadosTipoEdif

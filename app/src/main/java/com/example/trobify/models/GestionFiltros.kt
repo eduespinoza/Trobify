@@ -7,7 +7,39 @@ class GestionFiltros {
     var list = arrayListOf<String>()
     var filtrosSize = 0
 
+    lateinit var filtrosModelo : FiltrosModelo
+    var lista = arrayListOf<String>()
+
+    private fun gestionDeFiltrosModelo(){
+        list = arrayListOf()
+        if (!filtrosModelo.tipoInmueble.equals("Cualquiera")){
+            list.addAll(obtenerIdsTipoInmueble(filtrosModelo.tipoInmueble!!))
+        }
+        if (filtrosModelo.tipoVivienda.isNotEmpty()){
+            list.addAll(obtenerIdsTipoVivienda(filtrosModelo.tipoVivienda))
+        }
+        if (filtrosModelo.precioMax != 0){
+            list.addAll(obtenerIdsPrecio(filtrosModelo.precioMin,filtrosModelo.precioMax))
+        }
+        if (filtrosModelo.superficieMax != 0){
+            list.addAll(obtenerIdsSuperficie(filtrosModelo.superficieMin,filtrosModelo.superficieMax))
+        }
+        if (filtrosModelo.numBaños != 0){
+            list.addAll(obtenerIdsNumBaños(filtrosModelo.numBaños))
+        }
+        if (filtrosModelo.numHabitaciones != 0){
+            list.addAll(obtenerIdsNumHabs(filtrosModelo.numHabitaciones))
+        }
+        if (filtrosModelo.estado.isNotEmpty()){
+            list.addAll(obtenerIdsEstado(filtrosModelo.estado))
+        }
+        if (getExtras(filtrosModelo.extras).isNotEmpty()){
+            list.addAll(obtenerIdsExtras(getExtras(filtrosModelo.extras)))
+        }
+    }
+
     private fun gestionDeFiltros(){
+        list = arrayListOf()
         if (!filtros.tipoInmueble.equals("Cualquiera")){
             list.addAll(obtenerIdsTipoInmueble(filtros.tipoInmueble!!))
         }
@@ -36,7 +68,7 @@ class GestionFiltros {
     private fun getExtras(map : MutableMap<String,Boolean>):ArrayList<String>{
         var result = arrayListOf<String>()
         map.forEach {key,value ->
-            if (value == true)result.add(key)
+            if (value)result.add(key)
         }
         return result
     }
@@ -48,11 +80,18 @@ class GestionFiltros {
         }
         return Database.getInmueblesByIds(resultIds)
     }
+    fun aplicar (filtros : FiltrosModelo):ArrayList<DataInmueble2>{
+        filtrosModelo = filtros
+        gestionDeFiltrosModelo()
+        return obtenerResultados()
+    }
+
     fun aplicar(filtrosSeleccionados : FiltrosBusqueda.filtros):ArrayList<DataInmueble2>{
         filtros = filtrosSeleccionados
         gestionDeFiltros()
         return obtenerResultados()
     }
+
     private fun obtenerIdsPrecio(min : Int, max : Int): ArrayList<String>{
         filtrosSize++
         var idsMin = Database.getInmueblesByPrecioMayorIgual(min)

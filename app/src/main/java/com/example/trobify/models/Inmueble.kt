@@ -20,7 +20,6 @@ class Inmueble (
 
     var fotos : ArrayList<Int> = arrayListOf(),
     var fotosOrd : ArrayList<String> = arrayListOf(),
-    var certificadoEnergetico : String?,
     var descripcion : String? ,
 
     var fechaSubida : LocalDateTime?,
@@ -43,7 +42,7 @@ class Inmueble (
     private constructor(builder: Builder) : this(
         builder.id, builder.propietario, builder.numHabitaciones, builder.numBanos, builder.superficie,
         builder.direccion, builder.direccionO, builder.tipoVivienda, builder.tipoInmueble,
-        builder.intencion, builder.precio, builder.fotos, builder.fotosOrd, builder.certificadoEnergetico,
+        builder.intencion, builder.precio, builder.fotos, builder.fotosOrd,
         builder.descripcion, builder.fechaSubida, builder.estado,builder.extras, builder.parking,
         builder.ascensor, builder.amueblado, builder.calefaccion, builder.jardin, builder.piscina,
         builder.terraza, builder.trastero, builder.caracteristicas, builder.direccionSitio
@@ -110,9 +109,6 @@ class Inmueble (
             private set
         fun fotosOrd(fotosOrd : ArrayList<String>) = apply { this.fotosOrd = fotosOrd }
 
-        var certificadoEnergetico : String? = null
-            private set
-        fun certificadoEnergetico(certificadoEnergetico : String?) = apply { this.certificadoEnergetico = certificadoEnergetico }
 
         var descripcion : String? = null
             private set

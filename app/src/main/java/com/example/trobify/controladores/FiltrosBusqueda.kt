@@ -8,6 +8,7 @@ import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.example.trobify.R
+import com.example.trobify.models.FiltrosModelo
 import com.example.trobify.models.GuardaVistaFiltros
 import com.example.trobify.models.SnapshotFiltros
 import kotlinx.android.synthetic.*
@@ -511,6 +512,13 @@ open class FiltrosBusqueda : AppCompatActivity() {
                                         filtros.superficieMin, filtros.superficieMax, filtros.tipoVivienda, filtros.elementosSeleccionadosTipoEdif, filtros.elementosSeleccionadosTipoPorDefecto)
         SnapshotFiltros.foto.fotoFiltros = guardaFiltros
         return guardaFiltros
+    }
+
+    fun createSnapshot(filtrosModelo : FiltrosModelo):SnapshotFiltros{
+        return SnapshotFiltros(tipoInmueble = filtrosModelo.tipoInmueble,numHabitaciones = filtrosModelo.numHabitaciones,
+        numBaños = filtrosModelo.numBaños, extras = filtrosModelo.extras, estado = filtrosModelo.estado, precioMax = filtrosModelo.precioMax,
+        precioMin = filtrosModelo.precioMin, superficieMax = filtrosModelo.superficieMax, superficieMin = filtrosModelo.superficieMin,
+        tipoVivienda = filtrosModelo.tipoVivienda, elementosSeleccionadosTipoEdif = booleanArrayOf(),elementosSeleccionadosTipoPorDefecto = booleanArrayOf())
     }
 
     private fun saveVistaFiltros(){
