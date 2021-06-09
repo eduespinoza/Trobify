@@ -1,14 +1,12 @@
 package com.example.trobify.models
 
-
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.here.sdk.core.GeoCoordinates
 import kotlinx.coroutines.*
 import kotlin.collections.ArrayList
-//patrón singleton -> solo instancia una sola vez, luego se puede usar
-//en cualquier parte del proyecto, será la misma instancia
+
 object Database {
     val db = Firebase.firestore
     var inmueblesNoPost = arrayListOf<DataInmueble2>()
@@ -63,7 +61,6 @@ object Database {
         return inmuebles
     }
 
-    // INMUEBLES QUERIES
     private fun getInmuebleById(id : String,post : Boolean):DataInmueble2{
         var inmuebleEncontrado = DataInmueble2()
         if(post){
