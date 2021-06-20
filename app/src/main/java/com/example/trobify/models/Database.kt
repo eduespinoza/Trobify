@@ -1,6 +1,9 @@
 package com.example.trobify.models
 
 
+import android.provider.ContactsContract
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.*
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -15,7 +18,78 @@ object Database {
     var inmueblesNoPost = arrayListOf<DataInmueble2>()
     var inmuebles = arrayListOf<DataInmueble2>()
     var users = arrayListOf<DataUser>()
-    init{
+
+    class VistaModelo : ViewModel(){
+        fun fetchData(): LiveData<MutableList<DataInmueble2>> {
+            val mutableData = MutableLiveData<MutableList<DataInmueble2>>()
+            getInmuebleData().observeForever{ results ->
+                mutableData.value = results
+            }
+            return mutableData
+        }
+        fun fetchDataPost(): LiveData<MutableList<DataInmueble2>> {
+            val mutableData = MutableLiveData<MutableList<DataInmueble2>>()
+            getInmuebleNoPostData().observeForever{ results ->
+                mutableData.value = results
+            }
+            return mutableData
+        }
+        fun fetchDataUser(): LiveData<MutableList<DataUser>> {
+            val mutableData = MutableLiveData<MutableList<DataUser>>()
+            getUserData().observeForever{ results ->
+                mutableData.value = results
+            }
+            return mutableData
+        }
+    }
+    private val viewModel = VistaModelo()
+    init {
+        GlobalScope.launch(Dispatchers.Main) {
+        viewModel.fetchData().observeForever( Observer {
+            inmuebles = it as ArrayList<DataInmueble2>
+        })
+        viewModel.fetchDataPost().observeForever(Observer {
+            inmueblesNoPost = it as ArrayList<DataInmueble2>
+        })
+        viewModel.fetchDataUser().observeForever( Observer {
+            users = it as ArrayList<DataUser>
+        })
+        }
+    }
+    fun getInmuebleData():LiveData<MutableList<DataInmueble2>>{
+        val mutableData = MutableLiveData<MutableList<DataInmueble2>>()
+        db.collection("inmueblesFinal")
+            .orderBy("fechaSubida",Query.Direction.DESCENDING)
+            .get()
+            .addOnSuccessListener { result ->
+                mutableData.value = result.toObjects(DataInmueble2::class.java) as ArrayList<DataInmueble2>
+            }
+        return mutableData
+    }
+    fun getInmuebleNoPostData():LiveData<MutableList<DataInmueble2>>{
+        val mutableData = MutableLiveData<MutableList<DataInmueble2>>()
+        db.collection("inmueblesNoPost")
+            .orderBy("fechaSubida",Query.Direction.DESCENDING)
+            .get()
+            .addOnSuccessListener { result ->
+                mutableData.value = result.toObjects(DataInmueble2::class.java) as ArrayList<DataInmueble2>
+            }
+        return mutableData
+    }
+    fun getUserData():LiveData<MutableList<DataUser>>{
+        val mutableData = MutableLiveData<MutableList<DataUser>>()
+        db.collection("users")
+            .get()
+            .addOnSuccessListener { result ->
+                mutableData.value = result.toObjects(DataUser::class.java) as ArrayList<DataUser>
+            }
+        return mutableData
+    }
+
+
+
+
+    /*init{
         runBlocking {
             val queryNoPost = async {
                 db.collection("inmueblesNoPost").orderBy("fechaSubida",Query.Direction.DESCENDING).get()
@@ -32,7 +106,7 @@ object Database {
             inmuebles = queryInmuebles.getCompleted().result.toObjects(DataInmueble2::class.java) as ArrayList<DataInmueble2>
             users = queryUsers.getCompleted().result.toObjects(DataUser::class.java) as ArrayList<DataUser>
         }
-    }
+    }*/
 
     fun toNoPublicado(inmueble : DataInmueble2){
         inmueble.id?.let { db.collection("inmueblesNoPost").document(it).set(inmueble) }
@@ -388,4 +462,5 @@ object Database {
         }
         return result
     }
+
 }
