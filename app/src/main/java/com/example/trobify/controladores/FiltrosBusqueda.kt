@@ -79,7 +79,7 @@ open class FiltrosBusqueda : AppCompatActivity() {
         setContentView(R.layout.activity_filtros_busqueda)
 
         if(!(cuidador.arrayDeMementos.count() < 1)){
-            cuidador.restoreMemento()
+            cuidador.undo()
         }
 
         desplegables.spinnerInmueble = findViewById<Spinner>(R.id.desplegableTipoInmueble)

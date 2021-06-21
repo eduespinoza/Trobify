@@ -12,7 +12,7 @@ class Caretaker {
         arrayDeMementos.add(FiltrosBusqueda().createMemento())
     }
 
-    fun restoreMemento(){
+    fun undo(){
         if(arrayDeMementos.count() < 2){
             FiltrosBusqueda().restoreMemento(arrayDeMementos[0])
         }
