@@ -202,24 +202,23 @@ class Inmueble (
     }
 
     fun adaptadorInm(data : DataInmueble2) : Inmueble{
-        var inmueble = Inmueble.Builder().build()
-        inmueble.id = data.id
-        inmueble.propietario = data.propietario
-        inmueble.descripcion = data.descripcion
-        inmueble.tipoInmueble = data.tipoInmueble
-        inmueble.tipoVivienda = data.tipoVivienda
-        inmueble.numBanos = data.numBanos
-        inmueble.numHabitaciones = data.numHabitaciones
-        inmueble.precio = data.precio
-        inmueble.superficie = data.superficie
-        inmueble.intencion = data.intencion
-        inmueble.fotosOrd = data.fotos
-        inmueble.estado = data.estado
-        inmueble.extras = data.extras
-        inmueble.direccionSitio = data.direccion
-        inmueble.fechaSubida = LocalDateTime.parse(data.fechaSubida)
-
-        return inmueble
+        return Inmueble.Builder()
+            .id(data.id)
+            .propietario(data.propietario)
+            .descripcion(data.descripcion)
+            .tipoInmueble(data.tipoInmueble)
+            .tipoVivienda(data.tipoVivienda)
+            .numBanos(data.numBanos)
+            .numHabitaciones(data.numHabitaciones)
+            .precio(data.precio)
+            .superficie(data.superficie)
+            .intencion(data.intencion)
+            .fotosOrd(data.fotos)
+            .estado(data.estado)
+            .extras(data.extras)
+            .direccionSitio(data.direccion)
+            .fechaSubida(LocalDateTime.parse(data.fechaSubida))
+            .build()
     }
 
 }
