@@ -1,6 +1,5 @@
 package com.example.trobify
 
-import com.example.trobify.controladores.FiltrosBusqueda
 import kotlin.collections.ArrayList
 
 class Memento {
@@ -11,5 +10,10 @@ class Memento {
 
     constructor(state : ArrayList<Any>){
         this.state = state
+    }
+
+    @JvmName("getState1")
+    fun getState() : ArrayList<Any> {
+        return state
     }
 }

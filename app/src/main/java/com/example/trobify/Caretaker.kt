@@ -6,10 +6,11 @@ import kotlin.collections.ArrayList
 
 class Caretaker {
 
-    lateinit var arrayDeMementos : MutableList<Memento>
+    var arrayDeMementos : MutableList<Memento> = mutableListOf()
 
     fun saveMemento(){
         arrayDeMementos.add(FiltrosBusqueda().createMemento())
+        println(arrayDeMementos.count())
     }
 
     fun restoreMemento(){

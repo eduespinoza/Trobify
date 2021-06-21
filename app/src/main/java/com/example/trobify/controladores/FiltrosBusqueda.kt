@@ -80,6 +80,7 @@ open class FiltrosBusqueda : AppCompatActivity() {
 
         setContentView(R.layout.activity_filtros_busqueda)
 
+        cuidador.saveMemento() // Guarda el estado inicial de los filtros
         cuidador.restoreMemento()
 
 
@@ -513,23 +514,31 @@ open class FiltrosBusqueda : AppCompatActivity() {
     fun createMemento() : Memento{
         state = Memento(arrayListOf(filtros.tipoInmueble,filtros.numHabitaciones,filtros.numBaños,filtros.extras,filtros.estado,filtros.precioMin,filtros.precioMax,
         filtros.superficieMin,filtros.superficieMax,filtros.tipoVivienda,filtros.elementosSeleccionadosTipoEdif,filtros.elementosSeleccionadosTipoPorDefecto))
+        println("--------------------------------------------------")
+        println(state.toString())
+        println("--------------------------------------------------")
         return state
     }
 
     fun restoreMemento(memento : Memento) {
-        memento as ArrayList<Any>
-        filtros.tipoInmueble = memento[0] as String
-        filtros.numHabitaciones = memento[1] as Int
-        filtros.numBaños = memento[2] as Int
-        filtros.extras = memento[3] as MutableMap<String, Boolean>
-        filtros.estado = memento[4] as ArrayList<String>
-        filtros.precioMin = memento[5] as Int
-        filtros.precioMax = memento[6] as Int
-        filtros.superficieMin = memento[7] as Int
-        filtros.superficieMax = memento[8] as Int
-        filtros.tipoVivienda = memento[9] as ArrayList<String>
-        filtros.elementosSeleccionadosTipoEdif = memento[10] as BooleanArray
-        filtros.elementosSeleccionadosTipoPorDefecto = memento[11] as BooleanArray
+        var m = memento.getState()
+        filtros.tipoInmueble = m[0] as String
+        filtros.numHabitaciones = m[1] as Int
+        filtros.numBaños = m[2] as Int
+        filtros.extras = m[3] as MutableMap<String, Boolean>
+        filtros.estado = m[4] as ArrayList<String>
+        filtros.precioMin = m[5] as Int
+        filtros.precioMax = m[6] as Int
+        filtros.superficieMin = m[7] as Int
+        filtros.superficieMax = m[8] as Int
+        filtros.tipoVivienda = m[9] as ArrayList<String>
+        filtros.elementosSeleccionadosTipoEdif = m[10] as BooleanArray
+        filtros.elementosSeleccionadosTipoPorDefecto = m[11] as BooleanArray
+        println("--------------------------------------------------")
+        for(f in m){
+            println(m.toString())
+        }
+        println("--------------------------------------------------")
     }
 
     private fun saveVistaFiltros(){
