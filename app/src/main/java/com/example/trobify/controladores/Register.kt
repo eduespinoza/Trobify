@@ -3,10 +3,9 @@ package com.example.trobify.controladores
 import android.content.ContentValues.TAG
 import android.os.Bundle
 import android.util.Log
-import android.widget.Button
-import android.widget.EditText
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import bolts.Task.delay
 import com.example.trobify.R
 import com.example.trobify.adapters.Messages
 import com.example.trobify.models.*
@@ -36,6 +35,7 @@ class Register : AppCompatActivity() {
 
         val bRegister = findViewById<Button>(R.id.buttonNext)
         bRegister.setOnClickListener { check() }
+
     }
 
     private fun check() {
@@ -46,8 +46,15 @@ class Register : AppCompatActivity() {
         comPassword = findViewById<EditText>(R.id.editTextPassword2).text.toString()
 
         checker = Chek(name!!, surname!!, email!!, password!!, comPassword!!, messageCreator)
-        if(checker.isCorrect(this)){createNewUser(email.toString(), password.toString())}
+        if(checker.isCorrect(this)){
+            findViewById<CheckBox>(R.id.correctUser).isChecked = true
+            createNewUser(email.toString(), password.toString())
+        }
+        else{
+            findViewById<CheckBox>(R.id.correctUser).isChecked = false
+        }
     }
+
 
     private  fun createNewUser(uEmail :String, uPassword :String){
         auth.createUserWithEmailAndPassword(uEmail, uPassword).addOnCompleteListener(this) { task ->
