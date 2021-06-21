@@ -7,19 +7,19 @@ import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import com.example.trobify.Caretaker
 import com.example.trobify.R
-import com.example.trobify.models.FiltrosModelo
 import com.example.trobify.models.GuardaVistaFiltros
-import com.example.trobify.models.SnapshotFiltros
 import kotlinx.android.synthetic.*
 import kotlinx.android.synthetic.main.activity_filtros_busqueda.*
 import java.io.Serializable
-
+import com.example.trobify.Memento
 
 @SuppressLint("StaticFieldLeak")
 open class FiltrosBusqueda : AppCompatActivity() {
 
-    var guardaFiltros = SnapshotFiltros.foto.fotoFiltros
+    var state = Memento()
+    var cuidador = Caretaker()
 
     object filtros : Serializable {
         var tipoInmueble:String = "Cualquiera"
@@ -80,7 +80,7 @@ open class FiltrosBusqueda : AppCompatActivity() {
 
         setContentView(R.layout.activity_filtros_busqueda)
 
-        guardaFiltros.restoreData()
+        cuidador.restoreMemento()
 
         desplegables.spinnerInmueble = findViewById<Spinner>(R.id.desplegableTipoInmueble)
         desplegables.spinnerHabitaciones = findViewById<Spinner>(R.id.desplegableNumHabitaciones)
@@ -385,7 +385,9 @@ open class FiltrosBusqueda : AppCompatActivity() {
             checkPrice()
             checkSurface()
             if(checkPriceBool && checkSurfaceBool){
-                createSnapshot()
+
+                cuidador.saveMemento()
+
                 saveVistaFiltros()
                 val goSearch = Intent(this, MainTrobify::class.java)
                 goSearch.putExtra("user", userId.toString())
@@ -507,18 +509,26 @@ open class FiltrosBusqueda : AppCompatActivity() {
         }
     }
 
-    private fun createSnapshot(): SnapshotFiltros {
-        guardaFiltros = SnapshotFiltros(filtros.tipoInmueble, filtros.numHabitaciones, filtros.numBaños, filtros.extras, filtros.estado, filtros.precioMin, filtros.precioMax,
-                                        filtros.superficieMin, filtros.superficieMax, filtros.tipoVivienda, filtros.elementosSeleccionadosTipoEdif, filtros.elementosSeleccionadosTipoPorDefecto)
-        SnapshotFiltros.foto.fotoFiltros = guardaFiltros
-        return guardaFiltros
+    fun createMemento() : Memento{
+        state = Memento(arrayListOf(filtros.tipoInmueble,filtros.numHabitaciones,filtros.numBaños,filtros.extras,filtros.estado,filtros.precioMin,filtros.precioMax,
+        filtros.superficieMin,filtros.superficieMax,filtros.tipoVivienda,filtros.elementosSeleccionadosTipoEdif,filtros.elementosSeleccionadosTipoPorDefecto))
+        return state
     }
 
-    fun createSnapshot(filtrosModelo : FiltrosModelo):SnapshotFiltros{
-        return SnapshotFiltros(tipoInmueble = filtrosModelo.tipoInmueble,numHabitaciones = filtrosModelo.numHabitaciones,
-        numBaños = filtrosModelo.numBaños, extras = filtrosModelo.extras, estado = filtrosModelo.estado, precioMax = filtrosModelo.precioMax,
-        precioMin = filtrosModelo.precioMin, superficieMax = filtrosModelo.superficieMax, superficieMin = filtrosModelo.superficieMin,
-        tipoVivienda = filtrosModelo.tipoVivienda, elementosSeleccionadosTipoEdif = booleanArrayOf(),elementosSeleccionadosTipoPorDefecto = booleanArrayOf())
+    fun restoreMemento(memento : Memento){
+        memento as ArrayList<Any>
+        filtros.tipoInmueble = memento[0] as String
+        filtros.numHabitaciones = memento[1] as Int
+        filtros.numBaños = memento[2] as Int
+        filtros.extras = memento[3] as MutableMap<String, Boolean>
+        filtros.estado = memento[4] as ArrayList<String>
+        filtros.precioMin = memento[5] as Int
+        filtros.precioMax = memento[6] as Int
+        filtros.superficieMin = memento[7] as Int
+        filtros.superficieMax = memento[8] as Int
+        filtros.tipoVivienda = memento[9] as ArrayList<String>
+        filtros.elementosSeleccionadosTipoEdif = memento[10] as BooleanArray
+        filtros.elementosSeleccionadosTipoPorDefecto = memento[11] as BooleanArray
     }
 
     private fun saveVistaFiltros(){
@@ -662,7 +672,8 @@ open class FiltrosBusqueda : AppCompatActivity() {
         filtros.elementosSeleccionadosTipoEdif = booleanArrayOf(false,/*Apartamento*/ false,/*Ático*/ false,/*Dúplex*/ false,/*Loft*/ false,/*Planta baja*/ false/*Estudio*/)
         filtros.elementosSeleccionadosTipoPorDefecto = booleanArrayOf(false,/*Apartamento*/ false,/*Ático*/ false,/*Dúplex*/ false,/*Loft*/ false,/*Planta baja*/ false,/*Estudio*/ false, /*Casa*/ false,/*Chalet*/ false,/*Adosado*/ false/*Finca rústica*/)
 
-        createSnapshot()
+        cuidador.saveMemento()
+
         saveVistaFiltros()
     }
 }
