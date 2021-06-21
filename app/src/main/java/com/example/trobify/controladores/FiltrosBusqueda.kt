@@ -8,12 +8,12 @@ import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.example.trobify.Caretaker
+import com.example.trobify.Memento
 import com.example.trobify.R
 import com.example.trobify.models.GuardaVistaFiltros
 import kotlinx.android.synthetic.*
 import kotlinx.android.synthetic.main.activity_filtros_busqueda.*
 import java.io.Serializable
-import com.example.trobify.Memento
 
 @SuppressLint("StaticFieldLeak")
 open class FiltrosBusqueda : AppCompatActivity() {
@@ -81,6 +81,7 @@ open class FiltrosBusqueda : AppCompatActivity() {
         setContentView(R.layout.activity_filtros_busqueda)
 
         cuidador.restoreMemento()
+
 
         desplegables.spinnerInmueble = findViewById<Spinner>(R.id.desplegableTipoInmueble)
         desplegables.spinnerHabitaciones = findViewById<Spinner>(R.id.desplegableNumHabitaciones)
@@ -515,7 +516,7 @@ open class FiltrosBusqueda : AppCompatActivity() {
         return state
     }
 
-    fun restoreMemento(memento : Memento){
+    fun restoreMemento(memento : Memento) {
         memento as ArrayList<Any>
         filtros.tipoInmueble = memento[0] as String
         filtros.numHabitaciones = memento[1] as Int
