@@ -5,8 +5,6 @@ import android.os.Build
 import android.os.Bundle
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import com.example.trobify.GestionFiltrosTest
-import com.example.trobify.OrdenacionTest
 import com.example.trobify.R
 import com.example.trobify.models.Database
 import com.google.firebase.firestore.FirebaseFirestore
@@ -25,7 +23,6 @@ class MainActivity : AppCompatActivity() {
         startActivity(goLogin)
 
         //OrdenacionTest().pruebas()
-        GestionFiltrosTest().tests()
     }
 }
 
