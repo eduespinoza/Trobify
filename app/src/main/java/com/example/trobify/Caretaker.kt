@@ -10,7 +10,6 @@ class Caretaker {
 
     fun saveMemento(){
         arrayDeMementos.add(FiltrosBusqueda().createMemento())
-        println(arrayDeMementos.count())
     }
 
     fun restoreMemento(){

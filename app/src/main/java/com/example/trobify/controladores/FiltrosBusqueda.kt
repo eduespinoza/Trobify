@@ -75,14 +75,12 @@ open class FiltrosBusqueda : AppCompatActivity() {
     private lateinit var userId:String
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
         intent.getStringExtra("user")?.let { userId = it }
-
         setContentView(R.layout.activity_filtros_busqueda)
 
-        cuidador.saveMemento() // Guarda el estado inicial de los filtros
-        cuidador.restoreMemento()
-
+        if(!(cuidador.arrayDeMementos.count() < 1)){
+            cuidador.restoreMemento()
+        }
 
         desplegables.spinnerInmueble = findViewById<Spinner>(R.id.desplegableTipoInmueble)
         desplegables.spinnerHabitaciones = findViewById<Spinner>(R.id.desplegableNumHabitaciones)
@@ -514,14 +512,11 @@ open class FiltrosBusqueda : AppCompatActivity() {
     fun createMemento() : Memento{
         state = Memento(arrayListOf(filtros.tipoInmueble,filtros.numHabitaciones,filtros.numBaños,filtros.extras,filtros.estado,filtros.precioMin,filtros.precioMax,
         filtros.superficieMin,filtros.superficieMax,filtros.tipoVivienda,filtros.elementosSeleccionadosTipoEdif,filtros.elementosSeleccionadosTipoPorDefecto))
-        println("--------------------------------------------------")
-        println(state.toString())
-        println("--------------------------------------------------")
         return state
     }
 
     fun restoreMemento(memento : Memento) {
-        var m = memento.getState()
+        val m = memento.getState()
         filtros.tipoInmueble = m[0] as String
         filtros.numHabitaciones = m[1] as Int
         filtros.numBaños = m[2] as Int
@@ -534,11 +529,6 @@ open class FiltrosBusqueda : AppCompatActivity() {
         filtros.tipoVivienda = m[9] as ArrayList<String>
         filtros.elementosSeleccionadosTipoEdif = m[10] as BooleanArray
         filtros.elementosSeleccionadosTipoPorDefecto = m[11] as BooleanArray
-        println("--------------------------------------------------")
-        for(f in m){
-            println(m.toString())
-        }
-        println("--------------------------------------------------")
     }
 
     private fun saveVistaFiltros(){
