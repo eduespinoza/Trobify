@@ -15,10 +15,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.example.trobify.R
 import com.example.trobify.models.Busqueda
-import com.example.trobify.models.Database
+import com.example.trobify.database.Database
 import com.example.trobify.models.Sitio
 import com.here.sdk.core.GeoCoordinates
-import kotlinx.android.synthetic.main.trobify_main.*
 import kotlin.properties.Delegates
 
 class PantallaInicial : AppCompatActivity() {
@@ -114,7 +113,7 @@ class PantallaInicial : AppCompatActivity() {
 
         botonBuscar.setOnClickListener {
             println(opcionesElegidas)
-            var fstRes = Database.getInmueblesByOpciones(opcionesElegidas)
+            var fstRes = Database.obtenerInmueblesSegunOpciones(opcionesElegidas)
             println(fstRes.size)
             if(fstRes.size == 0){
                 AlertDialog.Builder(this).apply {

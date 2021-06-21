@@ -75,15 +75,7 @@
                         app:radius="6dp"
                         app:slideInterval="3000"
                         app:strokeColor="#FF777777"
-                        app:strokeWidth="1dp">
-
-                        <ImageView
-                            android:id="@+id/imageView"
-                            android:layout_width="410dp"
-                            android:layout_height="265dp"
-                            android:layout_gravity="center"
-                            app:srcCompat="@drawable/image_placeholder" />
-                    </com.synnapps.carouselview.CarouselView>
+                        app:strokeWidth="1dp"/>
 
                     <Button
                         android:id="@+id/buttonAddPhoto"

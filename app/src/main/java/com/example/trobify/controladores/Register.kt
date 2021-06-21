@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import bolts.Task.delay
 import com.example.trobify.R
 import com.example.trobify.adapters.Messages
+import com.example.trobify.database.Database
 import com.example.trobify.models.*
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth

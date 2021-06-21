@@ -3,7 +3,7 @@ package com.example.trobify.controladores
 import android.content.Context
 import android.util.Patterns
 import com.example.trobify.adapters.Messages
-import com.example.trobify.models.Database
+import com.example.trobify.database.Database
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 
@@ -53,7 +53,7 @@ class Chek(name:String, surname:String, email : String, password : String, passw
                     if(email!!.isEmpty()){ messageCreator.emptyMessage(cont); return false}
                     val emailPattern = Patterns.EMAIL_ADDRESS
                     if(!emailPattern.matcher(email).matches()){ messageCreator.incorrectEmailMessage(cont); return false}
-                    val emailList = Database.getAllUsersEmails()
+                    val emailList = Database.obtenerUsuariosEmails()
                     if(emailList.contains(email!!)){ messageCreator.emailAlreadyInUseMessage(cont); return false}
                     return true
                 }

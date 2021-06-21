@@ -15,9 +15,9 @@ import android.widget.SearchView
 import android.widget.SimpleCursorAdapter
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import androidx.fragment.app.FragmentActivity
 import com.example.trobify.R
 import com.example.trobify.adapters.AdaptadorFichaInmueble
+import com.example.trobify.database.Database
 import com.example.trobify.models.*
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -25,14 +25,9 @@ import com.here.sdk.core.Anchor2D
 import com.here.sdk.core.GeoCoordinates
 import com.here.sdk.core.Metadata
 import com.here.sdk.core.Point2D
-import com.here.sdk.gestures.GestureState
-import com.here.sdk.gestures.GestureType
-import com.here.sdk.gestures.LongPressListener
 import com.here.sdk.gestures.TapListener
 import com.here.sdk.mapviewlite.*
 import com.here.sdk.mapviewlite.MapScene.LoadSceneCallback
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.runBlocking
 
 
 class Mapa : AppCompatActivity(){
@@ -175,7 +170,7 @@ class Mapa : AppCompatActivity(){
         }
     }
     private fun loadMarks(){
-        inmuebles = Database.getAllInmuebles()
+        inmuebles = Database.obtenerInmuebles()
         for (inmueble in inmuebles) {
         val place = inmueble.direccion
         val mapImage = MapImageFactory.fromResource(this.resources,

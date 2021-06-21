@@ -16,8 +16,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.trobify.*
 import com.example.trobify.controladores.GestionarInmueble
 import com.example.trobify.controladores.ListOfChats
-import com.example.trobify.controladores.MainTrobify
-import com.example.trobify.models.Database
+import com.example.trobify.database.Database
 import com.example.trobify.models.Inmueble
 import com.example.trobify.models.Item
 import com.google.android.gms.tasks.Task
@@ -154,7 +153,7 @@ class AdaptadorFichaInmueble : AppCompatActivity() {
         rellenar(inmueble)
     }
     private fun removeFav(id:String,inmueble:Inmueble){
-        inmueble.id?.let { inmid -> Database.removeFav2User(id, inmid) }
+        inmueble.id?.let { inmid -> Database.eliminarFavoritoUsuario(id, inmid) }
         val builder =  AlertDialog.Builder(this)
         builder.setMessage("Inmueble eliminado de favoritos")
             .setCancelable(false)
@@ -164,7 +163,7 @@ class AdaptadorFichaInmueble : AppCompatActivity() {
         showEstrella(false)
     }
     private fun add2Fav(id:String,inmueble:Inmueble){
-        inmueble.id?.let { inmid -> Database.setFav2User(id, inmid) }
+        inmueble.id?.let { inmid -> Database.anadirFavoritoUsuario(id, inmid) }
         val builder =  AlertDialog.Builder(this)
         builder.setMessage("Inmueble añadido a favoritos")
             .setCancelable(false)
@@ -414,7 +413,7 @@ class AdaptadorFichaInmueble : AppCompatActivity() {
                 if (priceIntroduced.toString().toInt().compareTo(inmueble.precio.toString().toInt()) > 0) {
                     val builderAviso = AlertDialog.Builder(this@AdaptadorFichaInmueble)
                     val message =
-                        "Oferta : " + inmueble.direccion + '\n' + " Cantidad ofrecida : " + priceIntroduced
+                        "Oferta : " + inmueble.direccionSitio!!.titulo + '\n' + " Cantidad ofrecida : " + priceIntroduced
                     with(builderAviso) {
 
                         setTitle("El precio es superior al del inmueble, quiere enviar la oferta?")
@@ -432,7 +431,7 @@ class AdaptadorFichaInmueble : AppCompatActivity() {
                                         goCreateChat.putExtra("user", userId)
                                         goCreateChat.putExtra("otherUserId", propietarioId)
                                         goCreateChat.putExtra("message", message)
-                                        goCreateChat.putExtra("inmueble",inmueble.direccion.toString())
+                                        goCreateChat.putExtra("inmueble",inmueble.direccionSitio!!.titulo)
 
                                         startActivity(goCreateChat)
                                     }
@@ -445,7 +444,7 @@ class AdaptadorFichaInmueble : AppCompatActivity() {
                 }
                 else {
                     val message =
-                        "Oferta : " + inmueble.direccion + '\n' + " Cantidad ofrecida : " + priceIntroduced
+                        "Oferta : " + inmueble.direccionSitio!!.titulo + '\n' + " Cantidad ofrecida : " + priceIntroduced
                     val goCreateChat =
                         Intent(this@AdaptadorFichaInmueble, ListOfChats::class.java)
                     db.collection("users").whereEqualTo("email", propietarioMail)
@@ -458,7 +457,7 @@ class AdaptadorFichaInmueble : AppCompatActivity() {
                                 goCreateChat.putExtra("user", userId)
                                 goCreateChat.putExtra("otherUserId", propietarioId)
                                 goCreateChat.putExtra("message", message)
-                                goCreateChat.putExtra("inmueble",inmueble.direccion.toString())
+                                goCreateChat.putExtra("inmueble",inmueble.direccionSitio!!.titulo)
 
                                 startActivity(goCreateChat)
                             }

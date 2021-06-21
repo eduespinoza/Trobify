@@ -10,7 +10,7 @@ import com.example.trobify.R
 import com.example.trobify.adapters.AdaptadorFichaInmueble
 import com.example.trobify.adapters.AdaptadorInmuebleBusqueda
 import com.example.trobify.models.DataInmueble2
-import com.example.trobify.models.Database
+import com.example.trobify.database.Database
 import com.example.trobify.models.Inmueble
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -42,7 +42,7 @@ class  ListaFavoritos () : AppCompatActivity() , AdaptadorInmuebleBusqueda.OnIte
 
             finish()
         }
-        Database.getFavsUser(userId)?.let { mostrar(it) }
+        Database.obtenerFavoritosUsuario(userId)?.let { mostrar(it) }
     }
 
     private fun mostrar(pisosFav : ArrayList<DataInmueble2>){

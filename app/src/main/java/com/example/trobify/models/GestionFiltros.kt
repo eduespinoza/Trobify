@@ -1,6 +1,7 @@
 package com.example.trobify.models
 
 import com.example.trobify.controladores.FiltrosBusqueda
+import com.example.trobify.database.Database
 
 class GestionFiltros {
     lateinit var filtros : FiltrosBusqueda.filtros
@@ -78,7 +79,7 @@ class GestionFiltros {
             if(mapa.value.size == filtrosSize)
                 resultIds.add(mapa.key)
         }
-        return Database.getInmueblesByIds(resultIds)
+        return Database.obtenerInmueblesSegunIds(resultIds)
     }
     fun aplicar (filtros : FiltrosModelo):ArrayList<DataInmueble2>{
         filtrosModelo = filtros
@@ -94,8 +95,8 @@ class GestionFiltros {
 
     private fun obtenerIdsPrecio(min : Int, max : Int): ArrayList<String>{
         filtrosSize++
-        var idsMin = Database.getInmueblesByPrecioMayorIgual(min)
-        var idsMax =  Database.getInmueblesByPrecioMenorIgual(max)
+        var idsMin = Database.obtenerInmueblesSegunPrecioMayorIgual(min)
+        var idsMax =  Database.obtenerInmueblesSegunPrecioMenorIgual(max)
         var result = arrayListOf<String>()
         result.addAll(idsMin)
         result.addAll(idsMax)
@@ -108,8 +109,8 @@ class GestionFiltros {
     }
     private fun obtenerIdsSuperficie(min : Int, max : Int): ArrayList<String>{
         filtrosSize++
-        var idsMin = Database.getInmueblesBySuperficieMin(min)
-        var idsMax =  Database.getInmueblesBySuperficieMax(max)
+        var idsMin = Database.obtenerInmueblesSegunSuperficieMin(min)
+        var idsMax =  Database.obtenerInmueblesSegunSuperficieMax(max)
         var result = arrayListOf<String>()
         result.addAll(idsMin)
         result.addAll(idsMax)
@@ -122,35 +123,35 @@ class GestionFiltros {
     }
     private fun obtenerIdsTipoInmueble(opcion : String) : ArrayList<String>{
         filtrosSize++
-        var ids = Database.getInmueblesByTipoInmueble(opcion)
+        var ids = Database.obtenerInmbueblesSegunTipoInmueble(opcion)
         return ids
     }
     private fun obtenerIdsTipoVivienda(opciones : ArrayList<String>) : ArrayList<String>{
         filtrosSize++
         var result = arrayListOf<String>()
         for (op in opciones){
-            result.addAll(Database.getInmueblesByTipoVivienda(op))
+            result.addAll(Database.obtenerInmueblesSegunTipoVivienda(op))
         }
         return result
     }
     private fun obtenerIdsNumBaños(banos : Int) : ArrayList<String>{
         filtrosSize++
-        var result = Database.getInmueblesByBaños(banos)
+        var result = Database.obtenerInmueblesSegunBanos(banos)
         return result
     }
     private fun obtenerIdsNumHabs(habs : Int) : ArrayList<String>{
         filtrosSize++
-        var result = Database.getInmueblesByHabs(habs)
+        var result = Database.obtenerInmueblesSegunHabitaciones(habs)
         return result
     }
     private fun obtenerIdsEstado(estados : ArrayList<String>) : ArrayList<String>{
         filtrosSize++
-        var result = Database.getInmueblesByEstado(estados)
+        var result = Database.obtenerInmueblesSegunEstado(estados)
         return result
     }
     private fun obtenerIdsExtras(extras : ArrayList<String>) : ArrayList<String>{
         filtrosSize++
-        var result = Database.getInmueblesByExtras(extras)
+        var result = Database.obtenerInmueblesSegunExtras(extras)
         return result
     }
 }

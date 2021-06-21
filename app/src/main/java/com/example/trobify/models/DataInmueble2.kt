@@ -12,6 +12,6 @@ data class DataInmueble2 (var id : String? = null,
                           var precio : Int? = null,
                           var fotos : ArrayList<String> = arrayListOf(),
                           var descripcion : String? = null,
-                          var extras : ArrayList<String> = arrayListOf(),
+                          var extras : ArrayList<String>? = null,
                           var estado : String? = null,
                             var fechaSubida : String? = null)

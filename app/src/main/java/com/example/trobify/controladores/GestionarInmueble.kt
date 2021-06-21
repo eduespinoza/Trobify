@@ -1,6 +1,5 @@
 package com.example.trobify.controladores
 
-import android.content.ContentValues
 import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Color
@@ -10,6 +9,7 @@ import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.example.trobify.R
+import com.example.trobify.database.Database
 import com.example.trobify.models.*
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.ktx.firestore
@@ -162,7 +162,7 @@ class GestionarInmueble : AppCompatActivity() {
             builder.setMessage("¿Seguro que quieres eliminar este inmueble?")
                 .setCancelable(false)
                 .setPositiveButton("Yes") { dialog, id ->
-                    var quecojones = Database.isInmueblePost(inmuebleId)
+                    var quecojones = Database.estaPublicadoInmueble(inmuebleId)
                     println("$quecojones PERO QUE ESTA PASANDO")
                     Database.borrarInmueble(inmuebleId, quecojones)
                     finish()
@@ -200,7 +200,7 @@ class GestionarInmueble : AppCompatActivity() {
             estado = inmueble.estado, fechaSubida = inmueble.fechaSubida.toString())
     }
     private fun postOrNotPost(button : Button){
-        if (Database.isInmueblePost(inmuebleId)){
+        if (Database.estaPublicadoInmueble(inmuebleId)){
             button.setText("Despublicar")
             button.setBackgroundColor(Color.RED)
         }else {
@@ -373,7 +373,7 @@ class GestionarInmueble : AppCompatActivity() {
 
 
         if(checkFormats()) {
-            Database.modificarInmueble(updatedInmueble,Database.isInmueblePost(inmuebleId))
+            Database.modificarInmueble(updatedInmueble, Database.estaPublicadoInmueble(inmuebleId))
             finish()
         }
         else{

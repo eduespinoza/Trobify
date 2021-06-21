@@ -12,7 +12,6 @@ class Inmueble (
     var numBanos : Int? ,
     var superficie : Int? ,
     var direccion : String? ,
-    var direccionO : Direccion? ,
     var tipoVivienda : String? ,
     var tipoInmueble : String?,
     var intencion : String? ,
@@ -41,7 +40,7 @@ class Inmueble (
 ) : Serializable {
     private constructor(builder: Builder) : this(
         builder.id, builder.propietario, builder.numHabitaciones, builder.numBanos, builder.superficie,
-        builder.direccion, builder.direccionO, builder.tipoVivienda, builder.tipoInmueble,
+        builder.direccion, builder.tipoVivienda, builder.tipoInmueble,
         builder.intencion, builder.precio, builder.fotos, builder.fotosOrd,
         builder.descripcion, builder.fechaSubida, builder.estado,builder.extras, builder.parking,
         builder.ascensor, builder.amueblado, builder.calefaccion, builder.jardin, builder.piscina,
@@ -81,9 +80,6 @@ class Inmueble (
             private set
         fun direccion(direccion : String?) = apply { this.direccion = direccion }
 
-        var direccionO : Direccion? = null
-            private set
-        fun direccionO(direccionO : Direccion?) = apply { this.direccionO = direccionO }
 
         var tipoVivienda : String? = null
             private set

@@ -4,22 +4,20 @@ import android.annotation.SuppressLint
 import android.app.SearchManager
 import android.content.Intent
 import android.database.MatrixCursor
+import android.net.Uri
 import android.os.Bundle
 import android.provider.BaseColumns
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import com.bumptech.glide.Glide
 import com.example.trobify.R
 import com.example.trobify.models.*
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.here.sdk.core.GeoCoordinates
+import com.squareup.picasso.Picasso
 import com.synnapps.carouselview.CarouselView
-import com.synnapps.carouselview.ImageListener
 import kotlinx.android.synthetic.main.activity_ofertar_inmueble.*
 import kotlinx.android.synthetic.main.inmueble_card_busqueda.*
 import java.time.LocalDateTime
@@ -30,10 +28,10 @@ import kotlin.collections.ArrayList
 @SuppressLint("StaticFieldLeak")
 class OfertarInmueble : AppCompatActivity() {
 
+    private var inmuebleBuild = Inmueble.Builder()
     private var user : String? = null
     var id : String = UUID.randomUUID().toString()
     var buscador = Busqueda()
-    private var fotos : ArrayList<Int> = arrayListOf()
     private var fotosOrd : ArrayList<String> = arrayListOf()
     private var tipoInmueble : String? = null
     private var tipoVivienda : String? = null
@@ -41,44 +39,25 @@ class OfertarInmueble : AppCompatActivity() {
     private var precioDeVenta : Int? = null
     private var superficie : Int? = null
     private var direccion : Sitio? = null
-    private var direccionO : Direccion? = null
     private var numHabitaciones : Int = 0
     private var numBanos : Int = 0
     private var descripcion : String? = null
-    private var fechaSubida : LocalDateTime? = null
-    private var estado : String? = null
     private var imageId : String = "no_tiene"
-
-    private var parking : Boolean = false
-    private var ascensor : Boolean = false
-    private var amueblado : Boolean = false
-    private var calefaccion : Boolean = false
-    private var jardin : Boolean = false
-    private var piscina : Boolean = false
-    private var terraza : Boolean = false
-    private var trastero : Boolean = false
-    private var image : ImageView? = null
     private lateinit var carimages : CarouselView
-
-    private lateinit var extrasInmueble : ArrayList<String>
-    private lateinit var estadoInmueble : String
-
-    private var caracteristicas : String? = null
-
+    private var extrasInmueble : ArrayList<String>? = null
+    private var estadoInmueble : String? = null
     private val SELECT_FILE  = 1
 
     val elementosExtras = booleanArrayOf(false, false, false, false, false, false, false, false)
-    val elementosEstados = booleanArrayOf(false, false, false, false, false, false)
 
     private var mStorage : StorageReference? = null
 
-
-    var sampleImages = intArrayOf()
 
     lateinit var buscadorMapa : SearchView
     var sitio : Sitio? = null
     var direccionCorrecta = false
 
+    var urls = arrayListOf<Uri?>()
 
     object text {
         lateinit var tipoInmuebleElegidoText:TextView
@@ -96,21 +75,18 @@ class OfertarInmueble : AppCompatActivity() {
         lateinit var layoutVivienda : LinearLayout
     }
 
+
     override fun onCreate(savedInstanceState : Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_ofertar_inmueble)
-
+        println(id)
+        carimages = findViewById(R.id.carouselPhotosOfertar)
         intent.getStringExtra("user")?.let { user = it }
 
         mStorage = FirebaseStorage.getInstance().reference
 
-
-
-        image  = findViewById<ImageView>(R.id.imageView)
-        carimages = findViewById<CarouselView>(R.id.carouselPhotosOfertar) as CarouselView
-        carimages.setPageCount(sampleImages.size);
-        carimages.setImageListener(imageListener);
-
+        inmuebleBuild.id(id)
+        inmuebleBuild.propietario(user)
 
         text.layoutVivienda = findViewById(R.id.layoutTipoVivienda)
         text.tipoInmuebleElegidoText = findViewById(R.id.textViewTipoElegido)
@@ -150,74 +126,90 @@ class OfertarInmueble : AppCompatActivity() {
 
         val bPost = findViewById<Button>(R.id.buttonPublicar)
         bPost.setOnClickListener { post(true)
-        finish()
+        //finish()
         }
 
         val bSubir = findViewById<Button>(R.id.buttonSubir)
         bSubir.setOnClickListener { post(false)
 
-        finish()
+        //finish()
         }
 
         val bPhoto = findViewById<Button>(R.id.buttonAddPhoto)
         bPhoto.setOnClickListener{
-            val intent = Intent(Intent.ACTION_PICK)
+            val intent = Intent()
             intent.type = "image/*"
-            startActivityForResult(intent, SELECT_FILE)
+            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+            intent.action = Intent.ACTION_GET_CONTENT
+            startActivityForResult(Intent.createChooser(intent, "Select Picture"), 1)
         }
 
     }
-
    override fun onActivityResult(requestCode : Int, resultCode : Int, data : Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-       if(requestCode == SELECT_FILE && resultCode == RESULT_OK ) {
+       super.onActivityResult(requestCode, resultCode, data)
            var uri = data?.data
-           if (uri != null) {
-               imageId = UUID.randomUUID().toString()
-               var filePath : StorageReference? = mStorage?.child("imagenesinmueble/"+ id)?.child(imageId)
-               fotosOrd.add(filePath.toString())
-               filePath?.putFile(uri)?.addOnSuccessListener(this) { taskSnapshot ->
-
-                   filePath.downloadUrl.addOnSuccessListener { url ->
-                       Glide.with(this).load(url).into(image)
+       if(requestCode == SELECT_FILE){
+           if(resultCode == RESULT_OK){
+               var uris = data!!.clipData
+               if(uris != null){
+                   for(i in 0 until uris.itemCount){
+                       val uri = uris.getItemAt(i).uri
+                       imageId = UUID.randomUUID().toString()
+                       val filePath : StorageReference? = mStorage?.child("imagenesinmueble/" + id)?.child(
+                           imageId
+                       )
+                       fotosOrd.add(filePath.toString())
+                       urls.add(uri)
+                       mostrarImagenes(urls)
                    }
                }
-           }
-       }
+           else if (uri != null){
+               imageId = UUID.randomUUID().toString()
+               var filePath : StorageReference? = mStorage?.child("imagenesinmueble/" + id)?.child(
+                   imageId)
+               fotosOrd.add(filePath.toString())
+                   urls.add(uri)
+                   mostrarImagenes(urls)
+           }}}
    }
 
+    private fun mostrarImagenes(uris : ArrayList<Uri?> ){
+        carimages.setImageListener{ position, imageView ->
+            Picasso.get().load(uris[position]).into(imageView)
 
-    var imageListener =
-        ImageListener { position, imageView -> imageView.setImageResource(sampleImages[position]) }
+        }
+        carimages.setImageClickListener{ position ->
+            Toast.makeText(applicationContext, uris[position]!!.path, Toast.LENGTH_SHORT).show()
+        }
 
-
-    private fun compare(){
-        val builder =  AlertDialog.Builder(this)
-        builder.setTitle("Funcion no implementada")
-        builder.setIcon(android.R.drawable.stat_notify_error)
-        builder.setNeutralButton("  Continue  "){ _, _ -> }
-        val alertDialog: AlertDialog = builder.create()
-        alertDialog.setCancelable(false)
-        alertDialog.show()
+        carimages.pageCount = urls.size
     }
 
     private fun prepararBuscador(){
         buscadorMapa = findViewById(R.id.buscadorDirecciones)
         val from = arrayOf(SearchManager.SUGGEST_COLUMN_TEXT_1)
         val to = intArrayOf(R.id.item_label)
-        var adaptadorCursor = SimpleCursorAdapter(this.baseContext, R.layout.sugerencia_item,
-            null,from,to, CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER)
+        var adaptadorCursor = SimpleCursorAdapter(
+            this.baseContext, R.layout.sugerencia_item,
+            null, from, to, CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER
+        )
         buscadorMapa.suggestionsAdapter = adaptadorCursor
-        buscadorMapa.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
-            override fun onQueryTextSubmit(query: String): Boolean {return false}
+        buscadorMapa.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query : String) : Boolean {
+                return false
+            }
+
             override fun onQueryTextChange(query : String?) : Boolean {
                 if (query != null) {
-                    buscador.obtenerSugerencias("$query",GeoCoordinates(39.48204,-0.33876))
-                    var cursor = MatrixCursor(arrayOf(BaseColumns._ID, SearchManager.SUGGEST_COLUMN_TEXT_1))
-                    buscador.sugerencias.forEachIndexed{
-                            indice, item ->
-                        cursor.addRow(arrayOf(indice,item.title))
+                    buscador.obtenerSugerencias("$query", GeoCoordinates(39.48204, -0.33876))
+                    var cursor = MatrixCursor(
+                        arrayOf(
+                            BaseColumns._ID,
+                            SearchManager.SUGGEST_COLUMN_TEXT_1
+                        )
+                    )
+                    buscador.sugerencias.forEachIndexed { indice, item ->
+                        cursor.addRow(arrayOf(indice, item.title))
                     }
                     adaptadorCursor.changeCursor(cursor)
                 }
@@ -225,18 +217,23 @@ class OfertarInmueble : AppCompatActivity() {
                 return false
             }
         })
-        buscadorMapa.setOnSuggestionListener(object: SearchView.OnSuggestionListener {
-            override fun onSuggestionSelect(position: Int): Boolean {return false}
-            override fun onSuggestionClick(position: Int): Boolean {
+        buscadorMapa.setOnSuggestionListener(object : SearchView.OnSuggestionListener {
+            override fun onSuggestionSelect(position : Int) : Boolean {
+                return false
+            }
+
+            override fun onSuggestionClick(position : Int) : Boolean {
                 val cursor = buscadorMapa.suggestionsAdapter.getItem(position) as MatrixCursor
-                val selection = cursor.getString(cursor.getColumnIndex(SearchManager.SUGGEST_COLUMN_TEXT_1))
-                buscadorMapa.setQuery("",true)
+                val selection =
+                    cursor.getString(cursor.getColumnIndex(SearchManager.SUGGEST_COLUMN_TEXT_1))
+                buscadorMapa.setQuery("", true)
                 buscadorMapa.isIconified = true
                 text.inDireccion.visibility = View.VISIBLE
                 text.inDireccion.text = selection
-                buscador.suggeries.forEach{
-                    if(it.titulo.equals(selection)){
+                buscador.suggeries.forEach {
+                    if (it.titulo.equals(selection)) {
                         sitio = it
+                        inmuebleBuild.direccionSitio(sitio)
                     }
                 }
                 direccionCorrecta = true
@@ -260,17 +257,19 @@ class OfertarInmueble : AppCompatActivity() {
                 -> {
                     text.tipoAnuncioText.text = optionsAnuncio[0]
                     tipoAnuncio = "Vender"
+                    inmuebleBuild.intencion("Vender")
                     text.textViewPreciodeVenta.setText("Precio de venta")
                 }
                 which.equals(1)
                 -> {
                     text.tipoAnuncioText.text = optionsAnuncio[1]
                     tipoAnuncio = "Alquiler"
+                    inmuebleBuild.intencion("Alquiler")
                     text.textViewPreciodeVenta.setText("Precio de alquiler")
                 }
             }
         }
-        builder.setNegativeButton("Cancelar"){_, _ -> }
+        builder.setNegativeButton("Cancelar"){ _, _ -> }
         val options = builder.create()
         options.show()
     }
@@ -284,6 +283,7 @@ class OfertarInmueble : AppCompatActivity() {
                 -> {
                     text.tipoInmuebleElegidoText.text = optionsInmueble[0]
                     tipoInmueble = optionsInmueble[0].toString()
+                    inmuebleBuild.tipoInmueble(optionsInmueble[0].toString())
                     text.layoutHabitaciones.setVisibility(View.VISIBLE)
                     text.layoutBaños.setVisibility(View.VISIBLE)
                     text.layoutVivienda.setVisibility(View.VISIBLE)
@@ -292,6 +292,7 @@ class OfertarInmueble : AppCompatActivity() {
                 -> {
                     text.tipoInmuebleElegidoText.text = optionsInmueble[1]
                     tipoInmueble = optionsInmueble[1].toString()
+                    inmuebleBuild.tipoInmueble(optionsInmueble[1].toString())
                     text.layoutHabitaciones.setVisibility(View.VISIBLE)
                     text.layoutBaños.setVisibility(View.VISIBLE)
                     text.layoutVivienda.setVisibility(View.VISIBLE)
@@ -300,6 +301,7 @@ class OfertarInmueble : AppCompatActivity() {
                 -> {
                     text.tipoInmuebleElegidoText.text = optionsInmueble[2]
                     tipoInmueble = optionsInmueble[2].toString()
+                    inmuebleBuild.tipoInmueble(optionsInmueble[2].toString())
                     text.layoutHabitaciones.setVisibility(View.VISIBLE)
                     text.layoutBaños.setVisibility(View.VISIBLE)
                     text.layoutVivienda.setVisibility(View.VISIBLE)
@@ -308,6 +310,7 @@ class OfertarInmueble : AppCompatActivity() {
                 -> {
                     text.tipoInmuebleElegidoText.text = optionsInmueble[3]
                     tipoInmueble = optionsInmueble[3].toString()
+                    inmuebleBuild.tipoInmueble(optionsInmueble[3].toString())
                     text.layoutHabitaciones.setVisibility(View.GONE)
                     text.layoutBaños.setVisibility(View.GONE)
                     text.layoutVivienda.setVisibility(View.GONE)
@@ -316,6 +319,7 @@ class OfertarInmueble : AppCompatActivity() {
                 -> {
                     text.tipoInmuebleElegidoText.text = optionsInmueble[4]
                     tipoInmueble = optionsInmueble[4].toString()
+                    inmuebleBuild.tipoInmueble(optionsInmueble[4].toString())
                     text.layoutHabitaciones.setVisibility(View.GONE)
                     text.layoutVivienda.setVisibility(View.GONE)
                 }
@@ -323,6 +327,7 @@ class OfertarInmueble : AppCompatActivity() {
                 -> {
                     text.tipoInmuebleElegidoText.text = optionsInmueble[5]
                     tipoInmueble = optionsInmueble[5].toString()
+                    inmuebleBuild.tipoInmueble(optionsInmueble[5].toString())
                     text.layoutHabitaciones.setVisibility(View.GONE)
                     text.layoutBaños.setVisibility(View.GONE)
                     text.layoutVivienda.setVisibility(View.GONE)
@@ -331,6 +336,7 @@ class OfertarInmueble : AppCompatActivity() {
                 -> {
                     text.tipoInmuebleElegidoText.text = optionsInmueble[6]
                     tipoInmueble = optionsInmueble[6].toString()
+                    inmuebleBuild.tipoInmueble(optionsInmueble[6].toString())
                     text.layoutHabitaciones.setVisibility(View.GONE)
                     text.layoutBaños.setVisibility(View.GONE)
                     text.layoutVivienda.setVisibility(View.GONE)
@@ -339,13 +345,14 @@ class OfertarInmueble : AppCompatActivity() {
                 -> {
                     text.tipoInmuebleElegidoText.text = optionsInmueble[7]
                     tipoInmueble = optionsInmueble[7].toString()
+                    inmuebleBuild.tipoInmueble(optionsInmueble[7].toString())
                     text.layoutHabitaciones.setVisibility(View.GONE)
                     text.layoutBaños.setVisibility(View.GONE)
                     text.layoutVivienda.setVisibility(View.GONE)
                 }
             }
         }
-        builder.setNegativeButton("Cancelar"){_, _ -> }
+        builder.setNegativeButton("Cancelar"){ _, _ -> }
         val options = builder.create()
         options.show()
 
@@ -354,7 +361,9 @@ class OfertarInmueble : AppCompatActivity() {
     private fun chooseVivienda(){
         val builder = AlertDialog.Builder(this@OfertarInmueble)
         builder.setTitle("Selecciona el tipo de vivienda")
-        if(text.tipoInmuebleElegidoText.text.equals("Edificio") || text.tipoInmuebleElegidoText.text.equals("Oficina")){
+        if(text.tipoInmuebleElegidoText.text.equals("Edificio") || text.tipoInmuebleElegidoText.text.equals(
+                "Oficina"
+            )){
             val optionsViviendaEdificio = resources.getStringArray(R.array.options_vivienda_edificio)
             builder.setItems(optionsViviendaEdificio) { _, which ->
                 when {
@@ -362,35 +371,41 @@ class OfertarInmueble : AppCompatActivity() {
                     -> {
                         text.tipoViviendaElegidoText.text = optionsViviendaEdificio[0]
                         tipoVivienda = "Apartamento"
+                        inmuebleBuild.tipoVivienda("Apartamento")
                     }
                     which.equals(1)
                     -> {
                         text.tipoViviendaElegidoText.text = optionsViviendaEdificio[1]
                         tipoVivienda = "Ático"
+                        inmuebleBuild.tipoVivienda("Ático")
                     }
                     which.equals(2)
                     -> {
                         text.tipoViviendaElegidoText.text = optionsViviendaEdificio[2]
                         tipoVivienda = "Dúplex"
+                        inmuebleBuild.tipoVivienda("Dúplex")
                     }
                     which.equals(3)
                     -> {
                         text.tipoViviendaElegidoText.text = optionsViviendaEdificio[3]
                         tipoVivienda = "Loft"
+                        inmuebleBuild.tipoVivienda("Loft")
                     }
                     which.equals(4)
                     -> {
                         text.tipoViviendaElegidoText.text = optionsViviendaEdificio[4]
                         tipoVivienda = "Planta"
+                        inmuebleBuild.tipoVivienda("Planta")
                     }
                     which.equals(5)
                     -> {
                         text.tipoViviendaElegidoText.text = optionsViviendaEdificio[5]
                         tipoVivienda = "Estudio"
+                        inmuebleBuild.tipoVivienda("Estudio")
                     }
                 }
             }
-            builder.setNegativeButton("Cancelar"){_, _ -> }
+            builder.setNegativeButton("Cancelar"){ _, _ -> }
             val options = builder.create()
             options.show()
         }
@@ -402,55 +417,65 @@ class OfertarInmueble : AppCompatActivity() {
                     -> {
                         text.tipoViviendaElegidoText.text = optionsVivienda[0]
                         tipoVivienda = "Apartamento"
+                        inmuebleBuild.tipoVivienda("Apartamento")
                     }
                     which.equals(1)
                     -> {
                         text.tipoViviendaElegidoText.text = optionsVivienda[1]
                         tipoVivienda = "Ático"
+                        inmuebleBuild.tipoVivienda("Ático")
                     }
                     which.equals(2)
                     -> {
                         text.tipoViviendaElegidoText.text = optionsVivienda[2]
                         tipoVivienda = "Dúplex"
+                        inmuebleBuild.tipoVivienda("Dúplex")
                     }
                     which.equals(3)
                     -> {
                         text.tipoViviendaElegidoText.text = optionsVivienda[3]
                         tipoVivienda = "Loft"
+                        inmuebleBuild.tipoVivienda("Loft")
                     }
                     which.equals(4)
                     -> {
                         text.tipoViviendaElegidoText.text = optionsVivienda[4]
                         tipoVivienda = "Planta"
+                        inmuebleBuild.tipoVivienda("Planta")
                     }
                     which.equals(5)
                     -> {
                         text.tipoViviendaElegidoText.text = optionsVivienda[5]
                         tipoVivienda = "Estudio"
+                        inmuebleBuild.tipoVivienda("Estudio")
                     }
                     which.equals(6)
                     -> {
                         text.tipoViviendaElegidoText.text = optionsVivienda[6]
                         tipoVivienda = "Casa"
+                        inmuebleBuild.tipoVivienda("Casa")
                     }
                     which.equals(7)
                     -> {
                         text.tipoViviendaElegidoText.text = optionsVivienda[7]
                         tipoVivienda = "Chalet"
+                        inmuebleBuild.tipoVivienda("Chalet")
                     }
                     which.equals(8)
                     -> {
                         text.tipoViviendaElegidoText.text = optionsVivienda[8]
                         tipoVivienda = "Adosado"
+                        inmuebleBuild.tipoVivienda("Adosado")
                     }
                     which.equals(9)
                     -> {
                         text.tipoViviendaElegidoText.text = optionsVivienda[9]
                         tipoVivienda = "Finca rústica"
+                        inmuebleBuild.tipoVivienda("Finca rústica")
                     }
                 }
             }
-            builder.setNegativeButton("Cancelar"){_, _ -> }
+            builder.setNegativeButton("Cancelar"){ _, _ -> }
             val options = builder.create()
             options.show()
         }
@@ -458,18 +483,28 @@ class OfertarInmueble : AppCompatActivity() {
 
     private fun selectExtras(){
         val builder = AlertDialog.Builder(this@OfertarInmueble)
-        val extrasArray = arrayOf<String>("Parking","Ascensor","Amueblado","Calefacción","Jardín","Piscina","Terraza", "Trastero")
+        val extrasArray = arrayOf<String>(
+            "Parking",
+            "Ascensor",
+            "Amueblado",
+            "Calefacción",
+            "Jardín",
+            "Piscina",
+            "Terraza",
+            "Trastero"
+        )
         extrasInmueble = arrayListOf<String>()
         builder.setMultiChoiceItems(extrasArray, elementosExtras){ dialog, which, isChecked ->
             elementosExtras[which] = isChecked
             if(elementosExtras[which]){
-                extrasInmueble.add(extrasArray[which].toString())
+                extrasInmueble!!.add(extrasArray[which].toString())
             }
             else{
-                extrasInmueble.remove(extrasArray[which].toString())
+                extrasInmueble!!.remove(extrasArray[which].toString())
             }
+            inmuebleBuild.extras(extrasInmueble)
         }
-        builder.setNegativeButton("Ok"){_, _ -> }
+        builder.setNegativeButton("Ok"){ _, _ -> }
         val options = builder.create()
         options.show()
     }
@@ -482,160 +517,154 @@ class OfertarInmueble : AppCompatActivity() {
                 which.equals(0)
                 -> {
                     estadoInmueble = "Obra nueva"
+                    inmuebleBuild.estado(estado[0])
                 }
                 which.equals(1)
                 -> {
                     estadoInmueble = "Casi nuevo"
+                    inmuebleBuild.estado("Casi nuevo")
                 }
                 which.equals(2)
                 -> {
                     estadoInmueble = "Muy bien"
+                    inmuebleBuild.estado("Muy bien")
                 }
                 which.equals(3)
                 -> {
                     estadoInmueble = "Bien"
+                    inmuebleBuild.estado("Bien")
                 }
                 which.equals(4)
                 -> {
                     estadoInmueble = "Reformado"
+                    inmuebleBuild.estado("Reformado")
+
                 }
                 which.equals(5)
                 -> {
                     estadoInmueble = "A reformar"
+                    inmuebleBuild.estado("A reformar")
+
                 }
             }
         }
-        builder.setNegativeButton("Cancelar"){_, _ -> }
+        builder.setNegativeButton("Cancelar"){ _, _ -> }
         val options = builder.create()
         options.show()
 
     }
 
-    fun booleans2extras() : ArrayList<String> {
-        var res = arrayListOf<String>()
-        if(parking == true){ res.add("Parking")}
-        if(ascensor == true){ res.add("Ascensor") }
-        if(amueblado == true){ res.add("Amueblado") }
-        if(calefaccion == true){ res.add("Calefacción")}
-        if(jardin == true){ res.add("Jardín") }
-        if(piscina == true){res.add("Piscina") }
-        if(terraza == true){ res.add("Terraza")}
-        if(trastero == true){ res.add("Trastero") }
-        return res
-    }
-
     private fun post(post : Boolean){
         if(tipoInmueble == null){
-            messageInmNull()
+            mostrarMensajeCampoObligatorio("Por favor seleccione el tipo de Inmueble", null)
         }else if(tipoVivienda == null && text.layoutVivienda.visibility != View.GONE){
-            messageVivNull()
+            mostrarMensajeCampoObligatorio("Por favor seleccione el tipo de Vivienda", null)
         }else if( tipoAnuncio == null){
-            messageAnuNull()
+            mostrarMensajeCampoObligatorio("Por favor seleccione el tipo de Anuncio", null)
         }else if( (text.inPrecio.text.toString()   == null )|| (text.inPrecio.text.toString().toInt()  <= 0)){
-            messagePreInc()
+            mostrarMensajeCampoObligatorio(
+                "Error en el Precio de venta ",
+                " Por favor intruduzca un precio de venta valido. "
+            )
         }else if(text.inSuperficie.text.toString() == null || text.inSuperficie.text.toString().toInt()!! <= 0){
-            messageSupInc()
+            mostrarMensajeCampoObligatorio(
+                "Error en la superficie ",
+                " Por favor intruduzca un valor valido para la superficie. "
+            )
         }else if(text.inDireccion.text == "" || !direccionCorrecta){
-            messageDirNull()
-        }else{
+            mostrarMensajeCampoObligatorio(
+                "Error en la dirección ",
+                " Por favor intruduzca un valor valido para la dirección. "
+            )
+        }else if(fotosOrd.size == 0){
+            mostrarMensajeCampoObligatorio("Por favor seleccione al menos una foto", null)
+        }
+        else{
 
             precioDeVenta = text.inPrecio.text.toString().toInt()
             superficie = text.inSuperficie.text.toString().toInt()
             if(sitio != null) direccion = sitio
-            if(text.inDescripcion.text != null){ descripcion = text.inDescripcion.text.toString() }
+            if(text.inDescripcion.text != null){
+                descripcion = text.inDescripcion.text.toString()
+                inmuebleBuild.descripcion(text.inDescripcion.text.toString())
+            }
             else{descripcion = ""}
-            if(text.inBaños.text != null && text.inBaños.text.toString() != ""){ numBanos = Integer.parseInt(
-                text.inBaños.text.toString())}
+            if(text.inBaños.text != null && text.inBaños.text.toString() != ""){
+                numBanos = Integer.parseInt(text.inBaños.text.toString())
+                inmuebleBuild.numBanos(text.inBaños.text.toString().toInt())
+            }
             else{numBanos = 0}
-            if(text.inHabitaciones.text != null && text.inHabitaciones.text.toString() != ""){ numHabitaciones = Integer.parseInt(
-                text.inHabitaciones.text.toString())}
+            if(text.inHabitaciones.text != null && text.inHabitaciones.text.toString() != ""){
+                numHabitaciones = Integer.parseInt(text.inHabitaciones.text.toString())
+                inmuebleBuild.numHabitaciones(text.inHabitaciones.text.toString().toInt())
+            }
             else{numHabitaciones = 0}
 
-            //Fotos esta vacia, y en fotosord estan las ids de las fotos subidas a firebase y direccion contiene el string de la direccion mientras que direccion0 esta vacio
+            inmuebleBuild.precio(text.inPrecio.text.toString().toInt())
+            inmuebleBuild.superficie(text.inSuperficie.text.toString().toInt())
+            inmuebleBuild.fotosOrd(fotosOrd)
+            inmuebleBuild.fechaSubida(LocalDateTime.now())
+            var inmuebleInstance = inmuebleBuild.build()
+            println(inmuebleInstance.toString())
+            println(inmuebleInstance.convertToDataInmueble().toString())
 
-            val subelo = DataInmueble2(id,user,numHabitaciones, numBanos, superficie, direccion, tipoVivienda,
-                tipoInmueble,tipoAnuncio,precioDeVenta,fotosOrd,descripcion,extrasInmueble,estadoInmueble,LocalDateTime.now().toString())
-            Database.subirInmueble(subelo,post)
-            /*val anuncio = DataInmueble(id,user,numHabitaciones,numBanos,superficie,direccion,tipoVivienda,tipoInmueble,tipoAnuncio,precioDeVenta,fotos,fotosOrd,
-                "",descripcion,estado,parking,ascensor,amueblado,calefaccion,jardin,piscina,terraza,trastero, LocalDateTime.now().toString())*/
-
-            //Database.subirInmueble(anuncio)
-
-            var texto = "subido"
-            if(post)texto = "$texto y publicado"
-            val builder =  AlertDialog.Builder(this)
-            builder.setTitle(" Se ha $texto el piso correctamente " )
-            builder.setIcon(android.R.drawable.ic_dialog_info)
-            builder.setNeutralButton("  Continue  "){ _, _ -> }
-            val alertDialog: AlertDialog = builder.create()
-            alertDialog.setCancelable(false)
-            alertDialog.show()
+            val subelo = DataInmueble2(
+                id,
+                user,
+                numHabitaciones,
+                numBanos,
+                superficie,
+                direccion,
+                tipoVivienda,
+                tipoInmueble,
+                tipoAnuncio,
+                precioDeVenta,
+                fotosOrd,
+                descripcion,
+                extrasInmueble,
+                estadoInmueble,
+                LocalDateTime.now().toString()
+            )
+            println(subelo)
+            //Database.subirInmueble(subelo, post)
+            subirFotos()
+            mostrarMensajeExito(post)
         }
     }
 
+    private fun subirFotos(){
+        var position = -1
+        fotosOrd.forEach { idImg ->
+            position++
+            val filePath : StorageReference? = mStorage?.
+            child("imagenesinmueble/" + id)?.
+            child(idImg.substring(85))
+            filePath?.putFile(urls[position]!!)
+        }
+    }
 
-    private fun messageInmNull(){
-        val builder =  AlertDialog.Builder(this)
-        builder.setTitle(" Por favor seleccione el tipo de Inmueble" )
-        builder.setIcon(android.R.drawable.stat_notify_error)
-        builder.setNeutralButton("  Continue  "){ _, _ -> }
-        val alertDialog: AlertDialog = builder.create()
+    private fun mostrarMensajeExito(post : Boolean) {
+        var texto = "subido"
+        if (post) texto = "$texto y publicado"
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle(" Se ha $texto el piso correctamente ")
+        builder.setIcon(android.R.drawable.ic_dialog_info)
+        builder.setNeutralButton("  Continue  ") { _, _ -> }
+        val alertDialog : AlertDialog = builder.create()
         alertDialog.setCancelable(false)
         alertDialog.show()
     }
-    private fun messageVivNull(){
-        val builder =  AlertDialog.Builder(this)
-        builder.setTitle("Por favor seleccione el tipo de Vivienda" )
-        builder.setIcon(android.R.drawable.stat_notify_error)
-        builder.setNeutralButton("  Continue  "){ _, _ -> }
-        val alertDialog: AlertDialog = builder.create()
-        alertDialog.setCancelable(false)
-        alertDialog.show()
-    }
-    private fun messageAnuNull(){
-        val builder =  AlertDialog.Builder(this)
-        builder.setTitle("Por favor seleccione el tipo de Anuncio" )
-        builder.setIcon(android.R.drawable.stat_notify_error)
-        builder.setNeutralButton("  Continue  "){ _, _ -> }
-        val alertDialog: AlertDialog = builder.create()
-        alertDialog.setCancelable(false)
-        alertDialog.show()
-    }
-    private fun messagePreInc(){
-        val builder =  AlertDialog.Builder(this)
-        builder.setTitle("Error en el Precio de venta " )
-        builder.setMessage(" Por favor intruduzca un precio de venta valido. ")
-        builder.setIcon(android.R.drawable.stat_notify_error)
-        builder.setNeutralButton("  Continue  "){ _, _ -> }
-        val alertDialog: AlertDialog = builder.create()
-        alertDialog.setCancelable(false)
-        alertDialog.show()
-    }
-    private fun messageSupInc(){
-        val builder =  AlertDialog.Builder(this)
-        builder.setTitle("Error en la superficie " )
-        builder.setMessage(" Por favor intruduzca un valor valido para la superficie. ")
-        builder.setIcon(android.R.drawable.stat_notify_error)
-        builder.setNeutralButton("  Continue  "){ _, _ -> }
-        val alertDialog: AlertDialog = builder.create()
-        alertDialog.setCancelable(false)
-        alertDialog.show()
-    }
-    private fun messageDirNull(){
-        val builder =  AlertDialog.Builder(this)
-        builder.setTitle("Error en la dirección " )
-        builder.setMessage(" Por favor intruduzca un valor valido para la dirección. ")
-        builder.setIcon(android.R.drawable.stat_notify_error)
-        builder.setNeutralButton("  Continue  "){ _, _ -> }
-        val alertDialog: AlertDialog = builder.create()
-        alertDialog.setCancelable(false)
-        alertDialog.show()
-    }
-    private fun iExtras(){
-        extrasInmueble
-        estadoInmueble
 
-
+    private fun mostrarMensajeCampoObligatorio(titulo : String, mensaje : String?) {
+        val builder =  AlertDialog.Builder(this)
+        if(mensaje!=null)builder.setMessage(mensaje)
+        builder.setTitle(titulo)
+        builder.setIcon(android.R.drawable.stat_notify_error)
+        builder.setNeutralButton("  Continue  "){ _, _ -> }
+        val alertDialog: AlertDialog = builder.create()
+        alertDialog.setCancelable(false)
+        alertDialog.show()
     }
+
 
 }

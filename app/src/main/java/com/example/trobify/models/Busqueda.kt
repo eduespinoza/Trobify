@@ -1,18 +1,12 @@
 package com.example.trobify.models
 
-import android.util.Log
+import com.example.trobify.database.Database
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.here.sdk.core.CountryCode
-import com.here.sdk.core.GeoCircle
 import com.here.sdk.core.GeoCoordinates
 import com.here.sdk.core.LanguageCode
 import com.here.sdk.core.errors.InstantiationErrorException
 import com.here.sdk.search.*
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 
 class Busqueda {
     var db = Firebase.firestore
@@ -25,11 +19,11 @@ class Busqueda {
         prepararBuscadorHere()
     }
     fun buscar(busqueda : String) : ArrayList<DataInmueble2>{
-        var result = Database.getInmueblesBusqueda(busqueda, null)
+        var result = Database.obtenerInmueblesSegunBusqueda(busqueda, null)
         return result
     }
     fun buscarConIntencion(busqueda : String, intencion : String) : ArrayList<DataInmueble2>{
-        return Database.getInmueblesBusqueda(busqueda, intencion)
+        return Database.obtenerInmueblesSegunBusqueda(busqueda, intencion)
     }
     private val searchCallback =
         SearchCallback { searchError, mutableList ->

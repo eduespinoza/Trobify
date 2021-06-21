@@ -13,13 +13,13 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.trobify.R
 import com.example.trobify.adapters.AdaptadorFichaInmueble
 import com.example.trobify.adapters.AdaptadorInmuebleBusqueda
 import com.example.trobify.controladores.*
+import com.example.trobify.database.Database
 import com.example.trobify.models.*
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
@@ -28,10 +28,8 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.trobify_main.*
 import kotlinx.coroutines.*
-import java.time.LocalDateTime
 import java.util.*
 import kotlin.collections.ArrayList
-import kotlin.random.Random.Default.nextBoolean
 
 
 open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemClickListener {
@@ -67,7 +65,7 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
     override fun onResume() {
         super.onResume()
         if(filtrosAplicados == null && opcionesDeInicio == null){
-        user = Database.getUser(userId)
+        user = Database.obtenerUsuario(userId)
         userFav = user.favorites!!
         mostrarInmuebles(inmueblesEnPantalla)
         }
@@ -83,9 +81,9 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
         userId = (intent.extras!!.get("user") as String?).toString()
         opcionesDeInicio = intent.extras!!.get("opciones") as ArrayList<String>?
         filtrosAplicados = intent.extras!!.get("filtros") as FiltrosBusqueda.filtros?
-        user = Database.getUser(userId)
+        user = Database.obtenerUsuario(userId)
         userFav = user.favorites!!
-        inmuebles = Database.getAllInmuebles()
+        inmuebles = Database.obtenerInmuebles()
 
         if(opcionesDeInicio != null){
             println(opcionesDeInicio)
@@ -127,7 +125,7 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
 
     private fun mostrarResultadosInicio(opciones : ArrayList<String>){
         cabecera.text = "Primeros resultados"
-        var inm = Database.getInmueblesByIds(opciones)
+        var inm = Database.obtenerInmueblesSegunIds(opciones)
         println(inm.size)
         println("resultadosiniciojoderqcojones")
         mostrarInmuebles(inm)
@@ -323,7 +321,7 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
         cabecera.text = "Inmuebles en $busqueda"
     }
     private fun alquilerOVenta(opcion : String){
-        inmueblesEnPantalla = Database.getInmueblesIntencion(opcion)
+        inmueblesEnPantalla = Database.obtenerInmueblesSegunIntencion(opcion)
         mostrarInmuebles(inmueblesEnPantalla)
     }
 

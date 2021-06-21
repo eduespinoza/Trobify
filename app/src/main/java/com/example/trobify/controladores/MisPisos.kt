@@ -11,7 +11,7 @@ import com.example.trobify.R
 import com.example.trobify.adapters.AdaptadorFichaInmueble
 import com.example.trobify.adapters.AdaptadorInmuebleBusqueda
 import com.example.trobify.models.DataInmueble2
-import com.example.trobify.models.Database
+import com.example.trobify.database.Database
 import com.example.trobify.models.Inmueble
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -71,7 +71,7 @@ class  MisPisos : AppCompatActivity() , AdaptadorInmuebleBusqueda.OnItemClickLis
         noPublicados.setTextColor(Color.WHITE)
         publicados.setTextColor(Color.BLACK)
         publicados.setBackgroundColor(Color.GRAY)
-        var pisos = Database.getPisosNoPostUser(userId)
+        var pisos = Database.obtenerPisosNoPublicadosUsuario(userId)
         if (pisos != null && pisos.isNotEmpty()) {
             mostrar(pisos)
         }else mostrar(arrayListOf())
@@ -82,7 +82,7 @@ class  MisPisos : AppCompatActivity() , AdaptadorInmuebleBusqueda.OnItemClickLis
         publicados.setTextColor(Color.WHITE)
         noPublicados.setTextColor(Color.BLACK)
         noPublicados.setBackgroundColor(Color.GRAY)
-        var pisos = Database.getPisosUser(userId)
+        var pisos = Database.obtenerPisosUsuario(userId)
         if (pisos != null && pisos.isNotEmpty()) {
             mostrar(pisos)
         }else mostrar(arrayListOf())
