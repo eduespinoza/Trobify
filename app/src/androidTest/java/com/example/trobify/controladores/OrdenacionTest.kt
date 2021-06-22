@@ -26,6 +26,8 @@ import org.hamcrest.Description
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers
 import org.hamcrest.TypeSafeMatcher
+import java.util.concurrent.CountDownLatch
+import java.util.concurrent.TimeUnit
 
 @LargeTest
 @RunWith(AndroidJUnit4ClassRunner::class)
@@ -167,8 +169,14 @@ class OrdenacionTest {
 
     @Test
     fun ordenarPorAntiguedad() {
-        val intent = Intent(ApplicationProvider.getApplicationContext(),
-            PantallaInicial::class.java).putExtra("user", "unaNawww1PcRQTSSFS9OwZPces52")
+        var intent = Intent(ApplicationProvider.getApplicationContext(),MainActivity::class.java)
+        scenario = ActivityScenario.launch(intent)
+
+        val count = CountDownLatch(1)
+        count.await(4, TimeUnit.SECONDS)
+
+        intent = Intent(ApplicationProvider.getApplicationContext(),PantallaInicial::class.java)
+            .putExtra("user","unaNawww1PcRQTSSFS9OwZPces52")
         scenario = ActivityScenario.launch(intent)
 
         val textView = onView(Matchers.allOf(withId(R.id.titulo_pantalla_inicio), ViewMatchers.withText("TROBIFY"),
