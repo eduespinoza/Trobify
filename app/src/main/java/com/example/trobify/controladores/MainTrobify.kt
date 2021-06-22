@@ -251,24 +251,44 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
                         orden.ordenSeleccionado = 0
                         inmueblesEnPantalla = ordenarInmuebles(inmueblesEnPantalla)
                         cabecera.text = "Inmuebles ordenados ascendentemente"
+                        val builder = AlertDialog.Builder(this)
+                        builder.setMessage("Inmuebles ordenados ascendentemente")
+                        builder.setPositiveButton("Ok"){_, _ -> }
+                        val dialog = builder.create()
+                        dialog.show()
                     }
                     which.equals(1)// Ordenar por precio descendente
                     -> {
                         orden.ordenSeleccionado = 1
                         inmueblesEnPantalla = ordenarInmuebles(inmueblesEnPantalla)
                         cabecera.text = "Inmuebles ordenados descendentemente"
+                        val builder = AlertDialog.Builder(this)
+                        builder.setMessage("Inmuebles ordenados descendentemente")
+                        builder.setPositiveButton("Ok"){_, _ -> }
+                        val dialog = builder.create()
+                        dialog.show()
                     }
                     which.equals(2) // Ordenar por más recientes
                     -> {
                         orden.ordenSeleccionado = 2
                         inmueblesEnPantalla = ordenarInmuebles(inmueblesEnPantalla)
                         cabecera.text = "Inmuebles añadidos recientemente"
+                        val builder = AlertDialog.Builder(this)
+                        builder.setMessage("Inmuebles añadidos recientemente")
+                        builder.setPositiveButton("Ok"){_, _ -> }
+                        val dialog = builder.create()
+                        dialog.show()
                     }
                     which.equals(3) // Ordenar por más antiguos
                     -> {
                         orden.ordenSeleccionado = 3
                         inmueblesEnPantalla = ordenarInmuebles(inmueblesEnPantalla)
                         cabecera.text = "Inmuebles ordenados por antiguedad"
+                        val builder = AlertDialog.Builder(this)
+                        builder.setMessage("Inmuebles ordenados por antiguedad")
+                        builder.setPositiveButton("Ok"){_, _ -> }
+                        val dialog = builder.create()
+                        dialog.show()
                     }
                 }
                 mostrarInmuebles(inmueblesEnPantalla)
