@@ -4,37 +4,36 @@ package com.example.trobify.database
 import androidx.lifecycle.*
 import com.example.trobify.models.DataInmueble2
 import com.example.trobify.models.DataUser
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
 import com.here.sdk.core.GeoCoordinates
 import kotlinx.coroutines.*
 import kotlin.collections.ArrayList
 //patrón singleton -> solo instancia una sola vez, luego se puede usar
 //en cualquier parte del proyecto, será la misma instancia
+
+
 object Database {
     //val db = Firebase.firestore
-    var inmueblesNoPost = arrayListOf<DataInmueble2>()
+    var inmueblesNoPublicados = arrayListOf<DataInmueble2>()
     var inmuebles = arrayListOf<DataInmueble2>()
-    var users = arrayListOf<DataUser>()
+    var usuarios = arrayListOf<DataUser>()
     private val dbRepo = DatabaseRepo()
-
     init {
         GlobalScope.launch(Dispatchers.Main) {
         dbRepo.consultaInmuebles().observeForever( Observer {
             inmuebles = it as ArrayList<DataInmueble2>
         })
             dbRepo.consultaInmueblesNoPublicados().observeForever(Observer {
-            inmueblesNoPost = it as ArrayList<DataInmueble2>
+            inmueblesNoPublicados = it as ArrayList<DataInmueble2>
         })
             dbRepo.consultaUsuarios().observeForever( Observer {
-            users = it as ArrayList<DataUser>
+            usuarios = it as ArrayList<DataUser>
         })
         }
     }
 
     fun toNoPublicado(inmueble : DataInmueble2){
         dbRepo.subirDocumento("inmueblesNoPost",inmueble.id!!,inmueble)
-        inmueblesNoPost.add(inmueble)
+        inmueblesNoPublicados.add(inmueble)
         inmuebles.remove(inmueble)
         dbRepo.borrarDocumento("inmueblesFinal",inmueble.id!!)
         var user = obtenerUsuarioSegunId(inmueble.propietario!!)
@@ -50,7 +49,7 @@ object Database {
     fun toPublicado(inmueble : DataInmueble2){
         dbRepo.subirDocumento("inmueblesFinal",inmueble.id!!,inmueble)
         //inmueble.id?.let { db.collection("inmueblesFinal").document(it).set(inmueble) }
-        inmueblesNoPost.remove(inmueble)
+        inmueblesNoPublicados.remove(inmueble)
         inmuebles.add(0,inmueble)
         dbRepo.borrarDocumento("inmueblesNoPost",inmueble.id!!)
         //db.collection("inmueblesNoPost").document(inmueble.id!!).delete()
@@ -81,7 +80,7 @@ object Database {
             }
         }
         else{
-            inmueblesNoPost.forEach lit@{ inmueble ->
+            inmueblesNoPublicados.forEach lit@{ inmueble ->
                 if(inmueble.id.equals(id)){
                     inmuebleEncontrado = inmueble
                     return@lit
@@ -100,7 +99,7 @@ object Database {
         }else{
             dbRepo.borrarDocumento("inmueblesNoPost",inmueble.id!!)
             //inmueble.id?.let { db.collection("inmueblesNoPost").document(it).delete() }
-            inmueblesNoPost.remove(inmueble)
+            inmueblesNoPublicados.remove(inmueble)
             inmueble.propietario?.let { inmueble.id?.let { it1 -> eliminarPisoNoPublicadoUsuario(it, it1) } }
         }
     }
@@ -122,7 +121,7 @@ object Database {
         }else{
             dbRepo.subirDocumento("inmueblesNoPost",inmueble.id!!,inmueble)
             //inmueble.id?.let { db.collection("inmueblesNoPost").document(it).set(inmueble) }
-            inmueblesNoPost.add(inmueble)
+            inmueblesNoPublicados.add(inmueble)
             inmueble.propietario?.let { inmueble.id?.let { it1 -> anadirPisoNoPublicadoUsuario(it, it1) } }
         }
     }
@@ -148,7 +147,6 @@ object Database {
         }
         return resultado
     }
-
     fun obtenerInmueblesSegunIds(ids : ArrayList<String>):ArrayList<DataInmueble2>{
         var inmueblesEncontrados = arrayListOf<DataInmueble2>()
         for (ident in ids) {
@@ -163,7 +161,7 @@ object Database {
     fun obtenerInmueblesNoPublicadosSegunIds(ids : ArrayList<String>):ArrayList<DataInmueble2>{
         var inmueblesEncontrados = arrayListOf<DataInmueble2>()
         for (ident in ids) {
-            inmueblesNoPost.forEach ok@{ inmueble->
+            inmueblesNoPublicados.forEach ok@{ inmueble->
                 if (inmueble.id.equals(ident))
                     inmueblesEncontrados.add(inmueble)
                 return@ok
@@ -203,7 +201,6 @@ object Database {
         }
         return inmueblesEncontrados
     }
-
     fun obtenerInmueblesSegunPrecioMayorIgual(precio : Int):ArrayList<String>{
         var inmueblesEncontrados = arrayListOf<String>()
         inmuebles.forEach { inmueble ->
@@ -236,7 +233,6 @@ object Database {
         }
         return inmueblesEncontrados
     }
-
     fun obtenerInmueblesSegunHabitaciones(habs:Int):ArrayList<String>{
         var inmueblesEncontrados = arrayListOf<String>()
         inmuebles.forEach { inmueble ->
@@ -300,7 +296,6 @@ object Database {
         }
         return inmueblesEncontrados
     }
-
     private fun obtenerInmueblesSegunIntencionIds(op:String):ArrayList<String>{
         var inmueblesEncontrados = arrayListOf<String>()
         inmuebles.forEach { inmueble ->
@@ -364,14 +359,14 @@ object Database {
     fun subirUsuario(user : DataUser){
         dbRepo.subirDocumento("users",user.id!!,user)
         //user.id?.let { db.collection("users").document(it).set(user)}
-        users.add(user)
+        usuarios.add(user)
     }
     fun obtenerUsuario(id:String): DataUser {
         return  obtenerUsuarioSegunId(id)
     }
     private fun obtenerUsuarioSegunId(id : String) : DataUser {
         var userResult = DataUser()
-        users.forEach { user ->
+        usuarios.forEach { user ->
             if(user.id.equals(id)){
                 userResult = user
                 return@forEach
@@ -395,7 +390,7 @@ object Database {
     }
     fun obtenerUsuariosEmails() : MutableList<String>{
         var result = mutableListOf<String>()
-        users.forEach{ user ->
+        usuarios.forEach{ user ->
             user.email?.let { result.add(it) }
         }
         return result

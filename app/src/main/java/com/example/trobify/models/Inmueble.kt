@@ -51,7 +51,7 @@ class Inmueble (
         return DataInmueble2(id = id, propietario = propietario, numHabitaciones = numHabitaciones,
             numBanos = numBanos, superficie = superficie, direccion = direccionSitio,
             tipoVivienda = tipoVivienda, tipoInmueble = tipoInmueble, intencion = intencion,
-            precio = precio, fotos = fotosOrd, descripcion = descripcion,  extras = extras!!,
+            precio = precio, fotos = fotosOrd, descripcion = descripcion,  extras = extras,
             estado = estado, fechaSubida = fechaSubida.toString())
     }
 

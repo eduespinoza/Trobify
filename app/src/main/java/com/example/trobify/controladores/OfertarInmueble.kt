@@ -2,6 +2,7 @@ package com.example.trobify.controladores
 
 import android.annotation.SuppressLint
 import android.app.SearchManager
+import android.content.DialogInterface
 import android.content.Intent
 import android.database.MatrixCursor
 import android.net.Uri
@@ -12,6 +13,7 @@ import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.example.trobify.R
+import com.example.trobify.database.Database
 import com.example.trobify.models.*
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
@@ -555,23 +557,24 @@ class OfertarInmueble : AppCompatActivity() {
     }
 
     private fun post(post : Boolean){
+
         if(tipoInmueble == null){
             mostrarMensajeCampoObligatorio("Por favor seleccione el tipo de Inmueble", null)
         }else if(tipoVivienda == null && text.layoutVivienda.visibility != View.GONE){
             mostrarMensajeCampoObligatorio("Por favor seleccione el tipo de Vivienda", null)
         }else if( tipoAnuncio == null){
             mostrarMensajeCampoObligatorio("Por favor seleccione el tipo de Anuncio", null)
-        }else if( (text.inPrecio.text.toString()   == null )|| (text.inPrecio.text.toString().toInt()  <= 0)){
+        }else if( (text.inPrecio.text.toString()  == "" )|| (text.inPrecio.text.toString().toInt()  <= 0)){
             mostrarMensajeCampoObligatorio(
                 "Error en el Precio de venta ",
                 " Por favor intruduzca un precio de venta valido. "
             )
-        }else if(text.inSuperficie.text.toString() == null || text.inSuperficie.text.toString().toInt()!! <= 0){
+        }else if(text.inSuperficie.text.toString() == "" || text.inSuperficie.text.toString().toInt() <= 0){
             mostrarMensajeCampoObligatorio(
                 "Error en la superficie ",
                 " Por favor intruduzca un valor valido para la superficie. "
             )
-        }else if(text.inDireccion.text == "" || !direccionCorrecta){
+        }else if(sitio == null){
             mostrarMensajeCampoObligatorio(
                 "Error en la dirección ",
                 " Por favor intruduzca un valor valido para la dirección. "
@@ -580,35 +583,24 @@ class OfertarInmueble : AppCompatActivity() {
             mostrarMensajeCampoObligatorio("Por favor seleccione al menos una foto", null)
         }
         else{
-
-            precioDeVenta = text.inPrecio.text.toString().toInt()
-            superficie = text.inSuperficie.text.toString().toInt()
-            if(sitio != null) direccion = sitio
-            if(text.inDescripcion.text != null){
+            if(text.inDescripcion.text.toString() != ""){
                 descripcion = text.inDescripcion.text.toString()
                 inmuebleBuild.descripcion(text.inDescripcion.text.toString())
             }
-            else{descripcion = ""}
             if(text.inBaños.text != null && text.inBaños.text.toString() != ""){
                 numBanos = Integer.parseInt(text.inBaños.text.toString())
                 inmuebleBuild.numBanos(text.inBaños.text.toString().toInt())
             }
-            else{numBanos = 0}
             if(text.inHabitaciones.text != null && text.inHabitaciones.text.toString() != ""){
                 numHabitaciones = Integer.parseInt(text.inHabitaciones.text.toString())
                 inmuebleBuild.numHabitaciones(text.inHabitaciones.text.toString().toInt())
             }
-            else{numHabitaciones = 0}
-
             inmuebleBuild.precio(text.inPrecio.text.toString().toInt())
             inmuebleBuild.superficie(text.inSuperficie.text.toString().toInt())
             inmuebleBuild.fotosOrd(fotosOrd)
             inmuebleBuild.fechaSubida(LocalDateTime.now())
             var inmuebleInstance = inmuebleBuild.build()
-            println(inmuebleInstance.toString())
-            println(inmuebleInstance.convertToDataInmueble().toString())
-
-            val subelo = DataInmueble2(
+            /*val subelo = DataInmueble2(
                 id,
                 user,
                 numHabitaciones,
@@ -624,9 +616,8 @@ class OfertarInmueble : AppCompatActivity() {
                 extrasInmueble,
                 estadoInmueble,
                 LocalDateTime.now().toString()
-            )
-            println(subelo)
-            //Database.subirInmueble(subelo, post)
+            )*/
+            Database.subirInmueble(inmuebleInstance.convertToDataInmueble(), post)
             subirFotos()
             mostrarMensajeExito(post)
         }
@@ -649,7 +640,10 @@ class OfertarInmueble : AppCompatActivity() {
         val builder = AlertDialog.Builder(this)
         builder.setTitle(" Se ha $texto el piso correctamente ")
         builder.setIcon(android.R.drawable.ic_dialog_info)
-        builder.setNeutralButton("  Continue  ") { _, _ -> }
+        val volver  = { dialog:DialogInterface, which:Int ->
+            finish()
+        }
+        builder.setNeutralButton("  Continuar  ", DialogInterface.OnClickListener(function=volver))
         val alertDialog : AlertDialog = builder.create()
         alertDialog.setCancelable(false)
         alertDialog.show()

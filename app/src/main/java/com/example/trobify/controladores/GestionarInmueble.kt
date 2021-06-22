@@ -109,7 +109,7 @@ class GestionarInmueble : AppCompatActivity() {
                         if (Database.inmuebles.contains(inmuebleToData())){
                             println("LO TIENE INMUEBLES")}
                         else {
-                            if (Database.inmueblesNoPost.contains(inmuebleToData()))
+                            if (Database.inmueblesNoPublicados.contains(inmuebleToData()))
                                 println("LO TIENE EL OTROOOOOO MANIIIIIINI")
                         }
                         postOrNotPost(buttonPost)
