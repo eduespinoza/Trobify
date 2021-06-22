@@ -66,7 +66,7 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
         super.onResume()
         if(filtrosAplicados == null && opcionesDeInicio == null){
         user = Database.obtenerUsuario(userId)
-        userFav = arrayListOf()
+        userFav = user.favorites!!
         mostrarInmuebles(inmueblesEnPantalla)
         }
     }
@@ -82,7 +82,7 @@ open class MainTrobify : AppCompatActivity(), AdaptadorInmuebleBusqueda.OnItemCl
         opcionesDeInicio = intent.extras!!.get("opciones") as ArrayList<String>?
         filtrosAplicados = intent.extras!!.get("filtros") as FiltrosBusqueda.filtros?
         user = Database.obtenerUsuario(userId)
-        userFav = arrayListOf()
+        userFav = user.favorites!!
         inmuebles = Database.obtenerInmuebles()
 
         if(opcionesDeInicio != null){
